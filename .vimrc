@@ -539,6 +539,7 @@ let g:cdpath_list = [
   \   '\foo\bar',
   \ ]
 
+" pathの設定(ここに設定したパスはfind等の検索対象に含まれる)
 function! s:set_cdpath_list()
   set cdpath=
   set cdpath+=D:\hoge\fuga
