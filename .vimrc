@@ -723,8 +723,8 @@ NeoBundle 'thinca/vim-singleton'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'thinca/vim-fontzoom'
-" NeoBundleLazy 'thinca/vim-scouter',
-"   \ { 'autoload' : { 'commands' : ['Scouter'] } }
+NeoBundleLazy 'thinca/vim-scouter',
+  \ { 'autoload' : { 'commands' : ['Scouter'] } }
 " NeoBundle 'thinca/vim-submode'
 " NeoBundle 'thinca/vim-visualstar'
 " NeoBundle 'thinca/vim-qfreplace'
