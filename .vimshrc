@@ -1,0 +1,4 @@
+alias e = :tabnew
+alias vimrc = :tabnew ~/.vimrc
+alias zshrc = :tabnew ~/.zshrc
+
