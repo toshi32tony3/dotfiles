@@ -540,6 +540,8 @@ let g:cdpath_list = [
   \ ]
 
 function! s:set_cdpath_list()
+  set cdpath=
+  set cdpath+=D:\hoge\fuga
   for item in g:cdpath_list
     let $SET_CDPATH = $TARGET_DIR . item
     set cdpath+=$SET_CDPATH
@@ -548,8 +550,8 @@ endfunction
 
 " ctagsのタグファイルがあるディレクトリの指定
 function! s:set_tags()
-  let $SET_TAGS = $TARGET_DIR . '\tags'
   set tags=
+  let $SET_TAGS = $TARGET_DIR . '\tags'
   set tags+=$SET_TAGS
 endfunction
 
