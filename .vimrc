@@ -38,8 +38,7 @@ NeoBundle 'Shougo/vimproc'
 " NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundleLazy 'Shougo/unite.vim',
-  \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
+NeoBundle 'Shougo/unite.vim',
 NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
