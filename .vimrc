@@ -634,10 +634,8 @@ autocmd MyAutoCmd BufEnter * setlocal imsearch=0
 
 set notimeout " キー入力タイムアウトはあると邪魔だし、待つ意味も無い気がする
 
-" " :bdeleteの入力を簡易にする
-" nnoremap <C-w><C-w> :<C-u>bd<CR>
-
-" また開きたいことがしばしばあるので、消したい時は手でbdを打つことにする
+" 閉じる系の入力を簡易化
+nnoremap <C-q><C-q> :<C-u>bdelete<CR>
 nnoremap <C-w><C-w> :<C-u>close<CR>
 
 " フォーカスがあたっているウィンドウ以外閉じる
