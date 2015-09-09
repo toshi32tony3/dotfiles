@@ -1,4 +1,4 @@
-" TODO : 設定のまとまりをよくしたい
+" .vimrc for 香り屋版GVim
 
 "-----------------------------------------------------------------------------
 " 初期設定系 {{{
@@ -10,17 +10,225 @@ if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
-call neobundle#rc(expand('~/.vim/bundle'))
-" call neobundle#begin(expand('~/.vim/bundle'))
+call neobundle#begin(expand('~/.vim/bundle'))
 
-" NeoBundle自体の更新をチェックするための設定
+" NeoBundle自体の更新をチェックする
 NeoBundleFetch 'Shougo/neobundle.vim'
+
+" Vim Plugin List
+
+" Shougo_ware {{{
+
+" Kaoriya版付属のvimprocを使用する
+" -> Kaoriya版Vimからvimprocを~/.vim/bundle以下にコピーしておくこと
+NeoBundle 'Shougo/vimproc'
+
+" 環境に応じてvimprocを自動ビルドする場合
+" let vimproc_updcmd = has('win64') ?
+"   \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
+" execute "NeoBundle 'Shougo/vimproc.vim'," . string({
+"   \ 'build' : {
+"   \     'windows' : vimproc_updcmd,
+"   \     'cygwin'  : 'make -f make_cygwin.mak',
+"   \     'mac'     : 'make -f make_mac.mak',
+"   \     'unix'    : 'make -f make_unix.mak',
+"   \    },
+"   \ })
+
+" NeoBundle 'Shougo/neocomplete.vim'
+" NeoBundle 'Shougo/neosnippet'
+" NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundleLazy 'Shougo/unite.vim',
+  \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
+NeoBundle 'Shougo/neossh.vim'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/vimfiler.vim'
+
+" The end of Shougo_ware }}}
+
+" unite sources {{{
+
+" NeoBundleLazy 'Shougo/unite-build',
+"   \ { 'autoload' : { 'unite_sources' : [ 'build' ] } }
+" NeoBundleLazy 'rhysd/unite-codic.vim',
+"   \ { 'autoload' : { 'unite_sources' : [ 'codic' ] } }
+" NeoBundleLazy 'ujihisa/unite-colorscheme',
+"   \ { 'autoload' : { 'unite_sources' : [ 'colorscheme' ] } }
+NeoBundleLazy 'Shougo/neomru.vim',
+  \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
+NeoBundleLazy 'hewes/unite-gtags',
+  \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
+" NeoBundleLazy 'Shougo/unite-help',
+"   \ { 'autoload' : { 'unite_sources' : [ 'help' ] } }
+" NeoBundleLazy 'osyo-manga/unite-highlight',
+"   \ { 'autoload' : { 'unite_sources' : [ 'highlight' ] } }
+NeoBundleLazy 'Shougo/junkfile.vim',
+  \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
+NeoBundleLazy 'tacroe/unite-mark',
+  \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
+NeoBundleLazy 'Shougo/unite-outline',
+  \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
+" NeoBundleLazy 'osyo-manga/unite-candidate_sorter',
+"   \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
+
+" The end of unite sources }}}
+
+" YCM {{{
+
+" NeoBundle 'Valloric/YouCompleteMe'
+" NeoBundle 'SirVer/ultisnips'
+
+" === Windows 64bit YCMを頑張ってbuildする方法 === {{{
+" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う。
+"    https://github.com/Valloric/YouCompleteMe/wiki/Windows-Installation-Guide
+"    (手順13.は不要。手順に従ってコピーすると、それ古いから。と怒られる)
+" 1. python-2.7.8.amd64.msiを落としてくる。pythonを入れる。
+" 2. libpython27.aを落としてくる。(手順中にリンクが貼ってある)
+" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる。
+" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム。
+" 5. 手順に従ってmakeすると、エラーが出る。
+"    (Boostの関数tss_cleanup_implemented()が多重定義)
+"    YouCompleteMe\third_party\ycmd\cpp\BoostParts\libs\thread\src\win32\
+"    tss_dll.cppの最終行付近のtss_cleanup_implemented()あたりをコメントアウト
+" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず。
+" ================================================ }}}
+
+" === Windows 32bit YCMを頑張ってbuildする方法 === {{{
+" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う。
+"    https://github.com/Valloric/YouCompleteMe/wiki/Windows-Installation-Guide
+"    (手順13.は不要。手順に従ってコピーすると、それ古いから。と怒られる)
+"    -> MinGW32の手順が無いので、64bitの手順をいい感じに読み替える。
+"       こちらでは"コンパイルエラーが起きないので、ファイル差し替えは不要"。
+" 1. python-2.7.8.msiを落としてくる。pythonを入れる。
+" 2. 手順1.でlibpython27.aがついてくるので何もしなくてOK。手順3に進む。
+" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる。
+" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム。
+" 5. 手順に従ってmakeすると、エラーが出ないので何もしなくてOK。手順6に進む。
+" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず。
+"
+" Y. YCMのmake完了後、GVim起動時にランタイムエラーが出る。
+"    -> 環境変数からCMakeへのPathを消す。msvcrXXX.dllの異なるバージョンへPathが
+"       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す。
+" ================================================ }}}
+
+" The end of YCM }}}
+
+" thinca_ware {{{
+
+NeoBundle 'thinca/vim-singleton'
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'thinca/vim-ambicmd'
+NeoBundle 'thinca/vim-fontzoom'
+NeoBundleLazy 'thinca/vim-scouter',
+  \ { 'autoload' : { 'commands' : ['Scouter'] } }
+" NeoBundle 'thinca/vim-submode'
+" NeoBundle 'thinca/vim-visualstar'
+" NeoBundle 'thinca/vim-qfreplace'
+
+" The end of thinca_ware }}}
+
+" osyo_ware {{{
+
+" NeoBundle 'osyo-manga/vim-watchdogs'
+" NeoBundle 'osyo-manga/shabadou.vim'
+" NeoBundle 'jceb/vim-hier'
+" let g:watchdogs_check_BufWritePost_enable = 1
+" let g:watchdogs_check_BufWritePost_enables = {
+"   \   'c'    : 1,
+"   \   'ruby' : 1,
+"   \ }
+NeoBundle 'osyo-manga/vim-operator-search'
+NeoBundle 'osyo-manga/vim-anzu'
+NeoBundle 'osyo-manga/vim-brightest'
+NeoBundle 'osyo-manga/vim-over'
+
+" The end of osyo_ware }}}
+
+" other Vim plugins {{{
+
+NeoBundle 'vim-scripts/aspvbs.vim'    " syntax for ASP/VBScript
+" NeoBundle 'vim-scripts/vbnet.vim'   " syntax for VB.NET
+NeoBundleLazy 'hachibeeDI/vim-vbnet', {"autoload" : { "filetypes" : ["vbnet"], }}
+" NeoBundleLazy 'mattn/benchvimrc-vim',
+"   \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
+" NeoBundle 'koron/codic-vim'
+" NeoBundle 'scrooloose/syntastic'
+
+" memolist.vimはmarkdown形式でメモを生成するので、markdownを使いやすくしてみる
+" http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
+NeoBundle 'glidenote/memolist.vim'
+NeoBundle 'rcmdnk/vim-markdown'
+NeoBundle 'kannokanno/previm'
+NeoBundle 'tyru/open-browser.vim'
+
+" NeoBundle 'tyru/vim-altercmd'
+" NeoBundle 'tpope/vim-repeat'
+" NeoBundle 'tpope/vim-speeddating'
+NeoBundle 'deris/vim-visualinc'
+NeoBundle 'deris/vim-rengbang'
+NeoBundle 'tpope/vim-surround'
+
+" NeoBundle 'kana/vim-niceblock'
+NeoBundle 'kana/vim-operator-user'
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-operator-replace'
+NeoBundle 'kana/vim-textobj-function'
+
+NeoBundle 'kana/vim-smartchr'
+NeoBundle 'tyru/capture.vim'
+NeoBundle 't9md/vim-quickhl'
+
+" NeoBundle 'haya14busa/incsearch.vim'
+NeoBundle 'mhinz/vim-signify'
+" NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'majutsushi/tagbar'
+NeoBundle 'itchyny/lightline.vim'
+NeoBundle 'cocopon/lightline-hybrid.vim'
+NeoBundle 'LeafCage/foldCC'
+
+" NeoBundleLazy 'kana/vim-fakeclip'
+NeoBundle 'LeafCage/yankround.vim'
+NeoBundle 'junegunn/vim-easy-align'
+NeoBundle 'bronson/vim-trailing-whitespace'
+NeoBundle 'vim-scripts/BufOnly.vim'
+" NeoBundle 'rhysd/clever-f.vim'
+NeoBundle 'justinmk/vim-sneak'
+NeoBundle 'tyru/caw.vim'
+NeoBundle 'kshenoy/vim-signature'
+NeoBundle 'mhinz/vim-startify'
+NeoBundle 'vim-scripts/gtags.vim'
+
+NeoBundle 'mattn/webapi-vim'
+NeoBundle 'tmhedberg/matchit'
+
+NeoBundle 'basyura/J6uil.vim'
+NeoBundle 'AndrewRadev/linediff.vim'
+
+" other Vim plugins }}}
+
+" The end of Vim Plugin List
+
+call neobundle#end()
+
+filetype plugin indent on " ファイルタイプの自動検出をONにする
 
 " 構文解析ON
 syntax enable
 
+" .vimrcに書いてあるプラグインがインストールされているかチェックする
+NeoBundleCheck
+
+" The end of 初期設定系 }}}
+"-----------------------------------------------------------------------------
+" 基本設定系 {{{
+
 let mapleader = "#"         " 左手で<Leader>を入力したい
 set helplang=en             " 日本語ヘルプを卒業したい。例え英語が読めなくとも
+
+" vimrc内全体で使うaugroupを定義
+augroup MyAutoCmd
+  autocmd!
+augroup END
 
 " Echo startup time on start
 if has('vim_starting') && has('reltime')
@@ -30,11 +238,6 @@ if has('vim_starting') && has('reltime')
     \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
   augroup END
 endif
-
-" vimrc内全体で使うaugroupを定義
-augroup MyAutoCmd
-  autocmd!
-augroup END
 
 " SID取得関数を定義
 function! s:SID()
@@ -74,7 +277,7 @@ set autoread
 " 再描画がうっとおしいのでやっぱり0にする。再描画必要なら<C-e>や<C-y>を使う。
 set scrolloff=0
 
-" The end of 初期設定系 }}}
+" The end of 基本設定系 }}}
 "-----------------------------------------------------------------------------
 " 入力補助系 " {{{
 
@@ -203,15 +406,6 @@ set listchars=tab:>-,trail:-,eol:\
 
 " 入力中のキーを画面右下に表示
 set showcmd
-
-" コマンドの出力結果をクリップボードに格納
-function! s:func_copy_cmd_output(cmd)
-  redir @*>
-  silent execute a:cmd
-  redir END
-endfunction
-
-command! -nargs=1 -complete=command CopyCmdOutput call s:func_copy_cmd_output(<q-args>)
 
 set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
@@ -380,6 +574,15 @@ command! -nargs=0 ClipFile call s:Clip(expand('%:t'))
 " 現在開いているファイルのディレクトリパスをレジスタへ
 command! -nargs=0 ClipDir  call s:Clip(expand('%:p:h'))
 
+" コマンドの出力結果をクリップボードに格納
+function! s:func_copy_cmd_output(cmd)
+  redir @*>
+  silent execute a:cmd
+  redir END
+endfunction
+
+command! -nargs=1 -complete=command CopyCmdOutput call s:func_copy_cmd_output(<q-args>)
+
 " 1行以内の編集でも quote1 ～ quote9 に保存
 " http://sgur.tumblr.com/post/63476292878/vim
 function! s:update_numbered_registers()
@@ -400,7 +603,7 @@ inoremap <C-@> <C-g>u<C-@>
 
 " The end of 編集系 }}}
 "-----------------------------------------------------------------------------
-" Vim操作の簡単化 "{{{
+" 操作の簡単化 "{{{
 
 " <C-[>はVim内部で<Esc>として扱われるみたいなので注意(<Esc>のマッピングが適用)
 " <Esc>は遠いし、<C-[>は押しにくいイメージ、<C-c>はInsertLeaveが発生しない。
@@ -475,22 +678,18 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
 
 " " 開いたファイルと同じ場所へ移動する
 " " ネットワーク上のファイルにアクセスした時に問題が起きる？
-" " -> 基本VimFilerを使うので let g:vimfiler_enable_auto_cd = 1 しとけばOK
+" " -> 基本VimFilerを使うので let g:vimfiler_enable_auto_cd = 1 しておけばOK
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
 " パターンマッチが修正前だと:helpなどにも反応してしまうので修正
+" -> プラグインの挙動とぶつかってエラーになるらしいこともあるらしい
+"    https://github.com/Shougo/vimproc.vim/issues/116
 autocmd MyAutoCmd BufWritePost ?* mkview
 autocmd MyAutoCmd BufReadPost  ?* loadview
 
-" " プラグインの挙動とぶつかってエラーになるらしい。修正しないらしいので戻す
-" " -> :helpなどにも反応してしまうが妥協する
-" " https://github.com/Shougo/vimproc.vim/issues/116
-" autocmd MyAutoCmd BufWritePost * mkview
-" autocmd MyAutoCmd BufReadPost  * loadview
-
-" The end of Vim操作の簡単化 }}}
+" The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
 " tags, pathの設定 "{{{
 
@@ -620,190 +819,6 @@ nnoremap q/   <Nop>
 nnoremap q?   <Nop>
 
 " The end of 誤爆防止関係 }}}
-"-----------------------------------------------------------------------------
-" Plugin List " {{{
-
-" **************
-" * Shougoware *
-" **************
-" Kaoriya版付属のvimprocを使用する
-" -> Kaoriya版Vimからvimprocを~/.vim/bundle以下にコピーしておくこと
-NeoBundle 'Shougo/vimproc'
-
-" 環境に応じてvimprocを自動ビルドする場合
-" let vimproc_updcmd = has('win64') ?
-"   \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
-" execute "NeoBundle 'Shougo/vimproc.vim'," . string({
-"   \ 'build' : {
-"   \     'windows' : vimproc_updcmd,
-"   \     'cygwin'  : 'make -f make_cygwin.mak',
-"   \     'mac'     : 'make -f make_mac.mak',
-"   \     'unix'    : 'make -f make_unix.mak',
-"   \    },
-"   \ })
-
-" NeoBundle 'Shougo/neocomplete.vim'
-" NeoBundle 'Shougo/neosnippet'
-" NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundleLazy 'Shougo/unite.vim',
-  \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
-NeoBundle 'Shougo/neossh.vim'
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'Shougo/vimfiler.vim'
-
-" *****************
-" * unite sources *
-" *****************
-" NeoBundleLazy 'Shougo/unite-build',
-"   \ { 'autoload' : { 'unite_sources' : [ 'build' ] } }
-" NeoBundleLazy 'rhysd/unite-codic.vim',
-"   \ { 'autoload' : { 'unite_sources' : [ 'codic' ] } }
-" NeoBundleLazy 'ujihisa/unite-colorscheme',
-"   \ { 'autoload' : { 'unite_sources' : [ 'colorscheme' ] } }
-NeoBundleLazy 'Shougo/neomru.vim',
-  \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
-NeoBundleLazy 'hewes/unite-gtags',
-  \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
-" NeoBundleLazy 'Shougo/unite-help',
-"   \ { 'autoload' : { 'unite_sources' : [ 'help' ] } }
-" NeoBundleLazy 'osyo-manga/unite-highlight',
-"   \ { 'autoload' : { 'unite_sources' : [ 'highlight' ] } }
-NeoBundleLazy 'Shougo/junkfile.vim',
-  \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
-NeoBundleLazy 'tacroe/unite-mark',
-  \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
-NeoBundleLazy 'Shougo/unite-outline',
-  \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
-" NeoBundleLazy 'osyo-manga/unite-candidate_sorter',
-"   \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
-
-" *******
-" * YCM *
-" *******
-" NeoBundle 'Valloric/YouCompleteMe'
-" NeoBundle 'SirVer/ultisnips'
-
-" === Windows 64bit YCMを頑張ってbuildする方法 === {{{
-" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う。
-"    https://github.com/Valloric/YouCompleteMe/wiki/Windows-Installation-Guide
-"    (手順13.は不要。手順に従ってコピーすると、それ古いから。と怒られる)
-" 1. python-2.7.8.amd64.msiを落としてくる。pythonを入れる。
-" 2. libpython27.aを落としてくる。(手順中にリンクが貼ってある)
-" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる。
-" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム。
-" 5. 手順に従ってmakeすると、エラーが出る。
-"    (Boostの関数tss_cleanup_implemented()が多重定義)
-"    YouCompleteMe\third_party\ycmd\cpp\BoostParts\libs\thread\src\win32\
-"    tss_dll.cppの最終行付近のtss_cleanup_implemented()あたりをコメントアウト
-" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず。
-" ================================================ }}}
-
-" === Windows 32bit YCMを頑張ってbuildする方法 === {{{
-" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う。
-"    https://github.com/Valloric/YouCompleteMe/wiki/Windows-Installation-Guide
-"    (手順13.は不要。手順に従ってコピーすると、それ古いから。と怒られる)
-"    -> MinGW32の手順が無いので、64bitの手順をいい感じに読み替える。
-"       こちらでは"コンパイルエラーが起きないので、ファイル差し替えは不要"。
-" 1. python-2.7.8.msiを落としてくる。pythonを入れる。
-" 2. 手順1.でlibpython27.aがついてくるので何もしなくてOK。手順3に進む。
-" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる。
-" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム。
-" 5. 手順に従ってmakeすると、エラーが出ないので何もしなくてOK。手順6に進む。
-" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず。
-"
-" Y. YCMのmake完了後、GVim起動時にランタイムエラーが出る。
-"    -> 環境変数からCMakeへのPathを消す。msvcrXXX.dllの異なるバージョンへPathが
-"       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す。
-" ================================================ }}}
-
-" **************
-" * thincaware *
-" **************
-NeoBundle 'thinca/vim-singleton'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'thinca/vim-ambicmd'
-NeoBundle 'thinca/vim-fontzoom'
-NeoBundleLazy 'thinca/vim-scouter',
-  \ { 'autoload' : { 'commands' : ['Scouter'] } }
-" NeoBundle 'thinca/vim-submode'
-" NeoBundle 'thinca/vim-visualstar'
-" NeoBundle 'thinca/vim-qfreplace'
-
-" ************
-" * osyoware *
-" ************
-" NeoBundle 'osyo-manga/vim-watchdogs'
-" NeoBundle 'osyo-manga/shabadou.vim'
-" NeoBundle 'jceb/vim-hier'
-" let g:watchdogs_check_BufWritePost_enable = 1
-" let g:watchdogs_check_BufWritePost_enables = {
-"   \   'c'    : 1,
-"   \   'ruby' : 1,
-"   \ }
-NeoBundle 'osyo-manga/vim-operator-search'
-NeoBundle 'osyo-manga/vim-anzu'
-NeoBundle 'osyo-manga/vim-brightest'
-NeoBundle 'osyo-manga/vim-over'
-
-" **********
-" * others *
-" **********
-NeoBundle 'vim-scripts/aspvbs.vim'    " syntax for ASP/VBScript
-" NeoBundle 'vim-scripts/vbnet.vim'   " syntax for VB.NET
-NeoBundleLazy 'hachibeeDI/vim-vbnet', {"autoload" : { "filetypes" : ["vbnet"], }}
-" NeoBundleLazy 'mattn/benchvimrc-vim',
-"   \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
-" NeoBundle 'koron/codic-vim'
-" NeoBundle 'scrooloose/syntastic'
-
-" memolist.vimはmarkdown形式でメモを生成するので、markdownを使いやすくしてみる
-" http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
-NeoBundle 'glidenote/memolist.vim'
-NeoBundle 'rcmdnk/vim-markdown'
-NeoBundle 'kannokanno/previm'
-NeoBundle 'tyru/open-browser.vim'
-
-" NeoBundle 'tyru/vim-altercmd'
-" NeoBundle 'tpope/vim-repeat'
-" NeoBundle 'tpope/vim-speeddating'
-NeoBundle 'deris/vim-visualinc'
-NeoBundle 'deris/vim-rengbang'
-NeoBundle 'tpope/vim-surround'
-
-" NeoBundle 'kana/vim-niceblock'
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'kana/vim-textobj-user'
-NeoBundle 'kana/vim-operator-replace'
-NeoBundle 'kana/vim-textobj-function'
-
-NeoBundle 'kana/vim-smartchr'
-NeoBundle 'tyru/capture.vim'
-NeoBundle 't9md/vim-quickhl'
-
-" NeoBundle 'haya14busa/incsearch.vim'
-NeoBundle 'mhinz/vim-signify'
-" NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'majutsushi/tagbar'
-NeoBundle 'itchyny/lightline.vim'
-NeoBundle 'cocopon/lightline-hybrid.vim'
-NeoBundle 'LeafCage/foldCC'
-
-" NeoBundleLazy 'kana/vim-fakeclip'
-NeoBundle 'LeafCage/yankround.vim'
-NeoBundle 'junegunn/vim-easy-align'
-NeoBundle 'bronson/vim-trailing-whitespace'
-NeoBundle 'vim-scripts/BufOnly.vim'
-" NeoBundle 'rhysd/clever-f.vim'
-NeoBundle 'justinmk/vim-sneak'
-NeoBundle 'tyru/caw.vim'
-NeoBundle 'kshenoy/vim-signature'
-NeoBundle 'mhinz/vim-startify'
-NeoBundle 'vim-scripts/gtags.vim'
-
-NeoBundle 'mattn/webapi-vim'
-NeoBundle 'tmhedberg/matchit'
-
-" The end of Plugin List }}}
 "-----------------------------------------------------------------------------
 " Plugin Settings " {{{
 
@@ -1717,6 +1732,18 @@ if neobundle#tap('matchit')
 
 endif " }}}
 
+" VimからLingrを見る(J6uil.vim) {{{
+if neobundle#tap('J6uil.vim')
+
+  let g:J6uil_config_dir = expand('~/.cache/J6uil')
+
+endif " }}}
+
+" Visualモードで選択した2つの領域をDiffする(linediff.vim) {{{
+if neobundle#tap('linediff.vim')
+
+endif " }}}
+
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
 " 趣味＠正式採用前の設定 "{{{
@@ -1810,10 +1837,6 @@ endif " }}}
 " AlterCommand q Q
 " AlterCommand Q q
 
-" VimからLingrを見る
-NeoBundle 'basyura/J6uil.vim'
-let g:J6uil_config_dir = expand('~/.cache/J6uil')
-
 " c-family semantic source code highlighting, based on Clang
 " only for Linux ?
 " NeoBundle 'bbchung/clighter'
@@ -1821,25 +1844,11 @@ let g:J6uil_config_dir = expand('~/.cache/J6uil')
 " let g:clighter_libclang_file = 'D:\LLVM\bin'
 " let g:clighter_realtime = 1
 
-" Visualモードで選択した2つの領域をDiffする
-NeoBundle 'AndrewRadev/linediff.vim'
-
 " " Visualモードの選択範囲を拡張、縮小できるようにする
 " NeoBundle 'kana/vim-textobj-line'
 " NeoBundle 'kana/vim-textobj-entire'
 " NeoBundle 'terryma/vim-expand-region'
 
 " The end of 趣味関係＠正式採用前の設定 " }}}
-"-----------------------------------------------------------------------------
-" おまじない系 "{{{
-
-" call neobundle#end()
-
-filetype plugin indent on " ファイルタイプの自動検出をONにする
-
-" .vimrcに書いてあるプラグインがインストールされているかチェックする
-NeoBundleCheck
-
-" The end of おまじない系 }}}
 "-----------------------------------------------------------------------------
 
