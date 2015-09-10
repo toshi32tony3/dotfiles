@@ -1489,8 +1489,8 @@ endif " }}}
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
-  nmap gj <Plug>(signify-next-hunk)
-  nmap gk <Plug>(signify-prev-hunk)
+  nmap gj <Plug>(signify-next-hunk)zz
+  nmap gk <Plug>(signify-prev-hunk)zz
   nmap gh <Plug>(signify-toggle-highlight)
 
 endif " }}}
