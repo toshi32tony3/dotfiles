@@ -579,7 +579,6 @@ function! s:func_copy_cmd_output(cmd)
   silent execute a:cmd
   redir END
 endfunction
-
 command! -nargs=1 -complete=command CopyCmdOutput call s:func_copy_cmd_output(<q-args>)
 
 " 1行以内の編集でも quote1 ～ quote9 に保存
@@ -686,6 +685,9 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
 autocmd MyAutoCmd BufWritePost ?* mkview
 autocmd MyAutoCmd BufReadPost  ?* loadview
 
+" 新規タブでgf
+nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
+
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
 " tags, pathの設定 "{{{
@@ -698,8 +700,8 @@ function! s:TabTagJump(funcName)
   tablast | tabnew
   execute 'tag' a:funcName
 endfunction
-command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
-nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
+command! -nargs=0 TabTagJump call s:TabTagJump(expand('<cword>'))
+nnoremap t<C-]> :<C-u>TabTagJump<CR>
 
 let g:code_list = [
     \   'hoge',
