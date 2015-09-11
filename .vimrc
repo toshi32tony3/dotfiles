@@ -35,9 +35,9 @@ NeoBundle 'Shougo/vimproc'
 "   \    },
 "   \ })
 
-" NeoBundle 'Shougo/neocomplete.vim'
-" NeoBundle 'Shougo/neosnippet'
-" NeoBundle 'Shougo/neosnippet-snippets'
+NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'Shougo/unite.vim',
 NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
@@ -858,7 +858,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources = {}
   endif
   let g:neocomplete#sources._ =
-    \ ['buffer', 'member', 'tag', 'file', 'neosnippet']
+    \ ['file', 'file/include', 'member', 'buffer', 'include', 'neosnippet']
 
   if !exists('g:neocomplete#keyword_patterns')
     let g:neocomplete#keyword_patterns = {}
