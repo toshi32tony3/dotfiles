@@ -316,6 +316,19 @@ inoremap ￥ \
 inoremap （ (
 inoremap ） )
 
+" 汎用補完設定
+" Default: complete=.,w,b,u,t,i
+" . :      current buffer
+" w :              buffer in other windows
+" b : other loaded buffer in the buffer list
+" u :     unloaded buffer in the buffer list
+" t : tag completion
+"     -> タグファイルが大きいと時間がかかるので、汎用補完からtを外す
+" i : current and included files
+" d : current and included files for defined name or macro
+"     -> 試しにdを追加
+set complete=.,w,b,u,i,d
+
 " The end of 入力補助系 }}}
 "-----------------------------------------------------------------------------
 " 視覚情報系 "{{{
