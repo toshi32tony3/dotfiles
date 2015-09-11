@@ -802,6 +802,9 @@ nnoremap ZQ <Nop>
 " よくわからないけど終了されて困るので防ぐ
 nnoremap q<Space> <Nop>
 
+" よくわからないけど矩形Visualモードになるので潰す
+nnoremap <C-q> <Nop>
+
 " 挿入モードでカーソルキーを使うとUndo単位が区切られて困るので潰す
 inoremap <Up>    <Nop>
 inoremap <Down>  <Nop>
