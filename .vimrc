@@ -700,8 +700,8 @@ function! s:TabTagJump(funcName)
   tablast | tabnew
   execute 'tag' a:funcName
 endfunction
-command! -nargs=0 TabTagJump call s:TabTagJump(expand('<cword>'))
-nnoremap t<C-]> :<C-u>TabTagJump<CR>
+command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
+nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 
 let g:code_list = [
     \   'hoge',
