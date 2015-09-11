@@ -36,6 +36,7 @@ NeoBundle 'Shougo/vimproc'
 "   \ })
 
 NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/neoinclude.vim'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'Shougo/unite.vim',
@@ -328,6 +329,10 @@ inoremap ） )
 " d : current and included files for defined name or macro
 "     -> 試しにdを追加
 set complete=.,w,b,u,i,d
+
+" 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
+nnoremap & <silent>:<C-u>&&<CR>
+xnoremap & <silent>:<C-u>&&<CR>
 
 " The end of 入力補助系 }}}
 "-----------------------------------------------------------------------------
@@ -849,16 +854,17 @@ if neobundle#tap('neocomplete.vim')
   let g:neocomplete#auto_completion_start_length = 2
   let g:neocomplete#skip_auto_completion_time = '0.2'
 
-  " 使用する補完の種類を減らす
-  " 現在のsourceの取得は :echo keys(neocomplete#variables#get_sources())
-  " ['file', 'tag', 'vimshell/history', 'neosnippet', 'vim', 'dictionary',
-  "  'omni', 'vimshell', 'member', 'syntax', 'include', 'buffer', 'file/include']
-  " http://alpaca.tc/blog/vim/neocomplete-vs-youcompleteme.html
+  " 使用する補完の種類を指定
   if !exists('g:neocomplete#sources')
     let g:neocomplete#sources = {}
   endif
-  let g:neocomplete#sources._ =
-    \ ['file', 'file/include', 'member', 'buffer', 'include', 'neosnippet']
+  if neobundle#tap('neoinclude.vim')
+    let g:neocomplete#sources._ =
+      \ ['file', 'file/include', 'member', 'buffer', 'neosnippet']
+  else
+    let g:neocomplete#sources._ =
+      \ ['file', 'member', 'buffer', 'neosnippet']
+  endif
 
   if !exists('g:neocomplete#keyword_patterns')
     let g:neocomplete#keyword_patterns = {}
@@ -866,6 +872,16 @@ if neobundle#tap('neocomplete.vim')
 
   " 日本語を補完候補として取得しないようにする
   let g:neocomplete#keyword_patterns._ = '\h\w*'
+
+endif " }}}
+
+" インクルード補完(neoinclude.vim) " {{{
+if neobundle#tap('neoinclude.vim')
+  call neobundle#config({
+    \   'autoload' : {
+    \     'on_source' : [ 'neocomplete.vim' ]
+    \   }
+    \ })
 
 endif " }}}
 
