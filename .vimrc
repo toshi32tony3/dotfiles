@@ -711,7 +711,11 @@ nnoremap <C-]> g<C-]>zz
 " 新規タブでタグジャンプ
 function! s:TabTagJump(funcName)
   tablast | tabnew
-  execute 'tag' a:funcName
+  " ctagsファイルを複数生成して優先順位を付けているなら'tag'にする
+  " execute 'tag' a:funcName
+
+  " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
+  execute 'tjump' a:funcName
 endfunction
 command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
