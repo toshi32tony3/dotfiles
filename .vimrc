@@ -1552,6 +1552,24 @@ if neobundle#tap('tagbar')
     \ }
   nmap <silent><F8> :<C-u>TagbarToggle<CR>
 
+  " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
+  function! s:ClipCurrentTag(data)
+    " 選択範囲レジスタ(*)を使う
+    let @*=a:data
+    echo "clipped: " . a:data
+  endfunction
+  command! -nargs=0 ClipCurrentTag
+    \ call s:ClipCurrentTag(tagbar#currenttag('%s', ''))
+
+  function! s:PrintCurrentTag(data)
+    " 無名レジスタ(")を使う
+    let @"=a:data
+    normal! ""P
+    echo "print current tag: " . a:data
+  endfunction
+  command! -nargs=0 PrintCurrentTag
+    \ call s:PrintCurrentTag(tagbar#currenttag('%s', ''))
+
 endif " }}}
 
 " カッコいいステータスラインを使う(lightline.vim) {{{
