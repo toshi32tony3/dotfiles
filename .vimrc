@@ -776,12 +776,10 @@ function! s:set_tags()
   set tags+=$SET_TAGS
 endfunction
 
-if has('vim_starting')
-  call s:set_src_dir()
-  call s:set_path_list()
-  call s:set_cdpath_list()
-  call s:set_tags()
-endif
+call s:set_src_dir()
+call s:set_path_list()
+call s:set_cdpath_list()
+call s:set_tags()
 
 " 使用するコード(環境変数)をスイッチする
 function! s:SwitchSource()
