@@ -864,10 +864,10 @@ if neobundle#tap('neocomplete.vim')
   endif
   if neobundle#tap('neoinclude.vim')
     let g:neocomplete#sources._ =
-      \ ['file', 'file/include', 'member', 'buffer', 'neosnippet']
+      \ ['file/include', 'member', 'buffer', 'neosnippet']
   else
     let g:neocomplete#sources._ =
-      \ ['file', 'member', 'buffer', 'neosnippet']
+      \ ['member', 'buffer', 'neosnippet']
   endif
 
   if !exists('g:neocomplete#keyword_patterns')
