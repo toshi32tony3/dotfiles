@@ -191,7 +191,7 @@ NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'vim-scripts/BufOnly.vim'
-" NeoBundle 'rhysd/clever-f.vim'
+NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'justinmk/vim-sneak'
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'kshenoy/vim-signature'
@@ -1434,14 +1434,15 @@ endif " }}}
 " 囲む / 囲まなくする / 別の何かで囲む(vim-surround) " {{{
 if neobundle#tap('vim-surround')
 
-  " (例) sw' /* 次の単語を''で囲む */
-  nmap s <plug>Ysurround
-
-  " (例) S'  /* カーソル行以降を''で囲む */
-  nmap S <plug>Ysurround$
-
-  " (例) ss' /* 行を''で囲む */
-  nmap ss <plug>Yssurround
+  " " -> s-sneakとclever-fの使い分けに慣れるため、コメントアウトしておく
+  " " (例) sw' /* 次の単語を''で囲む */
+  " nmap s <plug>Ysurround
+  "
+  " " (例) S'  /* カーソル行以降を''で囲む */
+  " nmap S <plug>Ysurround$
+  "
+  " " (例) ss' /* 行を''で囲む */
+  " nmap ss <plug>Yssurround
 
 endif " }}}
 
@@ -1714,7 +1715,7 @@ if neobundle#tap('clever-f.vim')
 
   let g:clever_f_smart_case = 1
   let g:clever_f_fix_key_direction = 1
-  let g:clever_f_chars_match_any_signs = ';'
+  " let g:clever_f_chars_match_any_signs = ';'
 
 endif " }}}
 
@@ -1724,14 +1725,15 @@ if neobundle#tap('vim-sneak')
   let g:sneak#s_next = 1     " clever-f ならぬ clever-s な動作にする
   let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
 
-  " sは潰されやすいが、fは潰されるケースが少ないのでfを使う
-  " -> 下記設定により、繰り返し時も f / F を使うようになる
-  nmap f <Plug>Sneak_s
-  nmap F <Plug>Sneak_S
-  xmap f <Plug>Sneak_s
-  xmap F <Plug>Sneak_S
-  omap f <Plug>Sneak_s
-  omap F <Plug>Sneak_S
+  " " sは潰されやすいが、fは潰されるケースが少ないのでfを使う
+  " " -> 下記設定により、繰り返し時も f / F を使うようになる
+  " " -> s-sneakとclever-fの使い分けに慣れるため、コメントアウトしておく
+  " nmap f <Plug>Sneak_s
+  " nmap F <Plug>Sneak_S
+  " xmap f <Plug>Sneak_s
+  " xmap F <Plug>Sneak_S
+  " omap f <Plug>Sneak_s
+  " omap F <Plug>Sneak_S
 
 endif " }}}
 
