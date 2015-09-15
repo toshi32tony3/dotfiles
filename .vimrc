@@ -923,21 +923,21 @@ if neobundle#tap('unite.vim')
 
   " for jvgrep
   " -> 色付けできるらしいけど、unite grepしても単色になってる
-  " if executable('jvgrep')
-  "   let $JVGREP_OUTPUT_ENCODING = 'sjis'
-  "   let g:unite_source_grep_command = 'jvgrep'
-  "   let g:unite_source_grep_default_opts = '-i --exclude ''\.(git|hg)'''
-  "   let g:unite_source_grep_recursive_opt = '-R'
+  if executable('jvgrep')
+    let $JVGREP_OUTPUT_ENCODING = 'sjis'
+    let g:unite_source_grep_command = 'jvgrep'
+    let g:unite_source_grep_default_opts = '-i --exclude ''\.(git|hg)'''
+    let g:unite_source_grep_recursive_opt = '-R'
+    let g:unite_source_grep_max_candidates = 500
+  endif
+
+  " if executable('pt')
+  "   let g:unite_source_grep_command = 'pt'
+  "   let g:unite_source_grep_default_opts = '--nocolor --nogroup'
+  "   let g:unite_source_grep_recursive_opt = ''
+  "   let g:unite_source_grep_encoding = 'utf-8'
   "   let g:unite_source_grep_max_candidates = 0
   " endif
-
-  if executable('pt')
-    let g:unite_source_grep_command = 'pt'
-    let g:unite_source_grep_default_opts = '--nocolor --nogroup'
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_grep_encoding = 'utf-8'
-    let g:unite_source_grep_max_candidates = 0
-  endif
 
   " unite.vimのデフォルトコンテキストを設定する
   " http://d.hatena.ne.jp/osyo-manga/20140627
