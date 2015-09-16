@@ -856,7 +856,7 @@ if neobundle#tap('neocomplete.vim')
 
   " キャッシュを作らない(neocompleteってキャッシュを作らなくても使えるのかな？)
   " -> 使えませーん！
-  " let g:neocomplete#sources#buffer#cache_limit_size = 0
+  let g:neocomplete#sources#buffer#cache_limit_size = 0
 
   " 使用する補完の種類を指定
   if !exists('g:neocomplete#sources')
@@ -1734,6 +1734,14 @@ if neobundle#tap('vim-sneak')
   " xmap F <Plug>Sneak_S
   " omap f <Plug>Sneak_s
   " omap F <Plug>Sneak_S
+
+  " s-sneak
+  nmap s <Plug>Sneak_s
+  nmap S <Plug>Sneak_S
+  xmap s <Plug>Sneak_s
+  xmap S <Plug>Sneak_S
+  omap s <Plug>Sneak_s
+  omap S <Plug>Sneak_S
 
 endif " }}}
 
