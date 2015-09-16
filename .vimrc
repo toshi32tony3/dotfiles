@@ -35,10 +35,10 @@ NeoBundle 'Shougo/vimproc'
 "   \    },
 "   \ })
 
-NeoBundle 'Shougo/neocomplete.vim'
+" NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neoinclude.vim'
-NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/neosnippet-snippets'
+" NeoBundle 'Shougo/neosnippet'
+" NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'Shougo/unite.vim',
 NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
@@ -853,10 +853,6 @@ if neobundle#tap('neocomplete.vim')
   let g:neocomplete#enable_smart_case = 1
   let g:neocomplete#auto_completion_start_length = 2
   let g:neocomplete#skip_auto_completion_time = '0.2'
-
-  " キャッシュを作らない(neocompleteってキャッシュを作らなくても使えるのかな？)
-  " -> 使えませーん！
-  let g:neocomplete#sources#buffer#cache_limit_size = 0
 
   " 使用する補完の種類を指定
   if !exists('g:neocomplete#sources')
