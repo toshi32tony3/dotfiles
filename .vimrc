@@ -54,8 +54,8 @@ NeoBundle 'Shougo/vimfiler.vim'
 "   \ { 'autoload' : { 'unite_sources' : [ 'codic' ] } }
 " NeoBundleLazy 'ujihisa/unite-colorscheme',
 "   \ { 'autoload' : { 'unite_sources' : [ 'colorscheme' ] } }
-NeoBundleLazy 'Shougo/neomru.vim',
-  \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
+" NeoBundleLazy 'Shougo/neomru.vim',
+"   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
 " NeoBundleLazy 'Shougo/unite-help',
@@ -66,8 +66,8 @@ NeoBundleLazy 'Shougo/junkfile.vim',
   \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundleLazy 'tacroe/unite-mark',
   \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
-NeoBundleLazy 'Shougo/unite-outline',
-  \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
+" NeoBundleLazy 'Shougo/unite-outline',
+"   \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
 " NeoBundleLazy 'osyo-manga/unite-candidate_sorter',
 "   \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
 
@@ -140,15 +140,15 @@ NeoBundleLazy 'thinca/vim-scouter',
 NeoBundle 'osyo-manga/vim-operator-search'
 NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'osyo-manga/vim-brightest'
-NeoBundle 'osyo-manga/vim-over'
+" NeoBundle 'osyo-manga/vim-over'
 
 " The end of osyo_ware }}}
 
 " other Vim plugins {{{
 
-NeoBundle 'vim-scripts/aspvbs.vim'    " syntax for ASP/VBScript
+" NeoBundle 'vim-scripts/aspvbs.vim'    " syntax for ASP/VBScript
 " NeoBundle 'vim-scripts/vbnet.vim'   " syntax for VB.NET
-NeoBundleLazy 'hachibeeDI/vim-vbnet', {"autoload" : { "filetypes" : ["vbnet"], }}
+" NeoBundleLazy 'hachibeeDI/vim-vbnet', {"autoload" : { "filetypes" : ["vbnet"], }}
 " NeoBundleLazy 'mattn/benchvimrc-vim',
 "   \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
 " NeoBundle 'koron/codic-vim'
@@ -327,8 +327,6 @@ inoremap ） )
 "     -> タグファイルが大きいと時間がかかるので、汎用補完からtを外す
 " i : current and included files
 " d : current and included files for defined name or macro
-"     -> 試しにiを除外
-"     -> 試しにdを除外
 set complete=.,w,b,u
 
 " 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
@@ -972,7 +970,7 @@ if neobundle#tap('unite.vim')
   " let g:u_opt_co =                       g:u_hopt            . g:u_sins
   " let g:u_opt_cs =                       g:u_prev            . g:u_nins
   let g:u_opt_fi =            g:u_tabo            . g:u_fbuf . g:u_ninp
-  let g:u_opt_fm =                                  g:u_fbuf
+  " let g:u_opt_fm =                                  g:u_fbuf
   let g:u_opt_gd =                       g:u_nqui . g:u_vopt
   let g:u_opt_gg =                                  g:u_sbuf . g:u_sync
   let g:u_opt_gr =                       g:u_nqui . g:u_vopt
@@ -985,7 +983,7 @@ if neobundle#tap('unite.vim')
   " let g:u_opt_mg =            g:u_tabo            . g:u_sbuf . g:u_sync
   let g:u_opt_mm =                         g:u_vopt
   let g:u_opt_mp = ''
-  let g:u_opt_ol =                       g:u_vopt            . g:u_sins
+  " let g:u_opt_ol =                       g:u_vopt            . g:u_sins
   let g:u_opt_op = ''
   let g:u_opt_re =                         g:u_sbuf
   " let g:u_opt_us =                       g:u_vopt            . g:u_sins
@@ -1003,7 +1001,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr><Leader>bu ':<C-u>Unite buffer'       . g:u_opt_bu . '<CR>'
   nnoremap <expr><Leader>bo ':<C-u>Unite bookmark'     . g:u_opt_bo . '<CR>'
   nnoremap <expr><Leader>fi ':<C-u>Unite file'         . g:u_opt_fi . '<CR>'
-  nnoremap <expr><Leader>fm ':<C-u>Unite file_mru'     . g:u_opt_fm . '<CR>'
+  " nnoremap <expr><Leader>fm ':<C-u>Unite file_mru'     . g:u_opt_fm . '<CR>'
   nnoremap <expr><Leader>gd ':<C-u>Unite gtags/def'    . g:u_opt_gd . '<CR>'
   nnoremap <expr><Leader>gg ':<C-u>Unite grep:'        . g:u_opt_gg . '<CR>'
   nnoremap <expr><Leader>gr ':<C-u>Unite gtags/ref'    . g:u_opt_gr . '<CR>'
@@ -1015,7 +1013,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr><Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
   nnoremap <expr><Leader>re ':<C-u>UniteResume'        . g:u_opt_re . '<CR>'
   nnoremap <expr><Leader>ya ':<C-u>Unite history/yank' . g:u_opt_ya . '<CR>'
-  nnoremap <expr><Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
+  " nnoremap <expr><Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
   " nnoremap <expr><Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
   " nnoremap <expr><Leader>us ':<C-u>Unite ultisnips'    . g:u_opt_us . '<CR>'
 
