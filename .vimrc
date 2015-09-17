@@ -998,6 +998,8 @@ if neobundle#tap('unite.vim')
   " let g:u_opt_gr =          g:u_tabo . g:u_prev . g:u_vopt            . g:u_nqui
   " let g:u_opt_mm =          g:u_tabo . g:u_prev . g:u_vopt
 
+  " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
+  " -> 空いているキーがわかりにくくなるデメリットの方が大きい
   nnoremap <expr><Leader>bu ':<C-u>Unite buffer'       . g:u_opt_bu . '<CR>'
   nnoremap <expr><Leader>bo ':<C-u>Unite bookmark'     . g:u_opt_bo . '<CR>'
   nnoremap <expr><Leader>fi ':<C-u>Unite file'         . g:u_opt_fi . '<CR>'
