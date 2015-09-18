@@ -710,7 +710,8 @@ nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 " tags, pathの設定 "{{{
 
 " タグジャンプ時に候補が複数あった場合リスト表示
-nnoremap <C-]> g<C-]>zz
+" -> リスト表示したい時だけg付ければ良い気がしてきた
+" nnoremap <C-]> g<C-]>zz
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(funcName)
@@ -739,6 +740,8 @@ function! s:set_src_dir()
 endfunction
 
 " pathの設定(ここに設定したパスはfind等の検索対象に含まれる)
+" -> starstarは便利だが、範囲を広げすぎるとfindにかかる時間が膨大になるので注意
+" -> というかベタ書きの方が圧倒的に速いので、必要なところだけベタ書きしましょう
 let g:path_list = [
   \   'hoge',
   \   'fuga',
@@ -761,6 +764,7 @@ let g:cdpath_list = [
 " pathの設定(ここに設定したパスはfind等の検索対象に含まれる)
 function! s:set_cdpath_list()
   set cdpath=
+  set cdpath+=$SRC_DIR
   set cdpath+=D:\hoge\fuga
   for item in g:cdpath_list
     let $SET_CDPATH = $TARGET_DIR . item
