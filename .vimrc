@@ -745,7 +745,7 @@ let g:indexOfCode = 0
 
 " Gtagsのタグファイルがあるディレクトリの指定
 function! s:set_src_dir()
-  let $SRC_DIR = 'D:\hogehoge\'
+  let $SRC_DIR = 'D:\hogehoge'
   let $TARGET_VER = g:code_list[g:indexOfCode]
   let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
   let $GTAGSROOT = $TARGET_DIR
