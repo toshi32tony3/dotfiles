@@ -131,7 +131,7 @@ NeoBundleLazy 'thinca/vim-scouter',
 
 " NeoBundle 'osyo-manga/vim-watchdogs'
 " NeoBundle 'osyo-manga/shabadou.vim'
-" NeoBundle 'jceb/vim-hier'
+NeoBundle 'jceb/vim-hier'
 " let g:watchdogs_check_BufWritePost_enable = 1
 " let g:watchdogs_check_BufWritePost_enables = {
 "   \   'c'    : 1,
