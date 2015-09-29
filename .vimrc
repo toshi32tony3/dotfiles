@@ -277,7 +277,9 @@ set autoread
 " 再描画がうっとおしいのでやっぱり0にする。再描画必要なら<C-e>や<C-y>を使う。
 set scrolloff=0
 
-" makeしたらcopen
+" " makeしたらcopen
+" -> mkviewとの相性が良くないと思われるのでコメントアウト
+"    (Quickfixは名前を持たないので、copen時に「ファイル名がありません」が出る)
 " autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " The end of 基本設定系 }}}
