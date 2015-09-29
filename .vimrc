@@ -1220,9 +1220,13 @@ if neobundle#tap('vim-quickrun')
     \     'cmdopt'    : '//Nologo',
     \     'tempfile'  : '{tempname()}.vbs',
     \   },
+    \   'c' : {
+    \     'command'   : 'gcc',
+    \     'cmdopt'    : '-Wall',
+    \   },
     \   'cpp' : {
     \     'command'   : 'g++',
-    \     'cmdopt'    : '',
+    \     'cmdopt'    : '-Wall',
     \   },
     \   'make' : {
     \     'command'   : 'make',
@@ -1258,7 +1262,7 @@ if neobundle#tap('vim-quickrun')
     " \     'type' : 'cpp/clang3_4'
     " \   },
     " \   'cpp/clang3_4' : {
-    " \       'command' : 'C:\LLVM\bin\clang++.exe',
+    " \       'command' : 'clang++',
     " \       'exec'    : '%c %o %s -o %s:p:r',
     " \       'cmdopt'  : '-std=gnu++0x'
     " \   },
