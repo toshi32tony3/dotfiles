@@ -1263,8 +1263,10 @@ if neobundle#tap('vim-quickrun')
 
   " デフォルトの<Leader>rだと入力待ちがあるので、別のキーでマッピングする
   let g:quickrun_no_default_key_mappings = 1
-  nnoremap <Leader>qr :<C-u>QuickRun -hook/time/enable 1<CR>
-  vnoremap <Leader>qr :<C-u>QuickRun -hook/time/enable 1<CR>
+  nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
+  vnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
+  " nnoremap <Leader>qr :<C-u>QuickRun -hook/time/enable 1<CR>
+  " vnoremap <Leader>qr :<C-u>QuickRun -hook/time/enable 1<CR>
 
 endif " }}}
 
