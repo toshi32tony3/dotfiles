@@ -277,6 +277,9 @@ set autoread
 " 再描画がうっとおしいのでやっぱり0にする。再描画必要なら<C-e>や<C-y>を使う。
 set scrolloff=0
 
+" makeしたらcopen
+" autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
+
 " The end of 基本設定系 }}}
 "-----------------------------------------------------------------------------
 " 入力補助系 " {{{
@@ -495,7 +498,7 @@ function! s:StarSearch()
 endfunction
 
 " grep結果が0件の場合、Quickfixを開かない
-autocmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
+autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
 
 " The end of 文字列検索系 }}}
 "-----------------------------------------------------------------------------
@@ -526,6 +529,7 @@ nnoremap <Leader>ff  :<C-u>e ++ff=
 autocmd MyAutoCmd BufEnter *          setlocal tabstop=2 shiftwidth=2
 autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4
+autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4
 
@@ -1207,45 +1211,55 @@ if neobundle#tap('vim-quickrun')
 
   let g:quickrun_config = {
     \   '_' : {
-    \     'outputter/buffer/split' : ':botright 12sp',
+    \     'outputter/buffer/split' : ':botright 24sp',
     \   },
     \   'vb' : {
-    \     'command'  : 'cscript',
-    \     'cmdopt'   : '//Nologo',
-    \     'tempfile' : '{tempname()}.vbs',
+    \     'command'   : 'cscript',
+    \     'cmdopt'    : '//Nologo',
+    \     'tempfile'  : '{tempname()}.vbs',
+    \   },
+    \   'cpp' : {
+    \     'command'   : 'g++',
+    \     'cmdopt'    : '',
+    \   },
+    \   'make' : {
+    \     'command'   : 'make',
+    \     'cmdopt'    : 'run',
+    \     'exec'      : '%c %o',
+    \     'outputter' : 'error:buffer:quickfix',
     \   },
     \ }
 
-"   \   'watchdogs_checker/_' : {
-"   \     'runner/vimproc/updatetime'       : 40,
-"   \     'hook/close_quickfix/enable_exit' :  1,
-"   \   },
-"   \   'watchdogs_checker/gcc' : {
-"   \     'command' : 'gcc',
-"   \     'cmdopt'  : '-Wall',
-"   \     'exec'    : '%c %o -fsyntax-only %s:p ',
-"   \   },
-"   \   'c/watchdogs_checker' : {
-"   \     'type' : 'watchdogs_checker/gcc',
-"   \   },
-"   \   'watchdogs_checker/ruby' : {
-"   \     'command' : 'ruby',
-"   \     'exec'    : '%c %o -c %s:p ',
-"   \   },
-"   \   'ruby/watchdogs_checker' : {
-"   \     'type' : 'watchdogs_checker/ruby',
-"   \   },
-"   \ }
-
-" " clangを使う時の設定はこんな感じ？
-"   \   'cpp' : {
-"   \     'type' : 'cpp/clang3_4'
-"   \   },
-"   \   'cpp/clang3_4' : {
-"   \       'command' : 'C:\LLVM\bin\clang++.exe',
-"   \       'exec'    : '%c %o %s -o %s:p:r',
-"   \       'cmdopt'  : '-std=gnu++0x'
-"   \   },
+    " \   'watchdogs_checker/_' : {
+    " \     'runner/vimproc/updatetime'       : 40,
+    " \     'hook/close_quickfix/enable_exit' :  1,
+    " \   },
+    " \   'watchdogs_checker/gcc' : {
+    " \     'command'   : 'gcc',
+    " \     'cmdopt'    : '-Wall',
+    " \     'exec'      : '%c %o -fsyntax-only %s:p ',
+    " \   },
+    " \   'c/watchdogs_checker' : {
+    " \     'type' : 'watchdogs_checker/gcc',
+    " \   },
+    " \   'watchdogs_checker/ruby' : {
+    " \     'command'   : 'ruby',
+    " \     'exec'      : '%c %o -c %s:p ',
+    " \   },
+    " \   'ruby/watchdogs_checker' : {
+    " \     'type' : 'watchdogs_checker/ruby',
+    " \   },
+    " \ }
+    "
+    " " clangを使う時の設定はこんな感じ？
+    " \   'cpp' : {
+    " \     'type' : 'cpp/clang3_4'
+    " \   },
+    " \   'cpp/clang3_4' : {
+    " \       'command' : 'C:\LLVM\bin\clang++.exe',
+    " \       'exec'    : '%c %o %s -o %s:p:r',
+    " \       'cmdopt'  : '-std=gnu++0x'
+    " \   },
 
   " デフォルトの<Leader>rだと入力待ちがあるので、別のキーでマッピングする
   let g:quickrun_no_default_key_mappings = 1
