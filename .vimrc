@@ -774,8 +774,8 @@ let g:cdpath_list = [
 " pathの設定(ここに設定したパスはfind等の検索対象に含まれる)
 function! s:set_cdpath_list()
   set cdpath=
-  set cdpath+=$SRC_DIR
   set cdpath+=D:\hoge\fuga
+  set cdpath+=$SRC_DIR
   for item in g:cdpath_list
     let $SET_CDPATH = $TARGET_DIR . item
     set cdpath+=$SET_CDPATH
