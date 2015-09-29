@@ -747,7 +747,7 @@ let g:indexOfCode = 0
 function! s:set_src_dir()
   let $SRC_DIR = 'D:\hogehoge\'
   let $TARGET_VER = g:code_list[g:indexOfCode]
-  let $TARGET_DIR = $SRC_DIR . $TARGET_VER
+  let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
   let $GTAGSROOT = $TARGET_DIR
 endfunction
 
@@ -768,7 +768,6 @@ function! s:set_path_list()
 endfunction
 
 let g:cdpath_list = [
-  \   '',
   \   '\foo',
   \   '\foo\bar',
   \ ]
@@ -778,6 +777,7 @@ function! s:set_cdpath_list()
   set cdpath=
   set cdpath+=D:\hoge\fuga
   set cdpath+=$SRC_DIR
+  set cdpath+=$TARGET_DIR
   for item in g:cdpath_list
     let $SET_CDPATH = $TARGET_DIR . item
     set cdpath+=$SET_CDPATH
