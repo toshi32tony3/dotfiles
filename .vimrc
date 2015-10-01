@@ -249,6 +249,12 @@ endfunction
 " set nobackup
 " set nowritebackup
 
+" ネットワーク上ファイルのバックアップ、スワップファイルを作成すると
+" 重くなるらしい。確認のため、しばらく以下の設定とする。
+set noswapfile
+set nobackup
+set nowritebackup
+
 " ファイルの書き込みをしてバックアップが作られるときの設定
 " yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに上書き
 " no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに上書き
