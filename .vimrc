@@ -304,7 +304,7 @@ nmap <F2> o=====================================================================
 imap <F3> <C-R>=strftime("%Y/%m/%d(%a) %H:%M")<CR>
 
 " 区切り線＋タイムスタンプの挿入
-nmap <F3> 0i<C-R>=strftime("%Y/%m/%d(%a) %H:%M")<CR><Esc>A {{{<CR><CR>}}}<CR><F2><Esc>{
+nmap <F3> 0i<C-R>=strftime("%Y/%m/%d(%a) %H:%M")<CR><Esc>A {{{<CR><CR>}}}<Esc>{
 
 " 全角数字を半角数字に変更
 inoremap ０ 0
