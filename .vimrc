@@ -280,7 +280,7 @@ set scrolloff=0
 " " makeしたらcopen
 " -> mkviewとの相性が良くないと思われるのでコメントアウト
 "    (Quickfixは名前を持たないので、copen時に「ファイル名がありません」が出る)
-" autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
+autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " The end of 基本設定系 }}}
 "-----------------------------------------------------------------------------
@@ -711,8 +711,8 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
 " パターンマッチが修正前だと:helpなどにも反応してしまうので修正
 " -> プラグインの挙動とぶつかってエラーになるらしいこともあるらしい
 "    https://github.com/Shougo/vimproc.vim/issues/116
-autocmd MyAutoCmd BufWritePost ?* mkview
-autocmd MyAutoCmd BufReadPost  ?* loadview
+" autocmd MyAutoCmd BufWritePost ?* mkview
+" autocmd MyAutoCmd BufReadPost  ?* loadview
 
 " 新規タブでgf
 nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
