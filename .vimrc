@@ -1804,7 +1804,10 @@ if neobundle#tap('vim-startify')
 
   nnoremap ,, :<C-u>Startify<CR>
   let g:startify_files_number = 4
-  let g:startify_change_to_dir = 1
+
+  " 自動でcdしない
+  " -> 何らかの設定/プラグイン起因でネットワーク上にcdすると重くなるため
+  let g:startify_change_to_dir = 0
   let g:startify_bookmarks = [
     \   '.',
     \   '~\.vimrc',
