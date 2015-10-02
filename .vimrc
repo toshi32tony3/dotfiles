@@ -20,12 +20,12 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 " Shougo_ware {{{
 
 NeoBundle 'Shougo/vimproc.vim', {
-  \ 'build' : {
+  \   'build' : {
   \     'windows' : 'tools\\update-dll-mingw',
   \     'cygwin'  : 'make -f make_cygwin.mak',
   \     'mac'     : 'make -f make_mac.mak',
   \     'unix'    : 'make -f make_unix.mak',
-  \    },
+  \   },
   \ }
 " NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neoinclude.vim'
