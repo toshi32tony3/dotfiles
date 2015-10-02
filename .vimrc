@@ -616,19 +616,20 @@ function! s:func_copy_cmd_output(cmd)
 endfunction
 command! -nargs=1 -complete=command CopyCmdOutput call s:func_copy_cmd_output(<q-args>)
 
-" 1行以内の編集でも quote1 ～ quote9 に保存
-" http://sgur.tumblr.com/post/63476292878/vim
-function! s:update_numbered_registers()
-  let reg = getreg('"')
-  if len(split(reg, '\n')) == 1 && reg != getreg(1)
-    for i in range(9, 2, -1)
-      call setreg(i, getreg(i-1))
-    endfor
-    call setreg(1, reg)
-  endif
-endfunction
-
-autocmd MyAutoCmd TextChanged * call s:update_numbered_registers()
+" " 1行以内の編集でも quote1 ～ quote9 に保存
+" " http://sgur.tumblr.com/post/63476292878/vim
+" " -> 無いと不便かよくわからないので、一旦コメントアウト
+" function! s:update_numbered_registers()
+"   let reg = getreg('"')
+"   if len(split(reg, '\n')) == 1 && reg != getreg(1)
+"     for i in range(9, 2, -1)
+"       call setreg(i, getreg(i-1))
+"     endfor
+"     call setreg(1, reg)
+"   endif
+" endfunction
+"
+" autocmd MyAutoCmd TextChanged * call s:update_numbered_registers()
 
 " <C-@>  : 直前に挿入したテキストをもう一度挿入し、ノーマルモードに戻る
 " <C-g>u : アンドゥ単位を区切る
