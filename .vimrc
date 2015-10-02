@@ -138,6 +138,9 @@ NeoBundle 'osyo-manga/vim-brightest'
 
 " other Vim plugins {{{
 
+" My favorite theme
+" NeoBundle 'chriskempson/vim-tomorrow-theme'
+
 " NeoBundle 'vim-scripts/aspvbs.vim'    " syntax for ASP/VBScript
 " NeoBundle 'vim-scripts/vbnet.vim'   " syntax for VB.NET
 " NeoBundleLazy 'hachibeeDI/vim-vbnet', {"autoload" : { "filetypes" : ["vbnet"], }}
@@ -404,10 +407,11 @@ if has('gui_running')
 
 endif " endif of has('gui_running')
 
-" NeoBundle 'chriskempson/vim-tomorrow-theme'
 " vimrcリロード時にcolorschemeが見つかりませんエラーががが...
 " -> ~/vimfiles/colorsに移動してしまう作戦で一時しのぎ
-colorscheme Tomorrow-Night
+if filereadable($HOME . '/vimfiles/colors/Tomorrow-Night.vim')
+  colorscheme Tomorrow-Night
+endif
 
 " 入力モードに応じてカーソルの形を変える
 " -> Cygwin使ってた頃は必要だった気がするので取っておく
