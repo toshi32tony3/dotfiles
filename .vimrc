@@ -19,22 +19,14 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Shougo_ware {{{
 
-" Kaoriya版付属のvimprocを使用する
-" -> Kaoriya版Vimからvimprocを~/.vim/bundle以下にコピーしておくこと
-NeoBundle 'Shougo/vimproc'
-
-" 環境に応じてvimprocを自動ビルドする場合
-" let vimproc_updcmd = has('win64') ?
-"   \ 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32'
-" execute "NeoBundle 'Shougo/vimproc.vim'," . string({
-"   \ 'build' : {
-"   \     'windows' : vimproc_updcmd,
-"   \     'cygwin'  : 'make -f make_cygwin.mak',
-"   \     'mac'     : 'make -f make_mac.mak',
-"   \     'unix'    : 'make -f make_unix.mak',
-"   \    },
-"   \ })
-
+NeoBundle 'Shougo/vimproc.vim', {
+  \ 'build' : {
+  \     'windows' : 'tools\\update-dll-mingw',
+  \     'cygwin'  : 'make -f make_cygwin.mak',
+  \     'mac'     : 'make -f make_mac.mak',
+  \     'unix'    : 'make -f make_unix.mak',
+  \    },
+  \ }
 " NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neoinclude.vim'
 " NeoBundle 'Shougo/neosnippet'
@@ -515,17 +507,19 @@ autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
 set encoding=utf-8                  " utf-8をデフォルトエンコーディングとする
 set fileencodings=utf-8,sjis,euc-jp " 文字コード自動判定候補
 
-if !has('win64')
-  " 以下のファイルの時は文字コードをsjisに設定
-  autocmd MyAutoCmd FileType c        set fileencoding=sjis
-  autocmd MyAutoCmd FileType cpp      set fileencoding=sjis
-  autocmd MyAutoCmd FileType make     set fileencoding=sjis
-  autocmd MyAutoCmd FileType sh       set fileencoding=sjis
-  autocmd MyAutoCmd FileType cfg      set fileencoding=sjis
-  autocmd MyAutoCmd FileType awk      set fileencoding=sjis
-  autocmd MyAutoCmd FileType dosbatch set fileencoding=sjis
-  autocmd MyAutoCmd FileType vb       set fileencoding=sjis
-endif
+" " 文字コード判別はしばらくKaoriya Vimに任せてみる
+" " -> Windows(utf-8, sjis), Unix(euc-jp)意識せず両方使いたい
+" if !has('win64')
+"   " 以下のファイルの時は文字コードをsjisに設定
+"   autocmd MyAutoCmd FileType c        set fileencoding=sjis
+"   autocmd MyAutoCmd FileType cpp      set fileencoding=sjis
+"   autocmd MyAutoCmd FileType make     set fileencoding=sjis
+"   autocmd MyAutoCmd FileType sh       set fileencoding=sjis
+"   autocmd MyAutoCmd FileType cfg      set fileencoding=sjis
+"   autocmd MyAutoCmd FileType awk      set fileencoding=sjis
+"   autocmd MyAutoCmd FileType dosbatch set fileencoding=sjis
+"   autocmd MyAutoCmd FileType vb       set fileencoding=sjis
+" endif
 
 " 文字コードを指定してファイルを開き直す
 nnoremap <Leader>enc :<C-u>e ++enc=
