@@ -124,23 +124,15 @@ NeoBundleLazy 'thinca/vim-scouter',
 " NeoBundle 'osyo-manga/vim-watchdogs'
 " NeoBundle 'osyo-manga/shabadou.vim'
 NeoBundle 'jceb/vim-hier'
-" let g:watchdogs_check_BufWritePost_enable = 1
-" let g:watchdogs_check_BufWritePost_enables = {
-"   \   'c'    : 1,
-"   \   'ruby' : 1,
-"   \ }
 NeoBundle 'osyo-manga/vim-operator-search'
 NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'osyo-manga/vim-brightest'
-" NeoBundle 'osyo-manga/vim-over'
 
 " The end of osyo_ware }}}
 
 " other Vim plugins {{{
 
-" My favorite theme
-" NeoBundle 'chriskempson/vim-tomorrow-theme'
-
+NeoBundle 'chriskempson/vim-tomorrow-theme'
 " NeoBundle 'vim-scripts/aspvbs.vim'    " syntax for ASP/VBScript
 " NeoBundle 'vim-scripts/vbnet.vim'   " syntax for VB.NET
 " NeoBundleLazy 'hachibeeDI/vim-vbnet', {"autoload" : { "filetypes" : ["vbnet"], }}
@@ -406,12 +398,6 @@ if has('gui_running')
   endif
 
 endif " endif of has('gui_running')
-
-" vimrcリロード時にcolorschemeが見つかりませんエラーががが...
-" -> ~/vimfiles/colorsに移動してしまう作戦で一時しのぎ
-if filereadable($HOME . '/vimfiles/colors/Tomorrow-Night.vim')
-  colorscheme Tomorrow-Night
-endif
 
 " 入力モードに応じてカーソルの形を変える
 " -> Cygwin使ってた頃は必要だった気がするので取っておく
@@ -1344,6 +1330,12 @@ if neobundle#tap('vim-watchdogs')
     \   }
     \ })
 
+  let g:watchdogs_check_BufWritePost_enable = 1
+  let g:watchdogs_check_BufWritePost_enables = {
+    \   'c'    : 1,
+    \   'ruby' : 1,
+    \ }
+
   " quickrun_configにwatchdogs.vimの設定を追加
   call watchdogs#setup(g:quickrun_config)
 
@@ -1408,6 +1400,13 @@ if neobundle#tap('vim-over')
 
   nnoremap <Leader>ss :<C-u>OverCommandLine %s/<CR>
 
+endif " }}}
+
+" My favorite colorscheme(vim-tomorrow-theme)
+if neobundle#tap('vim-tomorrow-theme')
+  colorscheme Tomorrow-Night
+
+  call neobundle#untap()
 endif " }}}
 
 " Vim上で自動構文チェック(syntastic)
