@@ -1845,7 +1845,7 @@ endif " }}}
 if neobundle#tap('vim-startify')
 
   nnoremap ,, :<C-u>Startify<CR>
-  let g:startify_files_number = 4
+  let g:startify_files_number = 3
 
   " 自動でcdしない
   " -> 何らかの設定/プラグイン起因でネットワーク上にcdすると重くなるため
