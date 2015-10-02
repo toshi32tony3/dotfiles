@@ -58,8 +58,8 @@ NeoBundleLazy 'Shougo/junkfile.vim',
   \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundleLazy 'tacroe/unite-mark',
   \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
-" NeoBundleLazy 'Shougo/unite-outline',
-"   \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
+NeoBundleLazy 'Shougo/unite-outline',
+  \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
 " NeoBundleLazy 'osyo-manga/unite-candidate_sorter',
 "   \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
 
@@ -946,14 +946,6 @@ if neobundle#tap('unite.vim')
     let g:unite_source_grep_max_candidates = 500
   endif
 
-  " if executable('pt')
-  "   let g:unite_source_grep_command = 'pt'
-  "   let g:unite_source_grep_default_opts = '--nocolor --nogroup'
-  "   let g:unite_source_grep_recursive_opt = ''
-  "   let g:unite_source_grep_encoding = 'utf-8'
-  "   let g:unite_source_grep_max_candidates = 0
-  " endif
-
   " unite.vimのデフォルトコンテキストを設定する
   " http://d.hatena.ne.jp/osyo-manga/20140627
   " -> ホントはstart-insertにしたいけど処理速度の都合でエラーが出ることがしばしば
@@ -1004,7 +996,7 @@ if neobundle#tap('unite.vim')
   " let g:u_opt_mg =            g:u_tabo            . g:u_sbuf . g:u_sync
   let g:u_opt_mm =                         g:u_vopt
   let g:u_opt_mp = ''
-  " let g:u_opt_ol =                       g:u_vopt            . g:u_sins
+  let g:u_opt_ol =                       g:u_vopt            . g:u_sins
   let g:u_opt_op = ''
   let g:u_opt_re =                         g:u_sbuf
   " let g:u_opt_us =                       g:u_vopt            . g:u_sins
@@ -1036,7 +1028,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr><Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
   nnoremap <expr><Leader>re ':<C-u>UniteResume'        . g:u_opt_re . '<CR>'
   nnoremap <expr><Leader>ya ':<C-u>Unite history/yank' . g:u_opt_ya . '<CR>'
-  " nnoremap <expr><Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
+  nnoremap <expr><Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
   " nnoremap <expr><Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
   " nnoremap <expr><Leader>us ':<C-u>Unite ultisnips'    . g:u_opt_us . '<CR>'
 
