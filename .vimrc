@@ -645,7 +645,7 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
   \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 
 " " 開いたファイルと同じ場所へ移動する
-" " -> 何らかの設定/プラグイン起因でネットワーク上にcdすると重くなるため使わない
+" " startify/vimfilerの機能でcdするので以下の設定は使用しない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
@@ -1022,9 +1022,7 @@ if neobundle#tap('vimfiler.vim')
 
   let g:vimfiler_as_default_explorer = 1
   let g:vimfiler_edit_action = 'tabopen'
-
-  " 何らかの設定/プラグイン起因でネットワーク上にcdすると重くなるため
-  let g:vimfiler_enable_auto_cd = 0
+  let g:vimfiler_enable_auto_cd = 1
 
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
@@ -1881,10 +1879,7 @@ if neobundle#tap('vim-startify')
 
   nnoremap ,, :<C-u>Startify<CR>
   let g:startify_files_number = 3
-
-  " 自動でcdしない
-  " -> 何らかの設定/プラグイン起因でネットワーク上にcdすると重くなるため
-  let g:startify_change_to_dir = 0
+  let g:startify_change_to_dir = 1
   let g:startify_bookmarks = [
     \   '.',
     \   '~\.vimrc',
