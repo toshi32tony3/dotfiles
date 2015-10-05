@@ -681,12 +681,12 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
 " " -> 閉じたくないこともあるのでとりあえず放置
 " autocmd MyAutoCmd WinEnter *
 "   \ if (winnr('$') == 1) &&
-"   \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix' ||
-"   \  (getbufvar(winbufnr(0), '&buftype')) == 'unite') | quit | endif
+"   \ (((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') ||
+"   \  ((getbufvar(winbufnr(0), '&buftype')) == 'unite')) | quit | endif
 
 " " 開いたファイルと同じ場所へ移動する
 " " ネットワーク上のファイルにアクセスした時に問題が起きる？
-" " -> 基本VimFilerを使うので let g:vimfiler_enable_auto_cd = 1 しておけばOK
+" " -> 何らかの設定/プラグイン起因でネットワーク上にcdすると重くなるため使わない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
@@ -1063,7 +1063,10 @@ if neobundle#tap('vimfiler.vim')
 
   let g:vimfiler_as_default_explorer = 1
   let g:vimfiler_edit_action = 'tabopen'
-  let g:vimfiler_enable_auto_cd = 1
+
+  " 何らかの設定/プラグイン起因でネットワーク上にcdすると重くなるため
+  let g:vimfiler_enable_auto_cd = 0
+
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
 
