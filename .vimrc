@@ -17,8 +17,6 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " Vim Plugin List
 
-" Shougo_ware {{{
-
 NeoBundle 'Shougo/vimproc.vim', {
   \   'build' : {
   \     'windows' : 'tools\\update-dll-mingw',
@@ -36,10 +34,6 @@ NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
-" The end of Shougo_ware }}}
-
-" unite sources {{{
-
 " NeoBundleLazy 'Shougo/unite-build',
 "   \ { 'autoload' : { 'unite_sources' : [ 'build' ] } }
 " NeoBundleLazy 'rhysd/unite-codic.vim',
@@ -48,6 +42,7 @@ NeoBundle 'Shougo/vimfiler.vim'
 "   \ { 'autoload' : { 'unite_sources' : [ 'colorscheme' ] } }
 " NeoBundleLazy 'Shougo/neomru.vim',
 "   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
+NeoBundle 'vim-scripts/gtags.vim'
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
 " NeoBundleLazy 'Shougo/unite-help',
@@ -62,10 +57,6 @@ NeoBundleLazy 'Shougo/unite-outline',
   \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
 " NeoBundleLazy 'osyo-manga/unite-candidate_sorter',
 "   \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
-
-" The end of unite sources }}}
-
-" YCM {{{
 
 " NeoBundle 'Valloric/YouCompleteMe'
 " NeoBundle 'SirVer/ultisnips'
@@ -103,10 +94,6 @@ NeoBundleLazy 'Shougo/unite-outline',
 "       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す。
 " ================================================ }}}
 
-" The end of YCM }}}
-
-" thinca_ware {{{
-
 NeoBundle 'thinca/vim-singleton'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-ambicmd'
@@ -116,19 +103,11 @@ NeoBundleLazy 'thinca/vim-scouter',
 " NeoBundle 'thinca/vim-submode'
 " NeoBundle 'thinca/vim-qfreplace'
 
-" The end of thinca_ware }}}
-
-" osyo_ware {{{
-
 " NeoBundle 'osyo-manga/vim-watchdogs'
 " NeoBundle 'osyo-manga/shabadou.vim'
 NeoBundle 'jceb/vim-hier'
 NeoBundle 'osyo-manga/vim-operator-search'
 NeoBundle 'osyo-manga/vim-brightest'
-
-" The end of osyo_ware }}}
-
-" other Vim plugins {{{
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 " NeoBundle 'vim-scripts/aspvbs.vim'    " syntax for ASP/VBScript
@@ -172,32 +151,30 @@ NeoBundle 'haya14busa/vim-asterisk'
 
 NeoBundle 'mhinz/vim-signify'
 " NeoBundle 'tpope/vim-fugitive'
+
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
-NeoBundle 'LeafCage/foldCC'
 
+NeoBundle 'LeafCage/foldCC'
 " NeoBundleLazy 'kana/vim-fakeclip'
 NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'vim-scripts/BufOnly.vim'
+
 NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'justinmk/vim-sneak'
+
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'mhinz/vim-startify'
-NeoBundle 'vim-scripts/gtags.vim'
 
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'tmhedberg/matchit'
 
 NeoBundle 'basyura/J6uil.vim'
 NeoBundle 'AndrewRadev/linediff.vim'
-
-" other Vim plugins }}}
-
-" The end of Vim Plugin List
 
 call neobundle#end()
 
@@ -235,13 +212,7 @@ function! s:SID()
   return matchstr(expand('<sfile>'), '<SNR>\d\+_\zesid$')
 endfunction
 
-" " Swap, Backupファイルは作る(Vimクラッシュ時のファイルロストこわい)
-" set noswapfile
-" set nobackup
-" set nowritebackup
-
-" ネットワーク上ファイルのバックアップ、スワップファイルを作成すると
-" 重くなるらしい。確認のため、しばらく以下の設定とする。
+" ネットワーク上ファイルのバックアップ、スワップを作ると重くなるので、作らない
 set noswapfile
 set nobackup
 set nowritebackup
@@ -274,9 +245,7 @@ set autoread
 " 再描画がうっとおしいのでやっぱり0にする。再描画必要なら<C-e>や<C-y>を使う。
 set scrolloff=0
 
-" " makeしたらcopen
-" -> mkviewとの相性が良くないと思われるのでコメントアウト
-"    (Quickfixは名前を持たないので、copen時に「ファイル名がありません」が出る)
+" makeしたらcopen
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " The end of 基本設定系 }}}
@@ -289,9 +258,6 @@ set wildmode=full
 " <C-p>や<C-n>でもコマンド履歴のフィルタリングを有効にする
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
-
-" コーディング規約の都合でタブを使いたくないので全部スペースでインデントする
-set expandtab
 
 " 区切り線の挿入
 imap <F2> ================================================================================<CR>
@@ -334,6 +300,7 @@ inoremap ） )
 " t : tag completion
 "     -> タグファイルが大きいと時間がかかるので、汎用補完からtを外す
 " i : current and included files
+"     -> インクルードファイルが多いと時間がかかるので、汎用補完からiを外す
 " d : current and included files for defined name or macro
 set complete=.,w,b,u
 
@@ -366,7 +333,7 @@ if has('gui_running')
 
   set cmdheight=2
 
-  " Vimでフルスクリーンモード by scrnmode.vim (Kaoriya版付属プラグイン)
+  " Vimでフルスクリーンモード for scrnmode.vim (Kaoriya版付属プラグイン)
   let g:fullscreen_on = 0
   function! s:ToggleScreenMode()
     if g:fullscreen_on
@@ -404,7 +371,7 @@ if has('gui_running')
 endif " endif of has('gui_running')
 
 " 入力モードに応じてカーソルの形を変える
-" -> Cygwin使ってた頃は必要だった気がするので取っておく
+" -> Cygwin環境で必要だった気がするので取っておく
 let &t_ti .= "\e[1 q"
 let &t_SI .= "\e[5 q"
 let &t_EI .= "\e[1 q"
@@ -420,7 +387,7 @@ nnoremap <silent><F10> :<C-u>set relativenumber!<CR>
 " 不可視文字の可視化
 set list
 
-" 不可視文字は普通のやつを使う
+" 不可視文字にUTF-8特有の文字は使わない
 set listchars=tab:>-,trail:-,eol:\
 
 " 入力中のキーを画面右下に表示
@@ -509,13 +476,13 @@ nnoremap <Leader>enc :<C-u>e ++enc=
 " 改行コードを指定してファイルを開き直す
 nnoremap <Leader>ff  :<C-u>e ++ff=
 
-" タブ幅、シフト幅の設定
-autocmd MyAutoCmd BufEnter *          setlocal tabstop=2 shiftwidth=2
-autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4
-autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4
-autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4
-autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4
-autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4
+" タブ幅、シフト幅、タブ使用有無の設定
+autocmd MyAutoCmd BufEnter *          setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4 noexpandtab
+autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4 noexpandtab
+autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4 noexpandtab
 
 set infercase                   " 補完時に大文字小文字を区別しない
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
@@ -529,7 +496,7 @@ set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 
 " " 自動改行を無効化
 " set textwidth=0
-"
+
 " " Kaoriya版ではvimrc_exampleの都合、以下の設定をするらしいが上手くいかない
 " autocmd MyAutoCmd BufEnter text setlocal textwidth=0
 
@@ -677,22 +644,14 @@ nnoremap <Right> <C-w>l
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
   \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 
-" " 最後のウィンドウがuniteでも自動で閉じたい...けどやり方がわからない
-" " -> 閉じたくないこともあるのでとりあえず放置
-" autocmd MyAutoCmd WinEnter *
-"   \ if (winnr('$') == 1) &&
-"   \ (((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') ||
-"   \  ((getbufvar(winbufnr(0), '&buftype')) == 'unite')) | quit | endif
-
 " " 開いたファイルと同じ場所へ移動する
-" " ネットワーク上のファイルにアクセスした時に問題が起きる？
 " " -> 何らかの設定/プラグイン起因でネットワーク上にcdすると重くなるため使わない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
 " パターンマッチが修正前だと:helpなどにも反応してしまうので修正
-" -> プラグインの挙動とぶつかってエラーになるらしいこともあるらしい
+" -> プラグインの挙動とぶつかってエラーになるらしいこともあるらしいので使わない
 "    https://github.com/Shougo/vimproc.vim/issues/116
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
@@ -867,7 +826,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#keyword_patterns = {}
   endif
 
-  " 日本語を補完候補として取得しないようにする
+  " 日本語を補完候補として取得しない
   let g:neocomplete#keyword_patterns._ = '\h\w*'
 
   call neobundle#untap()
@@ -892,7 +851,7 @@ if neobundle#tap('neosnippet')
     \   }
     \ })
 
-  " デフォルトのスニペットがコーディング規約と離れたものになっているので要修正
+  " デフォルトのスニペットはコーディング規約と離れたものになっているので要修正
   let g:neosnippet#snippets_directory =
     \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
 
@@ -994,7 +953,7 @@ if neobundle#tap('unite.vim')
   " let g:u_opt_mm =          g:u_tabo . g:u_prev . g:u_vopt
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
-  " -> 空いているキーがわかりにくくなるデメリットの方が大きい
+  " -> 空いているキーがわかりにくくなるデメリットの方が大きいため
   nnoremap <expr><Leader>bu ':<C-u>Unite buffer'       . g:u_opt_bu . '<CR>'
   nnoremap <expr><Leader>bo ':<C-u>Unite bookmark'     . g:u_opt_bo . '<CR>'
   nnoremap <expr><Leader>fi ':<C-u>Unite file'         . g:u_opt_fi . '<CR>'
@@ -1072,6 +1031,12 @@ if neobundle#tap('vimfiler.vim')
 
   " 開いているファイルのパスでVimFilerを開く
   nnoremap <expr><Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
+
+  call neobundle#untap()
+endif " }}}
+
+" シンボル、関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
+if neobundle#tap('gtags.vim')
 
   call neobundle#untap()
 endif " }}}
@@ -1261,8 +1226,6 @@ if neobundle#tap('vim-quickrun')
   let g:quickrun_no_default_key_mappings = 1
   nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
   vnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
-  " nnoremap <Leader>qr :<C-u>QuickRun -hook/time/enable 1<CR>
-  " vnoremap <Leader>qr :<C-u>QuickRun -hook/time/enable 1<CR>
 
   call neobundle#untap()
 endif " }}}
@@ -1323,7 +1286,7 @@ if neobundle#tap('vim-submode')
 endif " }}}
 
 " Vim上で自動構文チェック(vim-watchdogs)
-" -> 裏で実行した結果を反映するからか、pause系の処理があると固まる {{{
+" -> 裏で実行した結果を反映しているのか、pause系の処理があると固まる {{{
 if neobundle#tap('vim-watchdogs')
   call neobundle#config({
     \   'autoload' : {
@@ -1405,6 +1368,8 @@ if neobundle#tap('memolist.vim')
 
   nnoremap <Leader>mn :<C-u>MemoNew<CR>
   nnoremap <Leader>ml :<C-u>MemoList<CR>
+
+  " Uniteが入っている前提
   nnoremap <expr><Leader>mg ':<C-u>Unite grep:~/memo' . g:u_opt_mg . '<CR>'
 
   call neobundle#untap()
@@ -1929,12 +1894,6 @@ if neobundle#tap('vim-startify')
     \   [ 'My bookmarks:'               ], 'bookmarks',
     \   [ 'Last recently opened files:' ], 'files',
     \ ]
-
-  call neobundle#untap()
-endif " }}}
-
-" シンボル、関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
-if neobundle#tap('gtags.vim')
 
   call neobundle#untap()
 endif " }}}
