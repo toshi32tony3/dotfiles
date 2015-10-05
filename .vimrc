@@ -1413,16 +1413,6 @@ if neobundle#tap('vim-brightest')
   call neobundle#untap()
 endif " }}}
 
-" 文字列置換を視覚的にわかりやすく(vim-over) {{{
-if neobundle#tap('vim-over')
-
-  let g:over_enable_auto_nohlsearch = 0
-
-  nnoremap <Leader>ss :<C-u>OverCommandLine %s/<CR>
-
-  call neobundle#untap()
-endif " }}}
-
 " My favorite colorscheme(vim-tomorrow-theme) {{{
 if neobundle#tap('vim-tomorrow-theme')
   colorscheme Tomorrow-Night
@@ -1905,11 +1895,6 @@ endif " }}}
 " " 試した感じ、けっこうイケてる、けど若干見た目が精神衛生上よろしくない
 " " 個人的にはclever-f, vim-sneakがあれば良いかなあと
 " NeoBundle 'haya14busa/vim-easymotion'
-
-" " テキスト整形する
-" " -> なんだかんだで使ってない。
-" NeoBundle 'h1mesuke/vim-alignta'
-" NeoBundle 'osyo-manga/vim-operator-alignta'
 
 " " HTMLコーディングを爆速化するらしい
 " " -> HTML書く機会が無かった。そのうち使いたい。
