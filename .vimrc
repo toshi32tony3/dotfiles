@@ -1474,7 +1474,7 @@ if neobundle#tap('vim-textobj-function')
   let g:textobj_function_no_default_key_mappings = 1
 
   if neobundle#tap('vim-textobj-function')
-    nmap sf/ <Plug>(operator-search)<Plug>(textobj-function-i)
+    nmap <Leader>f/ <Plug>(operator-search)<Plug>(textobj-function-i)
   endif
 
   call neobundle#untap()
@@ -1839,7 +1839,11 @@ endif " }}}
 if neobundle#tap('clever-f.vim')
 
   let g:clever_f_smart_case = 1
+
+  " fは進む、Fは戻るで固定する
+  " -> 標準Vimの挙動は0
   let g:clever_f_fix_key_direction = 1
+
   " let g:clever_f_chars_match_any_signs = ';'
 
   call neobundle#untap()
@@ -1850,6 +1854,10 @@ if neobundle#tap('vim-sneak')
 
   let g:sneak#s_next = 1     " clever-f ならぬ clever-s な動作にする
   let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
+
+  " sは進む、Sは戻るで固定する
+  " -> 標準Vimの挙動は0
+  let g:sneak#absolute_dir = 1
 
   " " sは潰されやすいが、fは潰されるケースが少ないのでfを使う
   " " -> 下記設定により、繰り返し時も f / F を使うようになる
