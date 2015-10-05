@@ -114,7 +114,6 @@ NeoBundle 'thinca/vim-fontzoom'
 NeoBundleLazy 'thinca/vim-scouter',
   \ { 'autoload' : { 'commands' : ['Scouter'] } }
 " NeoBundle 'thinca/vim-submode'
-" NeoBundle 'thinca/vim-visualstar'
 " NeoBundle 'thinca/vim-qfreplace'
 
 " The end of thinca_ware }}}
@@ -125,7 +124,6 @@ NeoBundleLazy 'thinca/vim-scouter',
 " NeoBundle 'osyo-manga/shabadou.vim'
 NeoBundle 'jceb/vim-hier'
 NeoBundle 'osyo-manga/vim-operator-search'
-NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'osyo-manga/vim-brightest'
 
 " The end of osyo_ware }}}
@@ -165,7 +163,13 @@ NeoBundle 'kana/vim-smartchr'
 NeoBundle 'tyru/capture.vim'
 NeoBundle 't9md/vim-quickhl'
 
-" NeoBundle 'haya14busa/incsearch.vim'
+NeoBundle 'haya14busa/incsearch.vim'
+NeoBundle 'haya14busa/incsearch-fuzzy.vim'
+NeoBundle 'haya14busa/incsearch-migemo.vim'
+" NeoBundle 'inside/vim-search-pulse'
+NeoBundle 'osyo-manga/vim-anzu'
+NeoBundle 'haya14busa/vim-asterisk'
+
 NeoBundle 'mhinz/vim-signify'
 " NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'majutsushi/tagbar'
@@ -453,8 +457,9 @@ nnoremap <silent><F9> :<C-u>set spell!<CR>
 "-----------------------------------------------------------------------------
 " 文字列検索系 "{{{
 
-" very magic
-nnoremap / /\v
+" " very magic
+" " -> incsearch.vimでvery magic指定する
+" nnoremap / /\v
 
 " 大文字小文字を区別しない。区別したい時は検索パターンのどこかに\Cを付ける
 set ignorecase " 検索時に大文字小文字を区別しない
@@ -473,19 +478,6 @@ set hlsearch   " 検索マッチテキストをハイライト
 " autocmd MyAutoCmd WinEnter *
 " \     let @/ = get(b:, 'vimrc_pattern', @/)
 " \   | let &l:hlsearch = get(b:, 'vimrc_hlsearch', &l:hlsearch)
-
-" 検索開始時にジャンプせず、その場に留まる＠ちらつかない
-" -> saihooooooooさんのvimrcからのコピペ
-" -> プラグインvisualstarだとちらつくので不採用とした
-nnoremap <silent>* viw:<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>`<
-xnoremap <silent>*    :<C-u>call <SID>StarSearch()<CR>:<C-u>set hlsearch<CR>
-function! s:StarSearch()
-  let orig = @"
-  normal! gvy
-  let text = @"
-  let @/ = '\V' . substitute(escape(text, '\/'), '\n', '\\n', 'g')
-  let @" = orig
-endfunction
 
 " grep結果が0件の場合、Quickfixを開かない
 autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
@@ -1327,17 +1319,6 @@ if neobundle#tap('vim-submode')
   call neobundle#untap()
 endif " }}}
 
-" アスタリスク検索開始時にジャンプせず、その場に留まる(visualstar) {{{
-if neobundle#tap('visualstar')
-
-  " 飛んだ時にちらつく...
-  " -> set lazyredrawで解決する？と思ったがzzが内蔵されているぽいのでダメだった
-  " set lazyredraw " 手動で行ってない操作は完了するまで画面を再描画しない
-  vmap * <Plug>(visualstar-*)N
-
-  call neobundle#untap()
-endif " }}}
-
 " Vim上で自動構文チェック(vim-watchdogs)
 " -> 裏で実行した結果を反映するからか、pause系の処理があると固まる {{{
 if neobundle#tap('vim-watchdogs')
@@ -1355,24 +1336,6 @@ if neobundle#tap('vim-watchdogs')
 
   " quickrun_configにwatchdogs.vimの設定を追加
   call watchdogs#setup(g:quickrun_config)
-
-  call neobundle#untap()
-endif " }}}
-
-" 何番目の検索対象か／検索対象の総数を表示(vim-anzu) {{{
-if neobundle#tap('vim-anzu')
-
-  " " 検索対象横にechoする。視線移動は減るが結構見づらくなるので慣れが必要
-  " nmap n <Plug>(anzu-mode-n)
-  " nmap N <Plug>(anzu-mode-N)
-  "
-  " " 検索開始時にジャンプせず、その場でanzu-modeに移行する
-  " nmap <expr>* ':<C-u>call anzu#mode#start("<C-R><C-W>", "", "", "")<CR>'
-
-  " コマンド結果出力画面にecho
-  nmap n <Plug>(anzu-n-with-echo)
-  nmap N <Plug>(anzu-N-with-echo)
-  " nmap * <Plug>(anzu-star-with-echo)N
 
   call neobundle#untap()
 endif " }}}
@@ -1572,7 +1535,113 @@ endif " }}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
+  " very magic
+  let g:incsearch#magic = '\v'
+
+  " 検索後、カーソル移動すると自動でnohlsearchする
+  let g:incsearch#auto_nohlsearch = 1
+
   map / <Plug>(incsearch-forward)
+  map ?  <Plug>(incsearch-backward)
+  " map g/ <Plug>(incsearch-stay)
+
+  if neobundle#tap('vim-anzu') && neobundle#tap('vim-search-pulse')
+    map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)<Plug>Pulse
+    map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)<Plug>Pulse
+
+  elseif neobundle#tap('vim-anzu')
+    map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
+    map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
+
+  else
+    map n  <Plug>(incsearch-nohl-n)
+    map N  <Plug>(incsearch-nohl-N)
+
+  endif
+
+  if neobundle#tap('vim-asterisk') && neobundle#tap('vim-search-pulse')
+    map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>Pulse
+    map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>Pulse
+
+  elseif neobundle#tap('vim-asterisk')
+    map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+    map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+
+  else
+    map *  <Plug>(incsearch-nohl-*)
+    map g* <Plug>(incsearch-nohl-g*)
+
+  endif
+
+  call neobundle#untap()
+endif " }}}
+
+" incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
+if neobundle#tap('incsearch-fuzzy.vim')
+  call neobundle#config({
+    \   'autoload' : {
+    \     'on_source' : [ 'incsearch.vim' ]
+    \   }
+    \ })
+
+  map z/ <Plug>(incsearch-fuzzy-/)
+  map z? <Plug>(incsearch-fuzzy-?)
+  " map zg/ <Plug>(incsearch-fuzzy-stay)
+
+  map g/ <Plug>(incsearch-fuzzyspell-/)
+  map g? <Plug>(incsearch-fuzzyspell-?)
+  " map gg/ <Plug>(incsearch-fuzzyspell-stay)
+
+  call neobundle#untap()
+endif " }}}
+
+" incsearch.vimをパワーアップ(incsearch-migemo.vim) {{{
+if neobundle#tap('incsearch-migemo.vim')
+  call neobundle#config({
+    \   'autoload' : {
+    \     'on_source' : [ 'incsearch.vim' ]
+    \   }
+    \ })
+
+  map m/ <Plug>(incsearch-migemo-/)
+  map m? <Plug>(incsearch-migemo-?)
+  " map mg/ <Plug>(incsearch-migemo-stay)
+
+  call neobundle#untap()
+endif " }}}
+
+" asterisk検索をパワーアップ(vim-asterisk) {{{
+if neobundle#tap('vim-asterisk')
+
+  " map *  <Plug>(asterisk-z*)
+  " map g* <Plug>(asterisk-gz*)
+
+  call neobundle#untap()
+endif " }}}
+
+" 何番目の検索対象か／検索対象の総数を表示(vim-anzu) {{{
+if neobundle#tap('vim-anzu')
+
+  " " 検索対象横にechoする。視線移動は減るが結構見づらくなるので慣れが必要
+  " nmap n <Plug>(anzu-mode-n)
+  " nmap N <Plug>(anzu-mode-N)
+  "
+  " " 検索開始時にジャンプせず、その場でanzu-modeに移行する
+  " nmap <expr>* ':<C-u>call anzu#mode#start("<C-R><C-W>", "", "", "")<CR>'
+
+  " " コマンド結果出力画面にecho
+  " nmap n <Plug>(anzu-n-with-echo)
+  " nmap N <Plug>(anzu-N-with-echo)
+  " nmap * <Plug>(anzu-star-with-echo)N
+
+  call neobundle#untap()
+endif " }}}
+
+" 検索後にピカる(vim-search-pulse) {{{
+if neobundle#tap('vim-search-pulse')
+
+  " let g:vim_search_pulse_mode = 'pattern'
+  let g:vim_search_pulse_disable_auto_mappings = 1
 
   call neobundle#untap()
 endif " }}}
