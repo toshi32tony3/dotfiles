@@ -163,8 +163,8 @@ NeoBundle 'junegunn/vim-easy-align'
 NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'vim-scripts/BufOnly.vim'
 
-NeoBundle 'rhysd/clever-f.vim'
 NeoBundle 'justinmk/vim-sneak'
+" NeoBundle 'rhysd/clever-f.vim'
 
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'kshenoy/vim-signature'
@@ -1801,20 +1801,6 @@ if neobundle#tap('vim-easy-align')
   call neobundle#untap()
 endif " }}}
 
-" vimのf検索を便利に(clever-f.vim) {{{
-if neobundle#tap('clever-f.vim')
-
-  let g:clever_f_smart_case = 1
-
-  " fは進む、Fは戻るで固定する
-  " -> 標準Vimの挙動は0
-  let g:clever_f_fix_key_direction = 1
-
-  " let g:clever_f_chars_match_any_signs = ';'
-
-  call neobundle#untap()
-endif " }}}
-
 " clever-fの2文字版(vim-sneak) {{{
 if neobundle#tap('vim-sneak')
 
@@ -1825,23 +1811,37 @@ if neobundle#tap('vim-sneak')
   " -> 標準Vimの挙動は0
   let g:sneak#absolute_dir = 1
 
-  " " sは潰されやすいが、fは潰されるケースが少ないのでfを使う
-  " " -> 下記設定により、繰り返し時も f / F を使うようになる
-  " " -> s-sneakとclever-fの使い分けに慣れるため、コメントアウトしておく
-  " nmap f <Plug>Sneak_s
-  " nmap F <Plug>Sneak_S
-  " xmap f <Plug>Sneak_s
-  " xmap F <Plug>Sneak_S
-  " omap f <Plug>Sneak_s
-  " omap F <Plug>Sneak_S
+  if neobundle#tap('clever-f.vim')
+    " clever-fと併用する時はs-sneak
+    nmap s <Plug>Sneak_s
+    nmap S <Plug>Sneak_S
+    xmap s <Plug>Sneak_s
+    xmap S <Plug>Sneak_S
+    omap s <Plug>Sneak_s
+    omap S <Plug>Sneak_S
+  else
+    " clever-fと併用しない時はf-sneak
+    nmap f <Plug>Sneak_s
+    nmap F <Plug>Sneak_S
+    xmap f <Plug>Sneak_s
+    xmap F <Plug>Sneak_S
+    omap f <Plug>Sneak_s
+    omap F <Plug>Sneak_S
+  endif
 
-  " s-sneak
-  nmap s <Plug>Sneak_s
-  nmap S <Plug>Sneak_S
-  xmap s <Plug>Sneak_s
-  xmap S <Plug>Sneak_S
-  omap s <Plug>Sneak_s
-  omap S <Plug>Sneak_S
+  call neobundle#untap()
+endif " }}}
+
+" vimのf検索を便利に(clever-f.vim) {{{
+if neobundle#tap('clever-f.vim')
+
+  let g:clever_f_smart_case = 1
+
+  " fは進む、Fは戻るで固定する
+  " -> 標準Vimの挙動は0
+  let g:clever_f_fix_key_direction = 1
+
+  " let g:clever_f_chars_match_any_signs = ';'
 
   call neobundle#untap()
 endif " }}}
