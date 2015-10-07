@@ -1253,6 +1253,14 @@ if neobundle#tap('vim-fontzoom')
   call neobundle#untap()
 endif " }}}
 
+" Vim力を測る(vim-scouter) {{{
+if neobundle#tap('vim-scouter')
+
+  nnoremap <Leader>sc :<C-u>Scouter $HOME\dotfiles\.vimrc<CR>
+
+  call neobundle#untap()
+endif " }}}
+
 " キー連打を便利に。ただし再描画がうっとおしい(vim-submode) {{{
 if neobundle#tap('vim-submode')
 
