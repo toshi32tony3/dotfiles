@@ -166,6 +166,9 @@ NeoBundle 'vim-scripts/BufOnly.vim'
 NeoBundle 'justinmk/vim-sneak'
 NeoBundle 'rhysd/clever-f.vim'
 
+" 画面の再描画を含むせいかlightlineやfoldCCとの相性が悪いようで、使えない
+" NeoBundle 'deris/vim-shot-f'
+
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'mhinz/vim-startify'
@@ -1526,20 +1529,40 @@ if neobundle#tap('incsearch.vim')
   endif
 
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu') && neobundle#tap('vim-search-pulse')
-    map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
-    map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
+    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)(anzu-update-search-status-with-echo)<Plug>Pulse
+    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)(anzu-update-search-status-with-echo)<Plug>Pulse
+    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)(anzu-update-search-status-with-echo)<Plug>Pulse
+
+    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
+    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
 
   elseif neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
-    map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-    map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+
+    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
 
   elseif neobundle#tap('vim-asterisk')
-    map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-    map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+
+    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
 
   else
-    map *  <Plug>(incsearch-nohl-*)
-    map g* <Plug>(incsearch-nohl-g*)
+    nmap *          yiw<Plug>(incsearch-nohl-*)
+    omap *     <Esc>yiw<Plug>(incsearch-nohl-*)
+    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
+
+    nmap g*         yiw<Plug>(incsearch-nohl-g*)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)
+    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
 
   endif
 
@@ -1794,6 +1817,12 @@ if neobundle#tap('yankround.vim')
   nmap <C-n> <Plug>(yankround-next)
   nmap <C-p> <Plug>(yankround-prev)
 
+  " " Visualモードでレジスタ指定貼り付けできるようにコメントアウト
+  " " -> yankroundはレジスタ指定を想定していないっぽい？
+  " xmap p     <Plug>(yankround-p)
+  " xmap gp    <Plug>(yankround-gp)
+  " xmap gP    <Plug>(yankround-gP)
+
   call neobundle#untap()
 endif " }}}
 
@@ -1836,7 +1865,7 @@ if neobundle#tap('vim-sneak')
   call neobundle#untap()
 endif " }}}
 
-" vimのf検索を便利に(clever-f.vim) {{{
+" f検索を便利に(clever-f.vim) {{{
 if neobundle#tap('clever-f.vim')
 
   let g:clever_f_smart_case = 1
@@ -1846,6 +1875,26 @@ if neobundle#tap('clever-f.vim')
   let g:clever_f_fix_key_direction = 1
 
   " let g:clever_f_chars_match_any_signs = ';'
+
+  call neobundle#untap()
+endif " }}}
+
+" f検索で一発ジャンプできなかった時の悲しみを終わらせる(vim-shot-f) {{{
+if neobundle#tap('vim-shot-f')
+  let g:shot_f_no_default_key_mappings = 1
+
+  nmap f  <Plug>(shot-f-f)
+  nmap F  <Plug>(shot-f-F)
+  nmap t  <Plug>(shot-f-t)
+  nmap T  <Plug>(shot-f-T)
+  xmap f  <Plug>(shot-f-f)
+  xmap F  <Plug>(shot-f-F)
+  xmap t  <Plug>(shot-f-t)
+  xmap T  <Plug>(shot-f-T)
+  omap f  <Plug>(shot-f-f)
+  omap F  <Plug>(shot-f-F)
+  omap t  <Plug>(shot-f-t)
+  omap T  <Plug>(shot-f-T)
 
   call neobundle#untap()
 endif " }}}
