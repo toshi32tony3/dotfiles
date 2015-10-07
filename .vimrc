@@ -1525,9 +1525,13 @@ if neobundle#tap('incsearch.vim')
 
   endif
 
-  if neobundle#tap('vim-asterisk') && neobundle#tap('vim-search-pulse')
-    map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>Pulse
-    map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>Pulse
+  if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu') && neobundle#tap('vim-search-pulse')
+    map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
+    map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
+
+  elseif neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
+    map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    map g* <Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
 
   elseif neobundle#tap('vim-asterisk')
     map *  <Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
