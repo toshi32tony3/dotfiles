@@ -164,7 +164,7 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'vim-scripts/BufOnly.vim'
 
 NeoBundle 'justinmk/vim-sneak'
-" NeoBundle 'rhysd/clever-f.vim'
+NeoBundle 'rhysd/clever-f.vim'
 
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'kshenoy/vim-signature'
