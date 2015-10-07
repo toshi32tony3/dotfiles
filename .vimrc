@@ -1819,17 +1819,13 @@ if neobundle#tap('yankround.vim')
   let g:yankround_region_hl_groupname = 'ErrorMsg'
 
   nmap p     <Plug>(yankround-p)
+  xmap p     <Plug>(yankround-p)
   nmap P     <Plug>(yankround-P)
   nmap gp    <Plug>(yankround-gp)
+  xmap gp    <Plug>(yankround-gp)
   nmap gP    <Plug>(yankround-gP)
   nmap <C-n> <Plug>(yankround-next)
   nmap <C-p> <Plug>(yankround-prev)
-
-  " " Visualモードでレジスタ指定貼り付けできるようにコメントアウト
-  " " -> yankroundはレジスタ指定を想定していないっぽい？
-  " xmap p     <Plug>(yankround-p)
-  " xmap gp    <Plug>(yankround-gp)
-  " xmap gP    <Plug>(yankround-gP)
 
   call neobundle#untap()
 endif " }}}
