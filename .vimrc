@@ -1816,7 +1816,7 @@ if neobundle#tap('foldCC')
   let g:foldCCtext_enable_autofdc_adjuster = 1
   set foldtext=FoldCCtext()
   set foldcolumn=1
-  set foldlevel=1
+  set foldlevel=0
   set foldnestmax=1
   set fillchars=vert:\|
   nnoremap <Leader>h  zc
