@@ -1872,9 +1872,9 @@ if neobundle#tap('vim-sneak')
   let g:sneak#s_next = 1     " clever-f ならぬ clever-s な動作にする
   let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
 
-  " sは進む、Sは戻るで固定する
-  " -> 標準Vimの挙動は0
-  let g:sneak#absolute_dir = 1
+  " " sは進む、Sは戻るで固定する
+  " " -> 標準Vimの挙動は0
+  " let g:sneak#absolute_dir = 1
 
   if neobundle#tap('clever-f.vim')
     " clever-fと併用する時はs-sneak
@@ -1902,9 +1902,9 @@ if neobundle#tap('clever-f.vim')
 
   let g:clever_f_smart_case = 1
 
-  " fは進む、Fは戻るで固定する
-  " -> 標準Vimの挙動は0
-  let g:clever_f_fix_key_direction = 1
+  " " fは進む、Fは戻るで固定する
+  " " -> 標準Vimの挙動は0
+  " let g:clever_f_fix_key_direction = 1
 
   " let g:clever_f_chars_match_any_signs = ';'
 
