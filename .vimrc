@@ -1,3 +1,4 @@
+
 " .vimrc for 香り屋版GVim
 
 "-----------------------------------------------------------------------------
@@ -784,6 +785,10 @@ nnoremap q<Space> <Nop>
 
 " よくわからないけど矩形Visualモードになるので潰す
 nnoremap <C-q> <Nop>
+
+" マウス中央ボタンは使わない
+map  <MiddleMouse> <Nop>
+imap <MiddleMouse> <Nop>
 
 " 挿入モードでカーソルキーを使うとUndo単位が区切られて困るので潰す
 inoremap <Up>    <Nop>
