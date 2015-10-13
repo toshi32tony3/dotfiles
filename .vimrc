@@ -1877,6 +1877,7 @@ if neobundle#tap('vim-sneak')
   " let g:sneak#absolute_dir = 1
 
   if neobundle#tap('clever-f.vim')
+
     " clever-fと併用する時はs-sneak
     nmap s <Plug>Sneak_s
     nmap S <Plug>Sneak_S
@@ -1962,9 +1963,9 @@ endif " }}}
 " vimにスタート画面を用意(vim-startify) {{{
 if neobundle#tap('vim-startify')
 
-  nnoremap ,, :<C-u>Startify<CR>
-  let g:startify_files_number = 3
+  let g:startify_files_number = 4
   let g:startify_change_to_dir = 1
+  let g:startify_session_dir = '~/vimfiles/session'
   let g:startify_bookmarks = [
     \   '.',
     \   '~\.vimrc',
@@ -1973,7 +1974,10 @@ if neobundle#tap('vim-startify')
   let g:startify_list_order = [
     \   [ 'My bookmarks:'               ], 'bookmarks',
     \   [ 'Last recently opened files:' ], 'files',
+    \   [ 'My sessions:' ], 'sessions',
     \ ]
+
+  nnoremap ,, :<C-u>Startify<CR>
 
   call neobundle#untap()
 endif " }}}
