@@ -780,7 +780,8 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
 " よくわからないけど終了されて困るので防ぐ
-nnoremap q<Space> <Nop>
+nnoremap q<Space>   <Nop>
+nnoremap <C-w><C-q> <Nop>
 
 " よくわからないけど矩形Visualモードになるので潰す
 nnoremap <C-q> <Nop>
