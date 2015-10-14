@@ -1,4 +1,3 @@
-
 " .vimrc for 香り屋版GVim
 
 "-----------------------------------------------------------------------------
@@ -1978,7 +1977,7 @@ if neobundle#tap('vim-startify')
 
   let g:startify_list_order = [
     \   [ 'My bookmarks:'               ], 'bookmarks',
-    \   [ 'Last recently opened files:' ], 'files',
+    \   [ 'Recently used files:' ], 'files',
     \   [ 'My sessions:' ], 'sessions',
     \ ]
 
