@@ -1553,7 +1553,7 @@ if neobundle#tap('incsearch.vim')
 
   map / <Plug>(incsearch-forward)
   map ?  <Plug>(incsearch-backward)
-  " map g/ <Plug>(incsearch-stay)
+  map ,/ <Plug>(incsearch-stay)
 
   if neobundle#tap('vim-anzu') && neobundle#tap('vim-search-pulse')
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)<Plug>Pulse
@@ -1699,7 +1699,7 @@ endif " }}}
 " ctagsを使ってアウトラインを作成(tagbar) {{{
 if neobundle#tap('tagbar')
 
-  " tagbarでctags日本語版を使うとエラーが出るみたい
+  " http://hp.vector.co.jp/authors/VA025040/ctags/
   let g:tagbar_ctags_bin = '$VIM\ctags.exe'
   let g:tagbar_sort = 0
   let g:tagbar_type_vim = {
