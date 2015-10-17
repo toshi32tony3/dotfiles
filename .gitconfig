@@ -1,0 +1,13 @@
+[user]
+	name = toshi32tony3
+	email = toshi32tony3@gmail.com
+[core]
+	autocrlf = true
+	editor = gvim
+[push]
+	default = simple
+
+[diff]
+	tool = vimdiff
+	algorithm = histogram
+
