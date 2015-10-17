@@ -673,7 +673,9 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
 " 新規タブでgf
 nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 
-" 新規タブでカレントファイルと引数指定ファイルを対象にvimdiff
+" 新規タブでvimdiff
+" 引数が1つ     : カレントバッファと引数指定ファイルの比較
+" 引数が2つ以上 : 引数指定ファイル同士の比較
 " http://koturn.hatenablog.com/entry/2013/08/10/034242
 function! s:vimdiff_in_newtab(...)
   if a:0 == 1
