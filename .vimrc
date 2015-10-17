@@ -662,8 +662,37 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
 " 新規タブでgf
 nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 
-" カレントファイルと引数指定ファイルでvimdiff起動
-command! -nargs=1 VDiff execute 'vertical diffsplit ' . expand('<q-args>')
+" 新規タブでカレントファイルと引数指定ファイルを対象にvimdiff
+" http://koturn.hatenablog.com/entry/2013/08/10/034242
+function! s:vimdiff_in_newtab(...)
+  if a:0 == 1
+    tabedit %:p
+    execute 'rightbelow vertical diffsplit ' .a:1
+  else
+    execute 'tabedit ' a:1
+    for l:file in a:000[1 :]
+      execute 'rightbelow vertical diffsplit ' . l:file
+    endfor
+  endif
+endfunction
+command! -bar -nargs=+ -complete=file Diff call s:vimdiff_in_newtab(<f-args>)
+
+" vimdiffモードは使用せず比較する
+" http://koturn.hatenablog.com/entry/2013/08/10/034242
+function! s:compare(...)
+  if a:0 == 1
+    tabedit %:p
+    execute 'rightbelow vertical diffsplit ' .a:1
+  else
+    execute 'tabedit ' a:1
+    setlocal scrollbind
+    for l:file in a:000[1 :]
+      execute 'rightbelow vertical diffsplit ' . l:file
+      setlocal scrollbind
+    endfor
+  endif
+endfunction
+command! -bar -nargs=+ -complete=file Compare call s:compare(<f-args>)
 
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
@@ -693,7 +722,7 @@ let g:indexOfCode = 0
 
 " Gtagsのタグファイルがあるディレクトリの指定
 function! s:set_src_dir()
-  let $SRC_DIR = 'D:\hogehoge'
+  let $SRC_DIR = 'C:\Users\toshi\dev\test\vim\src'
   let $TARGET_VER = g:code_list[g:indexOfCode]
   let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
   let $GTAGSROOT = $TARGET_DIR
