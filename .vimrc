@@ -662,6 +662,9 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
 " 新規タブでgf
 nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 
+" カレントファイルと引数指定ファイルでvimdiff起動
+command! -nargs=1 VDiff execute 'vertical diffsplit ' . expand('<q-args>')
+
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
 " tags, pathの設定 "{{{
