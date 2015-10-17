@@ -183,7 +183,7 @@ NeoBundle 'basyura/J6uil.vim'
 
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'lanbdalisue/vim-unified-diff'
-NeoBundle 'vim-scripts/diffchar.vim'
+" NeoBundle 'vim-scripts/diffchar.vim'
 
 call neobundle#end()
 
@@ -194,6 +194,9 @@ syntax enable
 
 " .vimrcに書いてあるプラグインがインストールされているかチェックする
 NeoBundleCheck
+
+" Load local settings
+source $HOME/localfiles/local.rc.vim
 
 " The end of 初期設定系 }}}
 "-----------------------------------------------------------------------------
@@ -725,29 +728,15 @@ endfunction
 command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 
-let g:code_list = [
-    \   'hoge',
-    \ ]
-let g:numberOfCode = len(g:code_list)
-let g:indexOfCode = 0
-
-" Gtagsのタグファイルがあるディレクトリの指定
+" ソースディレクトリの設定はローカル設定ファイルに記述する
+" see: $HOME/localfiles/local.rc.vim
 function! s:set_src_dir()
-  let $SRC_DIR = 'D:\hogehoge'
+  let g:numberOfCode = len(g:code_list)
   let $TARGET_VER = g:code_list[g:indexOfCode]
   let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
-  let $GTAGSROOT = $TARGET_DIR
 endfunction
 
-" pathの設定(ここに設定したパスはfind等の検索対象に含まれる)
-" -> starstarは便利だが、範囲を広げすぎるとfindにかかる時間が膨大になるので注意
-" -> というかベタ書きの方が圧倒的に速いので、必要なところだけベタ書きしましょう
-let g:path_list = [
-  \   'hoge',
-  \   'fuga',
-  \ ]
-
-function! s:set_path_list()
+ function! s:set_path_list()
   set path=
   for item in g:path_list
     let $SET_PATH = $TARGET_DIR . item
@@ -755,12 +744,6 @@ function! s:set_path_list()
   endfor
 endfunction
 
-let g:cdpath_list = [
-  \   '\foo',
-  \   '\foo\bar',
-  \ ]
-
-" pathの設定(ここに設定したパスはfind等の検索対象に含まれる)
 function! s:set_cdpath_list()
   set cdpath=
   set cdpath+=D:\hoge\fuga
@@ -772,11 +755,16 @@ function! s:set_cdpath_list()
   endfor
 endfunction
 
-" ctagsのタグファイルがあるディレクトリの指定
 function! s:set_tags()
+  " GNU Globalのタグはルートで生成する
+  let $GTAGSROOT = $TARGET_DIR
+
+  " ctagsは必要なディレクトリで生成する
   set tags=
-  let $SET_TAGS = $TARGET_DIR . '\tags'
-  set tags+=$SET_TAGS
+  for item in g:ctags_list
+    let $SET_TAGS = $TARGET_DIR . item
+    set tags+=$SET_TAGS
+  endfor
 endfunction
 
 call s:set_src_dir()
@@ -2010,10 +1998,13 @@ if neobundle#tap('vim-startify')
   let g:startify_files_number = 4
   let g:startify_change_to_dir = 1
   let g:startify_session_dir = '~/vimfiles/session'
-  let g:startify_bookmarks = [
-    \   '.',
-    \   '~\.vimrc',
-    \ ]
+
+  " ブックマークの設定はローカル設定ファイルに記述する
+  " see: $HOME/localfiles/local.rc.vim
+  " let g:startify_bookmarks = [
+  "   \   '.',
+  "   \   '~\.vimrc',
+  "   \ ]
 
   let g:startify_list_order = [
     \   [ 'My bookmarks:'               ], 'bookmarks',
