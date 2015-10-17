@@ -248,6 +248,9 @@ set autoread
 " 再描画がうっとおしいのでやっぱり0にする。再描画必要なら<C-e>や<C-y>を使う。
 set scrolloff=0
 
+" VimDiffは基本縦分割とする
+set diffopt=vertical
+
 " makeしたらcopen
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
