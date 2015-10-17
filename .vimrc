@@ -685,12 +685,12 @@ command! -bar -nargs=+ -complete=file Diff call s:vimdiff_in_newtab(<f-args>)
 function! s:compare(...)
   if a:0 == 1
     tabedit %:p
-    execute 'rightbelow vertical diffsplit ' .a:1
+    execute 'rightbelow vnew ' .a:1
   else
     execute 'tabedit ' a:1
     setlocal scrollbind
     for l:file in a:000[1 :]
-      execute 'rightbelow vertical diffsplit ' . l:file
+      execute 'rightbelow vnew ' . l:file
       setlocal scrollbind
     endfor
   endif
