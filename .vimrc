@@ -493,6 +493,7 @@ nnoremap <Leader>ff  :<C-u>e ++ff=
 autocmd MyAutoCmd BufEnter *          setlocal tabstop=2 shiftwidth=2 expandtab
 autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd MyAutoCmd BufEnter .gitconfig setlocal tabstop=2 shiftwidth=2 noexpandtab
 autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4 noexpandtab
 autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4 noexpandtab
 autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4 noexpandtab
