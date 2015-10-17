@@ -402,8 +402,8 @@ set showcmd
 set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
 
-" 差分ファイル確認時は折り畳み無効
-autocmd MyAutoCmd FileType diff setlocal nofoldenable
+" " 差分ファイル確認時は折り畳み無効
+" autocmd MyAutoCmd FileType diff setlocal nofoldenable
 
 " 折りたたみ機能をスイッチ
 nnoremap <silent><F12> :set foldenable!<CR>
@@ -725,7 +725,7 @@ let g:indexOfCode = 0
 
 " Gtagsのタグファイルがあるディレクトリの指定
 function! s:set_src_dir()
-  let $SRC_DIR = 'C:\Users\toshi\dev\test\vim\src'
+  let $SRC_DIR = 'D:\hogehoge'
   let $TARGET_VER = g:code_list[g:indexOfCode]
   let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
   let $GTAGSROOT = $TARGET_DIR
