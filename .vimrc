@@ -1,7 +1,7 @@
 " .vimrc for 香り屋版GVim
 
 "-----------------------------------------------------------------------------
-" 初期設定系 {{{
+" 初期設定 {{{
 set nocompatible            " Vi互換モードをオフ(Vimの拡張機能を有効化)
 filetype plugin indent off  " ftpluginは最後に読み込むため、一旦オフする
 
@@ -198,9 +198,9 @@ NeoBundleCheck
 " Load local settings
 source $HOME/localfiles/local.rc.vim
 
-" The end of 初期設定系 }}}
+" The end of 初期設定 }}}
 "-----------------------------------------------------------------------------
-" 基本設定系 {{{
+" 基本設定 {{{
 
 let mapleader = "#"         " 左手で<Leader>を入力したい
 set helplang=en             " 日本語ヘルプを卒業したい。例え英語が読めなくとも
@@ -263,9 +263,9 @@ set diffopt+=vertical
 " makeしたらcopen
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
-" The end of 基本設定系 }}}
+" The end of 基本設定 }}}
 "-----------------------------------------------------------------------------
-" 入力補助系 " {{{
+" 入力 " {{{
 
 set wildmenu
 set wildmode=full
@@ -324,9 +324,9 @@ set complete=.,w,b,u
 nnoremap & <silent>:<C-u>&&<CR>
 xnoremap & <silent>:<C-u>&&<CR>
 
-" The end of 入力補助系 }}}
+" The end of 入力 }}}
 "-----------------------------------------------------------------------------
-" 視覚情報系 "{{{
+" 表示 "{{{
 
 " いまひとつ.gvimrcでしかできない設定というのがわからない...
 " -> とりあえず移動したやつを列挙していこうかな
@@ -453,7 +453,7 @@ set commentstring=%s
 
 " The end of 表示 }}}
 "-----------------------------------------------------------------------------
-" 文字列検索系 "{{{
+" 文字列検索 "{{{
 
 " " very magic
 " " -> incsearch.vimでvery magic指定する
@@ -480,9 +480,9 @@ set hlsearch   " 検索マッチテキストをハイライト
 " grep結果が0件の場合、Quickfixを開かない
 autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
 
-" The end of 文字列検索系 }}}
+" The end of 文字列検索 }}}
 "-----------------------------------------------------------------------------
-" 編集系 "{{{
+" 編集 "{{{
 
 set encoding=utf-8                  " utf-8をデフォルトエンコーディングとする
 set fileencodings=utf-8,sjis,euc-jp " 文字コード自動判定候補
@@ -610,7 +610,7 @@ command! -nargs=1 -complete=command CopyCmdOutput call s:func_copy_cmd_output(<q
 " <C-g>u : アンドゥ単位を区切る
 inoremap <C-@> <C-g>u<C-@>
 
-" The end of 編集系 }}}
+" The end of 編集 }}}
 "-----------------------------------------------------------------------------
 " 操作の簡単化 "{{{
 
@@ -710,7 +710,7 @@ command! -bar -nargs=+ -complete=file Diff call s:vimdiff_in_newtab(<f-args>)
 
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
-" tags, pathの設定 "{{{
+" tags, path "{{{
 
 " タグジャンプ時に候補が複数あった場合リスト表示
 " -> リスト表示したい時だけg付ければ良い気がしてきた
@@ -798,7 +798,7 @@ function! s:ChangeDir(dir)
 endfunction
 command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 
-" The end of tags, pathの設定 }}}
+" The end of tags, path }}}
 "-----------------------------------------------------------------------------
 " 誤爆防止関係 " {{{
 
