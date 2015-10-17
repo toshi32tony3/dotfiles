@@ -159,7 +159,7 @@ NeoBundle 'majutsushi/tagbar'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
-NeoBundle 'LeafCage/foldCC'
+" NeoBundle 'LeafCage/foldCC'
 " NeoBundleLazy 'kana/vim-fakeclip'
 NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'junegunn/vim-easy-align'
@@ -433,7 +433,22 @@ nnoremap <silent><F2> :<C-u>call ToggleTransParency()<CR>
 set spelllang+=cjk
 nnoremap <silent><F3> :<C-u>set spell!<CR>
 
-" The end of 視覚情報系 }}}
+" fold(折り畳み)機能の設定
+set foldcolumn=1
+set foldlevel=0
+set foldnestmax=1
+set fillchars=vert:\|
+nnoremap <Leader>h  zc
+nnoremap <Leader>l  zo
+nnoremap <Leader>j  ]z
+nnoremap <Leader>k  [z
+nnoremap <Leader>fc zM
+nnoremap <Leader>fo zR
+
+set foldmethod=marker
+set commentstring=%s
+
+" The end of 表示 }}}
 "-----------------------------------------------------------------------------
 " 文字列検索系 "{{{
 
@@ -1821,20 +1836,32 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentTag()
     if &l:filetype ==# 'vim'
-      return FoldCCnavi()
+      if neobundle#tap('foldCC')
+        return FoldCCnavi()
+      else
+        return ''
+      endif
     endif
-    return tagbar#currenttag('%s', '')
+      if neobundle#tap('tagbar')
+        return tagbar#currenttag('%s', '')
+      else
+        return ''
+      endif
   endfunction
 
   function! MyFugitive()
-    try
-      if &ft !~? 'vimfiler' && exists('*fugitive#head')
-        let _ = fugitive#head()
-        return strlen(_) ? '⭠ ' . _ : ''
-      endif
-    catch
-    endtry
-    return ''
+    if neobundle#tap('vim-fugitive')
+      try
+        if &ft !~? 'vimfiler' && exists('*fugitive#head')
+          let _ = fugitive#head()
+          return strlen(_) ? '⭠ ' . _ : ''
+        endif
+      catch
+      endtry
+      return ''
+    else
+      return ''
+    endif
   endfunction
 
   call neobundle#untap()
@@ -1845,19 +1872,6 @@ if neobundle#tap('foldCC')
 
   let g:foldCCtext_enable_autofdc_adjuster = 1
   set foldtext=FoldCCtext()
-  set foldcolumn=1
-  set foldlevel=0
-  set foldnestmax=1
-  set fillchars=vert:\|
-  nnoremap <Leader>h  zc
-  nnoremap <Leader>l  zo
-  nnoremap <Leader>j  ]z
-  nnoremap <Leader>k  [z
-  nnoremap <Leader>fc zM
-  nnoremap <Leader>fo zR
-
-  set foldmethod=marker
-  set commentstring=%s
 
   call neobundle#untap()
 endif " }}}
