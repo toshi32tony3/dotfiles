@@ -1040,37 +1040,10 @@ if neobundle#tap('unite.vim')
   call neobundle#untap()
 endif " }}}
 
-" 使い捨てしやすいファイル生成(junkfile.vim) {{{
-if neobundle#tap('junkfile.vim')
-
-  let junkfile_dir = '~/memofiles'
-
-  if isdirectory(expand(junkfile_dir)) != 0
-    let g:junkfile#directory = '~/memofiles'
-  endif
-
-  call neobundle#untap()
-endif " }}}
-
-" Vim上で動くファイラ(vimfiler.vim) {{{
-if neobundle#tap('vimfiler.vim')
-
-  let g:vimfiler_as_default_explorer = 1
-  let g:vimfiler_edit_action = 'tabopen'
-  let g:vimfiler_enable_auto_cd = 1
-
-  let g:vimfiler_force_overwrite_statusline = 0
-  let g:vimfiler_safe_mode_by_default = 0
-
-  " 開いているファイルのパスでVimFilerを開く
-  nnoremap <expr><Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
-
-  call neobundle#untap()
-endif " }}}
-
 " Vim上で動くシェル(vimshell) {{{
 if neobundle#tap('vimshell')
 
+  let g:vimshell_enable_start_insert = 0
   let g:vimshell_force_overwrite_statusline = 0
 
   " 開いているファイルのパスでVimShellを開く
@@ -1083,7 +1056,7 @@ endif " }}}
 if neobundle#tap('vimfiler.vim')
 
   let g:vimfiler_as_default_explorer = 1
-  let g:vimfiler_edit_action = 'tabopen'
+  " let g:vimfiler_edit_action = 'tabopen'
   let g:vimfiler_enable_auto_cd = 1
 
   let g:vimfiler_force_overwrite_statusline = 0
@@ -1091,6 +1064,18 @@ if neobundle#tap('vimfiler.vim')
 
   " 開いているファイルのパスでVimFilerを開く
   nnoremap <expr><Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
+
+  call neobundle#untap()
+endif " }}}
+
+" 使い捨てしやすいファイル生成(junkfile.vim) {{{
+if neobundle#tap('junkfile.vim')
+
+  let junkfile_dir = '~/memofiles'
+
+  if isdirectory(expand(junkfile_dir)) != 0
+    let g:junkfile#directory = '~/memofiles'
+  endif
 
   call neobundle#untap()
 endif " }}}
