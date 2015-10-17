@@ -177,7 +177,10 @@ NeoBundle 'mattn/webapi-vim'
 NeoBundle 'tmhedberg/matchit'
 
 NeoBundle 'basyura/J6uil.vim'
+
 NeoBundle 'AndrewRadev/linediff.vim'
+NeoBundle 'lanbdalisue/vim-unified-diff'
+NeoBundle 'vim-scripts/diffchar.vim'
 
 call neobundle#end()
 
@@ -265,15 +268,16 @@ set wildmode=full
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
-" 区切り線の挿入
-imap <F2> ================================================================================<CR>
-nmap <F2> o================================================================================<CR><Esc>
-
-" タイムスタンプの挿入
-imap <F3> <C-R>=strftime("%Y/%m/%d(%a) %H:%M")<CR>
-
 " 区切り線＋タイムスタンプの挿入
-nmap <F3> 0i<C-R>=strftime("%Y/%m/%d(%a) %H:%M")<CR><Esc>A {{{<CR><CR>}}}<Esc>{
+function! s:put_memo_format()
+  let @"='='
+  normal! 080""Po
+  let @"=strftime("%Y/%m/%d(%a) %H:%M")
+  normal! ""PA {{{
+  normal! o}}}
+  normal! ko
+endfunction
+command! -nargs=0 PutMemoFormat call s:put_memo_format()
 
 " 全角数字を半角数字に変更
 inoremap ０ 0
@@ -420,11 +424,11 @@ function! ToggleTransParency()
   endif
 endfunction
 
-nnoremap <silent><F7> :<C-u>call ToggleTransParency()<CR>
+nnoremap <silent><F2> :<C-u>call ToggleTransParency()<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
-nnoremap <silent><F9> :<C-u>set spell!<CR>
+nnoremap <silent><F3> :<C-u>set spell!<CR>
 
 " The end of 視覚情報系 }}}
 "-----------------------------------------------------------------------------
@@ -1007,22 +1011,22 @@ if neobundle#tap('unite.vim')
     autocmd MyAutoCmd FileType unite call s:unite_settings()
     function! s:unite_settings()
       nmap <buffer><Esc> <Plug>(unite_all_exit)
-      nmap <buffer><C-j> <Nop>
-      nmap <buffer><C-K> <Nop>
+      nnoremap <buffer><C-j> <Nop>
+      nnoremap <buffer><C-K> <Nop>
 
       " " unite-candidate_sorter
       " nmap <buffer>S <Plug>(unite-candidate_sort)
 
       " unite中はdicwinを無効化。ローカルで辞書検索できるdicwinの代替が欲しい。
-      nmap <buffer><C-k><C-w> <Nop>
-      nmap <buffer><C-k><C-p> <Nop>
-      nmap <buffer><C-k><C-n> <Nop>
-      nmap <buffer><C-k><C-k> <Nop>
-      nmap <buffer><C-k>/     <Nop>
-      nmap <buffer><C-k>c     <Nop>
-      nmap <buffer><C-k>w     <Nop>
-      nmap <buffer><C-k>p     <Nop>
-      nmap <buffer><C-k>n     <Nop>
+      nnoremap <buffer><C-k><C-w> <Nop>
+      nnoremap <buffer><C-k><C-p> <Nop>
+      nnoremap <buffer><C-k><C-n> <Nop>
+      nnoremap <buffer><C-k><C-k> <Nop>
+      nnoremap <buffer><C-k>/     <Nop>
+      nnoremap <buffer><C-k>c     <Nop>
+      nnoremap <buffer><C-k>w     <Nop>
+      nnoremap <buffer><C-k>p     <Nop>
+      nnoremap <buffer><C-k>n     <Nop>
 
       imap <buffer><C-j> <Plug>(unite_insert_leave)
       imap <buffer><C-[> <Plug>(unite_insert_leave)
@@ -1726,7 +1730,7 @@ if neobundle#tap('tagbar')
     \     'f:functions',
     \   ]
     \ }
-  nmap <silent><F8> :<C-u>TagbarToggle<CR>
+  nmap <silent><F9> :<C-u>TagbarToggle<CR>
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
   function! s:ClipCurrentTag(data)
@@ -2021,6 +2025,12 @@ endif " }}}
 
 " Visualモードで選択した2つの領域をDiffする(linediff.vim) {{{
 if neobundle#tap('linediff.vim')
+
+  call neobundle#untap()
+endif " }}}
+
+" vimdiffに別のDiffアルゴリズムを適用する(vim-unified-diff) {{{
+if neobundle#tap('vim-unified-diff')
 
   call neobundle#untap()
 endif " }}}
