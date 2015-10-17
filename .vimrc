@@ -150,7 +150,10 @@ NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'haya14busa/vim-asterisk'
 
 NeoBundle 'mhinz/vim-signify'
-" NeoBundle 'tpope/vim-fugitive'
+
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'cohama/agit.vim'
+NeoBundle 'idanarye/vim-merginal'
 
 NeoBundle 'majutsushi/tagbar'
 NeoBundle 'itchyny/lightline.vim'
@@ -1712,8 +1715,20 @@ if neobundle#tap('vim-signify')
   call neobundle#untap()
 endif " }}}
 
-" VimからGitを使う(vim-fugitive) {{{
+" VimからGitを使う(編集、コマンド実行、vim-fugitive) {{{
 if neobundle#tap('vim-fugitive')
+
+  call neobundle#untap()
+endif " }}}
+
+" VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
+if neobundle#tap('agit.vim')
+
+  call neobundle#untap()
+endif " }}}
+
+" VimからGitを使う(ブランチ管理、vim-merginal) {{{
+if neobundle#tap('vim-merginal')
 
   call neobundle#untap()
 endif " }}}
