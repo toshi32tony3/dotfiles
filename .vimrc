@@ -249,7 +249,7 @@ set autoread
 set scrolloff=0
 
 " VimDiffは基本縦分割とする
-set diffopt=vertical
+set diffopt+=vertical
 
 " makeしたらcopen
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
@@ -679,23 +679,6 @@ function! s:vimdiff_in_newtab(...)
   endif
 endfunction
 command! -bar -nargs=+ -complete=file Diff call s:vimdiff_in_newtab(<f-args>)
-
-" vimdiffモードは使用せず比較する
-" http://koturn.hatenablog.com/entry/2013/08/10/034242
-function! s:compare(...)
-  if a:0 == 1
-    tabedit %:p
-    execute 'rightbelow vnew ' .a:1
-  else
-    execute 'tabedit ' a:1
-    setlocal scrollbind
-    for l:file in a:000[1 :]
-      execute 'rightbelow vnew ' . l:file
-      setlocal scrollbind
-    endfor
-  endif
-endfunction
-command! -bar -nargs=+ -complete=file Compare call s:compare(<f-args>)
 
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
