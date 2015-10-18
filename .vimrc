@@ -734,58 +734,78 @@ nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: $HOME/localfiles/local.rc.vim
 function! s:set_src_dir()
-  let g:numberOfCode = len(g:code_list)
-  let $TARGET_VER = g:code_list[g:indexOfCode]
+  let g:numberOfSrc = len(g:src_list)
+  let $TARGET_VER = g:src_list[g:indexOfSrc]
   let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
 endfunction
 
- function! s:set_path_list()
+function! s:set_tags()
+  set tags=
+
+  " $TARGET_DIRを起点にしたctags登録
+  " -> ctagsは必要なディレクトリで生成する
+  for item in g:target_dir_ctags_list
+    let $SET_TAGS = $TARGET_DIR . '\' . item
+    set tags+=$SET_TAGS
+  endfor
+
+  " GTAGSROOTの登録
+  " -> GNU Globalのタグはルートで生成する
+  let $GTAGSROOT = $TARGET_DIR
+endfunction
+
+function! s:set_path_list()
   set path=
-  for item in g:path_list
-    let $SET_PATH = $TARGET_DIR . item
+
+  " 起点なしのpath登録
+  for item in g:other_dir_path_list
+    let $SET_PATH = item
+    set path+=$SET_PATH
+  endfor
+
+  " $TARGET_DIRを起点にしたpath登録
+  for item in g:target_dir_path_list
+    let $SET_PATH = $TARGET_DIR . '\' . item
     set path+=$SET_PATH
   endfor
 endfunction
 
 function! s:set_cdpath_list()
   set cdpath=
-  set cdpath+=D:\hoge\fuga
+
+  " 起点なしのcdpath登録
+  for item in g:other_dir_cdpath_list
+    let $SET_CDPATH = item
+    set cdpath+=$SET_CDPATH
+  endfor
+
+  " $SRC_DIR, $TARGET_DIRをcdpath登録
   set cdpath+=$SRC_DIR
   set cdpath+=$TARGET_DIR
-  for item in g:cdpath_list
-    let $SET_CDPATH = $TARGET_DIR . item
+
+  " $TARGET_DIRを起点にしたcdpath登録
+  for item in g:target_dir_cdpath_list
+    let $SET_CDPATH = $TARGET_DIR . '\' . item
     set cdpath+=$SET_CDPATH
   endfor
 endfunction
 
-function! s:set_tags()
-  " GNU Globalのタグはルートで生成する
-  let $GTAGSROOT = $TARGET_DIR
-
-  " ctagsは必要なディレクトリで生成する
-  set tags=
-  for item in g:ctags_list
-    let $SET_TAGS = $TARGET_DIR . item
-    set tags+=$SET_TAGS
-  endfor
-endfunction
-
 call s:set_src_dir()
+call s:set_tags()
 call s:set_path_list()
 call s:set_cdpath_list()
-call s:set_tags()
 
 " 使用するコード(環境変数)をスイッチする
 function! s:SwitchSource()
-  let g:indexOfCode += 1
-  if g:indexOfCode >= g:numberOfCode
-    let g:indexOfCode = 0
+  let g:indexOfSrc += 1
+  if g:indexOfSrc >= g:numberOfSrc
+    let g:indexOfSrc = 0
   endif
 
   call s:set_src_dir()
+  call s:set_tags()
   call s:set_path_list()
   call s:set_cdpath_list()
-  call s:set_tags()
 
   " ソース切り替え後のバージョン名を出力
   echo "change source to: " . $TARGET_VER
