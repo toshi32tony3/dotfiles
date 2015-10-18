@@ -830,7 +830,7 @@ nnoremap <S-q> q
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
-" よくわからないけど終了されて困るので防ぐ
+" よくわからないけどGVimが終了されて困るので防ぐ
 nnoremap q<Space>   <Nop>
 nnoremap <C-w><C-q> <Nop>
 
