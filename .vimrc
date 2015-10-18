@@ -184,6 +184,7 @@ NeoBundle 'basyura/J6uil.vim'
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'lanbdalisue/vim-unified-diff'
 " NeoBundle 'vim-scripts/diffchar.vim'
+NeoBundle 'lanbdalisue/vim-improved-diff'
 
 call neobundle#end()
 
