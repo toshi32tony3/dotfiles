@@ -745,7 +745,7 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     " $TARGET_DIRを起点にしたctags登録
     " -> ctagsは必要なディレクトリで生成する
     for item in g:target_dir_ctags_list
-      let $SET_TAGS = $TARGET_DIR . '\' . item
+      let $SET_TAGS = $TARGET_DIR . '\' . item . '\tags'
       set tags+=$SET_TAGS
     endfor
 
