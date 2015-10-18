@@ -159,7 +159,9 @@ NeoBundle 'majutsushi/tagbar'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
+" 画面の再描画を含むプラグインとの相性が悪いようなので、使わないことにする
 " NeoBundle 'LeafCage/foldCC'
+
 " NeoBundleLazy 'kana/vim-fakeclip'
 NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'junegunn/vim-easy-align'
@@ -169,7 +171,7 @@ NeoBundle 'vim-scripts/BufOnly.vim'
 NeoBundle 'justinmk/vim-sneak'
 NeoBundle 'rhysd/clever-f.vim'
 
-" 画面の再描画を含むせいかlightlineやfoldCCとの相性が悪いようで、使えない
+" clever-fの方が自分に合っている＆画面の再描画を含むので、使わないことにする
 " NeoBundle 'deris/vim-shot-f'
 
 NeoBundle 'tyru/caw.vim'
