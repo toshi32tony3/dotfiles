@@ -196,7 +196,11 @@ syntax enable
 NeoBundleCheck
 
 " Load local settings
-source $HOME/localfiles/local.rc.vim
+if filereadable(expand('$HOME/localfiles/local.rc.vim'))
+  source $HOME/localfiles/local.rc.vim
+elseif filereadable(expand('$HOME/localfiles/template/local.rc.vim'))
+  source $HOME/localfiles/template/local.rc.vim
+endif
 
 " The end of 初期設定 }}}
 "-----------------------------------------------------------------------------
@@ -730,86 +734,90 @@ nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: $HOME/localfiles/local.rc.vim
-function! s:set_src_dir()
-  let g:numberOfSrc = len(g:src_list)
-  let $TARGET_VER = g:src_list[g:indexOfSrc]
-  let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
-endfunction
+if filereadable(expand('$HOME/localfiles/local.rc.vim'))
 
-function! s:set_tags()
-  set tags=
+  function! s:set_src_dir()
+    let g:numberOfSrc = len(g:src_list)
+    let $TARGET_VER = g:src_list[g:indexOfSrc]
+    let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
+  endfunction
 
-  " $TARGET_DIRを起点にしたctags登録
-  " -> ctagsは必要なディレクトリで生成する
-  for item in g:target_dir_ctags_list
-    let $SET_TAGS = $TARGET_DIR . '\' . item
-    set tags+=$SET_TAGS
-  endfor
+  function! s:set_tags()
+    set tags=
 
-  " GTAGSROOTの登録
-  " -> GNU Globalのタグはルートで生成する
-  let $GTAGSROOT = $TARGET_DIR
-endfunction
+    " $TARGET_DIRを起点にしたctags登録
+    " -> ctagsは必要なディレクトリで生成する
+    for item in g:target_dir_ctags_list
+      let $SET_TAGS = $TARGET_DIR . '\' . item
+      set tags+=$SET_TAGS
+    endfor
 
-function! s:set_path_list()
-  set path=
+    " GTAGSROOTの登録
+    " -> GNU Globalのタグはルートで生成する
+    let $GTAGSROOT = $TARGET_DIR
+  endfunction
 
-  " 起点なしのpath登録
-  for item in g:other_dir_path_list
-    let $SET_PATH = item
-    set path+=$SET_PATH
-  endfor
+  function! s:set_path_list()
+    set path=
 
-  " $TARGET_DIRを起点にしたpath登録
-  for item in g:target_dir_path_list
-    let $SET_PATH = $TARGET_DIR . '\' . item
-    set path+=$SET_PATH
-  endfor
-endfunction
+    " 起点なしのpath登録
+    for item in g:other_dir_path_list
+      let $SET_PATH = item
+      set path+=$SET_PATH
+    endfor
 
-function! s:set_cdpath_list()
-  set cdpath=
+    " $TARGET_DIRを起点にしたpath登録
+    for item in g:target_dir_path_list
+      let $SET_PATH = $TARGET_DIR . '\' . item
+      set path+=$SET_PATH
+    endfor
+  endfunction
 
-  " 起点なしのcdpath登録
-  for item in g:other_dir_cdpath_list
-    let $SET_CDPATH = item
-    set cdpath+=$SET_CDPATH
-  endfor
+  function! s:set_cdpath_list()
+    set cdpath=
 
-  " $SRC_DIR, $TARGET_DIRをcdpath登録
-  set cdpath+=$SRC_DIR
-  set cdpath+=$TARGET_DIR
+    " 起点なしのcdpath登録
+    for item in g:other_dir_cdpath_list
+      let $SET_CDPATH = item
+      set cdpath+=$SET_CDPATH
+    endfor
 
-  " $TARGET_DIRを起点にしたcdpath登録
-  for item in g:target_dir_cdpath_list
-    let $SET_CDPATH = $TARGET_DIR . '\' . item
-    set cdpath+=$SET_CDPATH
-  endfor
-endfunction
+    " $SRC_DIR, $TARGET_DIRをcdpath登録
+    set cdpath+=$SRC_DIR
+    set cdpath+=$TARGET_DIR
 
-call s:set_src_dir()
-call s:set_tags()
-call s:set_path_list()
-call s:set_cdpath_list()
-
-" 使用するコード(環境変数)をスイッチする
-function! s:SwitchSource()
-  let g:indexOfSrc += 1
-  if g:indexOfSrc >= g:numberOfSrc
-    let g:indexOfSrc = 0
-  endif
+    " $TARGET_DIRを起点にしたcdpath登録
+    for item in g:target_dir_cdpath_list
+      let $SET_CDPATH = $TARGET_DIR . '\' . item
+      set cdpath+=$SET_CDPATH
+    endfor
+  endfunction
 
   call s:set_src_dir()
   call s:set_tags()
   call s:set_path_list()
   call s:set_cdpath_list()
 
-  " ソース切り替え後のバージョン名を出力
-  echo "change source to: " . $TARGET_VER
+  " ソースコードをスイッチ
+  function! s:SwitchSource()
+    let g:indexOfSrc += 1
+    if g:indexOfSrc >= g:numberOfSrc
+      let g:indexOfSrc = 0
+    endif
 
-endfunction
-command! -nargs=0 SwitchSource call s:SwitchSource()
-nnoremap ,s :<C-u>SwitchSource<CR>
+    call s:set_src_dir()
+    call s:set_tags()
+    call s:set_path_list()
+    call s:set_cdpath_list()
+
+    " ソースコード切り替え後、バージョン名を出力
+    echo "change source to: " . $TARGET_VER
+
+  endfunction
+  command! -nargs=0 SwitchSource call s:SwitchSource()
+  nnoremap ,s :<C-u>SwitchSource<CR>
+
+endif
 
 " 現在開いているファイルのディレクトリに移動
 function! s:ChangeDir(dir)
