@@ -34,29 +34,17 @@ NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
-" NeoBundleLazy 'Shougo/unite-build',
-"   \ { 'autoload' : { 'unite_sources' : [ 'build' ] } }
-" NeoBundleLazy 'rhysd/unite-codic.vim',
-"   \ { 'autoload' : { 'unite_sources' : [ 'codic' ] } }
-" NeoBundleLazy 'ujihisa/unite-colorscheme',
-"   \ { 'autoload' : { 'unite_sources' : [ 'colorscheme' ] } }
 " NeoBundleLazy 'Shougo/neomru.vim',
 "   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
-" NeoBundleLazy 'Shougo/unite-help',
-"   \ { 'autoload' : { 'unite_sources' : [ 'help' ] } }
-" NeoBundleLazy 'osyo-manga/unite-highlight',
-"   \ { 'autoload' : { 'unite_sources' : [ 'highlight' ] } }
 NeoBundleLazy 'Shougo/junkfile.vim',
   \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundleLazy 'tacroe/unite-mark',
   \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
 NeoBundleLazy 'Shougo/unite-outline',
   \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
-" NeoBundleLazy 'osyo-manga/unite-candidate_sorter',
-"   \ { 'autoload' : { 'commands' : [ 'Unite', 'UniteWithBufferDir' ] } }
 
 " NeoBundle 'Valloric/YouCompleteMe'
 " NeoBundle 'SirVer/ultisnips'
@@ -184,6 +172,8 @@ NeoBundle 'basyura/J6uil.vim'
 NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'lanbdalisue/vim-unified-diff'
 NeoBundle 'lanbdalisue/vim-improved-diff'
+
+NeoBundle 'severin-lemaignan/vim-minimap'
 
 call neobundle#end()
 
@@ -416,12 +406,6 @@ set showcmd
 set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
 
-" " 差分ファイル確認時は折り畳み無効
-" autocmd MyAutoCmd FileType diff setlocal nofoldenable
-
-" 折りたたみ機能をスイッチ
-nnoremap <silent><F12> :set foldenable!<CR>
-
 " 透明度をスイッチ
 let g:transparency_on = 0
 function! ToggleTransParency()
@@ -438,6 +422,8 @@ nnoremap <silent><F2> :<C-u>call ToggleTransParency()<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
+
+" スペルチェック機能をスイッチ
 nnoremap <silent><F3> :<C-u>set spell!<CR>
 
 " fold(折り畳み)機能の設定
@@ -454,6 +440,12 @@ nnoremap <Leader>fo zR
 
 set foldmethod=marker
 set commentstring=%s
+
+" " 差分ファイル確認時は折り畳み無効
+" autocmd MyAutoCmd FileType diff setlocal nofoldenable
+
+" 折りたたみ機能をスイッチ
+nnoremap <silent><F12> :set foldenable!<CR>
 
 " The end of 表示 }}}
 "-----------------------------------------------------------------------------
@@ -654,9 +646,6 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 " フォーカスがあたっているウィンドウ以外閉じる
 nnoremap ,o  :<C-u>only<CR>
 
-" タブ操作を簡単化
-nnoremap ,tt :<C-u>tabnew<CR>
-
 " .vimrcをリロード
 nmap ,r :<C-u>source $MYVIMRC<CR><Esc>
 
@@ -691,6 +680,9 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
 "    https://github.com/Shougo/vimproc.vim/issues/116
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
+
+" 新規タブ生成
+nnoremap ,tt :<C-u>tabnew<CR>
 
 " 新規タブでgf
 nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
@@ -984,42 +976,34 @@ if neobundle#tap('unite.vim')
 
   " 各 unite source に応じた変数を定義して使う
   let g:u_opt_bu = ''
-  let g:u_opt_bo =                       g:u_vopt
-  " let g:u_opt_co =                       g:u_hopt            . g:u_sins
-  " let g:u_opt_cs =                       g:u_prev            . g:u_nins
+  " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =            g:u_tabo            . g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
   let g:u_opt_gd =                       g:u_nqui . g:u_vopt
   let g:u_opt_gg =                                  g:u_sbuf . g:u_sync
   let g:u_opt_gr =                       g:u_nqui . g:u_vopt
-  " let g:u_opt_he =                                             g:u_sins
-  " let g:u_opt_hl =                                             g:u_nins
   let g:u_opt_jj = ''
-  let g:u_opt_jn =                                               g:u_sins
+  let g:u_opt_jn =                                             g:u_sins
   let g:u_opt_li = ''
-  " let g:u_opt_li =                                             g:u_sins
-  " let g:u_opt_mg =            g:u_tabo            . g:u_sbuf . g:u_sync
-  let g:u_opt_mm =                         g:u_vopt
+  let g:u_opt_mm =                       g:u_vopt
   let g:u_opt_mp = ''
   let g:u_opt_ol =                       g:u_vopt            . g:u_sins
   let g:u_opt_op = ''
-  let g:u_opt_re =                         g:u_sbuf
-  " let g:u_opt_us =                       g:u_vopt            . g:u_sins
+  let g:u_opt_re =                       g:u_sbuf
   let g:u_opt_ya =                                             g:u_nins
 
   " Auto Preview が上手く動かないことが多い謎。
   " -> 重すぎてプレビュー表示に時間がかかっているだけだった。
-  " let g:u_opt_bu =                     g:u_prev
-  " let g:u_opt_fm =          g:u_tabo . g:u_prev            . g:u_fbuf
-  " let g:u_opt_gd =          g:u_tabo . g:u_prev . g:u_vopt
-  " let g:u_opt_gg =          g:u_tabo . g:u_prev . g:u_sbuf . g:u_sync . g:u_nqui
-  " let g:u_opt_gr =          g:u_tabo . g:u_prev . g:u_vopt            . g:u_nqui
-  " let g:u_opt_mm =          g:u_tabo . g:u_prev . g:u_vopt
+  " let g:u_opt_bu =          g:u_prev
+  " let g:u_opt_gd =          g:u_prev . g:u_nqui . g:u_vopt
+  " let g:u_opt_gg =          g:u_prev . g:u_nqui . g:u_sbuf . g:u_sync
+  " let g:u_opt_gr =          g:u_prev . g:u_nqui . g:u_vopt
+  " let g:u_opt_mm =          g:u_prev            . g:u_vopt
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
   " -> 空いているキーがわかりにくくなるデメリットの方が大きいため
   nnoremap <expr><Leader>bu ':<C-u>Unite buffer'       . g:u_opt_bu . '<CR>'
-  nnoremap <expr><Leader>bo ':<C-u>Unite bookmark'     . g:u_opt_bo . '<CR>'
+  " nnoremap <expr><Leader>bo ':<C-u>Unite bookmark'     . g:u_opt_bo . '<CR>'
   nnoremap <expr><Leader>fi ':<C-u>Unite file'         . g:u_opt_fi . '<CR>'
   " nnoremap <expr><Leader>fm ':<C-u>Unite file_mru'     . g:u_opt_fm . '<CR>'
   nnoremap <expr><Leader>gd ':<C-u>Unite gtags/def'    . g:u_opt_gd . '<CR>'
@@ -1030,26 +1014,22 @@ if neobundle#tap('unite.vim')
   nnoremap <expr><Leader>li ':<C-u>Unite line'         . g:u_opt_li . '<CR>'
   nnoremap <expr><Leader>mm ':<C-u>Unite mark'         . g:u_opt_mm . '<CR>'
   nnoremap <expr><Leader>mp ':<C-u>Unite mapping'      . g:u_opt_mp . '<CR>'
+  nnoremap <expr><Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
   nnoremap <expr><Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
   nnoremap <expr><Leader>re ':<C-u>UniteResume'        . g:u_opt_re . '<CR>'
   nnoremap <expr><Leader>ya ':<C-u>Unite history/yank' . g:u_opt_ya . '<CR>'
-  nnoremap <expr><Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
-  " nnoremap <expr><Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
-  " nnoremap <expr><Leader>us ':<C-u>Unite ultisnips'    . g:u_opt_us . '<CR>'
 
   let s:hooks = neobundle#get_hooks('unite.vim')
   function! s:hooks.on_source(bundle)
-    call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
-    call unite#custom_default_action('directory',                 'vimfiler')
-    call unite#custom_default_action('directory_mru',             'vimfiler')
+    " call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
+    " call unite#custom_default_action('directory_mru',             'vimfiler')
     autocmd MyAutoCmd FileType unite call s:unite_settings()
     function! s:unite_settings()
-      nmap <buffer><Esc> <Plug>(unite_all_exit)
+      nmap     <buffer><Esc> <Plug>(unite_all_exit)
       nnoremap <buffer><C-j> <Nop>
       nnoremap <buffer><C-K> <Nop>
-
-      " " unite-candidate_sorter
-      " nmap <buffer>S <Plug>(unite-candidate_sort)
+      imap     <buffer><C-j> <Plug>(unite_insert_leave)
+      imap     <buffer><C-[> <Plug>(unite_insert_leave)
 
       " unite中はdicwinを無効化。ローカルで辞書検索できるdicwinの代替が欲しい。
       nnoremap <buffer><C-k><C-w> <Nop>
@@ -1062,8 +1042,6 @@ if neobundle#tap('unite.vim')
       nnoremap <buffer><C-k>p     <Nop>
       nnoremap <buffer><C-k>n     <Nop>
 
-      imap <buffer><C-j> <Plug>(unite_insert_leave)
-      imap <buffer><C-[> <Plug>(unite_insert_leave)
     endfunction
   endfunction
 
@@ -1084,11 +1062,12 @@ endif " }}}
 if neobundle#tap('vimfiler.vim')
 
   let g:vimfiler_as_default_explorer = 1
-  " let g:vimfiler_edit_action = 'tabopen'
   let g:vimfiler_enable_auto_cd = 1
-
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
+
+  " タブで開く時は自分で指定することにしたのでコメントアウト
+  " let g:vimfiler_edit_action = 'tabopen'
 
   " 開いているファイルのパスでVimFilerを開く
   nnoremap <expr><Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
@@ -1098,10 +1077,8 @@ endif " }}}
 " 使い捨てしやすいファイル生成(junkfile.vim) {{{
 if neobundle#tap('junkfile.vim')
 
-  let junkfile_dir = '~/memofiles'
-
-  if isdirectory(expand(junkfile_dir)) != 0
-    let g:junkfile#directory = '~/memofiles'
+  if isdirectory(expand('~\memofiles')) != 0
+    let g:junkfile#directory = '~\memofiles'
   endif
 
 endif " }}}
@@ -1256,6 +1233,7 @@ if neobundle#tap('vim-quickrun')
     \   },
     \ }
 
+    " watchdogsを使う時の設定はこんな感じ？
     " \   'watchdogs_checker/_' : {
     " \     'runner/vimproc/updatetime'       : 40,
     " \     'hook/close_quickfix/enable_exit' :  1,
@@ -1276,7 +1254,7 @@ if neobundle#tap('vim-quickrun')
     " \     'type' : 'watchdogs_checker/ruby',
     " \   },
     " \ }
-    "
+
     " " clangを使う時の設定はこんな感じ？
     " \   'cpp' : {
     " \     'type' : 'cpp/clang3_4'
@@ -1327,8 +1305,8 @@ if neobundle#tap('vim-submode')
   let g:submode_timeout = 0
 
   " " gtttttt...で次のタブへ移動
-  " -> <C-PageDown><C-Pageup>の方が良い。
-  " -> [N]gtだと一発。こっちは1 origin
+  " " -> <C-PageDown><C-Pageup>の方が良い。
+  " " -> [N]gtだと一発。こっちは1 origin
   " call submode#enter_with('changetab', 'n', '', 'gt', 'gt')
   " call submode#enter_with('changetab', 'n', '', 'gT', 'gT')
   " call submode#map       ('changetab', 'n', '', 't',  'gt')
@@ -1434,8 +1412,9 @@ if neobundle#tap('memolist.vim')
   nnoremap <Leader>mn :<C-u>MemoNew<CR>
   nnoremap <Leader>ml :<C-u>MemoList<CR>
 
-  " Uniteが入っている前提
-  nnoremap <expr><Leader>mg ':<C-u>Unite grep:~/memo' . g:u_opt_mg . '<CR>'
+  if neobundle#tap('unite.vim')
+    nnoremap <expr><Leader>mg ':<C-u>Unite grep:~/memo' . g:u_opt_mg . '<CR>'
+  endif
 
 endif " }}}
 
@@ -1466,7 +1445,7 @@ endif " }}}
 " 囲む / 囲まなくする / 別の何かで囲む(vim-surround) " {{{
 if neobundle#tap('vim-surround')
 
-  " " -> s-sneakとclever-fの使い分けに慣れるため、コメントアウトしておく
+  " " s-sneakとclever-fの使い分けに慣れるため、コメントアウトしておく
   " " (例) sw' /* 次の単語を''で囲む */
   " nmap s <plug>Ysurround
   "
@@ -1633,12 +1612,13 @@ if neobundle#tap('incsearch-fuzzy.vim')
   " map z? <Plug>(incsearch-fuzzy-?)
   " map zg/ <Plug>(incsearch-fuzzy-stay)
 
-  " fuzzy検索は重いのでstayのみ使う
-  map z/ <Plug>(incsearch-fuzzy-stay)
-
   " map z/ <Plug>(incsearch-fuzzyspell-/)
   " map z? <Plug>(incsearch-fuzzyspell-?)
   " map zg/ <Plug>(incsearch-fuzzyspell-stay)
+
+  " fuzzyは入力中に色々引っかかるのでstayのみ使う
+  map z/ <Plug>(incsearch-fuzzy-stay)
+  map ,/ <Plug>(incsearch-fuzzyspell-stay)
 
 endif " }}}
 
@@ -1654,7 +1634,7 @@ if neobundle#tap('incsearch-migemo.vim')
   " map m? <Plug>(incsearch-migemo-?)
   " map mg/ <Plug>(incsearch-migemo-stay)
 
-  " migemo検索は重いのでstayのみ使う
+  " migemoは入力中に色々引っかかるのでstayのみ使う
   map m/ <Plug>(incsearch-migemo-stay)
 
 endif " }}}
@@ -2006,6 +1986,11 @@ if neobundle#tap('vim-improved-diff')
 
 endif " }}}
 
+" Vimでミニマップ(vim-minimap) {{{
+if neobundle#tap('vim-minimap')
+
+endif " }}}
+
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
 " 趣味＠正式採用前の設定 "{{{
@@ -2015,7 +2000,9 @@ endif " }}}
 " " -> swapファイルに怒られるので必ず読み取り専用で開いてほしい…
 " set noswapfile
 " NeoBundle 'mattn/minimap-vim'
+"
 " まだ開発初期っぽいので、今後に期待。
+" -> 試用中
 " NeoBundle 'severin-lemaignan/vim-minimap'
 
 " " 画面内移動を楽にするプラグイン
