@@ -127,7 +127,8 @@ NeoBundle 'kana/vim-operator-replace'
 NeoBundle 'kana/vim-textobj-function'
 
 NeoBundle 'kana/vim-smartchr'
-NeoBundle 'tyru/capture.vim'
+NeoBundleLazy 'tyru/capture.vim',
+  \ { 'autoload' : { 'commands' : ['Capture'] } }
 NeoBundle 't9md/vim-quickhl'
 
 NeoBundle 'haya14busa/incsearch.vim'
@@ -140,7 +141,8 @@ NeoBundle 'haya14busa/vim-asterisk'
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'cohama/agit.vim'
+NeoBundleLazy 'cohama/agit.vim',
+  \ { 'autoload' : { 'commands' : ['Agit'] } }
 NeoBundle 'idanarye/vim-merginal'
 
 NeoBundle 'majutsushi/tagbar'
@@ -154,22 +156,27 @@ NeoBundle 'cocopon/lightline-hybrid.vim'
 " NeoBundleLazy 'kana/vim-fakeclip'
 NeoBundle 'LeafCage/yankround.vim'
 NeoBundle 'junegunn/vim-easy-align'
-NeoBundle 'bronson/vim-trailing-whitespace'
-NeoBundle 'vim-scripts/BufOnly.vim'
+NeoBundleLazy 'bronson/vim-trailing-whitespace',
+  \ { 'autoload' : { 'commands' : ['FixWhitespace'] } }
+NeoBundleLazy 'vim-scripts/BufOnly.vim',
+  \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly', 'BufOnly', 'Bufonly'] } }
 
 NeoBundle 'justinmk/vim-sneak'
 NeoBundle 'rhysd/clever-f.vim'
 
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'kshenoy/vim-signature'
+
 NeoBundle 'mhinz/vim-startify'
 
 NeoBundle 'mattn/webapi-vim'
 NeoBundle 'tmhedberg/matchit'
 
-NeoBundle 'basyura/J6uil.vim'
+NeoBundleLazy 'basyura/J6uil.vim',
+  \ { 'autoload' : { 'commands' : ['J6uil'] } }
 
-NeoBundle 'AndrewRadev/linediff.vim'
+NeoBundleLazy 'AndrewRadev/linediff.vim',
+  \ { 'autoload' : { 'commands' : ['Linediff'] } }
 NeoBundle 'lanbdalisue/vim-unified-diff'
 NeoBundle 'lanbdalisue/vim-improved-diff'
 
@@ -1992,7 +1999,7 @@ endif " }}}
 " " -> あったらあったで結構良いかも。アウトライン系で十分な気もする
 " " -> swapファイルに怒られるので必ず読み取り専用で開いてほしい…
 " set noswapfile
-" NeoBundle 'mattn/minimap-vim'
+" NeoBundle 'koron/minimap-vim'
 "
 " まだ開発初期っぽいので、今後に期待。
 " -> python依存っぽいのでちょっと使えないかな...
