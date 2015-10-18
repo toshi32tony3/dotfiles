@@ -173,8 +173,6 @@ NeoBundle 'AndrewRadev/linediff.vim'
 NeoBundle 'lanbdalisue/vim-unified-diff'
 NeoBundle 'lanbdalisue/vim-improved-diff'
 
-NeoBundle 'severin-lemaignan/vim-minimap'
-
 call neobundle#end()
 
 filetype plugin indent on " ファイルタイプの自動検出をONにする
@@ -1986,11 +1984,6 @@ if neobundle#tap('vim-improved-diff')
 
 endif " }}}
 
-" Vimでミニマップ(vim-minimap) {{{
-if neobundle#tap('vim-minimap')
-
-endif " }}}
-
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
 " 趣味＠正式採用前の設定 "{{{
@@ -2002,7 +1995,7 @@ endif " }}}
 " NeoBundle 'mattn/minimap-vim'
 "
 " まだ開発初期っぽいので、今後に期待。
-" -> 試用中
+" -> python依存っぽいのでちょっと使えないかな...
 " NeoBundle 'severin-lemaignan/vim-minimap'
 
 " " 画面内移動を楽にするプラグイン
