@@ -7,7 +7,7 @@
 [push]
 	default = simple
 [diff]
-	tool = vimdiff
+	tool = gvimdiff2
 	algorithm = histogram
 [merge]
 	tool = gvimdiff3
