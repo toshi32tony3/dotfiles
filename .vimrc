@@ -146,6 +146,8 @@ NeoBundleLazy 'cohama/agit.vim',
 NeoBundle 'idanarye/vim-merginal'
 
 NeoBundle 'majutsushi/tagbar'
+
+" それなりに負荷が上がるので、自前のステータスライン構築を検討した方が良いかも
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
@@ -1745,13 +1747,15 @@ if neobundle#tap('lightline.vim')
   let g:lightline.separator    = { 'left' : "\u2B80", 'right' : "\u2B82" }
   let g:lightline.subseparator = { 'left' : "\u2B81", 'right' : "\u2B83" }
   let g:lightline.tabline = { 'left': [ [ 'tabs' ] ], 'right': [] }
+
   let g:lightline.active = {
     \   'left'  : [ [ 'mode', 'paste' ],
-    \               [ 'filename',   'fugitive',     'currenttag' ], ],
-    \   'right' : [ [ 'lineinfo',   'syntastic'],
+    \               [ 'filename', 'fugitive', 'currenttag' ], ],
+    \   'right' : [ [ 'lineinfo' ],
     \               [ 'percent' ],
     \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
     \ }
+
   let g:lightline.component_function = {
     \   'modified'     : 'MyModified',
     \   'readonly'     : 'MyReadonly',
@@ -1775,10 +1779,14 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyFilename()
+    " 以下の条件を満たすと処理不可が急激に伸びる。理由は不明。
+    " ・Vimのカレントディレクトリがネットワーク上
+    " ・ネットワーク上のファイルを開いており、ファイル名をフルパス(%:p)出力
+    " -> GVIMウィンドウ上部にフルパスが表示されているので、そちらを参照する
     return (&ft == 'unite'       ? unite#get_status_string()    :
       \     &ft == 'vimfiler'    ? vimfiler#get_status_string() :
       \     &ft == 'vimshell'    ? vimshell#get_status_string() :
-      \      '' != expand('%:p') ? expand('%:p')                : '[No Name]') .
+      \      '' != expand('%:t') ? expand('%:t')                : '[No Name]') .
       \    ( '' != MyReadonly()  ? ' ' . MyReadonly()           : ''         ) .
       \    ( '' != MyModified()  ? ' ' . MyModified()           : ''         )
   endfunction
@@ -1799,30 +1807,38 @@ if neobundle#tap('lightline.vim')
     return winwidth(0) > 60 ? lightline#mode() : ''
   endfunction
 
-  function! MyCurrentTag()
-    if &l:filetype ==# 'vim'
-      if neobundle#tap('foldCC')
+  if neobundle#tap('foldCC') && neobundle#tap('tagbar')
+    function! MyCurrentTag()
+      if &l:filetype ==# 'vim'
         return FoldCCnavi()
-      else
-        return ''
       endif
-    endif
-      if neobundle#tap('tagbar')
-        return tagbar#currenttag('%s', '')
-      else
-        return ''
+      return tagbar#currenttag('%s', '')
+    endfunction
+  elseif neobundle#tap('foldCC') && !neobundle#tap('tagbar')
+    function! MyCurrentTag()
+      if &l:filetype ==# 'vim'
+        return FoldCCnavi()
       endif
-  endfunction
+      return tagbar#currenttag('%s', '')
+    endfunction
+  elseif !neobundle#tap('foldCC') && neobundle#tap('tagbar')
+    function! MyCurrentTag()
+      return tagbar#currenttag('%s', '')
+    endfunction
+  else
+    function! MyCurrentTag()
+      return ''
+    endfunction
+  endif
 
   function! MyFugitive()
-    if neobundle#tap('vim-fugitive')
-      try
-        if &ft !~? 'vimfiler' && exists('*fugitive#head')
-          let _ = fugitive#head()
-          return strlen(_) ? '⭠ ' . _ : ''
-        endif
-      catch
-      endtry
+    try
+      if &ft !~? 'vimfiler' && exists('*fugitive#head')
+        let _ = fugitive#head()
+        return strlen(_) ? '⭠ ' . _ : ''
+      endif
+    catch
+    endtry
       return ''
     else
       return ''
