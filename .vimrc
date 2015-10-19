@@ -276,7 +276,7 @@ cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
 " 区切り線＋タイムスタンプの挿入
-function! s:put_memo_format()
+function! s:PutMemoFormat()
   let @"='='
   normal! 080""Po
   let @"=strftime("%Y/%m/%d(%a) %H:%M")
@@ -284,7 +284,7 @@ function! s:put_memo_format()
   normal! o}}}
   normal! ko
 endfunction
-command! -nargs=0 PutMemoFormat call s:put_memo_format()
+command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
 
 " 全角数字を半角数字に変更
 inoremap ０ 0
@@ -587,12 +587,12 @@ command! -nargs=0 ClipFile call s:Clip(expand('%:t'))
 command! -nargs=0 ClipDir  call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果をクリップボードに格納
-function! s:func_copy_cmd_output(cmd)
+function! s:CopyCmdOutput(cmd)
   redir @*>
   silent execute a:cmd
   redir END
 endfunction
-command! -nargs=1 -complete=command CopyCmdOutput call s:func_copy_cmd_output(<q-args>)
+command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
 
 " " 1行以内の編集でも quote1 ～ quote9 に保存
 " " http://sgur.tumblr.com/post/63476292878/vim
@@ -698,7 +698,7 @@ nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
 " 引数が2つ以上 : 引数指定ファイル同士の比較
 " http://koturn.hatenablog.com/entry/2013/08/10/034242
-function! s:vimdiff_in_newtab(...)
+function! s:VimDifInNewTab(...)
   if a:0 == 1
     tabedit %:p
     execute 'rightbelow vertical diffsplit ' .a:1
@@ -709,7 +709,7 @@ function! s:vimdiff_in_newtab(...)
     endfor
   endif
 endfunction
-command! -bar -nargs=+ -complete=file Diff call s:vimdiff_in_newtab(<f-args>)
+command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
@@ -735,20 +735,20 @@ nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 " see: $HOME/localfiles/local.rc.vim
 if filereadable(expand('$HOME/localfiles/local.rc.vim'))
 
-  function! s:set_src_dir()
+  function! s:SetSrcDir()
     let g:numberOfSrc = len(g:src_list)
     let $TARGET_VER = g:src_list[g:indexOfSrc]
     let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
   endfunction
 
-  function! s:set_tags()
+  function! s:SetTags()
     set tags=
 
     " $TARGET_DIRを起点にしたctags登録
     " -> ctagsは必要なディレクトリで生成する
     for item in g:target_dir_ctags_list
-      let $SET_TAGS = $TARGET_DIR . '\' . item . '\tags'
-      set tags+=$SET_TAGS
+      let $SetTags = $TARGET_DIR . '\' . item . '\tags'
+      set tags+=$SetTags
     endfor
 
     " GTAGSROOTの登録
@@ -756,7 +756,7 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     let $GTAGSROOT = $TARGET_DIR
   endfunction
 
-  function! s:set_path_list()
+  function! s:SetPathList()
     set path=
 
     " 起点なしのpath登録
@@ -772,7 +772,7 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     endfor
   endfunction
 
-  function! s:set_cdpath_list()
+  function! s:SetCDPathList()
     set cdpath=
 
     " 起点なしのcdpath登録
@@ -792,10 +792,10 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     endfor
   endfunction
 
-  call s:set_src_dir()
-  call s:set_tags()
-  call s:set_path_list()
-  call s:set_cdpath_list()
+  call s:SetSrcDir()
+  call s:SetTags()
+  call s:SetPathList()
+  call s:SetCDPathList()
 
   " ソースコードをスイッチ
   function! s:SwitchSource()
@@ -804,10 +804,10 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
       let g:indexOfSrc = 0
     endif
 
-    call s:set_src_dir()
-    call s:set_tags()
-    call s:set_path_list()
-    call s:set_cdpath_list()
+    call s:SetSrcDir()
+    call s:SetTags()
+    call s:SetPathList()
+    call s:SetCDPathList()
 
     " ソースコード切り替え後、バージョン名を出力
     echo "change source to: " . $TARGET_VER
@@ -1319,22 +1319,22 @@ if neobundle#tap('vim-submode')
   " call submode#map       ('changetab', 'n', '', 't',  'gt')
   " call submode#map       ('changetab', 'n', '', 'T',  'gT')
 
-  function! s:modulo(n, m)
-    let d = a:n * a:m < 0 ? 1 : 0
-    return a:n + (-(a:n + (0 < a:m ? d : -d)) / a:m + d) * a:m
-  endfunction
+  " function! s:modulo(n, m)
+  "   let d = a:n * a:m < 0 ? 1 : 0
+  "   return a:n + (-(a:n + (0 < a:m ? d : -d)) / a:m + d) * a:m
+  " endfunction
 
-  " <Leader>gtttttt...で現在フォーカスされているタブを移動
-  " -> [N]tabm[ove]だと一発。こっちは移動量を[N]で指定する
-  function! s:movetab(nr)
-    execute 'tabmove' s:modulo((tabpagenr() + (a:nr - 1)), tabpagenr('$'))
-  endfunction
-  let s:movetab = ':<C-u>call ' . s:SID() . 'movetab(%d)<CR>'
-  call submode#enter_with('movetab', 'n', '', '#gt', printf(s:movetab,  1))
-  call submode#enter_with('movetab', 'n', '', '#gT', printf(s:movetab, -1))
-  call submode#map       ('movetab', 'n', '', 't',   printf(s:movetab,  1))
-  call submode#map       ('movetab', 'n', '', 'T',   printf(s:movetab, -1))
-  unlet s:movetab
+  " " <Leader>gtttttt...で現在フォーカスされているタブを移動
+  " " -> [N]tabm[ove]だと一発。こっちは移動量を[N]で指定する
+  " function! s:movetab(nr)
+  "   execute 'tabmove' s:modulo((tabpagenr() + (a:nr - 1)), tabpagenr('$'))
+  " endfunction
+  " let s:movetab = ':<C-u>call ' . s:SID() . 'movetab(%d)<CR>'
+  " call submode#enter_with('movetab', 'n', '', '#gt', printf(s:movetab,  1))
+  " call submode#enter_with('movetab', 'n', '', '#gT', printf(s:movetab, -1))
+  " call submode#map       ('movetab', 'n', '', 't',   printf(s:movetab,  1))
+  " call submode#map       ('movetab', 'n', '', 'T',   printf(s:movetab, -1))
+  " unlet s:movetab
 
 endif " }}}
 
@@ -1511,8 +1511,8 @@ if neobundle#tap('vim-smartchr')
   " inoremap <expr>( search('\<\if\%#', 'bcn') ? ' (' : '('
 
   " ruby / eruby の時だけ設定
-  autocmd MyAutoCmd FileType ruby,eruby call s:ruby_settings()
-  function! s:ruby_settings()
+  autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
+  function! s:RubySettings()
     inoremap <buffer><expr>{ smartchr#one_of('{', '#{', '{{')
   endfunction
 
