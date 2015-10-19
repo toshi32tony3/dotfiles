@@ -720,13 +720,13 @@ command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 " nnoremap <C-]> g<C-]>zz
 
 " 新規タブでタグジャンプ
-function! s:TabTagJump(funcName)
+function! s:TabTagJump(ident)
   tablast | tabnew
   " ctagsファイルを複数生成して優先順位を付けているなら'tag'にする
-  " execute 'tag' a:funcName
+  execute 'tag' a:ident
 
-  " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
-  execute 'tjump' a:funcName
+  " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
+  " execute 'tjump' a:ident
 endfunction
 command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
@@ -747,8 +747,8 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     " $TARGET_DIRを起点にしたctags登録
     " -> ctagsは必要なディレクトリで生成する
     for item in g:target_dir_ctags_list
-      let $SetTags = $TARGET_DIR . '\' . item . '\tags'
-      set tags+=$SetTags
+      let $SET_TAGS= $TARGET_DIR . '\' . item . '\tags'
+      set tags+=$SET_TAGS
     endfor
 
     " GTAGSROOTの登録
@@ -815,8 +815,6 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
   endfunction
   command! -nargs=0 SwitchSource call s:SwitchSource()
   nnoremap ,s :<C-u>SwitchSource<CR>
-
-endif
 
 " 現在開いているファイルのディレクトリに移動
 function! s:ChangeDir(dir)
