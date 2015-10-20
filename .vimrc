@@ -843,17 +843,6 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
   endfunction
   command! -nargs=0 UpdateCtags call s:UpdateCtags()
 
-  " GNU Global tagをアップデート
-  function! s:UpdateGtags()
-    if !isdirectory($TAGS_DIR)
-      call system('mkdir ' . $TAGS_DIR)
-    endif
-    let currentDir = system('pwd')
-    call system('cd '. $TARGET_DIR)
-    call system('gtags -iv')
-    call system(currentDir)
-  endfunction
-
 endif
 
 " 現在開いているファイルのディレクトリに移動
