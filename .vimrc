@@ -121,7 +121,6 @@ NeoBundle 'deris/vim-visualinc'
 NeoBundle 'deris/vim-rengbang'
 NeoBundle 'tpope/vim-surround'
 
-NeoBundle 'kana/vim-niceblock'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-operator-replace'
@@ -135,7 +134,6 @@ NeoBundle 't9md/vim-quickhl'
 NeoBundle 'haya14busa/incsearch.vim'
 NeoBundle 'haya14busa/incsearch-fuzzy.vim'
 NeoBundle 'haya14busa/incsearch-migemo.vim'
-" NeoBundle 'inside/vim-search-pulse'
 NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'haya14busa/vim-asterisk'
 
@@ -324,6 +322,9 @@ inoremap ） )
 " d : current and included files for defined name or macro
 set complete=.,w,b,u
 
+" 補完時は対象が一つでもポップアップを表示
+set completeopt=menuone
+
 " 補完候補は一度に10個まで表示
 set pumheight=10
 
@@ -380,9 +381,6 @@ if has('gui_running')
   if &guioptions =~# 'M'
     let &guioptions = substitute(&guioptions, '[mT]', '', 'g')
   endif
-
-  " 補完時は対象が一つでもポップアップを表示
-  set completeopt=menuone
 
   " 印刷用フォント(とりあえずgvimrcサンプルのデフォルト値とする)
   if has('printer')
@@ -1313,7 +1311,7 @@ endif " }}}
 " コマンド名補完(vim-ambicmd) {{{
 if neobundle#tap('vim-ambicmd')
 
-  " 下手にマッピングするよりもambicmdに補完させた方が良い
+  " 下手にマッピングするよりもambicmdで補完した方が捗る
   cnoremap <expr><Space> ambicmd#expand("\<Space>")
 
 endif " }}}
@@ -1458,10 +1456,13 @@ endif " }}}
 
 " markdownを使いやすくする(vim-markdown) {{{
 if neobundle#tap('vim-markdown')
-
   " markdownのfold機能を無効にする
   let g:vim_markdown_folding_disabled = 1
 
+endif " }}}
+
+" Vimからブラウザを開く(open-browser)
+if neobundle#tap('open-browser.vim')
   nmap <Leader>L <Plug>(openbrowser-smart-search)
   vmap <Leader>L <Plug>(openbrowser-smart-search)
 
@@ -1492,14 +1493,6 @@ if neobundle#tap('vim-surround')
   "
   " " (例) ss' /* 行を''で囲む */
   " nmap ss <plug>Yssurround
-
-endif " }}}
-
-" 他のVisualモードでも矩形Visualモード挿入できるようにする(vim-niceblock) " {{{
-if neobundle#tap('vim-niceblock')
-
-  " 矩形Visualモード以外のVisualモードでも2byte文字の文字幅を考慮した置換を行う
-  xnoremap <expr>r niceblock#force_blockwise('r')
 
 endif " }}}
 
@@ -1588,30 +1581,16 @@ if neobundle#tap('incsearch.vim')
   map / <Plug>(incsearch-stay)
   map ? <Plug>(incsearch-stay)
 
-  if neobundle#tap('vim-anzu') && neobundle#tap('vim-search-pulse')
-    map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)<Plug>Pulse
-    map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)<Plug>Pulse
-
-  elseif neobundle#tap('vim-anzu')
+  if neobundle#tap('vim-anzu')
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
     map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
 
   else
     map n  <Plug>(incsearch-nohl-n)
     map N  <Plug>(incsearch-nohl-N)
-
   endif
 
-  if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu') && neobundle#tap('vim-search-pulse')
-    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)(anzu-update-search-status-with-echo)<Plug>Pulse
-    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)(anzu-update-search-status-with-echo)<Plug>Pulse
-    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)(anzu-update-search-status-with-echo)<Plug>Pulse
-
-    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
-    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)<Plug>Pulse
-
-  elseif neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
+  if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
@@ -1619,7 +1598,6 @@ if neobundle#tap('incsearch.vim')
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-
   elseif neobundle#tap('vim-asterisk')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
@@ -1628,7 +1606,6 @@ if neobundle#tap('incsearch.vim')
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-
   else
     nmap *          yiw<Plug>(incsearch-nohl-*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl-*)
@@ -1637,7 +1614,6 @@ if neobundle#tap('incsearch.vim')
     nmap g*         yiw<Plug>(incsearch-nohl-g*)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
-
   endif
 
 endif " }}}
@@ -1708,7 +1684,7 @@ if neobundle#tap('vim-anzu')
   " nmap N <Plug>(anzu-mode-N)
   "
   " " 検索開始時にジャンプせず、その場でanzu-modeに移行する
-  " nmap <expr>* ':<C-u>call anzu#mode#start("<C-R><C-W>", "", "", "")<CR>'
+  " nmap <expr>* ':<C-u>call anzu#mode#start('<C-R><C-W>', '', '', '')<CR>'
 
   " nmap * <Plug>(anzu-star-with-echo)N
 
@@ -1717,14 +1693,6 @@ if neobundle#tap('vim-anzu')
     nmap n <Plug>(anzu-n-with-echo)
     nmap N <Plug>(anzu-N-with-echo)
   endif
-
-endif " }}}
-
-" 検索後にピカる(vim-search-pulse) {{{
-if neobundle#tap('vim-search-pulse')
-
-  " let g:vim_search_pulse_mode = 'pattern'
-  let g:vim_search_pulse_disable_auto_mappings = 1
 
 endif " }}}
 
