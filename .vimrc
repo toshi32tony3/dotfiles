@@ -324,6 +324,9 @@ inoremap ） )
 " d : current and included files for defined name or macro
 set complete=.,w,b,u
 
+" 補完候補は一度に10個まで表示
+set pumheight=10
+
 " 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
 nnoremap & <silent>:<C-u>&&<CR>
 xnoremap & <silent>:<C-u>&&<CR>
@@ -397,8 +400,9 @@ let &t_SI .= "\e[5 q"
 let &t_EI .= "\e[1 q"
 let &t_te .= "\e[0 q"
 
-set wrap           " 長いテキストの折り返し
-set colorcolumn=81 " 81行目に線を表示
+set wrap             " 長いテキストの折り返し
+set display=lastline " なっが～いテキストを省略しない
+set colorcolumn=81   " 81行目に線を表示
 
 set number         " 行番号の表示
 set relativenumber " 行番号を相対表示
@@ -528,7 +532,7 @@ set virtualedit=all             " テキストが存在しない場所でも動�
 set hidden                      " quit時はバッファを削除せず、隠す
 set switchbuf=useopen           " すでに開いてあるバッファがあればそっちを開く
 set showmatch                   " 対応する括弧などの入力時にハイライト表示する
-set matchtime=3                 " 対応括弧入力時のハイライト表示を3秒にする
+set matchtime=3                 " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
 set matchpairs& matchpairs+=<:> " 対応括弧に'<'と'>'のペアを追加
 set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 
@@ -1801,7 +1805,7 @@ if neobundle#tap('lightline.vim')
 
   let g:lightline.active = {
     \   'left'  : [ [ 'mode', 'paste' ],
-    \               [ 'filename', 'fugitive', 'currenttag' ], ],
+    \               [ 'fugitive', 'filename', 'currenttag' ], ],
     \   'right' : [ [ 'lineinfo' ],
     \               [ 'percent' ],
     \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
