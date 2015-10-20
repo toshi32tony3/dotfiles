@@ -742,15 +742,14 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     let g:numberOfSrc = len(g:src_list)
     let $TARGET_VER = g:src_list[g:indexOfSrc]
     let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
+    let $TAGS_DIR = $TARGET_DIR . '\.tags'
   endfunction
 
   function! s:SetTags()
     set tags=
 
-    " $TARGET_DIRを起点にしたctags登録
-    " -> ctagsは必要なディレクトリで生成する
     for item in g:target_dir_ctags_list
-      let $SET_TAGS= $TARGET_DIR . '\' . item . '\tags'
+      let $SET_TAGS= $TAGS_DIR. '\' . g:target_dir_ctags_name_list[item]
       set tags+=$SET_TAGS
     endfor
 
@@ -818,6 +817,44 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
   endfunction
   command! -nargs=0 SwitchSource call s:SwitchSource()
   nnoremap ,s :<C-u>SwitchSource<CR>
+
+  " ctagsをアップデート
+  function! s:UpdateCtags()
+    if !isdirectory($TAGS_DIR)
+      call system('mkdir ' . $TAGS_DIR)
+    endif
+    for item in g:target_dir_ctags_list
+      let exists = has_key(g:target_dir_ctags_name_list, item)
+      if !exists
+        echo exists
+        continue
+      endif
+      let upCmd =
+        \ 'ctags -f ' .
+        \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[item] . ' -R ' .
+        \ $TARGET_DIR . '\' . item
+      if neobundle#tap('vimproc.vim')
+        call system(upCmd)
+        " call vimproc#system(upCmd)
+      else
+        call system(upCmd)
+      endif
+    endfor
+  endfunction
+  command! -nargs=0 UpdateCtags call s:UpdateCtags()
+
+  " GNU Global tagをアップデート
+  function! s:UpdateGtags()
+    if !isdirectory($TAGS_DIR)
+      call system('mkdir ' . $TAGS_DIR)
+    endif
+    let currentDir = system('pwd')
+    call system('cd '. $TARGET_DIR)
+    call system('gtags -iv')
+    call system(currentDir)
+  endfunction
+
+endif
 
 " 現在開いているファイルのディレクトリに移動
 function! s:ChangeDir(dir)
