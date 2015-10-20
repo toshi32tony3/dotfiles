@@ -100,7 +100,8 @@ NeoBundle 'osyo-manga/vim-brightest'
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 " NeoBundle 'vim-scripts/aspvbs.vim'  " syntax for ASP/VBScript
 " NeoBundle 'vim-scripts/vbnet.vim'   " syntax for VB.NET
-" NeoBundleLazy 'hachibeeDI/vim-vbnet', {"autoload" : { "filetypes" : ["vbnet"], }}
+" NeoBundleLazy 'hachibeeDI/vim-vbnet',
+"   \ { 'autoload' : { 'filetypes' : ['vbnet'] } }
 " NeoBundleLazy 'mattn/benchvimrc-vim',
 "   \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
 " NeoBundle 'koron/codic-vim'
@@ -145,19 +146,21 @@ NeoBundleLazy 'cohama/agit.vim',
   \ { 'autoload' : { 'commands' : ['Agit'] } }
 NeoBundle 'idanarye/vim-merginal'
 
-NeoBundle 'majutsushi/tagbar'
+NeoBundleLazy 'majutsushi/tagbar',
+  \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
 
 " それなりに負荷が上がるので、自前のステータスライン構築を検討した方が良いかも
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
 " 画面の再描画を含むプラグインとの相性が悪いようなので、使わないことにする
-" NeoBundle 'LeafCage/foldCC'
+" NeoBundle 'LeafCage/foldCC.vim'
 
 " Cygwin Vimでは使う
 " NeoBundleLazy 'kana/vim-fakeclip'
 NeoBundle 'LeafCage/yankround.vim'
-NeoBundle 'junegunn/vim-easy-align'
+NeoBundleLazy 'junegunn/vim-easy-align',
+  \ { 'autoload' : { 'commands' : ['EasyAlign'] } }
 NeoBundleLazy 'bronson/vim-trailing-whitespace',
   \ { 'autoload' : { 'commands' : ['FixWhitespace'] } }
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
@@ -1714,6 +1717,13 @@ if neobundle#tap('tagbar')
     \     'f:functions',
     \   ]
     \ }
+  let g:tagbar_type_c = {
+    \   'kinds'       : [
+    \     'd:macros',
+    \     'v:variables',
+    \     'f:functions',
+    \   ]
+    \ }
   nmap <silent><F9> :<C-u>TagbarToggle<CR>
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
@@ -1805,33 +1815,19 @@ if neobundle#tap('lightline.vim')
     return winwidth(0) > 60 ? lightline#mode() : ''
   endfunction
 
-  if neobundle#tap('foldCC') && neobundle#tap('tagbar')
-    function! MyCurrentTag()
-      if &l:filetype ==# 'vim'
-        return FoldCCnavi()
-      endif
-      return tagbar#currenttag('%s', '')
-    endfunction
-  elseif neobundle#tap('foldCC') && !neobundle#tap('tagbar')
-    function! MyCurrentTag()
-      if &l:filetype ==# 'vim'
-        return FoldCCnavi()
-      endif
-      return tagbar#currenttag('%s', '')
-    endfunction
-  elseif !neobundle#tap('foldCC') && neobundle#tap('tagbar')
-    function! MyCurrentTag()
-      return tagbar#currenttag('%s', '')
-    endfunction
-  else
-    function! MyCurrentTag()
-      return ''
-    endfunction
-  endif
+  function! MyCurrentTag()
+    if &ft == 'vim' && exists('*FoldCCnavi()')
+      let _ = FoldCCnavi()
+      return strlen(_) ? _ : ''
+    else
+      let _ = tagbar#currenttag('%s', '')
+      return strlen(_) ? _ : ''
+    endif
+  endfunction
 
   function! MyFugitive()
     try
-      if &ft !~? 'vimfiler' && exists('*fugitive#head')
+      if &ft != 'vimfiler'
         let _ = fugitive#head()
         return strlen(_) ? '⭠ ' . _ : ''
       endif
