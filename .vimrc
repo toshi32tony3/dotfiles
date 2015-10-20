@@ -1550,9 +1550,13 @@ if neobundle#tap('incsearch.vim')
   " 検索後、カーソル移動すると自動でnohlsearchする
   let g:incsearch#auto_nohlsearch = 1
 
-  map / <Plug>(incsearch-forward)
-  map ?  <Plug>(incsearch-backward)
-  map g/ <Plug>(incsearch-stay)
+  " map / <Plug>(incsearch-forward)
+  " map ?  <Plug>(incsearch-backward)
+  " map g/ <Plug>(incsearch-stay)
+
+  " 入力中に飛びたくないのでstayのみ使う
+  map / <Plug>(incsearch-stay)
+  map ? <Plug>(incsearch-stay)
 
   if neobundle#tap('vim-anzu') && neobundle#tap('vim-search-pulse')
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)<Plug>Pulse
@@ -1624,9 +1628,11 @@ if neobundle#tap('incsearch-fuzzy.vim')
   " map z? <Plug>(incsearch-fuzzyspell-?)
   " map zg/ <Plug>(incsearch-fuzzyspell-stay)
 
-  " fuzzyは入力中に色々引っかかるのでstayのみ使う
+  " 入力中に飛びたくないのでstayのみ使う
   map z/ <Plug>(incsearch-fuzzy-stay)
-  map ,/ <Plug>(incsearch-fuzzyspell-stay)
+  map z? <Plug>(incsearch-fuzzy-stay)
+  map g/ <Plug>(incsearch-fuzzyspell-stay)
+  map g? <Plug>(incsearch-fuzzyspell-stay)
 
 endif " }}}
 
@@ -1642,8 +1648,9 @@ if neobundle#tap('incsearch-migemo.vim')
   " map m? <Plug>(incsearch-migemo-?)
   " map mg/ <Plug>(incsearch-migemo-stay)
 
-  " migemoは入力中に色々引っかかるのでstayのみ使う
+  " 入力中に飛びたくないのでstayのみ使う
   map m/ <Plug>(incsearch-migemo-stay)
+  map m? <Plug>(incsearch-migemo-stay)
 
 endif " }}}
 
@@ -1651,8 +1658,15 @@ endif " }}}
 
 if neobundle#tap('vim-asterisk')
 
-  " map *  <Plug>(asterisk-z*)
-  " map g* <Plug>(asterisk-gz*)
+  if !neobundle#tap('incsearch.vim')
+    nmap *          yiw<Plug>(asterisk-z*)
+    omap *     <Esc>yiw<Plug>(asterisk-z*)
+    vmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
+
+    nmap g*         yiw<Plug>(asterisk-gz*)
+    omap g*    <Esc>yiw<Plug>(asterisk-gz*)
+    vmap g* <Esc>gvyvgv<Plug>(asterisk-gz*)
+  endif
 
 endif " }}}
 
@@ -1666,10 +1680,13 @@ if neobundle#tap('vim-anzu')
   " " 検索開始時にジャンプせず、その場でanzu-modeに移行する
   " nmap <expr>* ':<C-u>call anzu#mode#start("<C-R><C-W>", "", "", "")<CR>'
 
-  " " コマンド結果出力画面にecho
-  " nmap n <Plug>(anzu-n-with-echo)
-  " nmap N <Plug>(anzu-N-with-echo)
   " nmap * <Plug>(anzu-star-with-echo)N
+
+  if !neobundle#tap('incsearch.vim')
+    " コマンド結果出力画面にecho
+    nmap n <Plug>(anzu-n-with-echo)
+    nmap N <Plug>(anzu-N-with-echo)
+  endif
 
 endif " }}}
 
