@@ -1573,13 +1573,15 @@ if neobundle#tap('incsearch.vim')
   " 検索後、カーソル移動すると自動でnohlsearchする
   let g:incsearch#auto_nohlsearch = 1
 
-  " map / <Plug>(incsearch-forward)
-  " map ?  <Plug>(incsearch-backward)
-  " map g/ <Plug>(incsearch-stay)
+  map / <Plug>(incsearch-forward)
+  map ?  <Plug>(incsearch-backward)
+  map g/ <Plug>(incsearch-stay)
+  map g? <Plug>(incsearch-stay)
 
   " 入力中に飛びたくないのでstayのみ使う
-  map / <Plug>(incsearch-stay)
-  map ? <Plug>(incsearch-stay)
+  " -> 検索をモーションとして使う時にフベンだったので元に戻す
+  " map / <Plug>(incsearch-stay)
+  " map ? <Plug>(incsearch-stay)
 
   if neobundle#tap('vim-anzu')
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
@@ -1637,8 +1639,8 @@ if neobundle#tap('incsearch-fuzzy.vim')
   " 入力中に飛びたくないのでstayのみ使う
   map z/ <Plug>(incsearch-fuzzy-stay)
   map z? <Plug>(incsearch-fuzzy-stay)
-  map g/ <Plug>(incsearch-fuzzyspell-stay)
-  map g? <Plug>(incsearch-fuzzyspell-stay)
+  " map g/ <Plug>(incsearch-fuzzyspell-stay)
+  " map g? <Plug>(incsearch-fuzzyspell-stay)
 
 endif " }}}
 
