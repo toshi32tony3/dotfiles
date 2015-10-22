@@ -215,16 +215,11 @@ augroup END
 " Echo startup time on start
 if has('vim_starting') && has('reltime')
   let g:startuptime = reltime()
-  augroup MyAutoCmd
-    autocmd! VimEnter * let g:startuptime = reltime(g:startuptime) | redraw
+  autocmd MyAutoCmd VimEnter *
+    \   let g:startuptime = reltime(g:startuptime)
+    \ | redraw
     \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
-  augroup END
 endif
-
-" SID取得関数を定義
-function! s:SID()
-  return matchstr(expand('<sfile>'), '<SNR>\d\+_\zesid$')
-endfunction
 
 " ネットワーク上ファイルのバックアップ、スワップを作ると重くなるので、作らない
 set noswapfile
