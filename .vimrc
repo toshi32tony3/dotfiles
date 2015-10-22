@@ -1111,16 +1111,13 @@ if neobundle#tap('vimfiler.vim')
   " 開いているファイルのパスでVimFilerを開く
   nnoremap <expr><Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
 
-  " TODO:vimfilerのマッピングを変更する(#をLeader専用にしたい)
-  " let g:vimfiler_no_default_key_mappings = 1
-  " function! s:vimfiler_settings()
-  "
-  "   nmap # <Nop>
-  "   nmap \ <Plug>(vimfiler_mark_similar_lines)
-  "
-  " endfunction
-  "
-  " autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
+  " vimfilerのマッピングを一部変更(#をLeader専用にする)
+  function! s:vimfiler_settings()
+    " default : nmap <buffer>#  <Plug>(vimfiler_mark_similar_lines)
+                nmap <buffer>#  <Nop>
+                nmap <buffer>## <Plug>(vimfiler_mark_similar_lines)
+  endfunction
+  autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
 
 endif " }}}
 
