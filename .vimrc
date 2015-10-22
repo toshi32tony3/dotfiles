@@ -123,7 +123,8 @@ NeoBundle 'tyru/open-browser.vim'
 " 最新Vimでは標準搭載になったぽい？
 NeoBundle 'deris/vim-visualinc'
 
-NeoBundle 'deris/vim-rengbang'
+NeoBundleLazy 'deris/vim-rengbang',
+  \ { 'autoload' : { 'commands' : ['RengBang'] } }
 NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'kana/vim-operator-user'
