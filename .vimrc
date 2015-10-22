@@ -262,7 +262,7 @@ autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " The end of 基本設定 }}}
 "-----------------------------------------------------------------------------
-" 入力 " {{{
+" 入力 {{{
 
 set wildmenu
 set wildmode=full
@@ -329,7 +329,7 @@ xnoremap & <silent> :<C-u>&&<CR>
 
 " The end of 入力 }}}
 "-----------------------------------------------------------------------------
-" 表示 "{{{
+" 表示 {{{
 
 " いまひとつ.gvimrcでしかできない設定というのがわからない...
 " -> とりあえず移動したやつを列挙していこうかな
@@ -443,7 +443,7 @@ nnoremap <silent> <F12> :set foldenable!<CR>
 
 " The end of 表示 }}}
 "-----------------------------------------------------------------------------
-" 文字列検索 "{{{
+" 文字列検索 {{{
 
 " " very magic
 " " -> incsearch.vimでvery magic指定する
@@ -472,7 +472,7 @@ autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
 
 " The end of 文字列検索 }}}
 "-----------------------------------------------------------------------------
-" 編集 "{{{
+" 編集 {{{
 
 set encoding=utf-8                  " utf-8をデフォルトエンコーディングとする
 set fileencodings=utf-8,sjis,euc-jp " 文字コード自動判定候補
@@ -602,7 +602,7 @@ inoremap <C-@> <C-g>u<C-@>
 
 " The end of 編集 }}}
 "-----------------------------------------------------------------------------
-" 操作の簡単化 "{{{
+" 操作の簡単化 {{{
 
 " <C-[>はVim内部で<Esc>として扱われるので注意(<Esc>のマッピングが適用)
 " <Esc>は遠いし、<C-[>は押しにくいイメージ、<C-c>はInsertLeaveが発生しない
@@ -701,7 +701,7 @@ command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
-" tags, path "{{{
+" tags, path {{{
 
 " タグジャンプ時に候補が複数あった場合リスト表示
 " -> リスト表示したい時だけg付ければ良い気がしてきた
@@ -839,7 +839,7 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 
 " The end of tags, path }}}
 "-----------------------------------------------------------------------------
-" 誤爆防止関係 " {{{
+" 誤爆防止関係 {{{
 
 " レジスタ機能のキーを<S-q>にする(Exモードは使わないので潰す)
 nnoremap q     <Nop>
@@ -877,9 +877,9 @@ nnoremap q?   <Nop>
 
 " The end of 誤爆防止関係 }}}
 "-----------------------------------------------------------------------------
-" Plugin Settings " {{{
+" Plugin Settings {{{
 
-" Vimでフルスクリーンモード(scrnmode.vim)@Kaoriya版付属プラグイン
+" Vimでフルスクリーンモード(scrnmode.vim)@Kaoriya版付属プラグイン {{{
 if has('kaoriya')
 
   let g:fullscreen_on = 0
@@ -894,9 +894,9 @@ if has('kaoriya')
   endfunction
   nnoremap <F11> :<C-u>call<SID>ToggleScreenMode()<CR>
 
-endif
+endif " }}}
 
-" 入力補完(neocomplete.vim)  " {{{
+" 入力補完(neocomplete.vim) {{{
 if neobundle#tap('neocomplete.vim')
 
   let g:neocomplete#use_vimproc = 1
@@ -926,7 +926,7 @@ if neobundle#tap('neocomplete.vim')
 
 endif " }}}
 
-" インクルード補完(neoinclude.vim) " {{{
+" インクルード補完(neoinclude.vim) {{{
 if neobundle#tap('neoinclude.vim')
   call neobundle#config({
     \   'autoload' : {
@@ -936,7 +936,7 @@ if neobundle#tap('neoinclude.vim')
 
 endif " }}}
 
-" 入力補助(neosnippet) " {{{
+" 入力補助(neosnippet) {{{
 if neobundle#tap('neosnippet')
   call neobundle#config({
     \   'autoload' : {
@@ -1150,7 +1150,7 @@ if neobundle#tap('unite-mark')
 
 endif " }}}
 
-" 入力補完(YouCompleteMe) " {{{
+" 入力補完(YouCompleteMe) {{{
 if neobundle#tap('YouCompleteMe')
 
   let g:ycm_min_num_of_chars_for_completion = 2
@@ -1175,7 +1175,7 @@ if neobundle#tap('YouCompleteMe')
 
 endif " }}}
 
-" 入力補助(ultisnips) " {{{
+" 入力補助(ultisnips) {{{
 if neobundle#tap('ultisnips')
   call neobundle#config({
     \   'autoload' : {
@@ -1288,7 +1288,6 @@ if neobundle#tap('vim-quickrun')
     " \   'ruby/watchdogs_checker' : {
     " \     'type' : 'watchdogs_checker/ruby',
     " \   },
-    " \ }
 
     " " clangを使う時の設定はこんな感じ？
     " \   'cpp' : {
@@ -1475,7 +1474,7 @@ if neobundle#tap('vim-markdown')
 
 endif " }}}
 
-" Vimからブラウザを開く(open-browser)
+" Vimからブラウザを開く(open-browser) {{{
 if neobundle#tap('open-browser.vim')
   nmap <Leader>L <Plug>(openbrowser-smart-search)
   vmap <Leader>L <Plug>(openbrowser-smart-search)
@@ -1488,14 +1487,14 @@ if neobundle#tap('vim-altercmd')
 
 endif " }}}
 
-" 連番入力補助(vim-rengbang) " {{{
+" 連番入力補助(vim-rengbang) {{{
 if neobundle#tap('vim-rengbang')
 
   let g:rengbang_default_start = 1
 
 endif " }}}
 
-" 囲む / 囲まなくする / 別の何かで囲む(vim-surround) " {{{
+" 囲む / 囲まなくする / 別の何かで囲む(vim-surround) {{{
 if neobundle#tap('vim-surround')
 
   " " s-sneakとclever-fの使い分けに慣れるため、コメントアウトしておく
@@ -1553,6 +1552,8 @@ if neobundle#tap('vim-smartchr')
   function! s:RubySettings()
     inoremap <buffer><expr> { smartchr#one_of('{', '#{', '{{')
   endfunction
+
+  " for matchit }} } } }
 
 endif " }}}
 
@@ -2034,7 +2035,7 @@ endif " }}}
 
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
-" 趣味＠正式採用前の設定 "{{{
+" 趣味＠正式採用前の設定 {{{
 
 " ミニマップってあったら便利？
 " " -> あったらあったで結構良いかも。アウトライン系で十分な気もする
