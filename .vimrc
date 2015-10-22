@@ -1059,7 +1059,7 @@ if neobundle#tap('unite.vim')
   function! s:hooks.on_source(bundle)
     " call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     " call unite#custom_default_action('directory_mru',             'vimfiler')
-    autocmd MyAutoCmd FileType unite call s:unite_settings()
+
     function! s:unite_settings()
       nmap     <buffer><Esc> <Plug>(unite_all_exit)
       nnoremap <buffer><C-j> <Nop>
@@ -1067,7 +1067,7 @@ if neobundle#tap('unite.vim')
       imap     <buffer><C-j> <Plug>(unite_insert_leave)
       imap     <buffer><C-[> <Plug>(unite_insert_leave)
 
-      " unite中はdicwinを無効化。ローカルで辞書検索できるdicwinの代替が欲しい。
+      " unite中はdicwinを無効化。ローカルで辞書検索できるdicwinの代替が欲しい
       nnoremap <buffer><C-k><C-w> <Nop>
       nnoremap <buffer><C-k><C-p> <Nop>
       nnoremap <buffer><C-k><C-n> <Nop>
@@ -1077,8 +1077,10 @@ if neobundle#tap('unite.vim')
       nnoremap <buffer><C-k>w     <Nop>
       nnoremap <buffer><C-k>p     <Nop>
       nnoremap <buffer><C-k>n     <Nop>
-
     endfunction
+
+    autocmd MyAutoCmd FileType unite call s:unite_settings()
+
   endfunction
 
 endif " }}}
@@ -1107,6 +1109,17 @@ if neobundle#tap('vimfiler.vim')
 
   " 開いているファイルのパスでVimFilerを開く
   nnoremap <expr><Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
+
+  " TODO:vimfilerのマッピングを変更する(#をLeader専用にしたい)
+  " let g:vimfiler_no_default_key_mappings = 1
+  " function! s:vimfiler_settings()
+  "
+  "   nmap # <Nop>
+  "   nmap \ <Plug>(vimfiler_mark_similar_lines)
+  "
+  " endfunction
+  "
+  " autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
 
 endif " }}}
 
