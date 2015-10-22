@@ -1425,6 +1425,21 @@ endif " }}}
 
 " My favorite colorscheme(vim-tomorrow-theme) {{{
 if neobundle#tap('vim-tomorrow-theme')
+  " 現在のカーソル位置をわかりやすくする
+  autocmd MyAutoCmd ColorScheme * highlight Cursor
+    \  term=bold cterm=bold gui=bold
+    \  ctermfg=15 ctermbg=12 guifg=White guibg=Red
+
+  " 検索中にフォーカス位置をわかりやすくする
+  autocmd MyAutoCmd ColorScheme * highlight IncSearch
+    \  term=bold cterm=bold gui=bold
+    \  ctermfg=15 ctermbg=12 guifg=White guibg=Red
+
+  " IME ONしていることをわかりやすくする
+  if has('multi_byte_ime') || has('xim')
+    autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
+  endif
+
   colorscheme Tomorrow-Night
 
 endif " }}}
