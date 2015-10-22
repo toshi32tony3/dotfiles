@@ -30,7 +30,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 " NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'Shougo/unite.vim',
-NeoBundle 'Shougo/neossh.vim'
+" NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
@@ -112,13 +112,17 @@ NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'rcmdnk/vim-markdown'
 NeoBundle 'kannokanno/previm'
+
 NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'mattn/webapi-vim'
 
 " NeoBundle 'tyru/vim-altercmd'
 " NeoBundle 'tpope/vim-repeat'
 " NeoBundle 'tpope/vim-speeddating'
+
+" 最新Vimでは標準搭載になったぽい？
 NeoBundle 'deris/vim-visualinc'
+
 NeoBundle 'deris/vim-rengbang'
 NeoBundle 'tpope/vim-surround'
 
@@ -178,8 +182,8 @@ NeoBundle 'tmhedberg/matchit'
 NeoBundleLazy 'basyura/J6uil.vim',
   \ { 'autoload' : { 'commands' : ['J6uil'] } }
 
-NeoBundleLazy 'AndrewRadev/linediff.vim',
-  \ { 'autoload' : { 'commands' : ['Linediff'] } }
+" NeoBundleLazy 'AndrewRadev/linediff.vim',
+"   \ { 'autoload' : { 'commands' : ['Linediff'] } }
 NeoBundle 'lanbdalisue/vim-unified-diff'
 NeoBundle 'lanbdalisue/vim-improved-diff'
 
