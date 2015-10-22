@@ -342,6 +342,7 @@ xnoremap & <silent>:<C-u>&&<CR>
 " ② ...
 if has('gui_running')
 
+  " フォント種/フォントサイズ設定
   if has('win32')
     set guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
     set linespace=0 " 行間隔[pixel]の設定(default 1 for Win32 GUI)
@@ -356,20 +357,6 @@ if has('gui_running')
   endif
 
   set cmdheight=2
-
-  " Vimでフルスクリーンモード for scrnmode.vim (Kaoriya版付属プラグイン)
-  let g:fullscreen_on = 0
-  function! s:ToggleScreenMode()
-    if g:fullscreen_on
-      execute "ScreenMode 0"
-      let g:fullscreen_on = 0
-    else
-      execute "ScreenMode 6"
-      let g:fullscreen_on = 1
-    endif
-  endfunction
-
-  nnoremap <F11> :<C-u>call<SID>ToggleScreenMode()<CR>
 
   set mouse=a      " マウス機能有効
   set nomousefocus " マウスの移動でフォーカスを自動的に切替えない
@@ -897,6 +884,23 @@ nnoremap q?   <Nop>
 "-----------------------------------------------------------------------------
 " Plugin Settings " {{{
 
+" Vimでフルスクリーンモード(scrnmode.vim)@Kaoriya版付属プラグイン
+if has('kaoriya')
+
+  let g:fullscreen_on = 0
+  function! s:ToggleScreenMode()
+    if g:fullscreen_on
+      execute "ScreenMode 0"
+      let g:fullscreen_on = 0
+    else
+      execute "ScreenMode 6"
+      let g:fullscreen_on = 1
+    endif
+  endfunction
+  nnoremap <F11> :<C-u>call<SID>ToggleScreenMode()<CR>
+
+endif
+
 " 入力補完(neocomplete.vim)  " {{{
 if neobundle#tap('neocomplete.vim')
 
@@ -1067,17 +1071,6 @@ if neobundle#tap('unite.vim')
       nnoremap <buffer><C-K> <Nop>
       imap     <buffer><C-j> <Plug>(unite_insert_leave)
       imap     <buffer><C-[> <Plug>(unite_insert_leave)
-
-      " unite中はdicwinを無効化。ローカルで辞書検索できるdicwinの代替が欲しい
-      nnoremap <buffer><C-k><C-w> <Nop>
-      nnoremap <buffer><C-k><C-p> <Nop>
-      nnoremap <buffer><C-k><C-n> <Nop>
-      nnoremap <buffer><C-k><C-k> <Nop>
-      nnoremap <buffer><C-k>/     <Nop>
-      nnoremap <buffer><C-k>c     <Nop>
-      nnoremap <buffer><C-k>w     <Nop>
-      nnoremap <buffer><C-k>p     <Nop>
-      nnoremap <buffer><C-k>n     <Nop>
     endfunction
 
     autocmd MyAutoCmd FileType unite call s:unite_settings()
