@@ -113,6 +113,7 @@ NeoBundle 'glidenote/memolist.vim'
 NeoBundle 'rcmdnk/vim-markdown'
 NeoBundle 'kannokanno/previm'
 NeoBundle 'tyru/open-browser.vim'
+" NeoBundle 'mattn/webapi-vim'
 
 " NeoBundle 'tyru/vim-altercmd'
 " NeoBundle 'tpope/vim-repeat'
@@ -172,7 +173,6 @@ NeoBundle 'kshenoy/vim-signature'
 
 NeoBundle 'mhinz/vim-startify'
 
-NeoBundle 'mattn/webapi-vim'
 NeoBundle 'tmhedberg/matchit'
 
 NeoBundleLazy 'basyura/J6uil.vim',
