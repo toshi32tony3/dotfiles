@@ -1385,7 +1385,7 @@ if neobundle#tap('vim-brightest')
 
   " " <cword>のみに反映するハイライト
   " let b:brightest#highlight_in_cursorline = {
-  "   \   'group' : 'IncSearch',
+  "   \   'group' : 'ErrorMsg',
   "   \ }
 
   " " 強調を始めるまで間を置く
@@ -1394,7 +1394,7 @@ if neobundle#tap('vim-brightest')
 
   " " <cword>を含め、<cword>と同じ単語を文字色で強調したい場合
   " let g:brightest#highlight = {
-  "   \   "group"    : "WarningMsg",
+  "   \   "group"    : "ErrorMsg",
   "   \   "priority" : -1,
   "   \   "format"   : '\<%s\>',
   "   \ }
@@ -1433,8 +1433,8 @@ if neobundle#tap('vim-tomorrow-theme')
 
   " 検索中にフォーカス位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
-    \  term=bold cterm=bold gui=bold
-    \  ctermfg=15 ctermbg=12 guifg=White guibg=Red
+    \  term=reverse cterm=NONE gui=NONE
+    \  ctermfg=16 ctermbg=222 guifg=#1d1f21 guibg=#f0c674
 
   " IME ONしていることをわかりやすくする
   if has('multi_byte_ime') || has('xim')
