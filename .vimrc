@@ -742,17 +742,17 @@ nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 if filereadable(expand('$HOME/localfiles/local.rc.vim'))
 
   function! s:SetSrcDir()
-    let g:numberOfSrc = len(g:src_list)
-    let $TARGET_VER = g:src_list[g:indexOfSrc]
+    let g:numberOfSrc = len(g:src_ver_list)
+    let $TARGET_VER = g:src_ver_list[g:indexOfSrc]
     let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
-    let $TAGS_DIR = $TARGET_DIR . '\.tags'
+    let $CTAGS_DIR = $TARGET_DIR . '\.tags'
   endfunction
 
   function! s:SetTags()
     set tags=
 
     for item in g:target_dir_ctags_list
-      let $SET_TAGS= $TAGS_DIR. '\' . g:target_dir_ctags_name_list[item]
+      let $SET_TAGS= $CTAGS_DIR. '\' . g:target_dir_ctags_name_list[item]
       set tags+=$SET_TAGS
     endfor
 
@@ -823,8 +823,8 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
 
   " ctagsをアップデート
   function! s:UpdateCtags()
-    if !isdirectory($TAGS_DIR)
-      call system('mkdir ' . $TAGS_DIR)
+    if !isdirectory($CTAGS_DIR)
+      call system('mkdir ' . $CTAGS_DIR)
     endif
     for item in g:target_dir_ctags_list
       let exists = has_key(g:target_dir_ctags_name_list, item)
