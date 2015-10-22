@@ -331,12 +331,7 @@ xnoremap & <silent> :<C-u>&&<CR>
 "-----------------------------------------------------------------------------
 " 表示 {{{
 
-" いまひとつ.gvimrcでしかできない設定というのがわからない...
-" -> とりあえず移動したやつを列挙していこうかな
-" ① highlight CursorIM guibg=Purple guifg=NONE
-" ② ...
 if has('gui_running')
-
   " フォント種/フォントサイズ設定
   if has('win32')
     set guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
@@ -370,8 +365,7 @@ if has('gui_running')
       set printfont=MS_Mincho:h12:cSHIFTJIS
     endif
   endif
-
-endif " endif of has('gui_running')
+endif
 
 " 入力モードに応じてカーソルの形を変える
 " -> Cygwin環境で必要だった気がするので取っておく
