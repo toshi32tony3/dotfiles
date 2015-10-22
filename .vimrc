@@ -50,36 +50,36 @@ NeoBundleLazy 'Shougo/unite-outline',
 " NeoBundle 'SirVer/ultisnips'
 
 " === Windows 64bit YCMを頑張ってbuildする方法 === {{{
-" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う。
+" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う
 "    https://github.com/Valloric/YouCompleteMe/wiki/Windows-Installation-Guide
 "    (手順13.は不要。手順に従ってコピーすると、それ古いから。と怒られる)
-" 1. python-2.7.8.amd64.msiを落としてくる。pythonを入れる。
+" 1. python-2.7.8.amd64.msiを落としてくる。pythonを入れる
 " 2. libpython27.aを落としてくる。(手順中にリンクが貼ってある)
-" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる。
-" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム。
-" 5. 手順に従ってmakeすると、エラーが出る。
+" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる
+" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム
+" 5. 手順に従ってmakeすると、エラーが出る
 "    (Boostの関数tss_cleanup_implemented()が多重定義)
 "    YouCompleteMe\third_party\ycmd\cpp\BoostParts\libs\thread\src\win32\
 "    tss_dll.cppの最終行付近のtss_cleanup_implemented()あたりをコメントアウト
-" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず。
+" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず
 " ================================================ }}}
 
 " === Windows 32bit YCMを頑張ってbuildする方法 === {{{
-" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う。
+" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う
 "    https://github.com/Valloric/YouCompleteMe/wiki/Windows-Installation-Guide
 "    (手順13.は不要。手順に従ってコピーすると、それ古いから。と怒られる)
-"    -> MinGW32の手順が無いので、64bitの手順をいい感じに読み替える。
-"       こちらでは"コンパイルエラーが起きないので、ファイル差し替えは不要"。
-" 1. python-2.7.8.msiを落としてくる。pythonを入れる。
-" 2. 手順1.でlibpython27.aがついてくるので何もしなくてOK。手順3に進む。
-" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる。
-" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム。
-" 5. 手順に従ってmakeすると、エラーが出ないので何もしなくてOK。手順6に進む。
-" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず。
+"    -> MinGW32の手順が無いので、64bitの手順をいい感じに読み替える
+"       こちらでは"コンパイルエラーが起きないので、ファイル差し替えは不要"
+" 1. python-2.7.8.msiを落としてくる。pythonを入れる
+" 2. 手順1.でlibpython27.aがついてくるので何もしなくてOK。手順3に進む
+" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる
+" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム
+" 5. 手順に従ってmakeすると、エラーが出ないので何もしなくてOK。手順6に進む
+" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず
 "
-" Y. YCMのmake完了後、GVim起動時にランタイムエラーが出る。
+" Y. YCMのmake完了後、GVim起動時にランタイムエラーが出る
 "    -> 環境変数からCMakeへのPathを消す。msvcrXXX.dllの異なるバージョンへPathが
-"       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す。
+"       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す
 " ================================================ }}}
 
 NeoBundle 'thinca/vim-singleton'
@@ -204,8 +204,8 @@ endif
 "-----------------------------------------------------------------------------
 " 基本設定 {{{
 
-let mapleader = "#"         " 左手で<Leader>を入力したい
-set helplang=en             " 日本語ヘルプを卒業したい。例え英語が読めなくとも
+let mapleader = "#" " 左手で<Leader>を入力したい
+set helplang=en     " 日本語ヘルプを卒業したい
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
@@ -247,8 +247,8 @@ if has('persistent_undo')
 endif
 
 set viewdir=~/vimfiles/view
-set viminfo+=n~/_viminfo        " Windowsは_viminfo, Linuxは.viminfoとする
-set history=100                 " 100あれば十分すぎる
+set viminfo+=n~/_viminfo    " Windowsは_viminfo, Linuxは.viminfoとする
+set history=100             " 100あれば十分すぎる
 
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
@@ -256,7 +256,7 @@ set autoread
 " " カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
 " set scrolloff=50
 
-" 再描画がうっとおしいのでやっぱり0にする。再描画必要なら<C-e>や<C-y>を使う。
+" 再描画がうっとおしいのでやっぱり0にする。再描画必要なら<C-e>や<C-y>を使う
 set scrolloff=0
 
 " VimDiffは基本縦分割とする
@@ -474,7 +474,7 @@ set wrapscan   " 検索時に最後まで行ったら最初に戻る
 set incsearch  " インクリメンタルサーチ
 set hlsearch   " 検索マッチテキストをハイライト
 
-" " 検索状態をバッファ毎に保持する。
+" " 検索状態をバッファ毎に保持する
 " " -> 便利な時もあるんだけど、バッファ間で共通の方が都合の良いケースが多い
 " " http://d.hatena.ne.jp/tyru/20140129/localize_search_options
 " " Localize search options.
@@ -622,15 +622,16 @@ inoremap <C-@> <C-g>u<C-@>
 "-----------------------------------------------------------------------------
 " 操作の簡単化 "{{{
 
-" <C-[>はVim内部で<Esc>として扱われるみたいなので注意(<Esc>のマッピングが適用)
-" <Esc>は遠いし、<C-[>は押しにくいイメージ、<C-c>はInsertLeaveが発生しない。
-" jjは一時的な入力が発生して精神衛生上よろしくない。そこで<C-j>を使う。
-" -> eskk.vimで<C-j>を使うみたいなので、試すときは注意。
+" <C-[>はVim内部で<Esc>として扱われるので注意(<Esc>のマッピングが適用)
+" <Esc>は遠いし、<C-[>は押しにくいイメージ、<C-c>はInsertLeaveが発生しない
+" jjは一時的な入力が発生して精神衛生上よろしくない。そこで<C-j>を使う
+" -> eskk.vimで<C-j>を使うみたいなので、試すときは注意
 inoremap <C-j> <Esc>
 inoremap <C-[> <Esc>
 
 " /*******************************************************************/
 " /* IMEに関して、以下のように設定しておくと良い感じになる           */
+" /* -> IME OFFしたくない時は<C-[>を使う                             */
 " /* MS-IMEの設定            : <C-j> 入力/変換済み文字なし ; IME OFF */
 " /* MS-IMEの設定            : <Esc> 入力/変換済み文字なし ; IME OFF */
 " /* Google 日本語入力の設定 : <C-j> 入力文字なし          ; IME OFF */
@@ -1028,8 +1029,8 @@ if neobundle#tap('unite.vim')
   let g:u_opt_re =                       g:u_sbuf
   let g:u_opt_ya =                                             g:u_nins
 
-  " Auto Preview が上手く動かないことが多い謎。
-  " -> 重すぎてプレビュー表示に時間がかかっているだけだった。
+  " Auto Preview が上手く動かないことが多い謎
+  " -> 重すぎてプレビュー表示に時間がかかっているだけだった
   " let g:u_opt_bu =          g:u_prev
   " let g:u_opt_gd =          g:u_prev . g:u_nqui . g:u_vopt
   " let g:u_opt_gg =          g:u_prev . g:u_nqui . g:u_sbuf . g:u_sync
@@ -1183,7 +1184,7 @@ if neobundle#tap('YouCompleteMe')
   " https://github.com/Valloric/YouCompleteMe/issues/528
   let g:ycm_use_ultisnips_completer = 1
 
-  " 'GoTo*'コマンドの挙動は以下のどれかから選択。
+  " 'GoTo*'コマンドの挙動は以下のどれかから選択
   " [ 'same-buffer', 'horizontal-split', 'vertical-split', 'new-tab' ]
   let g:ycm_goto_buffer_command = 'same-buffer'
 
@@ -1197,15 +1198,15 @@ if neobundle#tap('ultisnips')
     \   }
     \ })
 
-  " YCMとultisnipsを組み合わせる時に<TAB>の使い方がコンフリクトするらしい。
-  " YCM的には「いい感じに設定してね」という風に読めたのでググってコピペ。
+  " YCMとultisnipsを組み合わせる時に<TAB>の使い方がコンフリクトするらしい
+  " -> YCM的には「いい感じに設定してね」という風に読めたのでググってコピペ
   " http://stackoverflow.com/questions/14896327/ultisnips-and-youcompleteme
   let g:UltiSnipsExpandTrigger = '<TAB>'
   let g:UltiSnipsJumpForwardTrigger = '<TAB>'
   let g:UltiSnipsJumpBackwardTrigger = '<S-TAB>'
   let g:UltiSnipsListSnippets = '<C-e>'
 
-  " snippetの作成先を以下で指定。
+  " snippetの作成先を以下で指定
   let g:UltiSnipsSnippetsDir = '~/vimfiles/UltiSnips'
 
   " snippetの居場所を以下で指定。runtimepathのサブディレクトリを検索する
@@ -1333,10 +1334,10 @@ endif " }}}
 if neobundle#tap('vim-fontzoom')
 
   nnoremap <silent>,f :<C-u>Fontzoom!<CR>
-  " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている。
+  " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
   " nnoremap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
   " nnoremap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
-  " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。
+  " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
   " -> (参考URL)https://github.com/vim-jp/issues/issues/73
 
 endif " }}}
@@ -1354,7 +1355,7 @@ if neobundle#tap('vim-submode')
   let g:submode_timeout = 0
 
   " " gtttttt...で次のタブへ移動
-  " " -> <C-PageDown><C-Pageup>の方が良い。
+  " " -> <C-PageDown><C-Pageup>の方が良い
   " " -> [N]gtだと一発。こっちは1 origin
   " call submode#enter_with('changetab', 'n', '', 'gt', 'gt')
   " call submode#enter_with('changetab', 'n', '', 'gT', 'gT')
@@ -1832,7 +1833,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyFilename()
-    " 以下の条件を満たすと処理負荷が急激に上がる。理由は不明。
+    " 以下の条件を満たすと処理負荷が急激に上がる。理由は不明
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており、ファイル名をフルパス(%:p)出力
     " -> GVIMウィンドウ上部にフルパスが表示されているので、そちらを参照する
@@ -2056,7 +2057,7 @@ endif " }}}
 " set noswapfile
 " NeoBundle 'koron/minimap-vim'
 "
-" まだ開発初期っぽいので、今後に期待。
+" まだ開発初期っぽいので、今後に期待
 " -> python依存っぽいのでちょっと使えないかな...
 " NeoBundle 'severin-lemaignan/vim-minimap'
 
@@ -2066,19 +2067,19 @@ endif " }}}
 " NeoBundle 'haya14busa/vim-easymotion'
 
 " " HTMLコーディングを爆速化するらしい
-" " -> HTML書く機会が無かった。そのうち使いたい。
+" " -> HTML書く機会が無かった。そのうち使いたい
 " NeoBundle 'mattn/emmet-vim'
 
 " " Gistへの投稿がすごく楽になったりするらしい
-" " -> Gist書く機会が無かった。そのうち使いたい。
+" " -> Gist書く機会が無かった。そのうち使いたい
 " NeoBundle 'mattn/gist-vim'
 
 " " 空ファイルテンプレートを実現する
-" " -> 使いたい候補上位だけど、まだ使ってない。
+" " -> 使いたい候補上位だけど、まだ使ってない
 " NeoBundle 'thinca/vim-template'
 
 " " リッチなカレンダー
-" " -> 試してみたら確かにリッチだった。実用性はよくわからない。
+" " -> 試してみたら確かにリッチだった。実用性はよくわからない
 " NeoBundle 'itchyny/calendar.vim'
 
 " " 幅の違う矩形オブジェクトに対するオペレータ(の動作をエミュレートしたもの)
@@ -2086,7 +2087,7 @@ endif " }}}
 " NeoBundle 'osyo-manga/vim-operator-blockwise'
 
 " " <CR>で良い感じにテキストオブジェクトを選択し、Vim力を下げるプラグイン
-" " -> 面白い、が今ひとつ使う機会が無い。
+" " -> 面白い、が今ひとつ使う機会が無い
 " NeoBundle 'gcmt/wildfire.vim'
 " map <CR> <Plug>(wildfire-fuel)
 " map <BS> <Plug>(wildfire-water)
