@@ -329,8 +329,8 @@ set completeopt=menuone
 set pumheight=10
 
 " 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
-nnoremap & <silent>:<C-u>&&<CR>
-xnoremap & <silent>:<C-u>&&<CR>
+nnoremap & <silent> :<C-u>&&<CR>
+xnoremap & <silent> :<C-u>&&<CR>
 
 " The end of 入力 }}}
 "-----------------------------------------------------------------------------
@@ -391,7 +391,7 @@ set colorcolumn=81   " 81行目に線を表示
 
 set number         " 行番号の表示
 set relativenumber " 行番号を相対表示
-nnoremap <silent><F10> :<C-u>set relativenumber!<CR>
+nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>
 
 " 不可視文字の可視化
 set list
@@ -417,13 +417,13 @@ function! ToggleTransParency()
   endif
 endfunction
 
-nnoremap <silent><F2> :<C-u>call ToggleTransParency()<CR>
+nnoremap <silent> <F2> :<C-u>call ToggleTransParency()<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
 
 " スペルチェック機能をスイッチ
-nnoremap <silent><F3> :<C-u>set spell!<CR>
+nnoremap <silent> <F3> :<C-u>set spell!<CR>
 
 " fold(折り畳み)機能の設定
 set foldcolumn=1
@@ -444,7 +444,7 @@ set commentstring=%s
 " autocmd MyAutoCmd FileType diff setlocal nofoldenable
 
 " 折りたたみ機能をスイッチ
-nnoremap <silent><F12> :set foldenable!<CR>
+nnoremap <silent> <F12> :set foldenable!<CR>
 
 " The end of 表示 }}}
 "-----------------------------------------------------------------------------
@@ -653,7 +653,7 @@ nmap ,r :<C-u>source $MYVIMRC<CR><Esc>
 " autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 
 " 検索テキストハイライトを消す
-nmap <silent><Esc> :<C-u>nohlsearch<CR>
+nmap <silent> <Esc> :<C-u>nohlsearch<CR>
 
 " j, k による移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
@@ -955,11 +955,11 @@ if neobundle#tap('neosnippet')
 
   " neocompleteとneosnippetを良い感じに使うためのキー設定
   " http://kazuph.hateblo.jp/entry/2013/01/19/193745
-  imap <expr><TAB> pumvisible() ? "\<C-n>" :
+  imap <expr> <TAB> pumvisible() ? "\<C-n>" :
     \     neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  smap <expr><TAB>
+  smap <expr> <TAB>
     \     neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+  inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
   smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
@@ -1043,22 +1043,22 @@ if neobundle#tap('unite.vim')
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
   " -> 空いているキーがわかりにくくなるデメリットの方が大きいため
-  nnoremap <expr><Leader>bu ':<C-u>Unite buffer'       . g:u_opt_bu . '<CR>'
-  " nnoremap <expr><Leader>bo ':<C-u>Unite bookmark'     . g:u_opt_bo . '<CR>'
-  nnoremap <expr><Leader>fi ':<C-u>Unite file'         . g:u_opt_fi . '<CR>'
-  " nnoremap <expr><Leader>fm ':<C-u>Unite file_mru'     . g:u_opt_fm . '<CR>'
-  nnoremap <expr><Leader>gd ':<C-u>Unite gtags/def'    . g:u_opt_gd . '<CR>'
-  nnoremap <expr><Leader>gg ':<C-u>Unite grep:'        . g:u_opt_gg . '<CR>'
-  nnoremap <expr><Leader>gr ':<C-u>Unite gtags/ref'    . g:u_opt_gr . '<CR>'
-  nnoremap <expr><Leader>jn ':<C-u>Unite junkfile/new' . g:u_opt_jn . '<CR>'
-  nnoremap <expr><Leader>jj ':<C-u>Unite junkfile'     . g:u_opt_jj . '<CR>'
-  nnoremap <expr><Leader>li ':<C-u>Unite line'         . g:u_opt_li . '<CR>'
-  nnoremap <expr><Leader>mm ':<C-u>Unite mark'         . g:u_opt_mm . '<CR>'
-  nnoremap <expr><Leader>mp ':<C-u>Unite mapping'      . g:u_opt_mp . '<CR>'
-  nnoremap <expr><Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
-  nnoremap <expr><Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
-  nnoremap <expr><Leader>re ':<C-u>UniteResume'        . g:u_opt_re . '<CR>'
-  nnoremap <expr><Leader>ya ':<C-u>Unite history/yank' . g:u_opt_ya . '<CR>'
+  nnoremap <expr> <Leader>bu ':<C-u>Unite buffer'       . g:u_opt_bu . '<CR>'
+  " nnoremap <expr> <Leader>bo ':<C-u>Unite bookmark'     . g:u_opt_bo . '<CR>'
+  nnoremap <expr> <Leader>fi ':<C-u>Unite file'         . g:u_opt_fi . '<CR>'
+  " nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'     . g:u_opt_fm . '<CR>'
+  nnoremap <expr> <Leader>gd ':<C-u>Unite gtags/def'    . g:u_opt_gd . '<CR>'
+  nnoremap <expr> <Leader>gg ':<C-u>Unite grep:'        . g:u_opt_gg . '<CR>'
+  nnoremap <expr> <Leader>gr ':<C-u>Unite gtags/ref'    . g:u_opt_gr . '<CR>'
+  nnoremap <expr> <Leader>jn ':<C-u>Unite junkfile/new' . g:u_opt_jn . '<CR>'
+  nnoremap <expr> <Leader>jj ':<C-u>Unite junkfile'     . g:u_opt_jj . '<CR>'
+  nnoremap <expr> <Leader>li ':<C-u>Unite line'         . g:u_opt_li . '<CR>'
+  nnoremap <expr> <Leader>mm ':<C-u>Unite mark'         . g:u_opt_mm . '<CR>'
+  nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'      . g:u_opt_mp . '<CR>'
+  nnoremap <expr> <Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
+  nnoremap <expr> <Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
+  nnoremap <expr> <Leader>re ':<C-u>UniteResume'        . g:u_opt_re . '<CR>'
+  nnoremap <expr> <Leader>ya ':<C-u>Unite history/yank' . g:u_opt_ya . '<CR>'
 
   let s:hooks = neobundle#get_hooks('unite.vim')
   function! s:hooks.on_source(bundle)
@@ -1066,11 +1066,11 @@ if neobundle#tap('unite.vim')
     " call unite#custom_default_action('directory_mru',             'vimfiler')
 
     function! s:unite_settings()
-      nmap     <buffer><Esc> <Plug>(unite_all_exit)
-      nnoremap <buffer><C-j> <Nop>
-      nnoremap <buffer><C-K> <Nop>
-      imap     <buffer><C-j> <Plug>(unite_insert_leave)
-      imap     <buffer><C-[> <Plug>(unite_insert_leave)
+      nmap     <buffer> <Esc> <Plug>(unite_all_exit)
+      nnoremap <buffer> <C-j> <Nop>
+      nnoremap <buffer> <C-K> <Nop>
+      imap     <buffer> <C-j> <Plug>(unite_insert_leave)
+      imap     <buffer> <C-[> <Plug>(unite_insert_leave)
     endfunction
 
     autocmd MyAutoCmd FileType unite call s:unite_settings()
@@ -1086,7 +1086,7 @@ if neobundle#tap('vimshell')
   let g:vimshell_force_overwrite_statusline = 0
 
   " 開いているファイルのパスでVimShellを開く
-  nnoremap <expr><Leader>vs ':<C-u>VimShellTab<Space>' . expand("%:h") . '<CR>'
+  nnoremap <expr> <Leader>vs ':<C-u>VimShellTab<Space>' . expand("%:h") . '<CR>'
 
 endif " }}}
 
@@ -1102,13 +1102,13 @@ if neobundle#tap('vimfiler.vim')
   " let g:vimfiler_edit_action = 'tabopen'
 
   " 開いているファイルのパスでVimFilerを開く
-  nnoremap <expr><Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
+  nnoremap <expr> <Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
 
   " vimfilerのマッピングを一部変更(#をLeader専用にする)
   function! s:vimfiler_settings()
-    " default : nmap <buffer>#  <Plug>(vimfiler_mark_similar_lines)
-                nmap <buffer>#  <Nop>
-                nmap <buffer>## <Plug>(vimfiler_mark_similar_lines)
+    " default : nmap <buffer> #  <Plug>(vimfiler_mark_similar_lines)
+                nmap <buffer> #  <Nop>
+                nmap <buffer> ## <Plug>(vimfiler_mark_similar_lines)
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
 
@@ -1223,7 +1223,7 @@ if neobundle#tap('ultisnips')
   " this mapping Enter key to <C-y> to chose the current highlight item
   " and close the selection list, same as other IDEs.
   " CONFLICT with some plugins like tpope/Endwise
-  inoremap <expr><CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
   function! g:UltiSnips_Reverse()
     call UltiSnips#JumpBackwards()
@@ -1316,14 +1316,14 @@ endif " }}}
 if neobundle#tap('vim-ambicmd')
 
   " 下手にマッピングするよりもambicmdで補完した方が捗る
-  cnoremap <expr><Space> ambicmd#expand("\<Space>")
+  cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 
 endif " }}}
 
 " Vimの文字サイズ変更を簡易化(vim-fontzoom) {{{
 if neobundle#tap('vim-fontzoom')
 
-  nnoremap <silent>,f :<C-u>Fontzoom!<CR>
+  nnoremap <silent> ,f :<C-u>Fontzoom!<CR>
   " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
   " nnoremap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
   " nnoremap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
@@ -1468,7 +1468,7 @@ if neobundle#tap('memolist.vim')
   nnoremap <Leader>ml :<C-u>MemoList<CR>
 
   if neobundle#tap('unite.vim')
-    nnoremap <expr><Leader>mg ':<C-u>Unite grep:~/memo' . g:u_opt_mg . '<CR>'
+    nnoremap <expr> <Leader>mg ':<C-u>Unite grep:~/memo' . g:u_opt_mg . '<CR>'
   endif
 
 endif " }}}
@@ -1547,16 +1547,16 @@ if neobundle#tap('vim-smartchr')
   " inoremap <expr>?     smartchr#one_of('?',     ' ? ')
 
   " 「->」は入力しづらいので、..で置換え
-  inoremap <expr>. smartchr#one_of('.', '->', '..')
+  inoremap <expr> . smartchr#one_of('.', '->', '..')
 
   " " if文直後の(は自動で間に空白を入れる
   " " -> 時々空白を入れたくない時があるので、とりあえずコメントアウト
-  " inoremap <expr>( search('\<\if\%#', 'bcn') ? ' (' : '('
+  " inoremap <expr> ( search('\<\if\%#', 'bcn') ? ' (' : '('
 
   " ruby / eruby の時だけ設定
   autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
   function! s:RubySettings()
-    inoremap <buffer><expr>{ smartchr#one_of('{', '#{', '{{')
+    inoremap <buffer><expr> { smartchr#one_of('{', '#{', '{{')
   endfunction
 
 endif " }}}
@@ -1579,7 +1579,7 @@ if neobundle#tap('vim-quickhl')
 
   " " QuickhlManualResetも一緒にやってしまうと間違えて消すのが若干怖い
   " " -> ambicmdのおかげで :qmr<Space> で呼び出せるのでコメントアウト
-  " nmap <silent><Esc> :<C-u>nohlsearch<CR>:<C-u>QuickhlManualReset<CR>
+  " nmap <silent> <Esc> :<C-u>nohlsearch<CR>:<C-u>QuickhlManualReset<CR>
 
 endif " }}}
 
@@ -1760,7 +1760,7 @@ if neobundle#tap('tagbar')
     \     'f:functions',
     \   ]
     \ }
-  nmap <silent><F9> :<C-u>TagbarToggle<CR>
+  nmap <silent> <F9> :<C-u>TagbarToggle<CR>
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
   function! s:ClipCurrentTag(data)
@@ -1912,7 +1912,7 @@ endif " }}}
 " 簡単にテキスト整形(vim-easy-align) {{{
 if neobundle#tap('vim-easy-align')
 
-  vnoremap <silent><CR> :EasyAlign<CR>
+  vnoremap <silent> <CR> :EasyAlign<CR>
 
 endif " }}}
 
