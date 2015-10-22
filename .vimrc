@@ -1383,19 +1383,28 @@ endif " }}}
 " <cword>を強調(vim-brightest) {{{
 if neobundle#tap('vim-brightest')
 
-  " " 文字色で強調したい場合
+  " " <cword>のみに反映するハイライト
+  " let b:brightest#highlight_in_cursorline = {
+  "   \   'group' : 'IncSearch',
+  "   \ }
+
+  " " 強調を始めるまで間を置く
+  " set updatetime=50
+  " let g:brightest#enable_on_CursorHold = 1
+
+  " " <cword>を含め、<cword>と同じ単語を文字色で強調したい場合
   " let g:brightest#highlight = {
   "   \   "group"    : "WarningMsg",
   "   \   "priority" : -1,
   "   \   "format"   : '\<%s\>',
   "   \ }
 
-  " アンダーラインで強調したい場合
+  " <cword>を含め、<cword>と同じ単語をアンダーラインで強調したい場合
   let g:brightest#highlight = {
     \   "group" : "BrightestUnderline"
     \ }
 
-  " " 波線で強調したい場合
+  " " <cword>を含め、<cword>と同じ単語を波線で強調したい場合
   " let g:brightest#highlight = {
   "   \   "group" : "BrightestUndercurl"
   "   \ }
