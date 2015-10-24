@@ -2,7 +2,14 @@
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
-set nocompatible            " Vi互換モードをオフ(Vimの拡張機能を有効化)
+
+scriptencoding utf-8
+
+" 実は不要なnocompatible
+" http://rbtnn.hateblo.jp/entry/2014/11/30/174749
+if &compatible
+  set nocompatible          " Vi互換モードをオフ(Vimの拡張機能を有効化)
+endif
 filetype plugin indent off  " ftpluginは最後に読み込むため、一旦オフする
 
 " Neo Bundleを使う
