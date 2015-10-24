@@ -214,6 +214,9 @@ endif
 let mapleader = "#" " 左手で<Leader>を入力したい
 set helplang=en     " 日本語ヘルプを卒業したい
 
+" メッセージ省略設定
+set shortmess=aoOotTWI
+
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
   autocmd!
@@ -353,7 +356,7 @@ if has('gui_running')
     set guifontset=a14,r14,k14
   endif
 
-  set cmdheight=2
+  set cmdheight=3
 
   set mouse=a      " マウス機能有効
   set nomousefocus " マウスの移動でフォーカスを自動的に切替えない
