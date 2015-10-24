@@ -211,7 +211,7 @@ endif
 "-----------------------------------------------------------------------------
 " 基本設定 {{{
 
-let mapleader = "#" " 左手で<Leader>を入力したい
+let g:mapleader = "#" " 左手で<Leader>を入力したい
 set helplang=en     " 日本語ヘルプを卒業したい
 
 " メッセージ省略設定
@@ -813,20 +813,20 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
       call system('mkdir ' . $CTAGS_DIR)
     endif
     for item in g:target_dir_ctags_list
-      let exists = has_key(g:target_dir_ctags_name_list, item)
-      if !exists
-        echo exists
+      let s:exists = has_key(g:target_dir_ctags_name_list, item)
+      if !s:exists
+        echo s:exists
         continue
       endif
-      let upCmd =
+      let s:upCmd =
         \ 'ctags -f ' .
         \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[item] . ' -R ' .
         \ $TARGET_DIR . '\' . item
       if neobundle#tap('vimproc.vim')
-        call system(upCmd)
-        " call vimproc#system(upCmd)
+        call system(s:upCmd)
+        " call vimproc#system(s:upCmd)
       else
-        call system(upCmd)
+        call system(s:upCmd)
       endif
     endfor
   endfunction
@@ -1872,19 +1872,19 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentTag()
     if &ft == 'vim' && exists('*FoldCCnavi()')
-      let _ = FoldCCnavi()
-      return strlen(_) ? _ : ''
+      let s:_ = FoldCCnavi()
+      return strlen(s:_) ? s:_ : ''
     else
-      let _ = tagbar#currenttag('%s', '')
-      return strlen(_) ? _ : ''
+      let s:_ = tagbar#currenttag('%s', '')
+      return strlen(s:_) ? s:_ : ''
     endif
   endfunction
 
   function! MyFugitive()
     try
       if &ft != 'vimfiler'
-        let _ = fugitive#head()
-        return strlen(_) ? '⭠ ' . _ : ''
+        let s:_ = fugitive#head()
+        return strlen(s:_) ? '⭠ ' . s:_ : ''
       endif
     catch
     endtry
@@ -2109,12 +2109,12 @@ endif " }}}
 "   autocmd!
 "   autocmd VimLeavePre * call s:save_window()
 "   function! s:save_window()
-"     let options = [
+"     let s:options = [
 "       \ 'set columns=' . &columns,
 "       \ 'set lines=' . &lines,
 "       \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
 "       \ ]
-"     call writefile(options, g:save_window_file)
+"     call writefile(s:options, g:save_window_file)
 "   endfunction
 " augroup END
 "
@@ -2130,10 +2130,10 @@ endif " }}}
 " command! Q :call s:gentle_quitman()
 "
 " function! s:gentle_quitman()
-"   let window_counter = 0
-"   windo let window_counter = window_counter + 1
+"   let s:window_counter = 0
+"   windo let s:window_counter = s:window_counter + 1
 "
-"   if window_counter == 1
+"   if s:window_counter == 1
 "     let a = input("Really quit last window? [n]|y ")
 "     if a == "y"
 "       q
