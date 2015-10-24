@@ -356,7 +356,7 @@ if has('gui_running')
     set guifontset=a14,r14,k14
   endif
 
-  set cmdheight=3
+  set cmdheight=2
 
   set mouse=a      " マウス機能有効
   set nomousefocus " マウスの移動でフォーカスを自動的に切替えない
