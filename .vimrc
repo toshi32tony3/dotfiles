@@ -591,8 +591,8 @@ command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
 " function! s:update_numbered_registers()
 "   let reg = getreg('"')
 "   if len(split(reg, '\n')) == 1 && reg != getreg(1)
-"     for i in range(9, 2, -1)
-"       call setreg(i, getreg(i-1))
+"     for s:i in range(9, 2, -1)
+"       call setreg(s:i, getreg(s:i-1))
 "     endfor
 "     call setreg(1, reg)
 "   endif
@@ -737,8 +737,8 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
   function! s:SetTags()
     set tags=
 
-    for item in g:target_dir_ctags_list
-      let $SET_TAGS= $CTAGS_DIR. '\' . g:target_dir_ctags_name_list[item]
+    for l:item in g:target_dir_ctags_list
+      let $SET_TAGS= $CTAGS_DIR. '\' . g:target_dir_ctags_name_list[l:item]
       set tags+=$SET_TAGS
     endfor
 
@@ -751,14 +751,14 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     set path=
 
     " 起点なしのpath登録
-    for item in g:other_dir_path_list
-      let $SET_PATH = item
+    for l:item in g:other_dir_path_list
+      let $SET_PATH = l:item
       set path+=$SET_PATH
     endfor
 
     " $TARGET_DIRを起点にしたpath登録
-    for item in g:target_dir_path_list
-      let $SET_PATH = $TARGET_DIR . '\' . item
+    for l:item in g:target_dir_path_list
+      let $SET_PATH = $TARGET_DIR . '\' . l:item
       set path+=$SET_PATH
     endfor
   endfunction
@@ -767,8 +767,8 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     set cdpath=
 
     " 起点なしのcdpath登録
-    for item in g:other_dir_cdpath_list
-      let $SET_CDPATH = item
+    for l:item in g:other_dir_cdpath_list
+      let $SET_CDPATH = l:item
       set cdpath+=$SET_CDPATH
     endfor
 
@@ -777,8 +777,8 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     set cdpath+=$TARGET_DIR
 
     " $TARGET_DIRを起点にしたcdpath登録
-    for item in g:target_dir_cdpath_list
-      let $SET_CDPATH = $TARGET_DIR . '\' . item
+    for l:item in g:target_dir_cdpath_list
+      let $SET_CDPATH = $TARGET_DIR . '\' . l:item
       set cdpath+=$SET_CDPATH
     endfor
   endfunction
@@ -812,21 +812,21 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
     if !isdirectory($CTAGS_DIR)
       call system('mkdir ' . $CTAGS_DIR)
     endif
-    for item in g:target_dir_ctags_list
-      let s:exists = has_key(g:target_dir_ctags_name_list, item)
+    for l:item in g:target_dir_ctags_list
+      let s:exists = has_key(g:target_dir_ctags_name_list, l:item)
       if !s:exists
         echo s:exists
         continue
       endif
-      let s:upCmd =
+      let l:upCmd =
         \ 'ctags -f ' .
-        \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[item] . ' -R ' .
-        \ $TARGET_DIR . '\' . item
+        \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[l:item] . ' -R ' .
+        \ $TARGET_DIR . '\' . l:item
       if neobundle#tap('vimproc.vim')
-        call system(s:upCmd)
-        " call vimproc#system(s:upCmd)
+        call system(l:upCmd)
+        " call vimproc#system(l:upCmd)
       else
-        call system(s:upCmd)
+        call system(l:upCmd)
       endif
     endfor
   endfunction
@@ -1872,19 +1872,19 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentTag()
     if &ft == 'vim' && exists('*FoldCCnavi()')
-      let s:_ = FoldCCnavi()
-      return strlen(s:_) ? s:_ : ''
+      let l:_ = FoldCCnavi()
+      return strlen(l:_) ? l:_ : ''
     else
-      let s:_ = tagbar#currenttag('%s', '')
-      return strlen(s:_) ? s:_ : ''
+      let l:_ = tagbar#currenttag('%s', '')
+      return strlen(l:_) ? l:_ : ''
     endif
   endfunction
 
   function! MyFugitive()
     try
       if &ft != 'vimfiler'
-        let s:_ = fugitive#head()
-        return strlen(s:_) ? '⭠ ' . s:_ : ''
+        let l:_ = fugitive#head()
+        return strlen(l:_) ? '⭠ ' . l:_ : ''
       endif
     catch
     endtry
