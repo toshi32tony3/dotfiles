@@ -3,8 +3,6 @@
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
 
-scriptencoding utf-8
-
 " 実は不要なnocompatible
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if &compatible
@@ -1750,6 +1748,7 @@ endif " }}}
 " VimからGitを使う(編集、コマンド実行、vim-fugitive) {{{
 if neobundle#tap('vim-fugitive')
 
+  autocmd MyAutoCmd FileType gitcommit setlocal nofoldenable
 endif " }}}
 
 " VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
