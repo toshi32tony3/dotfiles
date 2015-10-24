@@ -11,6 +11,7 @@
 	algorithm = histogram
 [merge]
 	tool = gvimdiff3
+	ff = false
 [mergetool "gvimdiff3"]
 	cmd = gvim -f -d -c \"wincmd J\" \"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
 [mergetool]
