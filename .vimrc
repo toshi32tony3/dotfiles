@@ -646,13 +646,13 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 nnoremap ,o  :<C-u>only<CR>
 
 " .vimrcをリロード
-nmap ,r :<C-u>source $MYVIMRC<CR><Esc>
+nnoremap ,r :<C-u>source $MYVIMRC<CR><Esc>
 
 " " オート版は違和感あったりlightlineの表示がおかしくなったりで微妙
 " autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
 
 " 検索テキストハイライトを消す
-nmap <silent> <Esc> :<C-u>nohlsearch<CR>
+nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
 " j, k による移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
@@ -861,8 +861,8 @@ nnoremap <C-w><C-q> <Nop>
 nnoremap <C-q> <Nop>
 
 " マウス中央ボタンは使わない
-map  <MiddleMouse> <Nop>
-imap <MiddleMouse> <Nop>
+noremap  <MiddleMouse> <Nop>
+inoremap <MiddleMouse> <Nop>
 
 " 挿入モードでカーソルキーを使うとUndo単位が区切られて困るので潰す
 inoremap <Up>    <Nop>
@@ -1111,8 +1111,8 @@ if neobundle#tap('vimfiler.vim')
   " vimfilerのマッピングを一部変更(#をLeader専用にする)
   function! s:vimfiler_settings()
     " default : nmap <buffer> #  <Plug>(vimfiler_mark_similar_lines)
-                nmap <buffer> #  <Nop>
-                nmap <buffer> ## <Plug>(vimfiler_mark_similar_lines)
+                nnoremap <buffer> #  <Nop>
+                nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
 
@@ -1779,7 +1779,7 @@ if neobundle#tap('tagbar')
     \     'f:functions',
     \   ]
     \ }
-  nmap <silent> <F9> :<C-u>TagbarToggle<CR>
+  nnoremap <silent> <F9> :<C-u>TagbarToggle<CR>
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
   function! s:ClipCurrentTag(data)
