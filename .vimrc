@@ -36,6 +36,8 @@ NeoBundle 'Shougo/vimfiler.vim'
 
 " NeoBundleLazy 'Shougo/neomru.vim',
 "   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
+" NeoBundleLazy 'Shougo/neoyank.vim',
+"   \ { 'autoload' : { 'unite_sources' : [ 'history/yank' ] } }
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
@@ -1025,7 +1027,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_ol =                       g:u_vopt            . g:u_sins
   let g:u_opt_op = ''
   let g:u_opt_re =                       g:u_sbuf
-  let g:u_opt_ya =                                             g:u_nins
+  " let g:u_opt_ya =                                             g:u_nins
 
   " Auto Preview が上手く動かないことが多い謎
   " -> 重すぎてプレビュー表示に時間がかかっているだけだった
@@ -1052,7 +1054,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>ol ':<C-u>Unite outline'      . g:u_opt_ol . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>Unite output'       . g:u_opt_op . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>UniteResume'        . g:u_opt_re . '<CR>'
-  nnoremap <expr> <Leader>ya ':<C-u>Unite history/yank' . g:u_opt_ya . '<CR>'
+  " nnoremap <expr> <Leader>ya ':<C-u>Unite history/yank' . g:u_opt_ya . '<CR>'
 
   let s:hooks = neobundle#get_hooks('unite.vim')
   function! s:hooks.on_source(bundle)
