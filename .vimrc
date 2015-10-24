@@ -1747,7 +1747,12 @@ endif " }}}
 
 " VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
 if neobundle#tap('agit.vim')
-
+  function! s:my_agit_setting()
+    nmap <buffer> ch <Plug>(agit-git-cherry-pick)
+    nmap <buffer> Rv <Plug>(agit-git-revert)
+  endfunction
+  autocmd MyAutoCmd FileType agit call s:my_agit_setting()
+  autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
 endif " }}}
 
 " VimからGitを使う(ブランチ管理、vim-merginal) {{{
