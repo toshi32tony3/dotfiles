@@ -3,8 +3,6 @@
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
 
-scriptencoding utf-8
-
 " 実は不要なnocompatible
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if &compatible
@@ -91,7 +89,8 @@ NeoBundleLazy 'Shougo/unite-outline',
 "       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す
 " ================================================ }}}
 
-NeoBundle 'thinca/vim-singleton'
+" 
+" NeoBundle 'thinca/vim-singleton'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'thinca/vim-fontzoom'
@@ -1249,7 +1248,7 @@ if neobundle#tap('ultisnips')
 
 endif " }}}
 
-" Vimの起動速度UP(vim-singleton) {{{
+" Vimの一つのインスタンスを使い回す(vim-singleton) {{{
 if neobundle#tap('vim-singleton')
 
   call singleton#enable()
@@ -1750,6 +1749,7 @@ endif " }}}
 " VimからGitを使う(編集、コマンド実行、vim-fugitive) {{{
 if neobundle#tap('vim-fugitive')
 
+  autocmd MyAutoCmd FileType gitcommit setlocal nofoldenable
 endif " }}}
 
 " VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
