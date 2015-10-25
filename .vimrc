@@ -116,9 +116,11 @@ NeoBundle 'chriskempson/vim-tomorrow-theme'
 
 " memolist.vimはmarkdown形式でメモを生成するので、markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
-NeoBundle 'glidenote/memolist.vim'
+NeoBundleLazy 'glidenote/memolist.vim',
+  \ { 'autoload' : { 'commands' : ['MemoNew', 'MemoList'] } }
 NeoBundle 'rcmdnk/vim-markdown'
-NeoBundle 'kannokanno/previm'
+NeoBundleLazy 'kannokanno/previm',
+  \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
 NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'mattn/webapi-vim'
@@ -155,7 +157,8 @@ NeoBundle 'mhinz/vim-signify'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'cohama/agit.vim',
   \ { 'autoload' : { 'commands' : ['Agit'] } }
-NeoBundle 'idanarye/vim-merginal'
+NeoBundleLazy 'idanarye/vim-merginal',
+  \ { 'autoload' : { 'commands' : ['Merginal'] } }
 
 NeoBundleLazy 'majutsushi/tagbar',
   \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
