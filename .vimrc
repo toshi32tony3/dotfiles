@@ -816,14 +816,14 @@ if filereadable(expand('$HOME/localfiles/local.rc.vim'))
       call system('mkdir ' . $CTAGS_DIR)
     endif
     for l:item in g:target_dir_ctags_list
-      let s:exists = has_key(g:target_dir_ctags_name_list, l:item)
-      if !s:exists
-        echo s:exists
+      let l:exists = has_key(g:target_dir_ctags_name_list, l:item)
+      if !l:exists
         continue
       endif
       let l:upCmd =
         \ 'ctags -f ' .
-        \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[l:item] . ' -R ' .
+        \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[l:item] .
+        \ ' -R ' .
         \ $TARGET_DIR . '\' . l:item
       if neobundle#tap('vimproc.vim')
         call system(l:upCmd)
