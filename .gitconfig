@@ -5,6 +5,8 @@
 	autocrlf = true
 	editor = gvim
 	quotepath = false
+	preloadindex = true
+	fscache = true
 [push]
 	default = simple
 [diff]
