@@ -191,8 +191,8 @@ NeoBundleLazy 'basyura/J6uil.vim',
 
 " NeoBundleLazy 'AndrewRadev/linediff.vim',
 "   \ { 'autoload' : { 'commands' : ['Linediff'] } }
-NeoBundle 'lanbdalisue/vim-unified-diff'
-NeoBundle 'lanbdalisue/vim-improved-diff'
+NeoBundle 'lambdalisue/vim-unified-diff'
+NeoBundle 'lambdalisue/vim-improve-diff'
 
 call neobundle#end()
 
