@@ -638,7 +638,8 @@ autocmd MyAutoCmd BufEnter * setlocal imsearch=0
 "   autocmd MyAutoCmd InsertEnter * setlocal noimdisable
 " endif
 
-set notimeout " キー入力タイムアウトはあると邪魔だし、待つ意味も無い気がする
+" キー入力タイムアウトはあると邪魔だし、待つ意味も無い気がする
+set notimeout
 
 " 閉じる系の入力を簡易化
 nnoremap <C-q><C-q> :<C-u>bdelete<CR>
