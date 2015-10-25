@@ -991,7 +991,7 @@ if neobundle#tap('unite.vim')
   " http://d.hatena.ne.jp/osyo-manga/20140627
   " -> ホントはstart-insertにしたいけど処理速度の都合でエラーが出ることがしばしば
   call unite#custom#profile('default', 'context', {
-    \   'start_insert'     : 0,
+    \   'start_insert'     : 1,
     \   'prompt_direction' : 'top',
     \   'prompt_visible'   : '1',
     \   'no-empty'         : 1,
@@ -1019,30 +1019,22 @@ if neobundle#tap('unite.vim')
   let g:u_vopt = ' -split -vertical -winwidth=75'
 
   " 各 unite source に応じた変数を定義して使う
-  let g:u_opt_bu = ''
+  let g:u_opt_bu =            g:u_prev
   " let g:u_opt_bo =                       g:u_vopt
-  let g:u_opt_fi =            g:u_tabo            . g:u_fbuf . g:u_ninp
+  let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
   let g:u_opt_gd =                       g:u_nqui . g:u_vopt
-  let g:u_opt_gg =                                  g:u_sbuf . g:u_sync
+  let g:u_opt_gg =                       g:u_nqui . g:u_sbuf . g:u_sync
   let g:u_opt_gr =                       g:u_nqui . g:u_vopt
   let g:u_opt_jj = ''
   let g:u_opt_jn =                                             g:u_sins
-  let g:u_opt_li = ''
-  let g:u_opt_mm =                       g:u_vopt
+  let g:u_opt_li =            g:u_prev
+  let g:u_opt_mm =            g:u_prev            . g:u_vopt
   let g:u_opt_mp = ''
   let g:u_opt_ol =                       g:u_vopt            . g:u_sins
   let g:u_opt_op = ''
-  let g:u_opt_re =                       g:u_sbuf
+  let g:u_opt_re =                                  g:u_sbuf
   " let g:u_opt_ya =                                             g:u_nins
-
-  " Auto Preview が上手く動かないことが多い謎
-  " -> 重すぎてプレビュー表示に時間がかかっているだけだった
-  " let g:u_opt_bu =          g:u_prev
-  " let g:u_opt_gd =          g:u_prev . g:u_nqui . g:u_vopt
-  " let g:u_opt_gg =          g:u_prev . g:u_nqui . g:u_sbuf . g:u_sync
-  " let g:u_opt_gr =          g:u_prev . g:u_nqui . g:u_vopt
-  " let g:u_opt_mm =          g:u_prev            . g:u_vopt
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
   " -> 空いているキーがわかりにくくなるデメリットの方が大きいため
