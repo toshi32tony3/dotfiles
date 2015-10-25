@@ -345,6 +345,9 @@ xnoremap & <silent> :<C-u>&&<CR>
 "-----------------------------------------------------------------------------
 " 表示 {{{
 
+" 2行くらいがちょうど良い
+set cmdheight=2
+
 if has('gui_running')
   " フォント種/フォントサイズ設定
   if has('win32')
@@ -360,8 +363,6 @@ if has('gui_running')
     set guifontset=a14,r14,k14
   endif
 
-  set cmdheight=2
-
   set mouse=a      " マウス機能有効
   set nomousefocus " マウスの移動でフォーカスを自動的に切替えない
   set mousehide    " 入力時にマウスポインタを隠す
@@ -373,12 +374,6 @@ if has('gui_running')
     let &guioptions = substitute(&guioptions, '[mT]', '', 'g')
   endif
 
-  " 印刷用フォント(とりあえずgvimrcサンプルのデフォルト値とする)
-  if has('printer')
-    if has('win32')
-      set printfont=MS_Mincho:h12:cSHIFTJIS
-    endif
-  endif
 endif
 
 " 入力モードに応じてカーソルの形を変える
@@ -399,7 +394,7 @@ nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>
 " 不可視文字の可視化
 set list
 
-" 不可視文字にUTF-8特有の文字は使わない
+" 不可視文字の設定(UTF-8特有の文字は使わない方が良い)
 set listchars=tab:>-,trail:-,eol:\
 
 " 入力中のキーを画面右下に表示
@@ -453,9 +448,9 @@ nnoremap <silent> <F12> :set foldenable!<CR>
 "-----------------------------------------------------------------------------
 " 文字列検索 {{{
 
-" " very magic
-" " -> incsearch.vimでvery magic指定する
-" nnoremap / /\v
+" very magic
+" -> incsearch.vimでvery magic指定して上書き
+nnoremap / /\v
 
 " 大文字小文字を区別しない。区別したい時は検索パターンのどこかに\Cを付ける
 set ignorecase " 検索時に大文字小文字を区別しない
