@@ -160,7 +160,6 @@ NeoBundle 'idanarye/vim-merginal'
 NeoBundleLazy 'majutsushi/tagbar',
   \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
 
-" それなりに負荷が上がるので、自前のステータスライン構築を検討した方が良いかも
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
