@@ -90,7 +90,8 @@ NeoBundleLazy 'Shougo/unite-outline',
 " ================================================ }}}
 
 " NeoBundle 'thinca/vim-singleton'
-NeoBundle 'thinca/vim-quickrun'
+NeoBundleLazy 'thinca/vim-quickrun',
+  \ { 'autoload' : { 'commands' : ['QuickRun'] } }
 NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundleLazy 'thinca/vim-scouter',
