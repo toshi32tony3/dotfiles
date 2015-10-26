@@ -220,7 +220,7 @@ endif
 " 基本設定 {{{
 
 let g:mapleader = "#" " 左手で<Leader>を入力したい
-set helplang=en     " 日本語ヘルプを卒業したい
+set helplang=en       " 日本語ヘルプを卒業したい
 
 " メッセージ省略設定
 set shortmess=aoOotTWI
@@ -355,8 +355,11 @@ set cmdheight=2
 if has('gui_running')
   " フォント種/フォントサイズ設定
   if has('win32')
+    " Ricty for Powerline
     set guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
-    set linespace=0 " 行間隔[pixel]の設定(default 1 for Win32 GUI)
+
+    " 行間隔[pixel]の設定(default 1 for Win32 GUI)
+    set linespace=0
     if has('kaoriya')
       set ambiwidth=auto
     endif
@@ -391,8 +394,8 @@ set wrap             " 長いテキストの折り返し
 set display=lastline " なっが～いテキストを省略しない
 set colorcolumn=81   " 81行目に線を表示
 
-set number         " 行番号の表示
-set relativenumber " 行番号を相対表示
+set number           " 行番号を表示
+set relativenumber   " 行番号を相対表示
 nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>
 
 " 不可視文字の可視化
@@ -1626,6 +1629,7 @@ if neobundle#tap('incsearch.vim')
     map N  <Plug>(incsearch-nohl-N)
   endif
 
+  " アスタリスク検索の対象をクリップボードにコピー
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
@@ -1869,16 +1873,16 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyMode()
-    return winwidth(0) > 60 ? lightline#mode() : ''
+    return winwidth(0) > 30 ? lightline#mode() : ''
   endfunction
 
   function! MyCurrentTag()
     if &ft == 'vim' && exists('*FoldCCnavi()')
       let l:_ = FoldCCnavi()
-      return strlen(l:_) ? l:_ : ''
+      return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
     else
       let l:_ = tagbar#currenttag('%s', '')
-      return strlen(l:_) ? l:_ : ''
+      return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
     endif
   endfunction
 
@@ -1886,7 +1890,7 @@ if neobundle#tap('lightline.vim')
     try
       if &ft != 'vimfiler'
         let l:_ = fugitive#head()
-        return strlen(l:_) ? '⭠ ' . l:_ : ''
+        return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
       endif
     catch
     endtry
