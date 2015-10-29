@@ -6,9 +6,12 @@
 " 実は不要なnocompatible
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if &compatible
-  set nocompatible          " Vi互換モードをオフ(Vimの拡張機能を有効化)
+  " Vi互換モードをオフ(Vimの拡張機能を有効化)
+  set nocompatible
 endif
-filetype plugin indent off  " ftpluginは最後に読み込むため、一旦オフする
+
+" ftpluginは最後に読み込むため、一旦オフする
+filetype plugin indent off
 
 " Neo Bundleを使う
 if has('vim_starting')
@@ -130,7 +133,7 @@ NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'tpope/vim-repeat'
 " NeoBundle 'tpope/vim-speeddating'
 
-" 最新Vimでは標準搭載になったぽい？
+" 最新Vimでは標準搭載になったぽい？そのうち不要になる？
 NeoBundle 'deris/vim-visualinc'
 
 NeoBundleLazy 'deris/vim-rengbang',
@@ -200,7 +203,8 @@ NeoBundle 'lambdalisue/vim-improve-diff'
 
 call neobundle#end()
 
-filetype plugin indent on " ファイルタイプの自動検出をONにする
+" ファイルタイプの自動検出をONにする
+filetype plugin indent on
 
 " 構文解析ON
 syntax enable
@@ -219,8 +223,12 @@ endif
 "-----------------------------------------------------------------------------
 " 基本設定 {{{
 
-let g:mapleader = "#" " 左手で<Leader>を入力したい
-set helplang=en       " 日本語ヘルプを卒業したい
+" 左手で<Leader>を入力したい
+let g:mapleader = "#"
+
+" 日本語ヘルプを卒業したい
+" -> なかなかできない
+" set helplang=en
 
 " メッセージ省略設定
 set shortmess=aoOotTWI
@@ -240,6 +248,7 @@ if has('vim_starting') && has('reltime')
 endif
 
 " ネットワーク上ファイルのバックアップ、スワップを作ると重くなるので、作らない
+" -> バックアップ、スワップの生成先をローカルに指定していたからかも？要調査
 set noswapfile
 set nobackup
 set nowritebackup
@@ -260,17 +269,20 @@ if has('persistent_undo')
 endif
 
 set viewdir=~/vimfiles/view
-set viminfo+=n~/_viminfo    " Windowsは_viminfo, Linuxは.viminfoとする
-set history=100             " 100あれば十分すぎる
+
+" Windowsは_viminfo, Linuxは.viminfoとする
+set viminfo+=n~/_viminfo
+
+" 100あれば十分すぎる
+set history=100
 
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
 
 " " カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
+" -> 再描画がうっとおしいのでやっぱり15にする。再描画必要なら<C-e>や<C-y>を使う
 " set scrolloff=50
-
-" 再描画がうっとおしいのでやっぱり0にする。再描画必要なら<C-e>や<C-y>を使う
-set scrolloff=0
+set scrolloff=15
 
 " VimDiffは基本縦分割とする
 set diffopt+=vertical
@@ -335,11 +347,8 @@ inoremap ） )
 " d : current and included files for defined name or macro
 set complete=.,w,b,u
 
-" 補完時は対象が一つでもポップアップを表示
-set completeopt=menuone
-
-" 補完候補は一度に10個まで表示
-set pumheight=10
+set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
+set pumheight=10        " 補完候補は一度に10個まで表示
 
 " 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
 nnoremap & <silent> :<C-u>&&<CR>
@@ -391,8 +400,10 @@ let &t_EI .= "\e[1 q"
 let &t_te .= "\e[0 q"
 
 set wrap             " 長いテキストの折り返し
-set display=lastline " なっが～いテキストを省略しない
-set colorcolumn=81   " 81行目に線を表示
+set display=lastline " 長いテキストを省略しない
+
+" 81行目に線を表示
+set colorcolumn=81
 
 set number           " 行番号を表示
 set relativenumber   " 行番号を相対表示
