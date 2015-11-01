@@ -1622,7 +1622,7 @@ if neobundle#tap('incsearch.vim')
   " 検索後、カーソル移動すると自動でnohlsearchする
   let g:incsearch#auto_nohlsearch = 1
 
-  map / <Plug>(incsearch-forward)
+  map /  <Plug>(incsearch-forward)
   map ?  <Plug>(incsearch-backward)
   map g/ <Plug>(incsearch-stay)
   map g? <Plug>(incsearch-stay)
