@@ -1045,11 +1045,11 @@ if neobundle#tap('unite.vim')
   let g:u_opt_li = ''
   let g:u_opt_mm =            g:u_prev            . g:u_vopt
   let g:u_opt_mp = ''
-  let g:u_opt_nu = ''
+  let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                       g:u_vopt
   let g:u_opt_op = ''
   let g:u_opt_re =                                  g:u_sbuf
-  " let g:u_opt_ya =                                             g:u_nins
+  " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
   " -> 空いているキーがわかりにくくなるデメリットの方が大きいため
