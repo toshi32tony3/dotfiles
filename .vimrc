@@ -1027,9 +1027,7 @@ if neobundle#tap('unite.vim')
   let g:u_sync = ' -sync'
   let g:u_fbuf = ' -buffer-name=files'
   let g:u_sbuf = ' -buffer-name=search-buffer'
-  let g:u_bufo = ' -default-action=persist_open'
   let g:u_tabo = ' -default-action=tabopen'
-  let g:u_sins = ' -start-insert'
   let g:u_nins = ' -no-start-insert'
   let g:u_hopt = ' -split -horizontal'
   let g:u_vopt = ' -split -vertical -winwidth=75'
@@ -1043,12 +1041,12 @@ if neobundle#tap('unite.vim')
   let g:u_opt_gg =                       g:u_nqui . g:u_sbuf . g:u_sync
   let g:u_opt_gr =                                . g:u_vopt
   let g:u_opt_jj = ''
-  let g:u_opt_jn =                                             g:u_sins
+  let g:u_opt_jn = ''
   let g:u_opt_li = ''
   let g:u_opt_mm =            g:u_prev            . g:u_vopt
   let g:u_opt_mp = ''
   let g:u_opt_nu = '-log '
-  let g:u_opt_ol =                       g:u_vopt            . g:u_sins
+  let g:u_opt_ol =                       g:u_vopt
   let g:u_opt_op = ''
   let g:u_opt_re =                                  g:u_sbuf
   " let g:u_opt_ya =                                             g:u_nins
