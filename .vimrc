@@ -92,7 +92,7 @@ NeoBundleLazy 'Shougo/unite-outline',
 "       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す
 " ================================================ }}}
 
-" NeoBundle 'thinca/vim-singleton'
+NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun',
   \ { 'autoload' : { 'commands' : ['QuickRun'] } }
 NeoBundle 'thinca/vim-ambicmd'
