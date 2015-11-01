@@ -1037,19 +1037,19 @@ if neobundle#tap('unite.vim')
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd =                                . g:u_vopt
+  let g:u_opt_gd =                                  g:u_vopt
   let g:u_opt_gg =                       g:u_nqui . g:u_sbuf . g:u_sync
-  let g:u_opt_gr =                                . g:u_vopt
+  let g:u_opt_gr =                                  g:u_vopt
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
   let g:u_opt_mm =            g:u_prev            . g:u_vopt
   let g:u_opt_mp = ''
-  let g:u_opt_nu = '-log '
+  let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                       g:u_vopt
   let g:u_opt_op = ''
   let g:u_opt_re =                                  g:u_sbuf
-  " let g:u_opt_ya =                                             g:u_nins
+  " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
   " -> 空いているキーがわかりにくくなるデメリットの方が大きいため
@@ -1065,7 +1065,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
   nnoremap <expr> <Leader>mm ':<C-u>Unite mark'             . g:u_opt_mm . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
-  nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu . '<CR>'
+  nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu
   nnoremap <expr> <Leader>ol ':<C-u>Unite outline'          . g:u_opt_ol . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>Unite output'           . g:u_opt_op . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>UniteResume'            . g:u_opt_re . '<CR>'
