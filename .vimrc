@@ -1161,8 +1161,9 @@ if neobundle#tap('unite-gtags')
     \   }
     \ })
 
-  " gtagsの結果をファイル毎のツリー形式で表示
-  let g:unite_source_gtags_project_config = { '_' : { 'treelize' : 1 } }
+  " " gtagsの結果をファイル毎のツリー形式で表示
+  " " -> すごく見やすいが、ファイル名で絞込めなくなるという欠点が…要カイゼン
+  " let g:unite_source_gtags_project_config = { '_' : { 'treelize' : 1 } }
 
 endif " }}}
 
