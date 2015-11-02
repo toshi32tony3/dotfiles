@@ -1004,7 +1004,7 @@ if neobundle#tap('unite.vim')
 
   " unite.vimのデフォルトコンテキストを設定する
   " http://d.hatena.ne.jp/osyo-manga/20140627
-  " -> ホントはstart-insertにしたいけど処理速度の都合でエラーが出ることがしばしば
+  " -> なんだかんだ非同期でやって貰う必要が無い気がする
   call unite#custom#profile('default', 'context', {
     \   'start_insert'     : 1,
     \   'prompt'           : '> ',
@@ -1012,7 +1012,7 @@ if neobundle#tap('unite.vim')
     \   'prompt_direction' : 'top',
     \   'no_empty'         : 1,
     \   'split'            : 0,
-    \   'sync'             : 0,
+    \   'sync'             : 1,
     \ })
 
   " Unite lineの結果候補数を制限しない
@@ -1031,6 +1031,7 @@ if neobundle#tap('unite.vim')
   let g:u_nins = ' -no-start-insert'
   let g:u_hopt = ' -split -horizontal'
   let g:u_vopt = ' -split -vertical -winwidth=75'
+  let g:u_nspl = ' -no-split'
 
   " 各 unite source に応じた変数を定義して使う
   let g:u_opt_bu =            g:u_prev
@@ -1038,7 +1039,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
   let g:u_opt_gd =                                  g:u_vopt
-  let g:u_opt_gg =                       g:u_nqui . g:u_sbuf . g:u_sync
+  let g:u_opt_gg =                                  g:u_nspl . g:u_sbuf
   let g:u_opt_gr =                                  g:u_vopt
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
@@ -1048,7 +1049,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                       g:u_vopt
   let g:u_opt_op = ''
-  let g:u_opt_re =                                  g:u_sbuf
+  let g:u_opt_re =                                  g:u_nspl . g:u_sbuf
   " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
@@ -1120,11 +1121,19 @@ if neobundle#tap('vimfiler.vim')
   " 開いているファイルのパスでVimFilerを開く
   nnoremap <expr> <Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
 
-  " vimfilerのマッピングを一部変更(#をLeader専用にする)
+  " vimfilerのマッピングを一部変更
   function! s:vimfiler_settings()
-    " default : nmap <buffer> #  <Plug>(vimfiler_mark_similar_lines)
+    " #をLeader専用にする
+    " default : nmap     <buffer> #  <Plug>(vimfiler_mark_similar_lines)
                 nnoremap <buffer> #  <Nop>
                 nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
+
+    if neobundle#tap('unite.vim')
+    " Unite grepの設定で使う
+    " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
+                nnoremap <buffer><expr> gr ':<C-u>Unite grep:' . g:u_opt_gg . '<CR>'
+
+    endif
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
 
