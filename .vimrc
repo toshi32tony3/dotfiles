@@ -1143,7 +1143,7 @@ endif " }}}
 if neobundle#tap('junkfile.vim')
 
   if isdirectory(expand('~\memofiles')) != 0
-    let g:junkfile#directory = '~\memofiles'
+    let g:junkfile#directory = expand('~\memofiles')
   endif
 
 endif " }}}
