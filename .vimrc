@@ -201,7 +201,7 @@ NeoBundleLazy 'basyura/J6uil.vim',
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
-" 慣れるまで、本番環境には入れない
+NeoBundle 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
 
 call neobundle#end()
@@ -1862,8 +1862,8 @@ if neobundle#tap('lightline.vim')
   let g:lightline.tabline = { 'left': [ [ 'tabs' ] ], 'right': [] }
 
   let g:lightline.active = {
-    \   'left'  : [ [ 'mode', 'paste' ],
-    \               [ 'fugitive', 'filename', 'currenttag' ], ],
+    \   'left'  : [ [ 'mode' ],
+    \               [ 'skk-mode', 'fugitive', 'filename', 'currenttag' ], ],
     \   'right' : [ [ 'lineinfo' ],
     \               [ 'percent' ],
     \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
@@ -1877,8 +1877,9 @@ if neobundle#tap('lightline.vim')
     \   'filetype'     : 'MyFiletype',
     \   'fileencoding' : 'MyFileencoding',
     \   'mode'         : 'MyMode',
-    \   'currenttag'   : 'MyCurrentTag',
+    \   'skk-mode'     : 'MySKKMode',
     \   'fugitive'     : 'MyFugitive',
+    \   'currenttag'   : 'MyCurrentTag',
     \ }
 
   function! MyModified()
@@ -1918,6 +1919,14 @@ if neobundle#tap('lightline.vim')
 
   function! MyMode()
     return winwidth(0) > 30 ? lightline#mode() : ''
+  endfunction
+
+  function! MySKKMode()
+    if neobundle#tap('eskk.vim')
+      return winwidth(0) > 30 ? eskk#statusline() : ''
+    else
+      return ''
+    endif
   endfunction
 
   function! MyCurrentTag()
@@ -2109,7 +2118,10 @@ endif " }}}
 " vimでskkする(eskk.vim) {{{
 if neobundle#tap('eskk.vim')
 
-  set imdisable
+  autocmd MyAutoCmd VimEnter * set imdisable
+
+  " disable skk.vim
+  let g:plugin_skk_disable = 1
 
   let g:eskk#directory = '~/.eskk'
   let g:eskk#dictionary
