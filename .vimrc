@@ -1,5 +1,4 @@
 " .vimrc for 香り屋版GVim
-" TODO:eskk.vimを導入する
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -955,6 +954,22 @@ if neobundle#tap('neocomplete.vim')
   " 日本語を補完候補として取得しない
   let g:neocomplete#keyword_patterns._ = '\h\w*'
 
+  if neobundle#tap('neosnippet')
+    " neocompleteとneosnippetを良い感じに使うためのキー設定
+    " http://kazuph.hateblo.jp/entry/2013/01/19/193745
+    imap <expr> <TAB> pumvisible() ? "\<C-n>" :
+      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    smap <expr> <TAB>
+      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+  else
+    inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
+    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+  endif
 endif " }}}
 
 " インクルード補完(neoinclude.vim) {{{
@@ -978,16 +993,6 @@ if neobundle#tap('neosnippet')
   " デフォルトのスニペットはコーディング規約と離れたものになっているので要修正
   let g:neosnippet#snippets_directory =
     \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
-
-  " neocompleteとneosnippetを良い感じに使うためのキー設定
-  " http://kazuph.hateblo.jp/entry/2013/01/19/193745
-  imap <expr> <TAB> pumvisible() ? "\<C-n>" :
-    \     neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  smap <expr> <TAB>
-    \     neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
 endif " }}}
 
@@ -2094,7 +2099,7 @@ endif " }}}
 
 " vimでskkする(eskk.vim) {{{
 if neobundle#tap('eskk.vim')
-  " IMEの進化は止まらない
+
   set imdisable
 
   let g:eskk#directory = '~/.eskk'
@@ -2104,6 +2109,16 @@ if neobundle#tap('eskk.vim')
     let g:eskk#large_dictionary =
       \ { 'path': '~/.eskk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
   endif
+
+  let g:eskk#show_annotation = 1
+  let g:eskk#tab_select_completion = 1
+  let g:eskk#start_completion_length = 2
+
+  " see : http://tyru.hatenablog.com/entry/20101214/vim_de_skk
+  let g:eskk#egg_like_newline = 1
+  let g:eskk#egg_like_newline_completion = 1
+  let g:eskk#rom_input_style = 'msime'
+
 endif " }}}
 
 " The end of Plugin Settings }}}
