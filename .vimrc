@@ -1,5 +1,4 @@
 " .vimrc for 香り屋版GVim
-" TODO:eskk.vimを導入する
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -34,7 +33,7 @@ NeoBundle 'Shougo/vimproc.vim', {
   \     'unix'    : 'make -f make_unix.mak',
   \   },
   \ }
-" NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neoinclude.vim'
 " NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
@@ -203,8 +202,7 @@ NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
 " 慣れるまで、本番環境には入れない
-" NeoBundle 'tyru/eskk.vim'
-" set imdisable
+NeoBundle 'tyru/eskk.vim'
 
 call neobundle#end()
 
@@ -218,10 +216,10 @@ syntax enable
 NeoBundleCheck
 
 " Load local settings
-if filereadable(expand('$HOME/localfiles/local.rc.vim'))
-  source $HOME/localfiles/local.rc.vim
-elseif filereadable(expand('$HOME/localfiles/template/local.rc.vim'))
-  source $HOME/localfiles/template/local.rc.vim
+if filereadable(expand('~/localfiles/local.rc.vim'))
+  source ~/localfiles/local.rc.vim
+elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
+  source ~/localfiles/template/local.rc.vim
 endif
 
 " The end of 初期設定 }}}
@@ -647,11 +645,13 @@ inoremap <C-[> <Esc>
 " /* Google 日本語入力の設定 : <Esc> 入力文字なし          ; IME OFF */
 " /*******************************************************************/
 
-" iminsert=2だとinsertモードに入った時にIME ONになって邪魔
-autocmd MyAutoCmd BufEnter * setlocal iminsert=0
+if !neobundle#tap('eskk.vim')
+  " iminsert=2だとinsertモードに入った時にIME ONになって邪魔
+  autocmd MyAutoCmd BufEnter * setlocal iminsert=0
 
-" 日本語検索はmigemoで十分
-autocmd MyAutoCmd BufEnter * setlocal imsearch=0
+  " 日本語検索はmigemoで十分
+  autocmd MyAutoCmd BufEnter * setlocal imsearch=0
+endif
 
 " コマンドモードで日本語が使えないと何かと不便(ファイル名、ディレクトリ名など)
 " if has('kaoriya')
@@ -748,8 +748,8 @@ command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
-" see: $HOME/localfiles/local.rc.vim
-if filereadable(expand('$HOME/localfiles/local.rc.vim'))
+" see: ~/localfiles/local.rc.vim
+if filereadable(expand('~/localfiles/local.rc.vim'))
 
   function! s:SetSrcDir()
     let g:numberOfSrc = len(g:src_ver_list)
@@ -941,9 +941,12 @@ if neobundle#tap('neocomplete.vim')
   if neobundle#tap('neoinclude.vim')
     let g:neocomplete#sources._ =
       \ ['file/include', 'member', 'buffer', 'neosnippet']
-  else
+  elseif neobundle#tap('neosnippet')
     let g:neocomplete#sources._ =
       \ ['member', 'buffer', 'neosnippet']
+  else
+    let g:neocomplete#sources._ =
+      \ ['member', 'buffer']
   endif
 
   if !exists('g:neocomplete#keyword_patterns')
@@ -953,6 +956,22 @@ if neobundle#tap('neocomplete.vim')
   " 日本語を補完候補として取得しない
   let g:neocomplete#keyword_patterns._ = '\h\w*'
 
+  if neobundle#tap('neosnippet')
+    " neocompleteとneosnippetを良い感じに使うためのキー設定
+    " http://kazuph.hateblo.jp/entry/2013/01/19/193745
+    imap <expr> <TAB> pumvisible() ? "\<C-n>" :
+      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    smap <expr> <TAB>
+      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+  else
+    inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
+    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+  endif
 endif " }}}
 
 " インクルード補完(neoinclude.vim) {{{
@@ -976,16 +995,6 @@ if neobundle#tap('neosnippet')
   " デフォルトのスニペットはコーディング規約と離れたものになっているので要修正
   let g:neosnippet#snippets_directory =
     \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
-
-  " neocompleteとneosnippetを良い感じに使うためのキー設定
-  " http://kazuph.hateblo.jp/entry/2013/01/19/193745
-  imap <expr> <TAB> pumvisible() ? "\<C-n>" :
-    \     neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  smap <expr> <TAB>
-    \     neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
 endif " }}}
 
@@ -1366,7 +1375,7 @@ endif " }}}
 " Vim力を測る(vim-scouter) {{{
 if neobundle#tap('vim-scouter')
 
-  nnoremap <Leader>sc :<C-u>Scouter $HOME\dotfiles\.vimrc<CR>
+  nnoremap <Leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
 
 endif " }}}
 
@@ -2047,7 +2056,7 @@ if neobundle#tap('vim-startify')
   let g:startify_session_dir = '~/vimfiles/session'
 
   " ブックマークの設定はローカル設定ファイルに記述する
-  " see: $HOME/localfiles/local.rc.vim
+  " see: ~/localfiles/local.rc.vim
   " let g:startify_bookmarks = [
   "   \   '.',
   "   \   '~\.vimrc',
@@ -2087,6 +2096,30 @@ endif " }}}
 
 " vimdiffをパワーアップする(vim-improved-diff) {{{
 if neobundle#tap('vim-improved-diff')
+
+endif " }}}
+
+" vimでskkする(eskk.vim) {{{
+if neobundle#tap('eskk.vim')
+
+  set imdisable
+
+  let g:eskk#directory = '~/.eskk'
+  let g:eskk#dictionary
+      \ = { 'path': '~/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
+  if filereadable(expand('~/.eskk/SKK-JISYO.L'))
+    let g:eskk#large_dictionary =
+      \ { 'path': '~/.eskk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
+  endif
+
+  let g:eskk#show_annotation = 1
+  let g:eskk#tab_select_completion = 1
+  let g:eskk#start_completion_length = 2
+
+  " see : http://tyru.hatenablog.com/entry/20101214/vim_de_skk
+  let g:eskk#egg_like_newline = 1
+  let g:eskk#egg_like_newline_completion = 1
+  let g:eskk#rom_input_style = 'msime'
 
 endif " }}}
 
