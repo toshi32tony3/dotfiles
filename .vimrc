@@ -645,11 +645,13 @@ inoremap <C-[> <Esc>
 " /* Google 日本語入力の設定 : <Esc> 入力文字なし          ; IME OFF */
 " /*******************************************************************/
 
-" iminsert=2だとinsertモードに入った時にIME ONになって邪魔
-autocmd MyAutoCmd BufEnter * setlocal iminsert=0
+if !neobundle#tap('eskk.vim')
+  " iminsert=2だとinsertモードに入った時にIME ONになって邪魔
+  autocmd MyAutoCmd BufEnter * setlocal iminsert=0
 
-" 日本語検索はmigemoで十分
-autocmd MyAutoCmd BufEnter * setlocal imsearch=0
+  " 日本語検索はmigemoで十分
+  autocmd MyAutoCmd BufEnter * setlocal imsearch=0
+endif
 
 " コマンドモードで日本語が使えないと何かと不便(ファイル名、ディレクトリ名など)
 " if has('kaoriya')
