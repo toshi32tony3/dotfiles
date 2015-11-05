@@ -1,4 +1,5 @@
 " .vimrc for 香り屋版GVim
+" TODO:eskk.vimを導入する
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -200,6 +201,10 @@ NeoBundleLazy 'basyura/J6uil.vim',
 "   \ { 'autoload' : { 'commands' : ['Linediff'] } }
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
+
+" 慣れるまで、本番環境には入れない
+" NeoBundle 'tyru/eskk.vim'
+" set imdisable
 
 call neobundle#end()
 
@@ -629,7 +634,8 @@ inoremap <C-@> <C-g>u<C-@>
 " <Esc>は遠いし、<C-[>は押しにくいイメージ、<C-c>はInsertLeaveが発生しない
 " jjは一時的な入力が発生して精神衛生上よろしくない。そこで<C-j>を使う
 " -> eskk.vimで<C-j>を使うみたいなので、試すときは注意
-inoremap <C-j> <Esc>
+" inoremap <C-j> <Esc>
+" -> eskk.vimを使う前に<C-j>を止める
 inoremap <C-[> <Esc>
 
 " /*******************************************************************/
@@ -1143,7 +1149,7 @@ endif " }}}
 if neobundle#tap('junkfile.vim')
 
   if isdirectory(expand('~\memofiles')) != 0
-    let g:junkfile#directory = '~\memofiles'
+    let g:junkfile#directory = expand('~\memofiles')
   endif
 
 endif " }}}
