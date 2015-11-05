@@ -932,7 +932,10 @@ if neobundle#tap('neocomplete.vim')
   let g:neocomplete#enable_at_startup = 1
   let g:neocomplete#enable_smart_case = 1
   let g:neocomplete#auto_completion_start_length = 2
+  let g:neocomplete#min_keyword_length = 3
+  let g:neocomplete#enable_auto_delimiter = 1
   let g:neocomplete#skip_auto_completion_time = '0.2'
+  let g:neocomplete#enable_auto_close_preview = 1
 
   " 使用する補完の種類を指定
   if !exists('g:neocomplete#sources')
@@ -972,6 +975,10 @@ if neobundle#tap('neocomplete.vim')
     inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
   endif
+
+  inoremap <expr> <C-g> neocomplete#undo_completion()
+  inoremap <expr> <C-l> neocomplete#complete_common_string()
+
 endif " }}}
 
 " インクルード補完(neoinclude.vim) {{{
