@@ -34,7 +34,7 @@ NeoBundle 'Shougo/vimproc.vim', {
   \     'unix'    : 'make -f make_unix.mak',
   \   },
   \ }
-" NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neoinclude.vim'
 " NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
@@ -203,8 +203,7 @@ NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
 " 慣れるまで、本番環境には入れない
-" NeoBundle 'tyru/eskk.vim'
-" set imdisable
+NeoBundle 'tyru/eskk.vim'
 
 call neobundle#end()
 
@@ -941,9 +940,12 @@ if neobundle#tap('neocomplete.vim')
   if neobundle#tap('neoinclude.vim')
     let g:neocomplete#sources._ =
       \ ['file/include', 'member', 'buffer', 'neosnippet']
-  else
+  elseif neobundle#tap('neosnippet')
     let g:neocomplete#sources._ =
       \ ['member', 'buffer', 'neosnippet']
+  else
+    let g:neocomplete#sources._ =
+      \ ['member', 'buffer']
   endif
 
   if !exists('g:neocomplete#keyword_patterns')
@@ -2088,6 +2090,20 @@ endif " }}}
 " vimdiffをパワーアップする(vim-improved-diff) {{{
 if neobundle#tap('vim-improved-diff')
 
+endif " }}}
+
+" vimでskkする(eskk.vim) {{{
+if neobundle#tap('eskk.vim')
+  " IMEの進化は止まらない
+  set imdisable
+
+  let g:eskk#directory = '~/.eskk'
+  let g:eskk#dictionary
+      \ = { 'path': '~/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
+  if filereadable(expand('~/.eskk/SKK-JISYO.L'))
+    let g:eskk#large_dictionary =
+      \ { 'path': '~/.eskk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
+  endif
 endif " }}}
 
 " The end of Plugin Settings }}}
