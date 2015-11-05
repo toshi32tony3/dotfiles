@@ -218,10 +218,10 @@ syntax enable
 NeoBundleCheck
 
 " Load local settings
-if filereadable(expand('$HOME/localfiles/local.rc.vim'))
-  source $HOME/localfiles/local.rc.vim
-elseif filereadable(expand('$HOME/localfiles/template/local.rc.vim'))
-  source $HOME/localfiles/template/local.rc.vim
+if filereadable(expand('~/localfiles/local.rc.vim'))
+  source ~/localfiles/local.rc.vim
+elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
+  source ~/localfiles/template/local.rc.vim
 endif
 
 " The end of 初期設定 }}}
@@ -748,8 +748,8 @@ command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
-" see: $HOME/localfiles/local.rc.vim
-if filereadable(expand('$HOME/localfiles/local.rc.vim'))
+" see: ~/localfiles/local.rc.vim
+if filereadable(expand('~/localfiles/local.rc.vim'))
 
   function! s:SetSrcDir()
     let g:numberOfSrc = len(g:src_ver_list)
@@ -1366,7 +1366,7 @@ endif " }}}
 " Vim力を測る(vim-scouter) {{{
 if neobundle#tap('vim-scouter')
 
-  nnoremap <Leader>sc :<C-u>Scouter $HOME\dotfiles\.vimrc<CR>
+  nnoremap <Leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
 
 endif " }}}
 
@@ -2047,7 +2047,7 @@ if neobundle#tap('vim-startify')
   let g:startify_session_dir = '~/vimfiles/session'
 
   " ブックマークの設定はローカル設定ファイルに記述する
-  " see: $HOME/localfiles/local.rc.vim
+  " see: ~/localfiles/local.rc.vim
   " let g:startify_bookmarks = [
   "   \   '.',
   "   \   '~\.vimrc',
