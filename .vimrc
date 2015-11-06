@@ -201,7 +201,7 @@ NeoBundleLazy 'basyura/J6uil.vim',
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
-" 慣れるまで、本番環境には入れない
+NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
 
 call neobundle#end()
@@ -932,7 +932,10 @@ if neobundle#tap('neocomplete.vim')
   let g:neocomplete#enable_at_startup = 1
   let g:neocomplete#enable_smart_case = 1
   let g:neocomplete#auto_completion_start_length = 2
+  let g:neocomplete#min_keyword_length = 3
+  let g:neocomplete#enable_auto_delimiter = 1
   let g:neocomplete#skip_auto_completion_time = '0.2'
+  let g:neocomplete#enable_auto_close_preview = 1
 
   " 使用する補完の種類を指定
   if !exists('g:neocomplete#sources')
@@ -972,6 +975,10 @@ if neobundle#tap('neocomplete.vim')
     inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
   endif
+
+  inoremap <expr> <C-g> neocomplete#undo_completion()
+  inoremap <expr> <C-l> neocomplete#complete_common_string()
+
 endif " }}}
 
 " インクルード補完(neoinclude.vim) {{{
@@ -1033,9 +1040,9 @@ if neobundle#tap('unite.vim')
   " Unite lineの結果候補数を制限しない
   call unite#custom#source('line', 'max_candidates', 0)
 
-  " /**************************************************************************/
-  " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う   */
-  " /**************************************************************************/
+  " /************************************************************************/
+  " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う */
+  " /************************************************************************/
   let g:u_ninp = ' -input='
   let g:u_nqui = ' -no-quit'
   let g:u_prev = ' -auto-preview'
@@ -1043,23 +1050,23 @@ if neobundle#tap('unite.vim')
   let g:u_fbuf = ' -buffer-name=files'
   let g:u_sbuf = ' -buffer-name=search-buffer'
   let g:u_tabo = ' -default-action=tabopen'
-  let g:u_nins = ' -no-start-insert'
-  let g:u_hopt = ' -split -horizontal'
-  let g:u_vopt = ' -split -vertical -winwidth=75'
+  let g:u_nins = ' -no-start-insert -prompt-visible'
+  let g:u_hopt = ' -split -horizontal -winheight=20'
+  let g:u_vopt = ' -split -vertical -winwidth=90'
   let g:u_nspl = ' -no-split'
 
   " 各 unite source に応じた変数を定義して使う
-  let g:u_opt_bu =            g:u_prev
+  let g:u_opt_bu = g:u_nins . g:u_prev
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd =                                  g:u_vopt
+  let g:u_opt_gd =                                  g:u_hopt
   let g:u_opt_gg =                                  g:u_nspl . g:u_sbuf
-  let g:u_opt_gr =                                  g:u_vopt
+  let g:u_opt_gr =                                  g:u_hopt
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
-  let g:u_opt_mm =            g:u_prev            . g:u_vopt
+  let g:u_opt_mm = g:u_nins . g:u_prev            . g:u_hopt
   let g:u_opt_mp = ''
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                       g:u_vopt
@@ -1855,8 +1862,8 @@ if neobundle#tap('lightline.vim')
   let g:lightline.tabline = { 'left': [ [ 'tabs' ] ], 'right': [] }
 
   let g:lightline.active = {
-    \   'left'  : [ [ 'mode', 'paste' ],
-    \               [ 'fugitive', 'filename', 'currenttag' ], ],
+    \   'left'  : [ [ 'mode' ],
+    \               [ 'skk-mode', 'fugitive', 'filename', 'currenttag' ], ],
     \   'right' : [ [ 'lineinfo' ],
     \               [ 'percent' ],
     \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
@@ -1870,8 +1877,9 @@ if neobundle#tap('lightline.vim')
     \   'filetype'     : 'MyFiletype',
     \   'fileencoding' : 'MyFileencoding',
     \   'mode'         : 'MyMode',
-    \   'currenttag'   : 'MyCurrentTag',
+    \   'skk-mode'     : 'MySKKMode',
     \   'fugitive'     : 'MyFugitive',
+    \   'currenttag'   : 'MyCurrentTag',
     \ }
 
   function! MyModified()
@@ -1911,6 +1919,14 @@ if neobundle#tap('lightline.vim')
 
   function! MyMode()
     return winwidth(0) > 30 ? lightline#mode() : ''
+  endfunction
+
+  function! MySKKMode()
+    if neobundle#tap('eskk.vim')
+      return winwidth(0) > 30 ? eskk#statusline() : ''
+    else
+      return ''
+    endif
   endfunction
 
   function! MyCurrentTag()
@@ -2102,7 +2118,10 @@ endif " }}}
 " vimでskkする(eskk.vim) {{{
 if neobundle#tap('eskk.vim')
 
-  set imdisable
+  autocmd MyAutoCmd VimEnter * set imdisable
+
+  " disable skk.vim
+  let g:plugin_skk_disable = 1
 
   let g:eskk#directory = '~/.eskk'
   let g:eskk#dictionary
