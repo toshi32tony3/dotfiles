@@ -201,7 +201,7 @@ NeoBundleLazy 'basyura/J6uil.vim',
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
-NeoBundle 'tyru/skk.vim'
+NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
 
 call neobundle#end()
