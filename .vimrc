@@ -1040,9 +1040,9 @@ if neobundle#tap('unite.vim')
   " Unite lineの結果候補数を制限しない
   call unite#custom#source('line', 'max_candidates', 0)
 
-  " /**************************************************************************/
-  " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う   */
-  " /**************************************************************************/
+  " /************************************************************************/
+  " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う */
+  " /************************************************************************/
   let g:u_ninp = ' -input='
   let g:u_nqui = ' -no-quit'
   let g:u_prev = ' -auto-preview'
@@ -1050,23 +1050,23 @@ if neobundle#tap('unite.vim')
   let g:u_fbuf = ' -buffer-name=files'
   let g:u_sbuf = ' -buffer-name=search-buffer'
   let g:u_tabo = ' -default-action=tabopen'
-  let g:u_nins = ' -no-start-insert'
-  let g:u_hopt = ' -split -horizontal'
-  let g:u_vopt = ' -split -vertical -winwidth=75'
+  let g:u_nins = ' -no-start-insert -prompt-visible'
+  let g:u_hopt = ' -split -horizontal -winheight=20'
+  let g:u_vopt = ' -split -vertical -winwidth=90'
   let g:u_nspl = ' -no-split'
 
   " 各 unite source に応じた変数を定義して使う
-  let g:u_opt_bu =            g:u_prev
+  let g:u_opt_bu = g:u_nins . g:u_prev
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd =                                  g:u_vopt
+  let g:u_opt_gd =                                  g:u_hopt
   let g:u_opt_gg =                                  g:u_nspl . g:u_sbuf
-  let g:u_opt_gr =                                  g:u_vopt
+  let g:u_opt_gr =                                  g:u_hopt
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
-  let g:u_opt_mm =            g:u_prev            . g:u_vopt
+  let g:u_opt_mm = g:u_nins . g:u_prev            . g:u_hopt
   let g:u_opt_mp = ''
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                       g:u_vopt
