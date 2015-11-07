@@ -241,9 +241,6 @@ nnoremap ## <Nop>
 " -> なかなかできない
 " set helplang=en
 
-" メッセージ省略設定
-set shortmess=aoOotTWI
-
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
   autocmd!
@@ -289,6 +286,9 @@ set history=100
 
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
+
+" メッセージ省略設定
+set shortmess=aoOotTWI
 
 " " カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
 " -> 再描画がうっとおしいのでやっぱり15にする。再描画必要なら<C-e>や<C-y>を使う
