@@ -1550,6 +1550,12 @@ if neobundle#tap('memolist.vim')
 
 endif " }}}
 
+" ファイルをブラウザで開く(previm)
+if neobundle#tap('previm')
+  let g:previm_enable_realtime = 1
+
+endif
+
 " markdownを使いやすくする(vim-markdown) {{{
 if neobundle#tap('vim-markdown')
   " markdownのfold機能を無効にする
