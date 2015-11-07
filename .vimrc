@@ -1,4 +1,9 @@
 " .vimrc for 香り屋版GVim
+" TODO: YCM/UltiSnips関連のコメントを削除する
+"         -> neocomplete & eskkのセットに一本化するため
+"         -> まあ、そもそもWindows環境でYCMをまともに使える気がしない
+" TODO: 趣味プラグインリストの棚卸し
+"         -> 多分使わないでしょなプラグインがいっぱい
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -33,7 +38,7 @@ NeoBundle 'Shougo/vimproc.vim', {
   \     'unix'    : 'make -f make_unix.mak',
   \   },
   \ }
-" NeoBundle 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neoinclude.vim'
 " NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
@@ -92,7 +97,7 @@ NeoBundleLazy 'Shougo/unite-outline',
 "       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す
 " ================================================ }}}
 
-" NeoBundle 'thinca/vim-singleton'
+NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun',
   \ { 'autoload' : { 'commands' : ['QuickRun'] } }
 NeoBundle 'thinca/vim-ambicmd'
@@ -201,6 +206,9 @@ NeoBundleLazy 'basyura/J6uil.vim',
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
+NeoBundleLazy 'tyru/skk.vim'
+NeoBundle 'tyru/eskk.vim'
+
 call neobundle#end()
 
 " ファイルタイプの自動検出をONにする
@@ -213,10 +221,10 @@ syntax enable
 NeoBundleCheck
 
 " Load local settings
-if filereadable(expand('$HOME/localfiles/local.rc.vim'))
-  source $HOME/localfiles/local.rc.vim
-elseif filereadable(expand('$HOME/localfiles/template/local.rc.vim'))
-  source $HOME/localfiles/template/local.rc.vim
+if filereadable(expand('~/localfiles/local.rc.vim'))
+  source ~/localfiles/local.rc.vim
+elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
+  source ~/localfiles/template/local.rc.vim
 endif
 
 " The end of 初期設定 }}}
@@ -629,7 +637,8 @@ inoremap <C-@> <C-g>u<C-@>
 " <Esc>は遠いし、<C-[>は押しにくいイメージ、<C-c>はInsertLeaveが発生しない
 " jjは一時的な入力が発生して精神衛生上よろしくない。そこで<C-j>を使う
 " -> eskk.vimで<C-j>を使うみたいなので、試すときは注意
-inoremap <C-j> <Esc>
+" inoremap <C-j> <Esc>
+" -> eskk.vimを使う前に<C-j>を止める
 inoremap <C-[> <Esc>
 
 " /*******************************************************************/
@@ -641,11 +650,13 @@ inoremap <C-[> <Esc>
 " /* Google 日本語入力の設定 : <Esc> 入力文字なし          ; IME OFF */
 " /*******************************************************************/
 
-" iminsert=2だとinsertモードに入った時にIME ONになって邪魔
-autocmd MyAutoCmd BufEnter * setlocal iminsert=0
+if !neobundle#tap('eskk.vim')
+  " iminsert=2だとinsertモードに入った時にIME ONになって邪魔
+  autocmd MyAutoCmd BufEnter * setlocal iminsert=0
 
-" 日本語検索はmigemoで十分
-autocmd MyAutoCmd BufEnter * setlocal imsearch=0
+  " 日本語検索はmigemoで十分
+  autocmd MyAutoCmd BufEnter * setlocal imsearch=0
+endif
 
 " コマンドモードで日本語が使えないと何かと不便(ファイル名、ディレクトリ名など)
 " if has('kaoriya')
@@ -742,8 +753,8 @@ command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
-" see: $HOME/localfiles/local.rc.vim
-if filereadable(expand('$HOME/localfiles/local.rc.vim'))
+" see: ~/localfiles/local.rc.vim
+if filereadable(expand('~/localfiles/local.rc.vim'))
 
   function! s:SetSrcDir()
     let g:numberOfSrc = len(g:src_ver_list)
@@ -926,7 +937,10 @@ if neobundle#tap('neocomplete.vim')
   let g:neocomplete#enable_at_startup = 1
   let g:neocomplete#enable_smart_case = 1
   let g:neocomplete#auto_completion_start_length = 2
+  let g:neocomplete#min_keyword_length = 3
+  let g:neocomplete#enable_auto_delimiter = 1
   let g:neocomplete#skip_auto_completion_time = '0.2'
+  let g:neocomplete#enable_auto_close_preview = 1
 
   " 使用する補完の種類を指定
   if !exists('g:neocomplete#sources')
@@ -935,9 +949,12 @@ if neobundle#tap('neocomplete.vim')
   if neobundle#tap('neoinclude.vim')
     let g:neocomplete#sources._ =
       \ ['file/include', 'member', 'buffer', 'neosnippet']
-  else
+  elseif neobundle#tap('neosnippet')
     let g:neocomplete#sources._ =
       \ ['member', 'buffer', 'neosnippet']
+  else
+    let g:neocomplete#sources._ =
+      \ ['member', 'buffer']
   endif
 
   if !exists('g:neocomplete#keyword_patterns')
@@ -946,6 +963,26 @@ if neobundle#tap('neocomplete.vim')
 
   " 日本語を補完候補として取得しない
   let g:neocomplete#keyword_patterns._ = '\h\w*'
+
+  if neobundle#tap('neosnippet')
+    " neocompleteとneosnippetを良い感じに使うためのキー設定
+    " http://kazuph.hateblo.jp/entry/2013/01/19/193745
+    imap <expr> <TAB> pumvisible() ? "\<C-n>" :
+      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    smap <expr> <TAB>
+      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+    imap <C-k> <Plug>(neosnippet_expand_or_jump)
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+
+  else
+    inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
+    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+
+  endif
+
+  inoremap <expr> <C-g> neocomplete#undo_completion()
+  inoremap <expr> <C-l> neocomplete#complete_common_string()
 
 endif " }}}
 
@@ -971,16 +1008,6 @@ if neobundle#tap('neosnippet')
   let g:neosnippet#snippets_directory =
     \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
 
-  " neocompleteとneosnippetを良い感じに使うためのキー設定
-  " http://kazuph.hateblo.jp/entry/2013/01/19/193745
-  imap <expr> <TAB> pumvisible() ? "\<C-n>" :
-    \     neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  smap <expr> <TAB>
-    \     neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-  inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-  smap <C-k> <Plug>(neosnippet_expand_or_jump)
-
 endif " }}}
 
 " 検索やリスト表示の拡張(unite.vim) {{{
@@ -1004,7 +1031,7 @@ if neobundle#tap('unite.vim')
 
   " unite.vimのデフォルトコンテキストを設定する
   " http://d.hatena.ne.jp/osyo-manga/20140627
-  " -> ホントはstart-insertにしたいけど処理速度の都合でエラーが出ることがしばしば
+  " -> なんだかんだ非同期でやって貰う必要が無い気がする
   call unite#custom#profile('default', 'context', {
     \   'start_insert'     : 1,
     \   'prompt'           : '> ',
@@ -1012,15 +1039,15 @@ if neobundle#tap('unite.vim')
     \   'prompt_direction' : 'top',
     \   'no_empty'         : 1,
     \   'split'            : 0,
-    \   'sync'             : 0,
+    \   'sync'             : 1,
     \ })
 
   " Unite lineの結果候補数を制限しない
   call unite#custom#source('line', 'max_candidates', 0)
 
-  " /**************************************************************************/
-  " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う   */
-  " /**************************************************************************/
+  " /************************************************************************/
+  " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う */
+  " /************************************************************************/
   let g:u_ninp = ' -input='
   let g:u_nqui = ' -no-quit'
   let g:u_prev = ' -auto-preview'
@@ -1028,27 +1055,28 @@ if neobundle#tap('unite.vim')
   let g:u_fbuf = ' -buffer-name=files'
   let g:u_sbuf = ' -buffer-name=search-buffer'
   let g:u_tabo = ' -default-action=tabopen'
-  let g:u_nins = ' -no-start-insert'
-  let g:u_hopt = ' -split -horizontal'
-  let g:u_vopt = ' -split -vertical -winwidth=75'
+  let g:u_nins = ' -no-start-insert -prompt-visible'
+  let g:u_hopt = ' -split -horizontal -winheight=20'
+  let g:u_vopt = ' -split -vertical -winwidth=90'
+  let g:u_nspl = ' -no-split'
 
   " 各 unite source に応じた変数を定義して使う
-  let g:u_opt_bu =            g:u_prev
+  let g:u_opt_bu = g:u_nins . g:u_prev
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd =                                  g:u_vopt
-  let g:u_opt_gg =                       g:u_nqui . g:u_sbuf . g:u_sync
-  let g:u_opt_gr =                                  g:u_vopt
+  let g:u_opt_gd =                                  g:u_hopt
+  let g:u_opt_gg =                                  g:u_nspl . g:u_sbuf
+  let g:u_opt_gr =                                  g:u_hopt
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
-  let g:u_opt_mm =            g:u_prev            . g:u_vopt
+  let g:u_opt_mm = g:u_nins . g:u_prev            . g:u_hopt
   let g:u_opt_mp = ''
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                       g:u_vopt
   let g:u_opt_op = ''
-  let g:u_opt_re =                                  g:u_sbuf
+  let g:u_opt_re =                                  g:u_nspl . g:u_sbuf
   " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
@@ -1079,7 +1107,7 @@ if neobundle#tap('unite.vim')
     function! s:unite_settings()
       nmap     <buffer> <Esc> <Plug>(unite_all_exit)
       nnoremap <buffer> <C-j> <Nop>
-      nnoremap <buffer> <C-K> <Nop>
+      nnoremap <buffer> <C-k> <Nop>
       imap     <buffer> <C-j> <Plug>(unite_insert_leave)
       imap     <buffer> <C-[> <Plug>(unite_insert_leave)
     endfunction
@@ -1120,11 +1148,19 @@ if neobundle#tap('vimfiler.vim')
   " 開いているファイルのパスでVimFilerを開く
   nnoremap <expr> <Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
 
-  " vimfilerのマッピングを一部変更(#をLeader専用にする)
+  " vimfilerのマッピングを一部変更
   function! s:vimfiler_settings()
-    " default : nmap <buffer> #  <Plug>(vimfiler_mark_similar_lines)
+    " #をLeader専用にする
+    " default : nmap     <buffer> #  <Plug>(vimfiler_mark_similar_lines)
                 nnoremap <buffer> #  <Nop>
                 nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
+
+    if neobundle#tap('unite.vim')
+    " Unite grepの設定で使う
+    " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
+                nnoremap <buffer><expr> gr ':<C-u>Unite grep:' . g:u_opt_gg . '<CR>'
+
+    endif
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
 
@@ -1134,7 +1170,7 @@ endif " }}}
 if neobundle#tap('junkfile.vim')
 
   if isdirectory(expand('~\memofiles')) != 0
-    let g:junkfile#directory = '~\memofiles'
+    let g:junkfile#directory = expand('~\memofiles')
   endif
 
 endif " }}}
@@ -1152,8 +1188,9 @@ if neobundle#tap('unite-gtags')
     \   }
     \ })
 
-  " gtagsの結果をファイル毎のツリー形式で表示
-  let g:unite_source_gtags_project_config = { '_' : { 'treelize' : 1 } }
+  " " gtagsの結果をファイル毎のツリー形式で表示
+  " " -> すごく見やすいが、ファイル名で絞込めなくなるという欠点が…要カイゼン
+  " let g:unite_source_gtags_project_config = { '_' : { 'treelize' : 1 } }
 
 endif " }}}
 
@@ -1350,7 +1387,7 @@ endif " }}}
 " Vim力を測る(vim-scouter) {{{
 if neobundle#tap('vim-scouter')
 
-  nnoremap <Leader>sc :<C-u>Scouter $HOME\dotfiles\.vimrc<CR>
+  nnoremap <Leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
 
 endif " }}}
 
@@ -1622,7 +1659,7 @@ if neobundle#tap('incsearch.vim')
   " 検索後、カーソル移動すると自動でnohlsearchする
   let g:incsearch#auto_nohlsearch = 1
 
-  map / <Plug>(incsearch-forward)
+  map /  <Plug>(incsearch-forward)
   map ?  <Plug>(incsearch-backward)
   map g/ <Plug>(incsearch-stay)
   map g? <Plug>(incsearch-stay)
@@ -1830,8 +1867,8 @@ if neobundle#tap('lightline.vim')
   let g:lightline.tabline = { 'left': [ [ 'tabs' ] ], 'right': [] }
 
   let g:lightline.active = {
-    \   'left'  : [ [ 'mode', 'paste' ],
-    \               [ 'fugitive', 'filename', 'currenttag' ], ],
+    \   'left'  : [ [ 'mode' ],
+    \               [ 'skk-mode', 'fugitive', 'filename', 'currenttag' ], ],
     \   'right' : [ [ 'lineinfo' ],
     \               [ 'percent' ],
     \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
@@ -1845,8 +1882,9 @@ if neobundle#tap('lightline.vim')
     \   'filetype'     : 'MyFiletype',
     \   'fileencoding' : 'MyFileencoding',
     \   'mode'         : 'MyMode',
-    \   'currenttag'   : 'MyCurrentTag',
+    \   'skk-mode'     : 'MySKKMode',
     \   'fugitive'     : 'MyFugitive',
+    \   'currenttag'   : 'MyCurrentTag',
     \ }
 
   function! MyModified()
@@ -1886,6 +1924,14 @@ if neobundle#tap('lightline.vim')
 
   function! MyMode()
     return winwidth(0) > 30 ? lightline#mode() : ''
+  endfunction
+
+  function! MySKKMode()
+    if neobundle#tap('eskk.vim')
+      return winwidth(0) > 30 ? eskk#statusline() : ''
+    else
+      return ''
+    endif
   endfunction
 
   function! MyCurrentTag()
@@ -2031,16 +2077,16 @@ if neobundle#tap('vim-startify')
   let g:startify_session_dir = '~/vimfiles/session'
 
   " ブックマークの設定はローカル設定ファイルに記述する
-  " see: $HOME/localfiles/local.rc.vim
+  " see: ~/localfiles/local.rc.vim
   " let g:startify_bookmarks = [
   "   \   '.',
   "   \   '~\.vimrc',
   "   \ ]
 
   let g:startify_list_order = [
-    \   [ 'My bookmarks:'               ], 'bookmarks',
+    \   [ 'My bookmarks:' ],        'bookmarks',
     \   [ 'Recently used files:' ], 'files',
-    \   [ 'My sessions:' ], 'sessions',
+    \   [ 'My sessions:' ],         'sessions',
     \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
@@ -2071,6 +2117,36 @@ endif " }}}
 
 " vimdiffをパワーアップする(vim-improved-diff) {{{
 if neobundle#tap('vim-improved-diff')
+
+endif " }}}
+
+" vimでskkする(eskk.vim) {{{
+if neobundle#tap('eskk.vim')
+
+  autocmd MyAutoCmd VimEnter * set imdisable
+
+  if neobundle#tap('skk.vim')
+    " disable skk.vim
+    " -> Helpを見るためにskk.vim自体は入れておきたい
+    let g:plugin_skk_disable = 1
+  endif
+
+  let g:eskk#directory = '~/.eskk'
+  let g:eskk#dictionary
+      \ = { 'path': '~/dotfiles/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
+  if filereadable(expand('~/.eskk/SKK-JISYO.L'))
+    let g:eskk#large_dictionary =
+      \ { 'path': '~/.eskk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
+  endif
+
+  let g:eskk#show_annotation = 1
+  let g:eskk#tab_select_completion = 1
+  let g:eskk#start_completion_length = 2
+
+  " see : http://tyru.hatenablog.com/entry/20101214/vim_de_skk
+  let g:eskk#egg_like_newline = 1
+  let g:eskk#egg_like_newline_completion = 1
+  let g:eskk#rom_input_style = 'msime'
 
 endif " }}}
 
