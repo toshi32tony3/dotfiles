@@ -1107,7 +1107,7 @@ if neobundle#tap('unite.vim')
     function! s:unite_settings()
       nmap     <buffer> <Esc> <Plug>(unite_all_exit)
       nnoremap <buffer> <C-j> <Nop>
-      nnoremap <buffer> <C-K> <Nop>
+      nnoremap <buffer> <C-k> <Nop>
       imap     <buffer> <C-j> <Plug>(unite_insert_leave)
       imap     <buffer> <C-[> <Plug>(unite_insert_leave)
     endfunction
@@ -2133,7 +2133,7 @@ if neobundle#tap('eskk.vim')
 
   let g:eskk#directory = '~/.eskk'
   let g:eskk#dictionary
-      \ = { 'path': '~/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
+      \ = { 'path': '~/dotfiles/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
   if filereadable(expand('~/.eskk/SKK-JISYO.L'))
     let g:eskk#large_dictionary =
       \ { 'path': '~/.eskk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
