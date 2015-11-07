@@ -2133,7 +2133,7 @@ if neobundle#tap('eskk.vim')
 
   let g:eskk#directory = '~/.eskk'
   let g:eskk#dictionary
-      \ = { 'path': '~/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
+      \ = { 'path': '~/dotfiles/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
   if filereadable(expand('~/.eskk/SKK-JISYO.L'))
     let g:eskk#large_dictionary =
       \ { 'path': '~/.eskk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
