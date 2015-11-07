@@ -1679,6 +1679,11 @@ if neobundle#tap('incsearch.vim')
 
   map /  <Plug>(incsearch-forward)
   map ?  <Plug>(incsearch-backward)
+
+  if has('kaoriya') && has('migemo')
+    " kaoriya版のmigemo searchを再マッピング
+    noremap m/ g/
+  endif
   map g/ <Plug>(incsearch-stay)
   map g? <Plug>(incsearch-stay)
 
@@ -1744,14 +1749,10 @@ if neobundle#tap('incsearch-fuzzy.vim')
   " 入力中に飛びたくないのでstayのみ使う
   map z/ <Plug>(incsearch-fuzzy-stay)
   map z? <Plug>(incsearch-fuzzy-stay)
-  " map g/ <Plug>(incsearch-fuzzyspell-stay)
-  " map g? <Plug>(incsearch-fuzzyspell-stay)
 
-endif " }}}
-
-  " 入力中に飛びたくないのでstayのみ使う
-  map m/ <Plug>(incsearch-migemo-stay)
-  map m? <Plug>(incsearch-migemo-stay)
+  " 消す程でもないけれど、fuzzyspellはあまり使わないかも
+  map <Leader>/ <Plug>(incsearch-fuzzyspell-stay)
+  map <Leader>? <Plug>(incsearch-fuzzyspell-stay)
 
 endif " }}}
 
