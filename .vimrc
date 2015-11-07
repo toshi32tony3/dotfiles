@@ -1,4 +1,9 @@
 " .vimrc for 香り屋版GVim
+" TODO: YCM/UltiSnips関連のコメントを削除する
+"         -> neocomplete & eskkのセットに一本化するため
+"         -> まあ、そもそもWindows環境でYCMをまともに使える気がしない
+" TODO: 趣味プラグインリストの棚卸し
+"         -> 多分使わないでしょなプラグインがいっぱい
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -2079,9 +2084,9 @@ if neobundle#tap('vim-startify')
   "   \ ]
 
   let g:startify_list_order = [
-    \   [ 'My bookmarks:'               ], 'bookmarks',
+    \   [ 'My bookmarks:' ],        'bookmarks',
     \   [ 'Recently used files:' ], 'files',
-    \   [ 'My sessions:' ], 'sessions',
+    \   [ 'My sessions:' ],         'sessions',
     \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
@@ -2120,8 +2125,11 @@ if neobundle#tap('eskk.vim')
 
   autocmd MyAutoCmd VimEnter * set imdisable
 
-  " disable skk.vim
-  let g:plugin_skk_disable = 1
+  if neobundle#tap('skk.vim')
+    " disable skk.vim
+    " -> Helpを見るためにskk.vim自体は入れておきたい
+    let g:plugin_skk_disable = 1
+  endif
 
   let g:eskk#directory = '~/.eskk'
   let g:eskk#dictionary
