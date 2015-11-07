@@ -18,7 +18,11 @@ endif
 " ftpluginは最後に読み込むため、一旦オフする
 filetype plugin indent off
 
-" Neo Bundleを使う
+" The end of 初期設定 }}}
+"-----------------------------------------------------------------------------
+" Plugin List {{{
+
+" Neo Bundleでプラグインを管理する
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
@@ -27,8 +31,6 @@ call neobundle#begin(expand('~/.vim/bundle'))
 
 " NeoBundle自体の更新をチェックする
 NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Vim Plugin List
 
 NeoBundle 'Shougo/vimproc.vim', {
   \   'build' : {
@@ -42,7 +44,7 @@ NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neoinclude.vim'
 " NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'Shougo/unite.vim',
+NeoBundle 'Shougo/unite.vim'
 " NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
@@ -157,7 +159,9 @@ NeoBundle 't9md/vim-quickhl'
 
 NeoBundle 'haya14busa/incsearch.vim'
 NeoBundle 'haya14busa/incsearch-fuzzy.vim'
-NeoBundle 'haya14busa/incsearch-migemo.vim'
+" kaoriya版GVimのmigemoと比べると遅いので不採用
+" NeoBundle 'haya14busa/incsearch-migemo.vim'
+
 NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'haya14busa/vim-asterisk'
 
@@ -220,14 +224,7 @@ syntax enable
 " .vimrcに書いてあるプラグインがインストールされているかチェックする
 NeoBundleCheck
 
-" Load local settings
-if filereadable(expand('~/localfiles/local.rc.vim'))
-  source ~/localfiles/local.rc.vim
-elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
-  source ~/localfiles/template/local.rc.vim
-endif
-
-" The end of 初期設定 }}}
+" The end of Plugin List }}}
 "-----------------------------------------------------------------------------
 " 基本設定 {{{
 
@@ -297,6 +294,13 @@ set diffopt+=vertical
 
 " makeしたらcopen
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
+
+" Load local settings
+if filereadable(expand('~/localfiles/local.rc.vim'))
+  source ~/localfiles/local.rc.vim
+elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
+  source ~/localfiles/template/local.rc.vim
+endif
 
 " The end of 基本設定 }}}
 "-----------------------------------------------------------------------------
@@ -1730,18 +1734,6 @@ if neobundle#tap('incsearch-fuzzy.vim')
   " map g? <Plug>(incsearch-fuzzyspell-stay)
 
 endif " }}}
-
-" incsearch.vimをパワーアップ(incsearch-migemo.vim) {{{
-if neobundle#tap('incsearch-migemo.vim')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'incsearch.vim' ]
-    \   }
-    \ })
-
-  " map m/ <Plug>(incsearch-migemo-/)
-  " map m? <Plug>(incsearch-migemo-?)
-  " map mg/ <Plug>(incsearch-migemo-stay)
 
   " 入力中に飛びたくないのでstayのみ使う
   map m/ <Plug>(incsearch-migemo-stay)
