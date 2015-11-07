@@ -1097,12 +1097,14 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>fi ':<C-u>Unite file'             . g:u_opt_fi . '<CR>'
   " nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'         . g:u_opt_fm . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>Unite gtags/def'        . g:u_opt_gd . '<CR>'
+  nnoremap <expr> <Leader>g. ':<C-u>Unite vimgrep:*'        . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>Unite vimgrep:**'       . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>Unite gtags/ref'        . g:u_opt_gr . '<CR>'
   nnoremap <expr> <Leader>jn ':<C-u>Unite junkfile/new'     . g:u_opt_jn . '<CR>'
   nnoremap <expr> <Leader>jj ':<C-u>Unite junkfile'         . g:u_opt_jj . '<CR>'
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
-  nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memofiles/*' . g:u_opt_mg . '<CR>'
+  nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memofiles/*'
+    \                                                       . g:u_opt_mg . '<CR>'
   nnoremap <expr> <Leader>ml ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
   nnoremap <expr> <Leader>mm ':<C-u>Unite mark'             . g:u_opt_mm . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
@@ -1171,7 +1173,8 @@ if neobundle#tap('vimfiler.vim')
     if neobundle#tap('unite.vim')
     " Unite vimgrepを使う
     " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
-                nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:' . g:u_opt_gg . '<CR>'
+                nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
+                  \                                         . g:u_opt_gg . '<CR>'
 
     endif
   endfunction
