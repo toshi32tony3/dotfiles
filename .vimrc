@@ -231,6 +231,12 @@ NeoBundleCheck
 " 左手で<Leader>を入力したい
 let g:mapleader = "#"
 
+" #検索が誤って発動しないようにする
+nnoremap #  <Nop>
+
+" ##で入力待ちを解除する
+nnoremap ## <Nop>
+
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
 " set helplang=en
@@ -1224,7 +1230,7 @@ if neobundle#tap('YouCompleteMe')
   " Exuberant Ctags formatにのみ対応。--fields=+lを付けてタグ生成すること
   let g:ycm_collect_identifiers_from_tags_files = 1
 
-  let g:ycm_global_ycm_extra_conf = '~\dotfiles\.ycm_extra_conf.py'
+  let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
   let g:ycm_max_diagnostics_to_display = 20
 
   " YCMでultisnipsを使うことを明示(下記変数はデフォルトで1)
