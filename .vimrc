@@ -1107,7 +1107,7 @@ if neobundle#tap('unite.vim')
     function! s:unite_settings()
       nmap     <buffer> <Esc> <Plug>(unite_all_exit)
       nnoremap <buffer> <C-j> <Nop>
-      nnoremap <buffer> <C-K> <Nop>
+      nnoremap <buffer> <C-k> <Nop>
       imap     <buffer> <C-j> <Plug>(unite_insert_leave)
       imap     <buffer> <C-[> <Plug>(unite_insert_leave)
     endfunction
