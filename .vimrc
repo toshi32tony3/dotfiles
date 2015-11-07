@@ -1023,14 +1023,14 @@ if neobundle#tap('unite.vim')
   let g:unite_enable_ignore_case = 1
   let g:unite_source_find_max_candidates = 0
 
-  " for jvgrep
-  " -> 色付けできるらしいけど、unite grepしても単色になってる
-  if executable('jvgrep')
-    let $JVGREP_OUTPUT_ENCODING = 'sjis'
-    let g:unite_source_grep_command = 'jvgrep'
-    let g:unite_source_grep_default_opts = '-i --exclude ''\.(git|hg)'''
-    let g:unite_source_grep_recursive_opt = '-R'
-    let g:unite_source_grep_max_candidates = 500
+  " use pt
+  " https://github.com/monochromegane/the_platinum_searcher
+  if executable('pt')
+    set grepprg=pt
+    let g:unite_source_grep_command = 'pt'
+    let g:unite_source_grep_default_opts = '-w --nogroup --nocolor --smart-case'
+    let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_encoding = 'utf-8'
   endif
 
   " unite.vimのデフォルトコンテキストを設定する
@@ -1062,7 +1062,6 @@ if neobundle#tap('unite.vim')
   let g:u_nins = ' -no-start-insert -prompt-visible'
   let g:u_hopt = ' -split -horizontal -winheight=20'
   let g:u_vopt = ' -split -vertical -winwidth=90'
-  let g:u_nspl = ' -no-split'
 
   " 各 unite source に応じた変数を定義して使う
   let g:u_opt_bu = g:u_nins . g:u_prev
@@ -1070,17 +1069,19 @@ if neobundle#tap('unite.vim')
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
   let g:u_opt_gd =                                  g:u_hopt
-  let g:u_opt_gg =                                  g:u_nspl . g:u_sbuf
+  let g:u_opt_gg =                                             g:u_sbuf
   let g:u_opt_gr =                                  g:u_hopt
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
+  let g:u_opt_mg =                                             g:u_sbuf
+  let g:u_opt_ml = ''
   let g:u_opt_mm = g:u_nins . g:u_prev            . g:u_hopt
   let g:u_opt_mp = ''
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                       g:u_vopt
   let g:u_opt_op = ''
-  let g:u_opt_re =                                  g:u_nspl . g:u_sbuf
+  let g:u_opt_re =                                             g:u_sbuf
   " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
@@ -1090,11 +1091,13 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>fi ':<C-u>Unite file'             . g:u_opt_fi . '<CR>'
   " nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'         . g:u_opt_fm . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>Unite gtags/def'        . g:u_opt_gd . '<CR>'
-  nnoremap <expr> <Leader>gg ':<C-u>Unite grep:'            . g:u_opt_gg . '<CR>'
+  nnoremap <expr> <Leader>gg ':<C-u>Unite vimgrep:**'       . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>Unite gtags/ref'        . g:u_opt_gr . '<CR>'
   nnoremap <expr> <Leader>jn ':<C-u>Unite junkfile/new'     . g:u_opt_jn . '<CR>'
   nnoremap <expr> <Leader>jj ':<C-u>Unite junkfile'         . g:u_opt_jj . '<CR>'
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
+  nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memofiles/*' . g:u_opt_mg . '<CR>'
+  nnoremap <expr> <Leader>ml ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
   nnoremap <expr> <Leader>mm ':<C-u>Unite mark'             . g:u_opt_mm . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
   nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu
@@ -1160,9 +1163,9 @@ if neobundle#tap('vimfiler.vim')
                 nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
     if neobundle#tap('unite.vim')
-    " Unite grepの設定で使う
+    " Unite vimgrepを使う
     " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
-                nnoremap <buffer><expr> gr ':<C-u>Unite grep:' . g:u_opt_gg . '<CR>'
+                nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:' . g:u_opt_gg . '<CR>'
 
     endif
   endfunction
@@ -1173,9 +1176,7 @@ endif " }}}
 " 使い捨てしやすいファイル生成(junkfile.vim) {{{
 if neobundle#tap('junkfile.vim')
 
-  if isdirectory(expand('~\memofiles')) != 0
-    let g:junkfile#directory = expand('~\memofiles')
-  endif
+  let g:junkfile#directory = expand('~/memofiles')
 
 endif " }}}
 
@@ -1533,12 +1534,13 @@ endif " }}}
 " メモ管理用プラグイン(memolist.vim) {{{
 if neobundle#tap('memolist.vim')
 
-  nnoremap <Leader>mn :<C-u>MemoNew<CR>
-  nnoremap <Leader>ml :<C-u>MemoList<CR>
+  let g:memolist_path = '~/memofiles'
+  let g:memolist_memo_suffix = "markdown"
 
-  if neobundle#tap('unite.vim')
-    nnoremap <expr> <Leader>mg ':<C-u>Unite grep:~/memo' . g:u_opt_mg . '<CR>'
-  endif
+  let g:memolist_prompt_categories = 1
+  let g:memolist_prompt_tags = 1
+
+  nnoremap <Leader>mn :<C-u>MemoNew<CR>
 
 endif " }}}
 
