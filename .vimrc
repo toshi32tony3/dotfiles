@@ -1074,18 +1074,18 @@ if neobundle#tap('unite.vim')
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd =                                  g:u_hopt
-  let g:u_opt_gg =                                             g:u_sbuf
-  let g:u_opt_gr =                                  g:u_hopt
+  let g:u_opt_gd = g:u_nins                       . g:u_hopt
+  let g:u_opt_gg = g:u_nins                                  . g:u_sbuf
+  let g:u_opt_gr = g:u_nins                       . g:u_hopt
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
-  let g:u_opt_mg =                                             g:u_sbuf
+  let g:u_opt_mg = g:u_nins                                  . g:u_sbuf
   let g:u_opt_ml = ''
   let g:u_opt_mm = g:u_nins . g:u_prev            . g:u_hopt
   let g:u_opt_mp = ''
   let g:u_opt_nu = g:u_nins
-  let g:u_opt_ol =                       g:u_vopt
+  let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
   let g:u_opt_re =                                             g:u_sbuf
   " let g:u_opt_ya = g:u_nins
@@ -1098,6 +1098,7 @@ if neobundle#tap('unite.vim')
   " nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'         . g:u_opt_fm . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>Unite gtags/def'        . g:u_opt_gd . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>Unite vimgrep:*'        . g:u_opt_gg . '<CR>'
+  nnoremap <expr> <Leader>g% ':<C-u>Unite vimgrep:%'        . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>Unite vimgrep:**'       . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>Unite gtags/ref'        . g:u_opt_gr . '<CR>'
   nnoremap <expr> <Leader>jn ':<C-u>Unite junkfile/new'     . g:u_opt_jn . '<CR>'
@@ -1126,7 +1127,6 @@ if neobundle#tap('unite.vim')
       imap     <buffer> <C-j> <Plug>(unite_insert_leave)
       imap     <buffer> <C-[> <Plug>(unite_insert_leave)
     endfunction
-
     autocmd MyAutoCmd FileType unite call s:unite_settings()
 
   endfunction
