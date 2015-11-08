@@ -18,7 +18,11 @@ endif
 " ftpluginは最後に読み込むため、一旦オフする
 filetype plugin indent off
 
-" Neo Bundleを使う
+" The end of 初期設定 }}}
+"-----------------------------------------------------------------------------
+" Plugin List {{{
+
+" Neo Bundleでプラグインを管理する
 if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
@@ -27,8 +31,6 @@ call neobundle#begin(expand('~/.vim/bundle'))
 
 " NeoBundle自体の更新をチェックする
 NeoBundleFetch 'Shougo/neobundle.vim'
-
-" Vim Plugin List
 
 NeoBundle 'Shougo/vimproc.vim', {
   \   'build' : {
@@ -42,7 +44,7 @@ NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neoinclude.vim'
 " NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
-NeoBundle 'Shougo/unite.vim',
+NeoBundle 'Shougo/unite.vim'
 " NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
@@ -131,6 +133,10 @@ NeoBundle 'rcmdnk/vim-markdown'
 NeoBundleLazy 'kannokanno/previm',
   \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
+" リアルタイムプレビューが早いので乗り換えたいけれど、まだ発展途上感が...
+" NeoBundleLazy 'kurocode25/mdforvim',
+"   \ { 'autoload' : { 'commands' : ['MdPreview'] } }
+
 NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'mattn/webapi-vim'
 
@@ -157,7 +163,9 @@ NeoBundle 't9md/vim-quickhl'
 
 NeoBundle 'haya14busa/incsearch.vim'
 NeoBundle 'haya14busa/incsearch-fuzzy.vim'
-NeoBundle 'haya14busa/incsearch-migemo.vim'
+" kaoriya版GVimのmigemoと比べると遅いので不採用
+" NeoBundle 'haya14busa/incsearch-migemo.vim'
+
 NeoBundle 'osyo-manga/vim-anzu'
 NeoBundle 'haya14busa/vim-asterisk'
 
@@ -220,26 +228,22 @@ syntax enable
 " .vimrcに書いてあるプラグインがインストールされているかチェックする
 NeoBundleCheck
 
-" Load local settings
-if filereadable(expand('~/localfiles/local.rc.vim'))
-  source ~/localfiles/local.rc.vim
-elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
-  source ~/localfiles/template/local.rc.vim
-endif
-
-" The end of 初期設定 }}}
+" The end of Plugin List }}}
 "-----------------------------------------------------------------------------
 " 基本設定 {{{
 
 " 左手で<Leader>を入力したい
 let g:mapleader = "#"
 
+" #検索が誤って発動しないようにする
+nnoremap #  <Nop>
+
+" ##で入力待ちを解除する
+nnoremap ## <Nop>
+
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
 " set helplang=en
-
-" メッセージ省略設定
-set shortmess=aoOotTWI
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
@@ -287,6 +291,9 @@ set history=100
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
 
+" メッセージ省略設定
+set shortmess=aoOotTWI
+
 " " カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
 " -> 再描画がうっとおしいのでやっぱり15にする。再描画必要なら<C-e>や<C-y>を使う
 " set scrolloff=50
@@ -297,6 +304,13 @@ set diffopt+=vertical
 
 " makeしたらcopen
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
+
+" Load local settings
+if filereadable(expand('~/localfiles/local.rc.vim'))
+  source ~/localfiles/local.rc.vim
+elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
+  source ~/localfiles/template/local.rc.vim
+endif
 
 " The end of 基本設定 }}}
 "-----------------------------------------------------------------------------
@@ -1019,14 +1033,14 @@ if neobundle#tap('unite.vim')
   let g:unite_enable_ignore_case = 1
   let g:unite_source_find_max_candidates = 0
 
-  " for jvgrep
-  " -> 色付けできるらしいけど、unite grepしても単色になってる
-  if executable('jvgrep')
-    let $JVGREP_OUTPUT_ENCODING = 'sjis'
-    let g:unite_source_grep_command = 'jvgrep'
-    let g:unite_source_grep_default_opts = '-i --exclude ''\.(git|hg)'''
-    let g:unite_source_grep_recursive_opt = '-R'
-    let g:unite_source_grep_max_candidates = 500
+  " use pt
+  " https://github.com/monochromegane/the_platinum_searcher
+  if executable('pt')
+    set grepprg=pt
+    let g:unite_source_grep_command = 'pt'
+    let g:unite_source_grep_default_opts = '-w --nogroup --nocolor --smart-case'
+    let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_encoding = 'utf-8'
   endif
 
   " unite.vimのデフォルトコンテキストを設定する
@@ -1058,25 +1072,26 @@ if neobundle#tap('unite.vim')
   let g:u_nins = ' -no-start-insert -prompt-visible'
   let g:u_hopt = ' -split -horizontal -winheight=20'
   let g:u_vopt = ' -split -vertical -winwidth=90'
-  let g:u_nspl = ' -no-split'
 
   " 各 unite source に応じた変数を定義して使う
   let g:u_opt_bu = g:u_nins . g:u_prev
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd =                                  g:u_hopt
-  let g:u_opt_gg =                                  g:u_nspl . g:u_sbuf
-  let g:u_opt_gr =                                  g:u_hopt
+  let g:u_opt_gd = g:u_nins                       . g:u_hopt
+  let g:u_opt_gg = g:u_nins                                  . g:u_sbuf
+  let g:u_opt_gr = g:u_nins                       . g:u_hopt
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
+  let g:u_opt_mg = g:u_nins                                  . g:u_sbuf
+  let g:u_opt_ml = ''
   let g:u_opt_mm = g:u_nins . g:u_prev            . g:u_hopt
   let g:u_opt_mp = ''
   let g:u_opt_nu = g:u_nins
-  let g:u_opt_ol =                       g:u_vopt
+  let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
-  let g:u_opt_re =                                  g:u_nspl . g:u_sbuf
+  let g:u_opt_re =                                             g:u_sbuf
   " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
@@ -1086,11 +1101,16 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>fi ':<C-u>Unite file'             . g:u_opt_fi . '<CR>'
   " nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'         . g:u_opt_fm . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>Unite gtags/def'        . g:u_opt_gd . '<CR>'
-  nnoremap <expr> <Leader>gg ':<C-u>Unite grep:'            . g:u_opt_gg . '<CR>'
+  nnoremap <expr> <Leader>g. ':<C-u>Unite vimgrep:*'        . g:u_opt_gg . '<CR>'
+  nnoremap <expr> <Leader>g% ':<C-u>Unite vimgrep:%'        . g:u_opt_gg . '<CR>'
+  nnoremap <expr> <Leader>gg ':<C-u>Unite vimgrep:**'       . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>Unite gtags/ref'        . g:u_opt_gr . '<CR>'
   nnoremap <expr> <Leader>jn ':<C-u>Unite junkfile/new'     . g:u_opt_jn . '<CR>'
   nnoremap <expr> <Leader>jj ':<C-u>Unite junkfile'         . g:u_opt_jj . '<CR>'
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
+  nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memofiles/*'
+    \                                                       . g:u_opt_mg . '<CR>'
+  nnoremap <expr> <Leader>ml ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
   nnoremap <expr> <Leader>mm ':<C-u>Unite mark'             . g:u_opt_mm . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
   nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu
@@ -1111,7 +1131,6 @@ if neobundle#tap('unite.vim')
       imap     <buffer> <C-j> <Plug>(unite_insert_leave)
       imap     <buffer> <C-[> <Plug>(unite_insert_leave)
     endfunction
-
     autocmd MyAutoCmd FileType unite call s:unite_settings()
 
   endfunction
@@ -1156,9 +1175,10 @@ if neobundle#tap('vimfiler.vim')
                 nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
     if neobundle#tap('unite.vim')
-    " Unite grepの設定で使う
+    " Unite vimgrepを使う
     " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
-                nnoremap <buffer><expr> gr ':<C-u>Unite grep:' . g:u_opt_gg . '<CR>'
+                nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
+                  \                                         . g:u_opt_gg . '<CR>'
 
     endif
   endfunction
@@ -1169,9 +1189,7 @@ endif " }}}
 " 使い捨てしやすいファイル生成(junkfile.vim) {{{
 if neobundle#tap('junkfile.vim')
 
-  if isdirectory(expand('~\memofiles')) != 0
-    let g:junkfile#directory = expand('~\memofiles')
-  endif
+  let g:junkfile#directory = expand('~/junkfiles')
 
 endif " }}}
 
@@ -1219,7 +1237,7 @@ if neobundle#tap('YouCompleteMe')
   " Exuberant Ctags formatにのみ対応。--fields=+lを付けてタグ生成すること
   let g:ycm_collect_identifiers_from_tags_files = 1
 
-  let g:ycm_global_ycm_extra_conf = '~\dotfiles\.ycm_extra_conf.py'
+  let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
   let g:ycm_max_diagnostics_to_display = 20
 
   " YCMでultisnipsを使うことを明示(下記変数はデフォルトで1)
@@ -1529,14 +1547,21 @@ endif " }}}
 " メモ管理用プラグイン(memolist.vim) {{{
 if neobundle#tap('memolist.vim')
 
-  nnoremap <Leader>mn :<C-u>MemoNew<CR>
-  nnoremap <Leader>ml :<C-u>MemoList<CR>
+  let g:memolist_path = '~/memofiles'
+  let g:memolist_memo_suffix = "markdown"
 
-  if neobundle#tap('unite.vim')
-    nnoremap <expr> <Leader>mg ':<C-u>Unite grep:~/memo' . g:u_opt_mg . '<CR>'
-  endif
+  let g:memolist_prompt_categories = 1
+  let g:memolist_prompt_tags = 1
+
+  nnoremap <Leader>mn :<C-u>MemoNew<CR>
 
 endif " }}}
+
+" ファイルをブラウザで開く(previm)
+if neobundle#tap('previm')
+  let g:previm_enable_realtime = 1
+
+endif
 
 " markdownを使いやすくする(vim-markdown) {{{
 if neobundle#tap('vim-markdown')
@@ -1661,6 +1686,11 @@ if neobundle#tap('incsearch.vim')
 
   map /  <Plug>(incsearch-forward)
   map ?  <Plug>(incsearch-backward)
+
+  if has('kaoriya') && has('migemo')
+    " kaoriya版のmigemo searchを再マッピング
+    noremap m/ g/
+  endif
   map g/ <Plug>(incsearch-stay)
   map g? <Plug>(incsearch-stay)
 
@@ -1726,26 +1756,10 @@ if neobundle#tap('incsearch-fuzzy.vim')
   " 入力中に飛びたくないのでstayのみ使う
   map z/ <Plug>(incsearch-fuzzy-stay)
   map z? <Plug>(incsearch-fuzzy-stay)
-  " map g/ <Plug>(incsearch-fuzzyspell-stay)
-  " map g? <Plug>(incsearch-fuzzyspell-stay)
 
-endif " }}}
-
-" incsearch.vimをパワーアップ(incsearch-migemo.vim) {{{
-if neobundle#tap('incsearch-migemo.vim')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'incsearch.vim' ]
-    \   }
-    \ })
-
-  " map m/ <Plug>(incsearch-migemo-/)
-  " map m? <Plug>(incsearch-migemo-?)
-  " map mg/ <Plug>(incsearch-migemo-stay)
-
-  " 入力中に飛びたくないのでstayのみ使う
-  map m/ <Plug>(incsearch-migemo-stay)
-  map m? <Plug>(incsearch-migemo-stay)
+  " 消す程でもないけれど、fuzzyspellはあまり使わないかも
+  map <Leader>/ <Plug>(incsearch-fuzzyspell-stay)
+  map <Leader>? <Plug>(incsearch-fuzzyspell-stay)
 
 endif " }}}
 
@@ -1996,6 +2010,11 @@ endif " }}}
 if neobundle#tap('vim-easy-align')
 
   vnoremap <silent> <CR> :EasyAlign<CR>
+
+endif " }}}
+
+" 簡単に文末の空白を削除(vim-trailing-whitespace) {{{
+if neobundle#tap('vim-trailing-whitespace')
 
 endif " }}}
 
