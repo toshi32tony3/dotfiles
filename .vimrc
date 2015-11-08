@@ -130,10 +130,13 @@ NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundleLazy 'glidenote/memolist.vim',
   \ { 'autoload' : { 'commands' : ['MemoNew', 'MemoList'] } }
 NeoBundle 'rcmdnk/vim-markdown'
+
+" Previm便利だけど、IEではmermaidを使えないようなのでShibaメインになりそう
+" https://github.com/rhysd/Shiba
 NeoBundleLazy 'kannokanno/previm',
   \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
-" リアルタイムプレビューが早いので乗り換えたいけれど、まだ発展途上感が...
+" リアルタイムプレビューが非常に早い。乗り換えたいけれど、まだ発展途上感が...
 " NeoBundleLazy 'kurocode25/mdforvim',
 "   \ { 'autoload' : { 'commands' : ['MdPreview'] } }
 
