@@ -133,6 +133,10 @@ NeoBundle 'rcmdnk/vim-markdown'
 NeoBundleLazy 'kannokanno/previm',
   \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
+" リアルタイムプレビューが早いので乗り換えたいけれど、まだ発展途上感が...
+" NeoBundleLazy 'kurocode25/mdforvim',
+"   \ { 'autoload' : { 'commands' : ['MdPreview'] } }
+
 NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'mattn/webapi-vim'
 
@@ -1185,7 +1189,7 @@ endif " }}}
 " 使い捨てしやすいファイル生成(junkfile.vim) {{{
 if neobundle#tap('junkfile.vim')
 
-  let g:junkfile#directory = expand('~/memofiles')
+  let g:junkfile#directory = expand('~/junkfiles')
 
 endif " }}}
 
@@ -2006,6 +2010,11 @@ endif " }}}
 if neobundle#tap('vim-easy-align')
 
   vnoremap <silent> <CR> :EasyAlign<CR>
+
+endif " }}}
+
+" 簡単に文末の空白を削除(vim-trailing-whitespace) {{{
+if neobundle#tap('vim-trailing-whitespace')
 
 endif " }}}
 
