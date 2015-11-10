@@ -527,8 +527,16 @@ autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
 "-----------------------------------------------------------------------------
 " 編集 {{{
 
-set encoding=utf-8                  " utf-8をデフォルトエンコーディングとする
-set fileencodings=utf-8,sjis,euc-jp " 文字コード自動判定候補
+" Vim内部で使う文字コード
+set encoding=utf-8
+
+" ファイル書き込み時の文字コード
+" -> 空の場合、encodingで指定した文字コードが使用される
+set fileencoding=
+
+" ファイル読み込み時の変換候補
+" -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
+set fileencodings=utf-8,cp932,euc-jp
 
 " " 文字コード判別はしばらくKaoriya Vimに任せてみる
 " " -> Windows(utf-8, sjis), Unix(euc-jp)意識せず両方使いたい
@@ -556,8 +564,8 @@ autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4 noexpandtab
 autocmd MyAutoCmd BufEnter .gitconfig setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4 expandtab
 
 set infercase                   " 補完時に大文字小文字を区別しない
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
@@ -1647,8 +1655,9 @@ if neobundle#tap('vim-smartchr')
   " inoremap <expr>,     smartchr#one_of(',',     ', ')
   " inoremap <expr>?     smartchr#one_of('?',     ' ? ')
 
-  " ハイフン一つ置きにスペースを入れるのが難しいので、"----"を"- - "に変換
-  inoremap <expr>-  smartchr#one_of('-', '--', '- ')
+  " " ハイフン一つ置きにスペースを入れるのが難しいので、"----"を"- - "に変換
+  " " -> markdownのために用意したけど不要であることがわかった
+  " inoremap <expr>-  smartchr#one_of('-', '--', '- ')
 
   " 「->」は入力しづらいので、..で置換え
   inoremap <expr> . smartchr#one_of('.', '->', '..')
