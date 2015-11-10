@@ -1,26 +1,26 @@
 [user]
-	name = toshi32tony3
-	email = toshi32tony3@gmail.com
+  name = toshi32tony3
+  email = toshi32tony3@gmail.com
 [core]
-	autocrlf = true
-	editor = gvim
-	quotepath = false
-	preloadindex = true
-	fscache = true
+  autocrlf = true
+  editor = gvim
+  quotepath = false
+  preloadindex = true
+  fscache = true
 [push]
-	default = simple
+  default = simple
 [diff]
-	tool = gvimdiff2
-	algorithm = histogram
+  tool = gvimdiff2
+  algorithm = histogram
 [merge]
-	tool = gvimdiff3
-	ff = false
+  tool = gvimdiff3
+  ff = false
 [mergetool "gvimdiff3"]
-	cmd = gvim -f -d -c \"wincmd J\" \"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+  cmd = gvim -f -d -c \"wincmd J\" \"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
 [mergetool]
-	prompt = false
-	keepBackup = false
+  prompt = false
+  keepBackup = false
 [color]
-	ui = auto
+  ui = auto
 [alias]
-	co = checkout
+  co = checkout
