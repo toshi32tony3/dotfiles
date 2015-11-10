@@ -556,8 +556,8 @@ autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4 noexpandtab
 autocmd MyAutoCmd BufEnter .gitconfig setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4 expandtab
 
 set infercase                   " 補完時に大文字小文字を区別しない
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
