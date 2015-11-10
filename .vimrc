@@ -137,8 +137,8 @@ NeoBundleLazy 'kannokanno/previm',
   \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
 " リアルタイムプレビューが非常に早い。乗り換えたいけれど、まだ発展途上感が...
-" NeoBundleLazy 'kurocode25/mdforvim',
-"   \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
+NeoBundleLazy 'kurocode25/mdforvim',
+  \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
 
 NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'mattn/webapi-vim'
