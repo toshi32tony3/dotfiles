@@ -1042,6 +1042,7 @@ if neobundle#tap('unite.vim')
   let g:unite_source_history_yank_enable = 1
   let g:unite_enable_ignore_case = 1
   let g:unite_source_find_max_candidates = 0
+  let g:unite_source_grep_max_candidates = 0
 
   " use pt
   " https://github.com/monochromegane/the_platinum_searcher
