@@ -326,6 +326,13 @@ set wildmode=full
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
+" タイムスタンプの挿入
+function! s:PutTimeStamp()
+  let @"=strftime("%Y/%m/%d(%a) %H:%M")
+  normal! ""P
+endfunction
+command! -nargs=0 PutTimeStamp call s:PutTimeStamp()
+
 " 区切り線＋タイムスタンプの挿入
 function! s:PutMemoFormat()
   let @"='='
