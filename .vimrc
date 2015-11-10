@@ -1647,8 +1647,9 @@ if neobundle#tap('vim-smartchr')
   " inoremap <expr>,     smartchr#one_of(',',     ', ')
   " inoremap <expr>?     smartchr#one_of('?',     ' ? ')
 
-  " ハイフン一つ置きにスペースを入れるのが難しいので、"----"を"- - "に変換
-  inoremap <expr>-  smartchr#one_of('-', '--', '- ')
+  " " ハイフン一つ置きにスペースを入れるのが難しいので、"----"を"- - "に変換
+  " " -> markdownのために用意したけど不要であることがわかった
+  " inoremap <expr>-  smartchr#one_of('-', '--', '- ')
 
   " 「->」は入力しづらいので、..で置換え
   inoremap <expr> . smartchr#one_of('.', '->', '..')
