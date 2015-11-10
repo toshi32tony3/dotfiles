@@ -528,7 +528,7 @@ autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
 " 編集 {{{
 
 set encoding=utf-8                  " utf-8をデフォルトエンコーディングとする
-set fileencodings=utf-8,sjis,euc-jp " 文字コード自動判定候補
+set fileencodings=euc-jp,cp932      " 文字コード自動判定候補
 
 " " 文字コード判別はしばらくKaoriya Vimに任せてみる
 " " -> Windows(utf-8, sjis), Unix(euc-jp)意識せず両方使いたい
