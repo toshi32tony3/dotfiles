@@ -527,8 +527,16 @@ autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
 "-----------------------------------------------------------------------------
 " 編集 {{{
 
-set encoding=utf-8                  " utf-8をデフォルトエンコーディングとする
-set fileencodings=euc-jp,cp932      " 文字コード自動判定候補
+" Vim内部で使う文字コード
+set encoding=utf-8
+
+" ファイル書き込み時の文字コード
+" -> 空の場合、encodingで指定した文字コードが使用される
+set fileencoding=
+
+" ファイル読み込み時の変換候補
+" -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
+set fileencodings=utf-8,cp932,euc-jp
 
 " " 文字コード判別はしばらくKaoriya Vimに任せてみる
 " " -> Windows(utf-8, sjis), Unix(euc-jp)意識せず両方使いたい
