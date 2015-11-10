@@ -130,12 +130,15 @@ NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundleLazy 'glidenote/memolist.vim',
   \ { 'autoload' : { 'commands' : ['MemoNew', 'MemoList'] } }
 NeoBundle 'rcmdnk/vim-markdown'
+
+" Previm便利だけど、IEではmermaidを使えないようなのでShibaメインになりそう
+" https://github.com/rhysd/Shiba
 NeoBundleLazy 'kannokanno/previm',
   \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
-" リアルタイムプレビューが早いので乗り換えたいけれど、まだ発展途上感が...
-" NeoBundleLazy 'kurocode25/mdforvim',
-"   \ { 'autoload' : { 'commands' : ['MdPreview'] } }
+" リアルタイムプレビューが非常に早い。乗り換えたいけれど、まだ発展途上感が...
+NeoBundleLazy 'kurocode25/mdforvim',
+  \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
 
 NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'mattn/webapi-vim'
@@ -322,6 +325,13 @@ set wildmode=full
 " <C-p>や<C-n>でもコマンド履歴のフィルタリングを有効にする
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
+
+" タイムスタンプの挿入
+function! s:PutTimeStamp()
+  let @"=strftime("%Y/%m/%d(%a) %H:%M")
+  normal! ""P
+endfunction
+command! -nargs=0 PutTimeStamp call s:PutTimeStamp()
 
 " 区切り線＋タイムスタンプの挿入
 function! s:PutMemoFormat()
@@ -544,10 +554,10 @@ nnoremap <Leader>ff  :<C-u>e ++ff=
 autocmd MyAutoCmd BufEnter *          setlocal tabstop=2 shiftwidth=2 expandtab
 autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4 expandtab
 autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4 expandtab
-autocmd MyAutoCmd BufEnter .gitconfig setlocal tabstop=2 shiftwidth=2 noexpandtab
 autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4 noexpandtab
-autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4 noexpandtab
-autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4 noexpandtab
+autocmd MyAutoCmd BufEnter .gitconfig setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=2 shiftwidth=2 expandtab
+autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=2 shiftwidth=2 expandtab
 
 set infercase                   " 補完時に大文字小文字を区別しない
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
@@ -1032,6 +1042,7 @@ if neobundle#tap('unite.vim')
   let g:unite_source_history_yank_enable = 1
   let g:unite_enable_ignore_case = 1
   let g:unite_source_find_max_candidates = 0
+  let g:unite_source_grep_max_candidates = 0
 
   " use pt
   " https://github.com/monochromegane/the_platinum_searcher
@@ -1635,6 +1646,9 @@ if neobundle#tap('vim-smartchr')
   " inoremap <expr><Bar> smartchr#one_of('<Bar>', ' <Bar><Bar> ', ' <Bar> ')
   " inoremap <expr>,     smartchr#one_of(',',     ', ')
   " inoremap <expr>?     smartchr#one_of('?',     ' ? ')
+
+  " ハイフン一つ置きにスペースを入れるのが難しいので、"----"を"- - "に変換
+  inoremap <expr>-  smartchr#one_of('-', '--', '- ')
 
   " 「->」は入力しづらいので、..で置換え
   inoremap <expr> . smartchr#one_of('.', '->', '..')
