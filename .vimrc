@@ -137,8 +137,8 @@ NeoBundleLazy 'kannokanno/previm',
   \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
 " リアルタイムプレビューが非常に早い。乗り換えたいけれど、まだ発展途上感が...
-" NeoBundleLazy 'kurocode25/mdforvim',
-"   \ { 'autoload' : { 'commands' : ['MdPreview'] } }
+NeoBundleLazy 'kurocode25/mdforvim',
+  \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
 
 NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'mattn/webapi-vim'
@@ -1645,6 +1645,9 @@ if neobundle#tap('vim-smartchr')
   " inoremap <expr><Bar> smartchr#one_of('<Bar>', ' <Bar><Bar> ', ' <Bar> ')
   " inoremap <expr>,     smartchr#one_of(',',     ', ')
   " inoremap <expr>?     smartchr#one_of('?',     ' ? ')
+
+  " ハイフン一つ置きにスペースを入れるのが難しいので、"----"を"- - "に変換
+  inoremap <expr>-  smartchr#one_of('-', '--', '- ')
 
   " 「->」は入力しづらいので、..で置換え
   inoremap <expr> . smartchr#one_of('.', '->', '..')
