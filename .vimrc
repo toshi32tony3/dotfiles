@@ -1567,10 +1567,15 @@ endif " }}}
 if neobundle#tap('memolist.vim')
 
   let g:memolist_path = '~/memofiles'
-  let g:memolist_memo_suffix = "markdown"
-
-  let g:memolist_prompt_categories = 1
+  let g:memolist_memo_suffix = 'md'
   let g:memolist_prompt_tags = 1
+
+  " カテゴリまで決めるの面倒なので...
+  let g:memolist_prompt_categories = 0
+
+  if filereadable(expand('~/configs/memolist/md.txt'))
+    let g:memolist_template_dir_path = "~/configs/memolist"
+  endif
 
   nnoremap <Leader>mn :<C-u>MemoNew<CR>
 
