@@ -1138,21 +1138,22 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>re ':<C-u>UniteResume'            . g:u_opt_re . '<CR>'
   " nnoremap <expr> <Leader>ya ':<C-u>Unite history/yank'     . g:u_opt_ya . '<CR>'
 
-  let s:hooks = neobundle#get_hooks('unite.vim')
-  function! s:hooks.on_source(bundle)
-    " call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
-    " call unite#custom_default_action('directory_mru',             'vimfiler')
+  " call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
+  " call unite#custom_default_action('directory_mru',             'vimfiler')
 
-    function! s:unite_settings()
-      nmap     <buffer> <Esc> <Plug>(unite_all_exit)
-      nnoremap <buffer> <C-j> <Nop>
-      nnoremap <buffer> <C-k> <Nop>
-      imap     <buffer> <C-j> <Plug>(unite_insert_leave)
-      imap     <buffer> <C-[> <Plug>(unite_insert_leave)
-    endfunction
-    autocmd MyAutoCmd FileType unite call s:unite_settings()
+  function! s:unite_settings()
+    imap     <buffer> <Esc>      <Plug>(unite_insert_leave)
+    nmap     <buffer> <Esc>      <Plug>(unite_exit)
 
+    " Disable dicwin.vim
+    nnoremap <buffer> <C-k>c     <Nop>
+    nnoremap <buffer> <C-k><C-k> <Nop>
+
+    " Disable yankround.vim
+    nnoremap <buffer> <C-n>      <Nop>
+    nnoremap <buffer> <C-p>      <Nop>
   endfunction
+  autocmd MyAutoCmd FileType unite call s:unite_settings()
 
 endif " }}}
 
