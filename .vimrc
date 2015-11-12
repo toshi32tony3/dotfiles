@@ -1097,9 +1097,9 @@ if neobundle#tap('unite.vim')
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd = g:u_nins                       . g:u_hopt
+  let g:u_opt_gd = g:u_nins                       . g:u_hopt . g:u_sbuf
   let g:u_opt_gg = g:u_nins                                  . g:u_sbuf
-  let g:u_opt_gr = g:u_nins                       . g:u_hopt
+  let g:u_opt_gr = g:u_nins                       . g:u_hopt . g:u_sbuf
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
