@@ -1,7 +1,7 @@
 " .vimrc for 香り屋版GVim
 " TODO: YCM/UltiSnips関連のコメントを削除する
 "         -> neocomplete & eskkのセットに一本化するため
-"         -> まあ、そもそもWindows環境でYCMをまともに使える気がしない
+"         -> 英語を読めずにWindows環境でYCMをまともに使える気がしない
 " TODO: 趣味プラグインリストの棚卸し
 "         -> 多分使わないでしょなプラグインがいっぱい
 
