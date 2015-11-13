@@ -1,7 +1,7 @@
 " .vimrc for 香り屋版GVim
 " TODO: YCM/UltiSnips関連のコメントを削除する
 "         -> neocomplete & eskkのセットに一本化するため
-"         -> まあ、そもそもWindows環境でYCMをまともに使える気がしない
+"         -> 英語を読めずにWindows環境でYCMをまともに使える気がしない
 " TODO: 趣味プラグインリストの棚卸し
 "         -> 多分使わないでしょなプラグインがいっぱい
 
@@ -719,12 +719,6 @@ nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 nnoremap j gj
 nnoremap k gk
 
-" カーソルキーでウィンドウ間を移動
-nnoremap <Left>  <C-w>h
-nnoremap <Down>  <C-w>j
-nnoremap <Up>    <C-w>k
-nnoremap <Right> <C-w>l
-
 " 最後のウィンドウがQuickfixウィンドウの場合、自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
   \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
@@ -926,10 +920,58 @@ noremap  <MiddleMouse> <Nop>
 inoremap <MiddleMouse> <Nop>
 
 " 挿入モードでカーソルキーを使うとUndo単位が区切られて困るので潰す
-inoremap <Up>    <Nop>
-inoremap <Down>  <Nop>
 inoremap <Left>  <Nop>
+inoremap <Down>  <Nop>
+inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
+
+" Shift or Ctrl or Alt + カーソルキーはコマンドモードでのみ使用する
+inoremap <S-Down>  <Nop>
+inoremap <S-Left>  <Nop>
+inoremap <S-Up>    <Nop>
+inoremap <S-Right> <Nop>
+inoremap <C-Down>  <Nop>
+inoremap <C-Left>  <Nop>
+inoremap <C-Up>    <Nop>
+inoremap <C-Right> <Nop>
+inoremap <A-Down>  <Nop>
+inoremap <A-Left>  <Nop>
+inoremap <A-Up>    <Nop>
+inoremap <A-Right> <Nop>
+noremap  <Up>      <Nop>
+noremap  <Down>    <Nop>
+noremap  <Left>    <Nop>
+noremap  <Right>   <Nop>
+noremap  <S-Up>    <Nop>
+noremap  <S-Down>  <Nop>
+noremap  <S-Left>  <Nop>
+noremap  <S-Right> <Nop>
+noremap  <C-Up>    <Nop>
+noremap  <C-Down>  <Nop>
+noremap  <C-Left>  <Nop>
+noremap  <C-Right> <Nop>
+noremap  <A-Up>    <Nop>
+noremap  <A-Down>  <Nop>
+noremap  <A-Left>  <Nop>
+noremap  <A-Right> <Nop>
+
+" せっかくなので、カーソルキーでウィンドウ間を移動
+nnoremap <Left>  <C-w>h
+nnoremap <Down>  <C-w>j
+nnoremap <Up>    <C-w>k
+nnoremap <Right> <C-w>l
+
+" せっかくなので、Shift + <Left> or <Right>でbprevious/bnext
+nnoremap <S-Left>  :<C-u>bprevious<CR>
+nnoremap <S-Right> :<C-u>bnext<CR>
+
+" せっかくなので、 Ctrl + <Left> or <Right>でcprevious/cnext
+nnoremap <C-Left>  :<C-u>cprevious<CR>
+nnoremap <C-Right> :<C-u>cnext<CR>
+
+" せっかくなので、  Alt + <Left> or <Right>でtabprevious/tabnext
+nnoremap <A-Left>  :<C-u>tabprevious<CR>
+nnoremap <A-Right> :<C-u>tabnext<CR>
 
 " F5 command history
 nnoremap <F5> <Esc>q:
@@ -1075,8 +1117,9 @@ if neobundle#tap('unite.vim')
     \   'sync'             : 1,
     \ })
 
-  " Unite lineの結果候補数を制限しない
-  call unite#custom#source('line', 'max_candidates', 0)
+  " Unite line/vimgrepの結果候補数を制限しない
+  call unite#custom#source('line',    'max_candidates', 0)
+  call unite#custom#source('vimgrep', 'max_candidates', 0)
 
   " /************************************************************************/
   " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う */
@@ -1093,7 +1136,7 @@ if neobundle#tap('unite.vim')
   let g:u_vopt = ' -split -vertical -winwidth=90'
 
   " 各 unite source に応じた変数を定義して使う
-  let g:u_opt_bu = g:u_nins . g:u_prev
+  let g:u_opt_bu = g:u_nins
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
@@ -1105,12 +1148,12 @@ if neobundle#tap('unite.vim')
   let g:u_opt_li = ''
   let g:u_opt_mg = g:u_nins                                  . g:u_sbuf
   let g:u_opt_ml = ''
-  let g:u_opt_mm = g:u_nins . g:u_prev            . g:u_hopt
+  let g:u_opt_mm = g:u_nins                       . g:u_hopt
   let g:u_opt_mp = ''
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
-  let g:u_opt_re =                                             g:u_sbuf
+  let g:u_opt_re = g:u_nins                                  . g:u_sbuf
   " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
