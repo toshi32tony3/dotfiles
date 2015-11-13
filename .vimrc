@@ -953,13 +953,13 @@ nnoremap <Down>  <C-w>j
 nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
-" せっかくなので、Shift + <Left> or <Right>でbnext/bprevious
-nnoremap <S-Left>  :<C-u>bnext<CR>
-nnoremap <S-Right> :<C-u>bprevious<CR>
+" せっかくなので、Shift + <Left> or <Right>でbprevious/bnext
+nnoremap <S-Left>  :<C-u>bprevious<CR>
+nnoremap <S-Right> :<C-u>bnext<CR>
 
-" せっかくなので、 Ctrl + <Left> or <Right>でcnext/cprevious
-nnoremap <C-Left>  :<C-u>cnext<CR>
-nnoremap <C-Right> :<C-u>cprevious<CR>
+" せっかくなので、 Ctrl + <Left> or <Right>でcprevious/cnext
+nnoremap <C-Left>  :<C-u>cprevious<CR>
+nnoremap <C-Right> :<C-u>cnext<CR>
 
 " F5 command history
 nnoremap <F5> <Esc>q:
@@ -1105,8 +1105,9 @@ if neobundle#tap('unite.vim')
     \   'sync'             : 1,
     \ })
 
-  " Unite lineの結果候補数を制限しない
-  call unite#custom#source('line', 'max_candidates', 0)
+  " Unite line/vimgrepの結果候補数を制限しない
+  call unite#custom#source('line',    'max_candidates', 0)
+  call unite#custom#source('vimgrep', 'max_candidates', 0)
 
   " /************************************************************************/
   " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う */
