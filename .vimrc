@@ -925,7 +925,7 @@ inoremap <Down>  <Nop>
 inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
 
-" Shift or Ctrl + カーソルキーはコマンドモードでのみ使用する
+" Shift or Ctrl or Alt + カーソルキーはコマンドモードでのみ使用する
 inoremap <S-Down>  <Nop>
 inoremap <S-Left>  <Nop>
 inoremap <S-Up>    <Nop>
@@ -934,6 +934,10 @@ inoremap <C-Down>  <Nop>
 inoremap <C-Left>  <Nop>
 inoremap <C-Up>    <Nop>
 inoremap <C-Right> <Nop>
+inoremap <A-Down>  <Nop>
+inoremap <A-Left>  <Nop>
+inoremap <A-Up>    <Nop>
+inoremap <A-Right> <Nop>
 noremap  <Up>      <Nop>
 noremap  <Down>    <Nop>
 noremap  <Left>    <Nop>
@@ -946,6 +950,10 @@ noremap  <C-Up>    <Nop>
 noremap  <C-Down>  <Nop>
 noremap  <C-Left>  <Nop>
 noremap  <C-Right> <Nop>
+noremap  <A-Up>    <Nop>
+noremap  <A-Down>  <Nop>
+noremap  <A-Left>  <Nop>
+noremap  <A-Right> <Nop>
 
 " せっかくなので、カーソルキーでウィンドウ間を移動
 nnoremap <Left>  <C-w>h
@@ -960,6 +968,10 @@ nnoremap <S-Right> :<C-u>bnext<CR>
 " せっかくなので、 Ctrl + <Left> or <Right>でcprevious/cnext
 nnoremap <C-Left>  :<C-u>cprevious<CR>
 nnoremap <C-Right> :<C-u>cnext<CR>
+
+" せっかくなので、  Alt + <Left> or <Right>でtabprevious/tabnext
+nnoremap <A-Left>  :<C-u>tabprevious<CR>
+nnoremap <A-Right> :<C-u>tabnext<CR>
 
 " F5 command history
 nnoremap <F5> <Esc>q:
