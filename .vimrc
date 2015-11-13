@@ -925,12 +925,6 @@ inoremap <Down>  <Nop>
 inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
 
-" せっかくなので、カーソルキーでウィンドウ間を移動
-nnoremap <Left>  <C-w>h
-nnoremap <Down>  <C-w>j
-nnoremap <Up>    <C-w>k
-nnoremap <Right> <C-w>l
-
 " Shift or Ctrl + カーソルキーはコマンドモードでのみ使用する
 inoremap <S-Down>  <Nop>
 inoremap <S-Left>  <Nop>
@@ -940,6 +934,10 @@ inoremap <C-Down>  <Nop>
 inoremap <C-Left>  <Nop>
 inoremap <C-Up>    <Nop>
 inoremap <C-Right> <Nop>
+noremap  <Up>      <Nop>
+noremap  <Down>    <Nop>
+noremap  <Left>    <Nop>
+noremap  <Right>   <Nop>
 noremap  <S-Up>    <Nop>
 noremap  <S-Down>  <Nop>
 noremap  <S-Left>  <Nop>
@@ -948,6 +946,20 @@ noremap  <C-Up>    <Nop>
 noremap  <C-Down>  <Nop>
 noremap  <C-Left>  <Nop>
 noremap  <C-Right> <Nop>
+
+" せっかくなので、カーソルキーでウィンドウ間を移動
+nnoremap <Left>  <C-w>h
+nnoremap <Down>  <C-w>j
+nnoremap <Up>    <C-w>k
+nnoremap <Right> <C-w>l
+
+" せっかくなので、Shift + <Left> or <Right>でbnext/bprevious
+nnoremap <S-Left>  :<C-u>bnext<CR>
+nnoremap <S-Right> :<C-u>bprevious<CR>
+
+" せっかくなので、 Ctrl + <Left> or <Right>でcnext/cprevious
+nnoremap <C-Left>  :<C-u>cnext<CR>
+nnoremap <C-Right> :<C-u>cprevious<CR>
 
 " F5 command history
 nnoremap <F5> <Esc>q:
