@@ -719,12 +719,6 @@ nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 nnoremap j gj
 nnoremap k gk
 
-" カーソルキーでウィンドウ間を移動
-nnoremap <Left>  <C-w>h
-nnoremap <Down>  <C-w>j
-nnoremap <Up>    <C-w>k
-nnoremap <Right> <C-w>l
-
 " 最後のウィンドウがQuickfixウィンドウの場合、自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
   \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
@@ -926,10 +920,34 @@ noremap  <MiddleMouse> <Nop>
 inoremap <MiddleMouse> <Nop>
 
 " 挿入モードでカーソルキーを使うとUndo単位が区切られて困るので潰す
-inoremap <Up>    <Nop>
-inoremap <Down>  <Nop>
 inoremap <Left>  <Nop>
+inoremap <Down>  <Nop>
+inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
+
+" せっかくなので、カーソルキーでウィンドウ間を移動
+nnoremap <Left>  <C-w>h
+nnoremap <Down>  <C-w>j
+nnoremap <Up>    <C-w>k
+nnoremap <Right> <C-w>l
+
+" Shift or Ctrl + カーソルキーはコマンドモードでのみ使用する
+inoremap <S-Down>  <Nop>
+inoremap <S-Left>  <Nop>
+inoremap <S-Up>    <Nop>
+inoremap <S-Right> <Nop>
+inoremap <C-Down>  <Nop>
+inoremap <C-Left>  <Nop>
+inoremap <C-Up>    <Nop>
+inoremap <C-Right> <Nop>
+noremap  <S-Up>    <Nop>
+noremap  <S-Down>  <Nop>
+noremap  <S-Left>  <Nop>
+noremap  <S-Right> <Nop>
+noremap  <C-Up>    <Nop>
+noremap  <C-Down>  <Nop>
+noremap  <C-Left>  <Nop>
+noremap  <C-Right> <Nop>
 
 " F5 command history
 nnoremap <F5> <Esc>q:
