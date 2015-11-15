@@ -67,7 +67,6 @@ NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundleLazy 'thinca/vim-scouter',
   \ { 'autoload' : { 'commands' : ['Scouter'] } }
-" NeoBundle 'thinca/vim-submode'
 " NeoBundle 'thinca/vim-qfreplace'
 
 " NeoBundle 'osyo-manga/vim-watchdogs'
@@ -1365,42 +1364,6 @@ endif " }}}
 if neobundle#tap('vim-scouter')
 
   nnoremap <Leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
-
-endif " }}}
-
-" キー連打を便利に。ただし再描画がうっとおしい(vim-submode) {{{
-if neobundle#tap('vim-submode')
-
-  let g:submode_timeout = 0
-
-  function s:SID()
-    return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
-  endfunction
-
-  function! s:modulo(n, m)
-    let d = a:n * a:m < 0 ? 1 : 0
-    return a:n + (-(a:n + (0 < a:m ? d : -d)) / a:m + d) * a:m
-  endfunction
-
-  " gtttttt...で次のタブへ移動
-  " -> <C-PageDown><C-Pageup>の方が良い
-  " -> [N]gtだと一発。こっちは1 origin
-  call submode#enter_with('changetab', 'n', '', 'gt', 'gt')
-  call submode#enter_with('changetab', 'n', '', 'gT', 'gT')
-  call submode#map       ('changetab', 'n', '', 't',  'gt')
-  call submode#map       ('changetab', 'n', '', 'T',  'gT')
-
-  " <Leader>gtttttt...で現在フォーカスされているタブを移動
-  " -> [N]tabm[ove]だと一発。こっちは移動量を[N]で指定する
-  function! s:movetab(nr)
-    execute 'tabmove' s:modulo((tabpagenr() + (a:nr - 1)), tabpagenr('$'))
-  endfunction
-  let s:movetab = ':<C-u>call ' . s:SID() . 'movetab(%d)<CR>'
-  call submode#enter_with('movetab', 'n', '', '#gt', printf(s:movetab,  1))
-  call submode#enter_with('movetab', 'n', '', '#gT', printf(s:movetab, -1))
-  call submode#map       ('movetab', 'n', '', 't',   printf(s:movetab,  1))
-  call submode#map       ('movetab', 'n', '', 'T',   printf(s:movetab, -1))
-  unlet s:movetab
 
 endif " }}}
 
