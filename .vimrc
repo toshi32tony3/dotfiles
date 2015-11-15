@@ -50,11 +50,11 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
+NeoBundleLazy 'Shougo/junkfile.vim',
+  \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
-NeoBundleLazy 'Shougo/junkfile.vim',
-  \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundleLazy 'tacroe/unite-mark',
   \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
 NeoBundleLazy 'Shougo/unite-outline',
@@ -652,11 +652,13 @@ inoremap <C-[> <Esc>
 " /*******************************************************************/
 
 if !neobundle#tap('eskk.vim')
+
   " iminsert=2だとinsertモードに入った時にIME ONになって邪魔
   autocmd MyAutoCmd BufEnter * setlocal iminsert=0
 
   " 日本語検索はmigemoで十分
   autocmd MyAutoCmd BufEnter * setlocal imsearch=0
+
 endif
 
 " コマンドモードで日本語が使えないと何かと不便(ファイル名、ディレクトリ名など)
@@ -846,12 +848,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
         \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[l:item] .
         \ ' -R ' .
         \ $TARGET_DIR . '\' . l:item
-      if neobundle#tap('vimproc.vim')
-        call system(l:upCmd)
-        " call vimproc#system(l:upCmd)
-      else
-        call system(l:upCmd)
-      endif
+      call system(l:upCmd)
     endfor
   endfunction
   command! -nargs=0 UpdateCtags call s:UpdateCtags()
@@ -995,7 +992,9 @@ if neobundle#tap('neocomplete.vim')
   if !exists('g:neocomplete#sources')
     let g:neocomplete#sources = {}
   endif
+
   if neobundle#tap('neoinclude.vim')
+
     let g:neocomplete#sources._ =
       \ ['file/include', 'member', 'buffer', 'neosnippet']
   elseif neobundle#tap('neosnippet')
@@ -1004,6 +1003,7 @@ if neobundle#tap('neocomplete.vim')
   else
     let g:neocomplete#sources._ =
       \ ['member', 'buffer']
+
   endif
 
   if !exists('g:neocomplete#keyword_patterns')
@@ -1014,6 +1014,7 @@ if neobundle#tap('neocomplete.vim')
   let g:neocomplete#keyword_patterns._ = '\h\w*'
 
   if neobundle#tap('neosnippet')
+
     " neocompleteとneosnippetを良い感じに使うためのキー設定
     " http://kazuph.hateblo.jp/entry/2013/01/19/193745
     imap <expr> <TAB> pumvisible() ? "\<C-n>" :
@@ -1037,11 +1038,6 @@ endif " }}}
 
 " 入力補助(neosnippet) {{{
 if neobundle#tap('neosnippet')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'neocomplete.vim' ]
-    \   }
-    \ })
 
   " デフォルトのスニペットはコーディング規約と離れたものになっているので要修正
   let g:neosnippet#snippets_directory =
@@ -1051,11 +1047,6 @@ endif " }}}
 
 " インクルード補完(neoinclude.vim) {{{
 if neobundle#tap('neoinclude.vim')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'neocomplete.vim' ]
-    \   }
-    \ })
 
 endif " }}}
 
@@ -1215,12 +1206,14 @@ if neobundle#tap('vimfiler.vim')
                 nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
     if neobundle#tap('unite.vim')
+
     " Unite vimgrepを使う
     " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
                 nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
                   \                                         . g:u_opt_gg . '<CR>'
 
     endif
+
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
 
@@ -1240,11 +1233,6 @@ endif " }}}
 
 " for unite-gtags {{{
 if neobundle#tap('unite-gtags')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'unite.vim' ]
-    \   }
-    \ })
 
   " " gtagsの結果をファイル毎のツリー形式で表示
   " " -> すごく見やすいが、ファイル名で絞込めなくなるという欠点が…要カイゼン
@@ -1254,11 +1242,6 @@ endif " }}}
 
 " for unite-mark {{{
 if neobundle#tap('unite-mark')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'unite.vim' ]
-    \   }
-    \ })
 
   " グローバルマークに対しても有効にする
   let g:unite_source_mark_marks =
@@ -1359,10 +1342,20 @@ if neobundle#tap('vim-fontzoom')
 
 endif " }}}
 
-" Vim力を測る(vim-scouter) {{{
+" vim力を測る(vim-scouter) {{{
 if neobundle#tap('vim-scouter')
 
-  nnoremap <Leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
+  nnoremap <leader>sc :<c-u>scouter ~\dotfiles\.vimrc<cr>
+
+endif " }}}
+
+" Quickfixから置換(vim-qfreplace) {{{
+if neobundle#tap('vim-qfreplace')
+
+endif " }}}
+
+" Quickfixに表示されている行を強調表示(vim-hier) {{{
+if neobundle#tap('vim-hier')
 
 endif " }}}
 
@@ -1410,6 +1403,11 @@ if neobundle#tap('vim-brightest')
 
 endif " }}}
 
+" quickrun-hook集(shabadou.vim) {{{
+if neobundle#tap('shabadou.vim')
+
+endif " }}}
+
 " Vim上で自動構文チェック(vim-watchdogs) {{{
 if neobundle#tap('vim-watchdogs')
   " Caution: 裏で実行した結果を反映しているのか、pause系の処理があると固まる
@@ -1426,8 +1424,12 @@ if neobundle#tap('vim-watchdogs')
     \   'ruby' : 1,
     \ }
 
-  " quickrun_configにwatchdogs.vimの設定を追加
-  call watchdogs#setup(g:quickrun_config)
+  if neobundle#tap('watchdogs.vim')
+
+    " quickrun_configにwatchdogs.vimの設定を追加
+    call watchdogs#setup(g:quickrun_config)
+
+  endif
 
 endif " }}}
 
@@ -1443,6 +1445,7 @@ endif " }}}
 
 " My favorite colorscheme(vim-tomorrow-theme) {{{
 if neobundle#tap('vim-tomorrow-theme')
+
   " 現在のカーソル位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight Cursor
     \  term=bold cterm=bold gui=bold
@@ -1482,12 +1485,14 @@ endif " }}}
 
 " ファイルをブラウザで開く(previm)
 if neobundle#tap('previm')
+
   let g:previm_enable_realtime = 1
 
 endif
 
 " markdownを使いやすくする(vim-markdown) {{{
 if neobundle#tap('vim-markdown')
+
   " markdownのfold機能を無効にする
   let g:vim_markdown_folding_disabled = 1
 
@@ -1495,6 +1500,7 @@ endif " }}}
 
 " Vimからブラウザを開く(open-browser) {{{
 if neobundle#tap('open-browser.vim')
+
   nmap <Leader>L <Plug>(openbrowser-smart-search)
   vmap <Leader>L <Plug>(openbrowser-smart-search)
 
@@ -1502,6 +1508,7 @@ endif " }}}
 
 " コマンド名を置き換える(vim-altercmd) {{{
 if neobundle#tap('vim-altercmd')
+
   call altercmd#load()
 
 endif " }}}
@@ -1623,16 +1630,20 @@ if neobundle#tap('incsearch.vim')
   " map ? <Plug>(incsearch-stay)
 
   if neobundle#tap('vim-anzu')
+
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
     map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
 
   else
+
     map n  <Plug>(incsearch-nohl-n)
     map N  <Plug>(incsearch-nohl-N)
+
   endif
 
   " アスタリスク検索の対象をクリップボードにコピー
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
+
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
@@ -1640,7 +1651,9 @@ if neobundle#tap('incsearch.vim')
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+
   elseif neobundle#tap('vim-asterisk')
+
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
@@ -1648,7 +1661,9 @@ if neobundle#tap('incsearch.vim')
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+
   else
+
     nmap *          yiw<Plug>(incsearch-nohl-*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl-*)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
@@ -1656,17 +1671,13 @@ if neobundle#tap('incsearch.vim')
     nmap g*         yiw<Plug>(incsearch-nohl-g*)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
+
   endif
 
 endif " }}}
 
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
 if neobundle#tap('incsearch-fuzzy.vim')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'incsearch.vim' ]
-    \   }
-    \ })
 
   " map z/ <Plug>(incsearch-fuzzy-/)
   " map z? <Plug>(incsearch-fuzzy-?)
@@ -1691,6 +1702,7 @@ endif " }}}
 if neobundle#tap('vim-asterisk')
 
   if !neobundle#tap('incsearch.vim')
+
     nmap *          yiw<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(asterisk-z*)
     vmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
@@ -1698,6 +1710,7 @@ if neobundle#tap('vim-asterisk')
     nmap g*         yiw<Plug>(asterisk-gz*)
     omap g*    <Esc>yiw<Plug>(asterisk-gz*)
     vmap g* <Esc>gvyvgv<Plug>(asterisk-gz*)
+
   endif
 
 endif " }}}
@@ -1715,9 +1728,11 @@ if neobundle#tap('vim-anzu')
   " nmap * <Plug>(anzu-star-with-echo)N
 
   if !neobundle#tap('incsearch.vim')
+
     " コマンド結果出力画面にecho
     nmap n <Plug>(anzu-n-with-echo)
     nmap N <Plug>(anzu-N-with-echo)
+
   endif
 
 endif " }}}
@@ -1739,12 +1754,14 @@ endif " }}}
 
 " VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
 if neobundle#tap('agit.vim')
+
   function! s:my_agit_setting()
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
     nmap <buffer> Rv <Plug>(agit-git-revert)
   endfunction
   autocmd MyAutoCmd FileType agit call s:my_agit_setting()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
+
 endif " }}}
 
 " VimからGitを使う(ブランチ管理、vim-merginal) {{{
@@ -2043,6 +2060,7 @@ endif " }}}
 
 " VimからLingrを見る(J6uil.vim) {{{
 if neobundle#tap('J6uil.vim')
+
   let g:J6uil_config_dir = '~/.cache/J6uil'
 
 endif " }}}
@@ -2068,9 +2086,11 @@ if neobundle#tap('eskk.vim')
   autocmd MyAutoCmd VimEnter * set imdisable
 
   if neobundle#tap('skk.vim')
+
     " disable skk.vim
     " -> Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
+
   endif
 
   let g:eskk#directory = '~/.cache/eskk'
@@ -2094,6 +2114,7 @@ endif " }}}
 
 " 元の状態を復元してVimを再起動(restart.vim) {{{
 if neobundle#tap('restart.vim')
+
   command! -bar RestartWithSession
     \   let g:restart_sessionoptions
     \     = 'blank,curdir,folds,help,localoptions,tabpages'
