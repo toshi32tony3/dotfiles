@@ -67,7 +67,7 @@ NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundleLazy 'thinca/vim-scouter',
   \ { 'autoload' : { 'commands' : ['Scouter'] } }
-" NeoBundle 'thinca/vim-qfreplace'
+NeoBundle 'thinca/vim-qfreplace'
 
 " NeoBundle 'osyo-manga/vim-watchdogs'
 " NeoBundle 'osyo-manga/shabadou.vim'
