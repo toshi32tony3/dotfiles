@@ -174,6 +174,9 @@ NeoBundle 'tyru/eskk.vim'
 NeoBundleLazy 'tyru/restart.vim',
   \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
 
+NeoBundleLazy 'thinca/vim-prettyprint',
+  \ { 'autoload' : { 'commands' : ['PP'] } }
+
 call neobundle#end()
 
 " ファイルタイプの自動検出をONにする
