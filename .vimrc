@@ -189,7 +189,7 @@ NeoBundleCheck
 " 基本設定 {{{
 
 " 左手で<Leader>を入力したい
-let g:mapleader = "#"
+let g:mapleader = '#'
 
 " #検索が誤って発動しないようにする
 nnoremap #  <Nop>
@@ -281,7 +281,7 @@ cnoremap <C-n> <Down>
 
 " タイムスタンプの挿入
 function! s:PutTimeStamp()
-  let @"=strftime("%Y/%m/%d(%a) %H:%M")
+  let @"=strftime('%Y/%m/%d(%a) %H:%M')
   normal! ""P
 endfunction
 command! -nargs=0 PutTimeStamp call s:PutTimeStamp()
@@ -290,7 +290,7 @@ command! -nargs=0 PutTimeStamp call s:PutTimeStamp()
 function! s:PutMemoFormat()
   let @"='='
   normal! 080""Po
-  let @"=strftime("%Y/%m/%d(%a) %H:%M")
+  let @"=strftime('%Y/%m/%d(%a) %H:%M')
   normal! ""PA {{{
   normal! o}}}
   normal! ko
@@ -556,11 +556,11 @@ set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
 " /**************************************************************************/
-" /* formatoptions (Vim default: "tcq", Vi default: "vt")                   */
+" /* formatoptions (Vim default: 'tcq', Vi default: 'vt')                   */
 " /* t : Auto-wrap text using textwidth                                     */
 " /* c : Auto-wrap comments using textwidth, inserting the current comment  */
 " /*     leader automatically.                                              */
-" /* q : Allow formatting of comments with "gq".                            */
+" /* q : Allow formatting of comments with 'gq'.                            */
 " /* l : Long lines are not broken in insert mode                           */
 " /**************************************************************************/
 
@@ -591,7 +591,7 @@ set clipboard=unnamed
 " https://gist.github.com/pinzolo/8168337
 function! s:Clip(data)
   let @*=a:data
-  echo "clipped: " . a:data
+  echo 'clipped: ' . a:data
 endfunction
 
 " 現在開いているファイルのパスをレジスタへ
@@ -825,7 +825,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     call s:SetCDPathList()
 
     " ソースコード切り替え後、バージョン名を出力
-    echo "change source to: " . $TARGET_VER
+    echo 'change source to: ' . $TARGET_VER
 
   endfunction
   command! -nargs=0 SwitchSource call s:SwitchSource()
@@ -861,7 +861,7 @@ endif
 " 現在開いているファイルのディレクトリに移動
 function! s:ChangeDir(dir)
   cd %:p:h
-  echo "change directory to: " . a:dir
+  echo 'change directory to: ' . a:dir
 endfunction
 command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 
@@ -967,10 +967,10 @@ if has('kaoriya')
   let g:fullscreen_on = 0
   function! s:ToggleScreenMode()
     if g:fullscreen_on
-      execute "ScreenMode 0"
+      execute 'ScreenMode 0'
       let g:fullscreen_on = 0
     else
-      execute "ScreenMode 6"
+      execute 'ScreenMode 6'
       let g:fullscreen_on = 1
     endif
   endfunction
@@ -1016,17 +1016,17 @@ if neobundle#tap('neocomplete.vim')
   if neobundle#tap('neosnippet')
     " neocompleteとneosnippetを良い感じに使うためのキー設定
     " http://kazuph.hateblo.jp/entry/2013/01/19/193745
-    imap <expr> <TAB> pumvisible() ? "\<C-n>" :
-      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    imap <expr> <TAB> pumvisible() ? '\<C-n>' :
+      \ neosnippet#jumpable() ? '\<Plug>(neosnippet_expand_or_jump)' : '\<TAB>'
     smap <expr> <TAB>
-      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+      \ neosnippet#jumpable() ? '\<Plug>(neosnippet_expand_or_jump)' : '\<TAB>'
+    inoremap <expr> <S-TAB> pumvisible() ? '\<C-p>' : '\<S-TAB>'
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
   else
-    inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
-    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+    inoremap <expr>   <TAB> pumvisible() ? '\<C-n>' :   '\<TAB>'
+    inoremap <expr> <S-TAB> pumvisible() ? '\<C-p>' : '\<S-TAB>'
 
   endif
 
@@ -1185,11 +1185,11 @@ if neobundle#tap('vimshell')
 
   " 動的プロンプトの設定
   " http://blog.supermomonga.com/articles/vim/vimshell-dynamicprompt.html
-  let g:vimshell_prompt_expr = 'getcwd()." > "'
+  let g:vimshell_prompt_expr = 'getcwd() . ' > ''
   let g:vimshell_prompt_pattern = '^\f\+ > '
 
   " 開いているファイルのパスでVimShellを開く
-  nnoremap <expr> <Leader>vs ':<C-u>VimShellTab<Space>' . expand("%:h") . '<CR>'
+  nnoremap <expr> <Leader>vs ':<C-u>VimShellTab<Space>' . expand('%:h') . '<CR>'
 
 endif " }}}
 
@@ -1205,7 +1205,7 @@ if neobundle#tap('vimfiler.vim')
   " let g:vimfiler_edit_action = 'tabopen'
 
   " 開いているファイルのパスでVimFilerを開く
-  nnoremap <expr> <Leader>vf ':<C-u>VimFilerTab<Space>' . expand("%:h") . '<CR>'
+  nnoremap <expr> <Leader>vf ':<C-u>VimFilerTab<Space>' . expand('%:h') . '<CR>'
 
   " vimfilerのマッピングを一部変更
   function! s:vimfiler_settings()
@@ -1262,7 +1262,7 @@ if neobundle#tap('unite-mark')
 
   " グローバルマークに対しても有効にする
   let g:unite_source_mark_marks =
-    \ "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    \ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 endif " }}}
 
@@ -1343,7 +1343,7 @@ endif " }}}
 if neobundle#tap('vim-ambicmd')
 
   " 下手にマッピングするよりもambicmdで補完した方が捗る
-  cnoremap <expr> <Space> ambicmd#expand("\<Space>")
+  cnoremap <expr> <Space> ambicmd#expand('\<Space>')
 
 endif " }}}
 
@@ -1380,19 +1380,19 @@ if neobundle#tap('vim-brightest')
 
   " " <cword>を含め、<cword>と同じ単語を文字色で強調したい場合
   " let g:brightest#highlight = {
-  "   \   "group"    : "ErrorMsg",
-  "   \   "priority" : -1,
-  "   \   "format"   : '\<%s\>',
+  "   \   'group'    : 'ErrorMsg',
+  "   \   'priority' : -1,
+  "   \   'format'   : '\<%s\>',
   "   \ }
 
   " <cword>を含め、<cword>と同じ単語をアンダーラインで強調したい場合
   let g:brightest#highlight = {
-    \   "group" : "BrightestUnderline"
+    \   'group' : 'BrightestUnderline'
     \ }
 
   " " <cword>を含め、<cword>と同じ単語を波線で強調したい場合
   " let g:brightest#highlight = {
-  "   \   "group" : "BrightestUndercurl"
+  "   \   'group' : 'BrightestUndercurl'
   "   \ }
 
   " " ハイライトする単語のパターンを設定
@@ -1402,10 +1402,10 @@ if neobundle#tap('vim-brightest')
 
   " " シンタックスが Statement の場合はハイライトしない
   " " e.g. Vim script だと let とか if とか function とか
-  " let g:brightest#ignore_syntax_list = [ "Statement" ]
+  " let g:brightest#ignore_syntax_list = [ 'Statement' ]
 
   " " brightestの背景をcursorlineに合わせる
-  " let g:brightest#highlight_in_cursorline = { "group" : "BrightestCursorLineBg" }
+  " let g:brightest#highlight_in_cursorline = { 'group' : 'BrightestCursorLineBg' }
   " set cursorline
 
 endif " }}}
@@ -1473,7 +1473,7 @@ if neobundle#tap('memolist.vim')
   let g:memolist_prompt_categories = 0
 
   if filereadable(expand('~/configs/memolist/md.txt'))
-    let g:memolist_template_dir_path = "~/configs/memolist"
+    let g:memolist_template_dir_path = '~/configs/memolist'
   endif
 
   nnoremap <Leader>mn :<C-u>MemoNew<CR>
@@ -1581,7 +1581,7 @@ if neobundle#tap('capture.vim')
 
   let g:capture_open_command = 'botright 12sp new'
 
-  nnoremap <Leader>who :<C-u>Capture echo expand("%:p")<CR>
+  nnoremap <Leader>who :<C-u>Capture echo expand('%:p')<CR>
   nnoremap <Leader>sn  :<C-u>Capture scriptnames<CR>
 
 endif " }}}
@@ -1777,7 +1777,7 @@ if neobundle#tap('tagbar')
   function! s:ClipCurrentTag(data)
     " 選択範囲レジスタ(*)を使う
     let @*=a:data
-    echo "clipped: " . a:data
+    echo 'clipped: ' . a:data
   endfunction
   command! -nargs=0 ClipCurrentTag
     \ call s:ClipCurrentTag(tagbar#currenttag('%s', ''))
@@ -1786,7 +1786,7 @@ if neobundle#tap('tagbar')
     " 無名レジスタ(")を使う
     let @"=a:data
     normal! ""P
-    echo "print current tag: " . a:data
+    echo 'print current tag: ' . a:data
   endfunction
   command! -nargs=0 PrintCurrentTag
     \ call s:PrintCurrentTag(tagbar#currenttag('%s', ''))
@@ -1831,7 +1831,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyReadonly()
-    return &ft !~? 'help\|vimfiler\' && &readonly ? "\u2B64" : ''
+    return &ft !~? 'help\|vimfiler\' && &readonly ? '\u2B64' : ''
   endfunction
 
   function! MyFilename()
