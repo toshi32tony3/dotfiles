@@ -900,33 +900,33 @@ inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
 
 " Shift or Ctrl or Alt + カーソルキーはコマンドモードでのみ使用する
-inoremap <S-Down>  <Nop>
 inoremap <S-Left>  <Nop>
+inoremap <S-Down>  <Nop>
 inoremap <S-Up>    <Nop>
 inoremap <S-Right> <Nop>
-inoremap <C-Down>  <Nop>
 inoremap <C-Left>  <Nop>
+inoremap <C-Down>  <Nop>
 inoremap <C-Up>    <Nop>
 inoremap <C-Right> <Nop>
-inoremap <A-Down>  <Nop>
 inoremap <A-Left>  <Nop>
+inoremap <A-Down>  <Nop>
 inoremap <A-Up>    <Nop>
 inoremap <A-Right> <Nop>
-noremap  <Up>      <Nop>
-noremap  <Down>    <Nop>
 noremap  <Left>    <Nop>
+noremap  <Down>    <Nop>
+noremap  <Up>      <Nop>
 noremap  <Right>   <Nop>
-noremap  <S-Up>    <Nop>
-noremap  <S-Down>  <Nop>
 noremap  <S-Left>  <Nop>
+noremap  <S-Down>  <Nop>
+noremap  <S-Up>    <Nop>
 noremap  <S-Right> <Nop>
-noremap  <C-Up>    <Nop>
-noremap  <C-Down>  <Nop>
 noremap  <C-Left>  <Nop>
+noremap  <C-Down>  <Nop>
+noremap  <C-Up>    <Nop>
 noremap  <C-Right> <Nop>
-noremap  <A-Up>    <Nop>
-noremap  <A-Down>  <Nop>
 noremap  <A-Left>  <Nop>
+noremap  <A-Down>  <Nop>
+noremap  <A-Up>    <Nop>
 noremap  <A-Right> <Nop>
 
 " せっかくなので、カーソルキーでウィンドウ間を移動
@@ -935,16 +935,22 @@ nnoremap <Down>  <C-w>j
 nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
-" せっかくなので、Shift + <Left> or <Right>でbprevious/bnext
+" せっかくなので、Shift + カーソルキーでbprevious/bnext
 nnoremap <S-Left>  :<C-u>bprevious<CR>
+nnoremap <S-Down>  :<C-u>bnext<CR>
+nnoremap <S-Up>    :<C-u>bprevious<CR>
 nnoremap <S-Right> :<C-u>bnext<CR>
 
-" せっかくなので、 Ctrl + <Left> or <Right>でcprevious/cnext
+" せっかくなので、 Ctrl + カーソルキーでcprevious/cnext
 nnoremap <C-Left>  :<C-u>cprevious<CR>
+nnoremap <C-Down>  :<C-u>cnext<CR>
+nnoremap <C-Up>    :<C-u>cprevious<CR>
 nnoremap <C-Right> :<C-u>cnext<CR>
 
-" せっかくなので、  Alt + <Left> or <Right>でtabprevious/tabnext
+" せっかくなので、  Alt + カーソルキーでtabprevious/tabnext
 nnoremap <A-Left>  :<C-u>tabprevious<CR>
+nnoremap <A-Down>  :<C-u>tabnext<CR>
+nnoremap <A-Up>    :<C-u>tabprevious<CR>
 nnoremap <A-Right> :<C-u>tabnext<CR>
 
 " F5 command history
