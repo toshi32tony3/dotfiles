@@ -1,6 +1,4 @@
 " .vimrc for 香り屋版GVim
-" TODO: 趣味プラグインリストの棚卸し
-"         -> 多分使わないでしょなプラグインがいっぱい
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -458,6 +456,22 @@ set commentstring=%s
 
 " 折りたたみ機能をスイッチ
 nnoremap <silent> <F12> :set foldenable!<CR>
+
+" Hack #120: gVim でウィンドウの位置とサイズを記憶する
+" http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
+let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
+autocmd MyAutoCmd VimLeavePre * call s:save_window()
+function! s:save_window()
+  let s:options = [
+    \ 'set columns=' . &columns,
+    \ 'set lines='   . &lines,
+    \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
+    \ ]
+  call writefile(s:options, g:save_winpos_file)
+endfunction
+if filereadable(g:save_winpos_file)
+  execute 'source' g:save_winpos_file
+endif
 
 " The end of 表示 }}}
 "-----------------------------------------------------------------------------
@@ -2133,107 +2147,5 @@ if neobundle#tap('restart.vim')
 endif " }}}
 
 " The end of Plugin Settings }}}
-"-----------------------------------------------------------------------------
-" 趣味＠正式採用前の設定 {{{
-
-" ミニマップってあったら便利？
-" " -> あったらあったで結構良いかも。アウトライン系で十分な気もする
-" " -> swapファイルに怒られるので必ず読み取り専用で開いてほしい…
-" set noswapfile
-" NeoBundle 'koron/minimap-vim'
-"
-" まだ開発初期っぽいので、今後に期待
-" -> python依存っぽいのでちょっと使えないかな...
-" NeoBundle 'severin-lemaignan/vim-minimap'
-
-" " 画面内移動を楽にするプラグイン
-" " 試した感じ、けっこうイケてる、けど若干見た目が精神衛生上よろしくない
-" " 個人的にはclever-f, vim-sneakがあれば良いかなあと
-" NeoBundle 'haya14busa/vim-easymotion'
-
-" " HTMLコーディングを爆速化するらしい
-" " -> HTML書く機会が無かった。そのうち使いたい
-" NeoBundle 'mattn/emmet-vim'
-
-" " Gistへの投稿がすごく楽になったりするらしい
-" " -> Gist書く機会が無かった。そのうち使いたい
-" NeoBundle 'mattn/gist-vim'
-
-" " 空ファイルテンプレートを実現する
-" " -> 使いたい候補上位だけど、まだ使ってない
-" NeoBundle 'thinca/vim-template'
-
-" " リッチなカレンダー
-" " -> 試してみたら確かにリッチだった。実用性はよくわからない
-" NeoBundle 'itchyny/calendar.vim'
-
-" " 幅の違う矩形オブジェクトに対するオペレータ(の動作をエミュレートしたもの)
-" " -> なんだかんだと出番がありそうなオペレータ。割り当てるキーを確保したい
-" NeoBundle 'osyo-manga/vim-operator-blockwise'
-
-" " <CR>で良い感じにテキストオブジェクトを選択し、Vim力を下げるプラグイン
-" " -> 面白い、が今ひとつ使う機会が無い
-" NeoBundle 'gcmt/wildfire.vim'
-" map <CR> <Plug>(wildfire-fuel)
-" map <BS> <Plug>(wildfire-water)
-
-" " Hack #120: gVim でウィンドウの位置とサイズを記憶する
-" " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-" " -> Windowsのスナップ機能を使った時に位置情報記録できてない
-" let g:save_window_file = expand('~/vimfiles/winpos/.vimwinpos')
-" augroup SaveWindow
-"   autocmd!
-"   autocmd VimLeavePre * call s:save_window()
-"   function! s:save_window()
-"     let s:options = [
-"       \ 'set columns=' . &columns,
-"       \ 'set lines=' . &lines,
-"       \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
-"       \ ]
-"     call writefile(s:options, g:save_window_file)
-"   endfunction
-" augroup END
-"
-" if filereadable(g:save_window_file)
-"   execute 'source' g:save_window_file
-" endif
-
-" 最後のwindowをquitする時に確認してくれるようにする
-" -> 面白いし欲しかったような機能だけど、タブの数を数える方法が間違ってる？
-" -> 最近は :bdelete しまくってから最後に :q するので実用上は問題無い
-" http://toqoz.hateblo.jp/entry/2013/11/19/171928
-
-" command! Q :call s:gentle_quitman()
-"
-" function! s:gentle_quitman()
-"   let s:window_counter = 0
-"   windo let s:window_counter = s:window_counter + 1
-"
-"   if s:window_counter == 1
-"     let a = input("Really quit last window? [n]|y ")
-"     if a == "y"
-"       q
-"     endif
-"   else
-"     q
-"   endif
-" endfunction
-"
-" AlterCommand q Q
-" AlterCommand Q q
-
-" c-family semantic source code highlighting, based on Clang
-" only for Linux ?
-" NeoBundle 'bbchung/clighter'
-" let g:clighter_autostart = 0
-" let g:clighter_libclang_file = 'D:\LLVM\bin'
-" let g:clighter_realtime = 1
-
-" " Visualモードの選択範囲を拡張、縮小できるようにする
-" NeoBundle 'kana/vim-textobj-line'
-" NeoBundle 'kana/vim-textobj-entire'
-" NeoBundle 'terryma/vim-expand-region'
-
-" The end of 趣味関係＠正式採用前の設定 " }}}
 "-----------------------------------------------------------------------------
 
