@@ -105,6 +105,7 @@ NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-textobj-user'
+
 NeoBundle 'kana/vim-operator-replace'
 NeoBundle 'osyo-manga/vim-operator-search'
 NeoBundle 'kana/vim-textobj-function'
@@ -1249,6 +1250,11 @@ if neobundle#tap('unite-mark')
 
 endif " }}}
 
+" for unite-outline {{{
+if neobundle#tap('unite-outline')
+
+endif " }}}
+
 " Vimの一つのインスタンスを使い回す(vim-singleton) {{{
 if neobundle#tap('vim-singleton')
 
@@ -1483,18 +1489,23 @@ if neobundle#tap('memolist.vim')
 
 endif " }}}
 
-" ファイルをブラウザで開く(previm)
-if neobundle#tap('previm')
-
-  let g:previm_enable_realtime = 1
-
-endif
-
 " markdownを使いやすくする(vim-markdown) {{{
 if neobundle#tap('vim-markdown')
 
   " markdownのfold機能を無効にする
   let g:vim_markdown_folding_disabled = 1
+
+endif " }}}
+
+" ファイルをブラウザで開く(previm) {{{
+if neobundle#tap('previm')
+
+  let g:previm_enable_realtime = 1
+
+endif " }}}
+
+" markdownをブラウザでプレビュー(mdforvim) {{{
+if neobundle#tap('mdforvim')
 
 endif " }}}
 
@@ -1510,6 +1521,11 @@ endif " }}}
 if neobundle#tap('vim-altercmd')
 
   call altercmd#load()
+
+endif " }}}
+
+" Visualモードでインクリメント/デクリメント(vim-visualinc) {{{
+if neobundle#tap('vim-visualinc')
 
 endif " }}}
 
@@ -1543,12 +1559,12 @@ if neobundle#tap('vim-operator-replace')
 
 endif " }}}
 
-" 関数内検索(vim-textobj-function with vim-textobj-function) {{{
+" 関数内検索(vim-textobj-function with vim-operator-search) {{{
 if neobundle#tap('vim-textobj-function')
 
   let g:textobj_function_no_default_key_mappings = 1
 
-  if neobundle#tap('vim-textobj-function')
+  if neobundle#tap('vim-operator-search')
     nmap <Leader>f/ <Plug>(operator-search)<Plug>(textobj-function-i)
   endif
 
@@ -1814,7 +1830,11 @@ endif " }}}
 if neobundle#tap('lightline.vim')
 
   let g:lightline = {}
-  let g:lightline.colorscheme  = 'hybrid'
+
+  if neobundle#tap('lightline-hybrid.vim')
+    let g:lightline.colorscheme  = 'hybrid'
+  endif
+
   let g:lightline.mode_map     = { 'c'    : 'NORMAL'                     }
   let g:lightline.separator    = { 'left' : "\u2B80", 'right' : "\u2B82" }
   let g:lightline.subseparator = { 'left' : "\u2B81", 'right' : "\u2B83" }
