@@ -782,10 +782,21 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
   endfunction
 
+  function! s:SetIncludes()
+    let g:syntastic_c_include_dirs = []
+    for l:item in g:c_include_dirs
+      call add(g:syntastic_c_include_dirs, $TARGET_DIR. '\' . l:item)
+    endfor
+  endfunction
+
   call s:SetSrcDir()
   call s:SetTags()
   call s:SetPathList()
   call s:SetCDPathList()
+
+  if neobundle#tap('syntastic')
+    call s:SetIncludes()
+  endif
 
   " ソースコードをスイッチ
   function! s:SwitchSource()
@@ -798,6 +809,10 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
+
+    if neobundle#tap('syntastic')
+      call s:SetIncludes()
+    endif
 
     " ソースコード切り替え後、バージョン名を出力
     echo 'change source to: ' . $TARGET_VER
@@ -1425,6 +1440,9 @@ if neobundle#tap('syntastic')
   " 必ず手動チェックとする
   let g:syntastic_check_on_wq = 0
   let g:syntastic_mode_map = { 'mode': 'passive' }
+
+  " エラーにジャンプ、警告は無視
+  let g:syntastic_auto_jump = 3
 
 endif " }}}
 
