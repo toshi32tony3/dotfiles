@@ -76,10 +76,6 @@ NeoBundle 'osyo-manga/vim-operator-search'
 NeoBundle 'osyo-manga/vim-brightest'
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
-" NeoBundle 'vim-scripts/aspvbs.vim'  " syntax for ASP/VBScript
-" NeoBundle 'vim-scripts/vbnet.vim'   " syntax for VB.NET
-" NeoBundleLazy 'hachibeeDI/vim-vbnet',
-"   \ { 'autoload' : { 'filetypes' : ['vbnet'] } }
 " NeoBundleLazy 'mattn/benchvimrc-vim',
 "   \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
 " NeoBundle 'koron/codic-vim'
