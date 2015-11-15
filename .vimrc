@@ -600,25 +600,6 @@ function! s:CopyCmdOutput(cmd)
 endfunction
 command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
 
-" " 1行以内の編集でも quote1 ～ quote9 に保存
-" " http://sgur.tumblr.com/post/63476292878/vim
-" " -> 無いと不便かよくわからないので、一旦コメントアウト
-" function! s:update_numbered_registers()
-"   let reg = getreg('"')
-"   if len(split(reg, "\n")) == 1 && reg != getreg(1)
-"     for s:i in range(9, 2, -1)
-"       call setreg(s:i, getreg(s:i-1))
-"     endfor
-"     call setreg(1, reg)
-"   endif
-" endfunction
-"
-" autocmd MyAutoCmd TextChanged * call s:update_numbered_registers()
-
-" <C-@>  : 直前に挿入したテキストをもう一度挿入し、ノーマルモードに戻る
-" <C-g>u : アンドゥ単位を区切る
-inoremap <C-@> <C-g>u<C-@>
-
 " The end of 編集 }}}
 "-----------------------------------------------------------------------------
 " 操作の簡単化 {{{
@@ -942,6 +923,13 @@ nnoremap q:   <Nop>
 nnoremap <F6> <Esc>q/
 nnoremap q/   <Nop>
 nnoremap q?   <Nop>
+
+" <C-@>  : 直前に挿入したテキストをもう一度挿入し、ノーマルモードに戻る
+" <C-g>u : アンドゥ単位を区切る
+" -> 割りと暴発する&あまり用途が見当たらないので、<Esc>に置き替え
+" inoremap <C-@> <C-g>u<C-@>
+inoremap <C-@> <Esc>
+noremap  <C-@> <Esc>
 
 " The end of 誤爆防止関係 }}}
 "-----------------------------------------------------------------------------
