@@ -1075,7 +1075,7 @@ if neobundle#tap('unite.vim')
   " use pt
   " https://github.com/monochromegane/the_platinum_searcher
   if executable('pt')
-    set grepprg=pt
+    set grepprg=pt\ --hidden\ --nogroup\ --nocolor\ --smart-case
     let g:unite_source_grep_command = 'pt'
     let g:unite_source_grep_default_opts =
       \   '--hidden --nogroup --nocolor --smart-case'
