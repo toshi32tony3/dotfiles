@@ -183,6 +183,8 @@ NeoBundle 'lambdalisue/vim-improve-diff'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
 
+NeoBundle 'tyru/restart.vim'
+
 call neobundle#end()
 
 " ファイルタイプの自動検出をONにする
@@ -2120,6 +2122,15 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
 endif " }}}
+
+" 元の状態を復元してVimを再起動(restart.vim) {{{
+if neobundle#tap('restart.vim')
+  command! -bar RestartWithSession
+    \   let g:restart_sessionoptions
+    \     = 'blank,curdir,folds,help,localoptions,tabpages'
+    \ | Restart
+
+endif
 
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
