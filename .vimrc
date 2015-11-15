@@ -510,20 +510,6 @@ set fileencoding=
 " -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
 set fileencodings=utf-8,cp932,euc-jp
 
-" " 文字コード判別はしばらくKaoriya Vimに任せてみる
-" " -> Windows(utf-8, sjis), Unix(euc-jp)意識せず両方使いたい
-" if !has('win64')
-"   " 以下のファイルの時は文字コードをsjisに設定
-"   autocmd MyAutoCmd FileType c        set fileencoding=sjis
-"   autocmd MyAutoCmd FileType cpp      set fileencoding=sjis
-"   autocmd MyAutoCmd FileType make     set fileencoding=sjis
-"   autocmd MyAutoCmd FileType sh       set fileencoding=sjis
-"   autocmd MyAutoCmd FileType cfg      set fileencoding=sjis
-"   autocmd MyAutoCmd FileType awk      set fileencoding=sjis
-"   autocmd MyAutoCmd FileType dosbatch set fileencoding=sjis
-"   autocmd MyAutoCmd FileType vb       set fileencoding=sjis
-" endif
-
 " 文字コードを指定してファイルを開き直す
 nnoremap <Leader>enc :<C-u>e ++enc=
 
