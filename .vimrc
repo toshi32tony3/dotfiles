@@ -40,19 +40,21 @@ NeoBundle 'Shougo/vimproc.vim', {
   \     'unix'    : 'make -f make_unix.mak',
   \   },
   \ }
+
 NeoBundle 'Shougo/neocomplete.vim'
-" NeoBundle 'Shougo/neoinclude.vim'
 " NeoBundle 'Shougo/neosnippet'
 " NeoBundle 'Shougo/neosnippet-snippets'
+" NeoBundle 'Shougo/neoinclude.vim'
+" NeoBundleLazy 'Shougo/neomru.vim',
+"   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
+" NeoBundleLazy 'Shougo/neoyank.vim',
+"   \ { 'autoload' : { 'unite_sources' : [ 'history/yank' ] } }
+
 NeoBundle 'Shougo/unite.vim'
 " NeoBundle 'Shougo/neossh.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
-" NeoBundleLazy 'Shougo/neomru.vim',
-"   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
-" NeoBundleLazy 'Shougo/neoyank.vim',
-"   \ { 'autoload' : { 'unite_sources' : [ 'history/yank' ] } }
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
@@ -1060,16 +1062,6 @@ if neobundle#tap('neocomplete.vim')
 
 endif " }}}
 
-" インクルード補完(neoinclude.vim) {{{
-if neobundle#tap('neoinclude.vim')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'neocomplete.vim' ]
-    \   }
-    \ })
-
-endif " }}}
-
 " 入力補助(neosnippet) {{{
 if neobundle#tap('neosnippet')
   call neobundle#config({
@@ -1081,6 +1073,16 @@ if neobundle#tap('neosnippet')
   " デフォルトのスニペットはコーディング規約と離れたものになっているので要修正
   let g:neosnippet#snippets_directory =
     \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
+
+endif " }}}
+
+" インクルード補完(neoinclude.vim) {{{
+if neobundle#tap('neoinclude.vim')
+  call neobundle#config({
+    \   'autoload' : {
+    \     'on_source' : [ 'neocomplete.vim' ]
+    \   }
+    \ })
 
 endif " }}}
 
