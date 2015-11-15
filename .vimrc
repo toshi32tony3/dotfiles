@@ -69,17 +69,15 @@ NeoBundleLazy 'thinca/vim-scouter',
   \ { 'autoload' : { 'commands' : ['Scouter'] } }
 NeoBundle 'thinca/vim-qfreplace'
 
-" NeoBundle 'osyo-manga/vim-watchdogs'
-" NeoBundle 'osyo-manga/shabadou.vim'
 NeoBundle 'jceb/vim-hier'
-NeoBundle 'osyo-manga/vim-operator-search'
 NeoBundle 'osyo-manga/vim-brightest'
+" NeoBundle 'osyo-manga/shabadou.vim'
+" NeoBundle 'osyo-manga/vim-watchdogs'
+NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
-" NeoBundleLazy 'mattn/benchvimrc-vim',
-"   \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
-" NeoBundle 'koron/codic-vim'
-" NeoBundle 'scrooloose/syntastic'
+NeoBundleLazy 'mattn/benchvimrc-vim',
+  \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
 
 " memolist.vimはmarkdown形式でメモを生成するので、markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
@@ -97,11 +95,6 @@ NeoBundleLazy 'kurocode25/mdforvim',
   \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
 
 NeoBundle 'tyru/open-browser.vim'
-" NeoBundle 'mattn/webapi-vim'
-
-" NeoBundle 'tyru/vim-altercmd'
-" NeoBundle 'tpope/vim-repeat'
-" NeoBundle 'tpope/vim-speeddating'
 
 " 最新Vimでは標準搭載になったぽい？そのうち不要になる？
 NeoBundle 'deris/vim-visualinc'
@@ -113,6 +106,7 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-textobj-user'
 NeoBundle 'kana/vim-operator-replace'
+NeoBundle 'osyo-manga/vim-operator-search'
 NeoBundle 'kana/vim-textobj-function'
 
 NeoBundle 'kana/vim-smartchr'
@@ -176,7 +170,8 @@ NeoBundle 'lambdalisue/vim-improve-diff'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
 
-NeoBundle 'tyru/restart.vim'
+NeoBundleLazy 'tyru/restart.vim',
+  \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
 
 call neobundle#end()
 
@@ -1371,27 +1366,6 @@ if neobundle#tap('vim-scouter')
 
 endif " }}}
 
-" Vim上で自動構文チェック(vim-watchdogs) {{{
-if neobundle#tap('vim-watchdogs')
-  " Caution: 裏で実行した結果を反映しているのか、pause系の処理があると固まる
-
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'vim-quickrun' ]
-    \   }
-    \ })
-
-  let g:watchdogs_check_BufWritePost_enable = 1
-  let g:watchdogs_check_BufWritePost_enables = {
-    \   'c'    : 1,
-    \   'ruby' : 1,
-    \ }
-
-  " quickrun_configにwatchdogs.vimの設定を追加
-  call watchdogs#setup(g:quickrun_config)
-
-endif " }}}
-
 " <cword>を強調(vim-brightest) {{{
 if neobundle#tap('vim-brightest')
 
@@ -1436,6 +1410,37 @@ if neobundle#tap('vim-brightest')
 
 endif " }}}
 
+" Vim上で自動構文チェック(vim-watchdogs) {{{
+if neobundle#tap('vim-watchdogs')
+  " Caution: 裏で実行した結果を反映しているのか、pause系の処理があると固まる
+
+  call neobundle#config({
+    \   'autoload' : {
+    \     'on_source' : [ 'vim-quickrun' ]
+    \   }
+    \ })
+
+  let g:watchdogs_check_BufWritePost_enable = 1
+  let g:watchdogs_check_BufWritePost_enables = {
+    \   'c'    : 1,
+    \   'ruby' : 1,
+    \ }
+
+  " quickrun_configにwatchdogs.vimの設定を追加
+  call watchdogs#setup(g:quickrun_config)
+
+endif " }}}
+
+" Vim上で自動構文チェック(syntastic) {{{
+if neobundle#tap('syntastic')
+  " Caution: syntasticは非同期チェックできない
+
+  " 必ず手動チェックとする
+  let g:syntastic_check_on_wq = 0
+  let g:syntastic_mode_map = { 'mode': 'passive' }
+
+endif " }}}
+
 " My favorite colorscheme(vim-tomorrow-theme) {{{
 if neobundle#tap('vim-tomorrow-theme')
   " 現在のカーソル位置をわかりやすくする
@@ -1454,19 +1459,6 @@ if neobundle#tap('vim-tomorrow-theme')
   endif
 
   colorscheme Tomorrow-Night
-
-endif " }}}
-
-" Vim上で自動構文チェック(syntastic) {{{
-if neobundle#tap('syntastic')
-  " Caution: syntasticは非同期チェックできない
-
-  let g:syntastic_check_on_wq = 0
-  let g:syntastic_mode_map = { 'mode': 'passive',
-    \ 'active_filetypes': ['ruby'] }
-
-  " " rubocopが使える環境でrubyの構文チェックをする時
-  " let g:syntastic_ruby_checkers = ['rubocop']
 
 endif " }}}
 
@@ -1566,10 +1558,6 @@ if neobundle#tap('vim-smartchr')
   " inoremap <expr><Bar> smartchr#one_of('<Bar>', ' <Bar><Bar> ', ' <Bar> ')
   " inoremap <expr>,     smartchr#one_of(',',     ', ')
   " inoremap <expr>?     smartchr#one_of('?',     ' ? ')
-
-  " " ハイフン一つ置きにスペースを入れるのが難しいので、"----"を"- - "に変換
-  " " -> markdownのために用意したけど不要であることがわかった
-  " inoremap <expr>-  smartchr#one_of('-', '--', '- ')
 
   " 「->」は入力しづらいので、..で置換え
   inoremap <expr> . smartchr#one_of('.', '->', '..')
@@ -1928,6 +1916,7 @@ endif " }}}
 " ペーストからの<C-n>,<C-p>でクリップボードの履歴をぐるぐる(yankround.vim) {{{
 if neobundle#tap('yankround.vim')
 
+  let g:yankround_dir = '~/.cache/yankround'
   let g:yankround_region_hl_groupname = 'ErrorMsg'
 
   nmap p     <Plug>(yankround-p)
@@ -2054,8 +2043,7 @@ endif " }}}
 
 " VimからLingrを見る(J6uil.vim) {{{
 if neobundle#tap('J6uil.vim')
-
-  let g:J6uil_config_dir = expand('~/.cache/J6uil')
+  let g:J6uil_config_dir = '~/.cache/J6uil'
 
 endif " }}}
 
@@ -2085,12 +2073,12 @@ if neobundle#tap('eskk.vim')
     let g:plugin_skk_disable = 1
   endif
 
-  let g:eskk#directory = '~/.eskk'
+  let g:eskk#directory = '~/.cache/eskk'
   let g:eskk#dictionary
       \ = { 'path': '~/dotfiles/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
-  if filereadable(expand('~/.eskk/SKK-JISYO.L'))
+  if filereadable(expand('~/vimfiles/dict/SKK-JISYO.L'))
     let g:eskk#large_dictionary =
-      \ { 'path': '~/.eskk/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
+      \ { 'path': '~/vimfiles/dict/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
   endif
 
   let g:eskk#show_annotation = 1
