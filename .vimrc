@@ -616,7 +616,7 @@ command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
 " " -> 無いと不便かよくわからないので、一旦コメントアウト
 " function! s:update_numbered_registers()
 "   let reg = getreg('"')
-"   if len(split(reg, '\n')) == 1 && reg != getreg(1)
+"   if len(split(reg, "\n")) == 1 && reg != getreg(1)
 "     for s:i in range(9, 2, -1)
 "       call setreg(s:i, getreg(s:i-1))
 "     endfor
@@ -1016,17 +1016,17 @@ if neobundle#tap('neocomplete.vim')
   if neobundle#tap('neosnippet')
     " neocompleteとneosnippetを良い感じに使うためのキー設定
     " http://kazuph.hateblo.jp/entry/2013/01/19/193745
-    imap <expr> <TAB> pumvisible() ? '\<C-n>' :
-      \ neosnippet#jumpable() ? '\<Plug>(neosnippet_expand_or_jump)' : '\<TAB>'
+    imap <expr> <TAB> pumvisible() ? "\<C-n>" :
+      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
     smap <expr> <TAB>
-      \ neosnippet#jumpable() ? '\<Plug>(neosnippet_expand_or_jump)' : '\<TAB>'
-    inoremap <expr> <S-TAB> pumvisible() ? '\<C-p>' : '\<S-TAB>'
+      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
 
   else
-    inoremap <expr>   <TAB> pumvisible() ? '\<C-n>' :   '\<TAB>'
-    inoremap <expr> <S-TAB> pumvisible() ? '\<C-p>' : '\<S-TAB>'
+    inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
+    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
 
   endif
 
@@ -1343,7 +1343,7 @@ endif " }}}
 if neobundle#tap('vim-ambicmd')
 
   " 下手にマッピングするよりもambicmdで補完した方が捗る
-  cnoremap <expr> <Space> ambicmd#expand('\<Space>')
+  cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 
 endif " }}}
 
@@ -1382,7 +1382,7 @@ if neobundle#tap('vim-brightest')
   " let g:brightest#highlight = {
   "   \   'group'    : 'ErrorMsg',
   "   \   'priority' : -1,
-  "   \   'format'   : '\<%s\>',
+  "   \   'format'   : "\<%s\>",
   "   \ }
 
   " <cword>を含め、<cword>と同じ単語をアンダーラインで強調したい場合
@@ -1564,7 +1564,7 @@ if neobundle#tap('vim-smartchr')
 
   " " if文直後の(は自動で間に空白を入れる
   " " -> 時々空白を入れたくない時があるので、とりあえずコメントアウト
-  " inoremap <expr> ( search('\<\if\%#', 'bcn') ? ' (' : '('
+  " inoremap <expr> ( search("\<\if\%#", 'bcn') ? ' (' : '('
 
   " ruby / eruby の時だけ設定
   autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
@@ -1831,7 +1831,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyReadonly()
-    return &ft !~? 'help\|vimfiler\' && &readonly ? '\u2B64' : ''
+    return &ft !~? 'help\|vimfiler\' && &readonly ? "\u2B64" : ''
   endfunction
 
   function! MyFilename()
