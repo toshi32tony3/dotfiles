@@ -450,18 +450,20 @@ nnoremap <silent> <F12> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
-autocmd MyAutoCmd VimLeavePre * call s:save_window()
-function! s:save_window()
-  let s:options = [
-    \ 'set columns=' . &columns,
-    \ 'set lines='   . &lines,
-    \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
-    \ ]
-  call writefile(s:options, g:save_winpos_file)
-endfunction
-if filereadable(g:save_winpos_file)
-  execute 'source' g:save_winpos_file
+if isdirectory('~/vimfiles/winpos')
+  let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
+  autocmd MyAutoCmd VimLeavePre * call s:save_window()
+  function! s:save_window()
+    let s:options = [
+      \ 'set columns=' . &columns,
+      \ 'set lines='   . &lines,
+      \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
+      \ ]
+    call writefile(s:options, g:save_winpos_file)
+  endfunction
+  if filereadable(g:save_winpos_file)
+    execute 'source' g:save_winpos_file
+  endif
 endif
 
 " The end of 表示 }}}
@@ -507,20 +509,6 @@ set fileencoding=
 " ファイル読み込み時の変換候補
 " -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
 set fileencodings=utf-8,cp932,euc-jp
-
-" " 文字コード判別はしばらくKaoriya Vimに任せてみる
-" " -> Windows(utf-8, sjis), Unix(euc-jp)意識せず両方使いたい
-" if !has('win64')
-"   " 以下のファイルの時は文字コードをsjisに設定
-"   autocmd MyAutoCmd FileType c        set fileencoding=sjis
-"   autocmd MyAutoCmd FileType cpp      set fileencoding=sjis
-"   autocmd MyAutoCmd FileType make     set fileencoding=sjis
-"   autocmd MyAutoCmd FileType sh       set fileencoding=sjis
-"   autocmd MyAutoCmd FileType cfg      set fileencoding=sjis
-"   autocmd MyAutoCmd FileType awk      set fileencoding=sjis
-"   autocmd MyAutoCmd FileType dosbatch set fileencoding=sjis
-"   autocmd MyAutoCmd FileType vb       set fileencoding=sjis
-" endif
 
 " 文字コードを指定してファイルを開き直す
 nnoremap <Leader>enc :<C-u>e ++enc=
@@ -611,25 +599,6 @@ function! s:CopyCmdOutput(cmd)
   redir END
 endfunction
 command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
-
-" " 1行以内の編集でも quote1 ～ quote9 に保存
-" " http://sgur.tumblr.com/post/63476292878/vim
-" " -> 無いと不便かよくわからないので、一旦コメントアウト
-" function! s:update_numbered_registers()
-"   let reg = getreg('"')
-"   if len(split(reg, "\n")) == 1 && reg != getreg(1)
-"     for s:i in range(9, 2, -1)
-"       call setreg(s:i, getreg(s:i-1))
-"     endfor
-"     call setreg(1, reg)
-"   endif
-" endfunction
-"
-" autocmd MyAutoCmd TextChanged * call s:update_numbered_registers()
-
-" <C-@>  : 直前に挿入したテキストをもう一度挿入し、ノーマルモードに戻る
-" <C-g>u : アンドゥ単位を区切る
-inoremap <C-@> <C-g>u<C-@>
 
 " The end of 編集 }}}
 "-----------------------------------------------------------------------------
@@ -954,6 +923,13 @@ nnoremap q:   <Nop>
 nnoremap <F6> <Esc>q/
 nnoremap q/   <Nop>
 nnoremap q?   <Nop>
+
+" <C-@>  : 直前に挿入したテキストをもう一度挿入し、ノーマルモードに戻る
+" <C-g>u : アンドゥ単位を区切る
+" -> 割りと暴発する&あまり用途が見当たらないので、<Esc>に置き替え
+" inoremap <C-@> <C-g>u<C-@>
+inoremap <C-@> <Esc>
+noremap  <C-@> <Esc>
 
 " The end of 誤爆防止関係 }}}
 "-----------------------------------------------------------------------------
@@ -1351,7 +1327,7 @@ endif " }}}
 " vim力を測る(vim-scouter) {{{
 if neobundle#tap('vim-scouter')
 
-  nnoremap <leader>sc :<c-u>scouter ~\dotfiles\.vimrc<cr>
+  nnoremap <leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
 
 endif " }}}
 
