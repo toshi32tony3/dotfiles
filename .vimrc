@@ -1,7 +1,4 @@
 " .vimrc for 香り屋版GVim
-" TODO: YCM/UltiSnips関連のコメントを削除する
-"         -> neocomplete & eskkのセットに一本化するため
-"         -> 英語を読めずにWindows環境でYCMをまともに使える気がしない
 " TODO: 趣味プラグインリストの棚卸し
 "         -> 多分使わないでしょなプラグインがいっぱい
 
@@ -64,42 +61,6 @@ NeoBundleLazy 'tacroe/unite-mark',
   \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
 NeoBundleLazy 'Shougo/unite-outline',
   \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
-
-" NeoBundle 'Valloric/YouCompleteMe'
-" NeoBundle 'SirVer/ultisnips'
-
-" === Windows 64bit YCMを頑張ってbuildする方法 === {{{
-" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う
-"    https://github.com/Valloric/YouCompleteMe/wiki/Windows-Installation-Guide
-"    (手順13.は不要。手順に従ってコピーすると、それ古いから。と怒られる)
-" 1. python-2.7.8.amd64.msiを落としてくる。pythonを入れる
-" 2. libpython27.aを落としてくる。(手順中にリンクが貼ってある)
-" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる
-" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム
-" 5. 手順に従ってmakeすると、エラーが出る
-"    (Boostの関数tss_cleanup_implemented()が多重定義)
-"    YouCompleteMe\third_party\ycmd\cpp\BoostParts\libs\thread\src\win32\
-"    tss_dll.cppの最終行付近のtss_cleanup_implemented()あたりをコメントアウト
-" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず
-" ================================================ }}}
-
-" === Windows 32bit YCMを頑張ってbuildする方法 === {{{
-" X. 基本は下記URLのInstructions for 64-bit using MinGW64 (clang)に従う
-"    https://github.com/Valloric/YouCompleteMe/wiki/Windows-Installation-Guide
-"    (手順13.は不要。手順に従ってコピーすると、それ古いから。と怒られる)
-"    -> MinGW32の手順が無いので、64bitの手順をいい感じに読み替える
-"       こちらでは"コンパイルエラーが起きないので、ファイル差し替えは不要"
-" 1. python-2.7.8.msiを落としてくる。pythonを入れる
-" 2. 手順1.でlibpython27.aがついてくるので何もしなくてOK。手順3に進む
-" 3. cmake-3.0.0-win32-x86.exeを落としてくる。cmakeを入れる
-" 4. llvm-3.4-mingw-w64-4.8.1-x86-posix-sjljを落として解凍、C:\LLVMにリネーム
-" 5. 手順に従ってmakeすると、エラーが出ないので何もしなくてOK。手順6に進む
-" 6. make ycm_support_libsが成功したらYCMが使えるようになってるはず
-"
-" Y. YCMのmake完了後、GVim起動時にランタイムエラーが出る
-"    -> 環境変数からCMakeへのPathを消す。msvcrXXX.dllの異なるバージョンへPathが
-"       通っているとエラーになるらしい。Kaoriya Vimだけ残し、他はすべて消す
-" ================================================ }}}
 
 NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun',
@@ -1288,89 +1249,6 @@ if neobundle#tap('unite-mark')
   " グローバルマークに対しても有効にする
   let g:unite_source_mark_marks =
     \ "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-endif " }}}
-
-" 入力補完(YouCompleteMe) {{{
-if neobundle#tap('YouCompleteMe')
-
-  let g:ycm_min_num_of_chars_for_completion = 2
-
-  " コメント中でも補完をかけようとすると、しばしばC++ランタイムエラーが出る？
-  " let g:ycm_complete_in_comments = 1
-
-  " Exuberant Ctags formatにのみ対応。--fields=+lを付けてタグ生成すること
-  let g:ycm_collect_identifiers_from_tags_files = 1
-
-  let g:ycm_global_ycm_extra_conf = '~/dotfiles/.ycm_extra_conf.py'
-  let g:ycm_max_diagnostics_to_display = 20
-
-  " YCMでultisnipsを使うことを明示(下記変数はデフォルトで1)
-  " ちなみにYCMはneosnippetに対応しないと明言されてる
-  " https://github.com/Valloric/YouCompleteMe/issues/528
-  let g:ycm_use_ultisnips_completer = 1
-
-  " 'GoTo*'コマンドの挙動は以下のどれかから選択
-  " [ 'same-buffer', 'horizontal-split', 'vertical-split', 'new-tab' ]
-  let g:ycm_goto_buffer_command = 'same-buffer'
-
-endif " }}}
-
-" 入力補助(ultisnips) {{{
-if neobundle#tap('ultisnips')
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'YouCompleteMe' ]
-    \   }
-    \ })
-
-  " YCMとultisnipsを組み合わせる時に<TAB>の使い方がコンフリクトするらしい
-  " -> YCM的には「いい感じに設定してね」という風に読めたのでググってコピペ
-  " http://stackoverflow.com/questions/14896327/ultisnips-and-youcompleteme
-  let g:UltiSnipsExpandTrigger = '<TAB>'
-  let g:UltiSnipsJumpForwardTrigger = '<TAB>'
-  let g:UltiSnipsJumpBackwardTrigger = '<S-TAB>'
-  let g:UltiSnipsListSnippets = '<C-e>'
-
-  " snippetの作成先を以下で指定
-  let g:UltiSnipsSnippetsDir = '~/vimfiles/UltiSnips'
-
-  " snippetの居場所を以下で指定。runtimepathのサブディレクトリを検索する
-  let g:UltiSnipsSnippetDirectories=[ 'UltiSnips' ]
-
-  function! g:UltiSnips_Complete()
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res == 0
-      if pumvisible()
-        return "\<C-n>"
-      else
-        call UltiSnips#JumpForwards()
-        if g:ulti_jump_forwards_res == 0
-          return "\<TAB>"
-        endif
-      endif
-    endif
-    return ""
-  endfunction
-
-  autocmd MyAutoCmd BufEnter * execute "inoremap <silent> "
-    \ . g:UltiSnipsExpandTrigger . " <C-r>=g:UltiSnips_Complete()<CR>"
-
-  " this mapping Enter key to <C-y> to chose the current highlight item
-  " and close the selection list, same as other IDEs.
-  " CONFLICT with some plugins like tpope/Endwise
-  inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-
-  function! g:UltiSnips_Reverse()
-    call UltiSnips#JumpBackwards()
-    if g:ulti_jump_backwards_res == 0
-      return "\<C-p>"
-    endif
-    return ""
-  endfunction
-
-  autocmd MyAutoCmd BufEnter * execute "inoremap <silent> "
-    \ . g:UltiSnipsJumpBackwardTrigger . " <C-r>=g:UltiSnips_Reverse()<CR>"
 
 endif " }}}
 
