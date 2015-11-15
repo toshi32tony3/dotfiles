@@ -734,7 +734,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     set tags=
 
     for l:item in g:target_dir_ctags_list
-      let $SET_TAGS= $CTAGS_DIR. '\' . g:target_dir_ctags_name_list[l:item]
+      let $SET_TAGS = $CTAGS_DIR. '\' . g:target_dir_ctags_name_list[l:item]
       set tags+=$SET_TAGS
     endfor
 
