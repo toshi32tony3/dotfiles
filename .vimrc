@@ -73,7 +73,7 @@ NeoBundle 'jceb/vim-hier'
 NeoBundle 'osyo-manga/vim-brightest'
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
-NeoBundle 'scrooloose/syntastic'
+" NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundleLazy 'mattn/benchvimrc-vim',
@@ -174,8 +174,7 @@ NeoBundle 'tyru/eskk.vim'
 NeoBundleLazy 'tyru/restart.vim',
   \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
 
-NeoBundleLazy 'thinca/vim-prettyprint',
-  \ { 'autoload' : { 'commands' : ['PP'] } }
+NeoBundle 'thinca/vim-prettyprint'
 
 call neobundle#end()
 
