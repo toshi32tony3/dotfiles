@@ -1077,7 +1077,8 @@ if neobundle#tap('unite.vim')
   if executable('pt')
     set grepprg=pt
     let g:unite_source_grep_command = 'pt'
-    let g:unite_source_grep_default_opts = '-w --nogroup --nocolor --smart-case'
+    let g:unite_source_grep_default_opts =
+      \   '--hidden --nogroup --nocolor --smart-case'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding = 'utf-8'
   endif
