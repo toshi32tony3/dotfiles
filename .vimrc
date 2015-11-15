@@ -1327,7 +1327,7 @@ endif " }}}
 " vim力を測る(vim-scouter) {{{
 if neobundle#tap('vim-scouter')
 
-  nnoremap <leader>sc :<c-u>scouter ~\dotfiles\.vimrc<cr>
+  nnoremap <leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
 
 endif " }}}
 
