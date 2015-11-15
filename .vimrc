@@ -2130,7 +2130,7 @@ if neobundle#tap('restart.vim')
     \     = 'blank,curdir,folds,help,localoptions,tabpages'
     \ | Restart
 
-endif
+endif " }}}
 
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
