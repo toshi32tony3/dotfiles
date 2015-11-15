@@ -498,8 +498,8 @@ set hlsearch   " 検索マッチテキストをハイライト
 " \     let @/ = get(b:, 'vimrc_pattern', @/)
 " \   | let &l:hlsearch = get(b:, 'vimrc_hlsearch', &l:hlsearch)
 
-" grep結果が0件の場合、Quickfixを開かない
-autocmd MyAutoCmd QuickfixCmdPost grep if len(getqflist()) != 0 | copen | endif
+" vimgrep/grep後にQuickfixを開く。ただし、候補が0件の場合、Quickfixを開かない
+autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
 
 " The end of 文字列検索 }}}
 "-----------------------------------------------------------------------------
