@@ -163,8 +163,6 @@ NeoBundle 'tmhedberg/matchit'
 NeoBundleLazy 'basyura/J6uil.vim',
   \ { 'autoload' : { 'commands' : ['J6uil'] } }
 
-" NeoBundleLazy 'AndrewRadev/linediff.vim',
-"   \ { 'autoload' : { 'commands' : ['Linediff'] } }
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
@@ -606,14 +604,6 @@ command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
 "-----------------------------------------------------------------------------
 " 操作の簡単化 {{{
 
-" <C-[>はVim内部で<Esc>として扱われるので注意(<Esc>のマッピングが適用)
-" <Esc>は遠いし、<C-[>は押しにくいイメージ、<C-c>はInsertLeaveが発生しない
-" jjは一時的な入力が発生して精神衛生上よろしくない。そこで<C-j>を使う
-" -> eskk.vimで<C-j>を使うみたいなので、試すときは注意
-" inoremap <C-j> <Esc>
-" -> eskk.vimを使う前に<C-j>を止める
-inoremap <C-[> <Esc>
-
 " /*******************************************************************/
 " /* IMEに関して、以下のように設定しておくと良い感じになる           */
 " /* -> IME OFFしたくない時は<C-[>を使う                             */
@@ -706,13 +696,13 @@ command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 " tags, path {{{
 
 " タグジャンプ時に候補が複数あった場合リスト表示
-" -> リスト表示したい時だけg付ければ良い気がしてきた
+" -> リスト表示したい時だけgを付ければ良い
 " nnoremap <C-]> g<C-]>zz
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(ident)
   tablast | tabnew
-  " ctagsファイルを複数生成して優先順位を付けているなら'tag'にする
+  " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:ident
 
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
