@@ -73,7 +73,7 @@ NeoBundle 'jceb/vim-hier'
 NeoBundle 'osyo-manga/vim-brightest'
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
-NeoBundle 'scrooloose/syntastic'
+" NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundleLazy 'mattn/benchvimrc-vim',
@@ -163,8 +163,6 @@ NeoBundle 'tmhedberg/matchit'
 NeoBundleLazy 'basyura/J6uil.vim',
   \ { 'autoload' : { 'commands' : ['J6uil'] } }
 
-" NeoBundleLazy 'AndrewRadev/linediff.vim',
-"   \ { 'autoload' : { 'commands' : ['Linediff'] } }
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
@@ -173,6 +171,8 @@ NeoBundle 'tyru/eskk.vim'
 
 NeoBundleLazy 'tyru/restart.vim',
   \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
+
+NeoBundle 'thinca/vim-prettyprint'
 
 call neobundle#end()
 
@@ -450,7 +450,7 @@ nnoremap <silent> <F12> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-if isdirectory('~/vimfiles/winpos')
+if isdirectory(expand('~/vimfiles/winpos'))
   let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
   autocmd MyAutoCmd VimLeavePre * call s:save_window()
   function! s:save_window()
@@ -604,14 +604,6 @@ command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
 "-----------------------------------------------------------------------------
 " 操作の簡単化 {{{
 
-" <C-[>はVim内部で<Esc>として扱われるので注意(<Esc>のマッピングが適用)
-" <Esc>は遠いし、<C-[>は押しにくいイメージ、<C-c>はInsertLeaveが発生しない
-" jjは一時的な入力が発生して精神衛生上よろしくない。そこで<C-j>を使う
-" -> eskk.vimで<C-j>を使うみたいなので、試すときは注意
-" inoremap <C-j> <Esc>
-" -> eskk.vimを使う前に<C-j>を止める
-inoremap <C-[> <Esc>
-
 " /*******************************************************************/
 " /* IMEに関して、以下のように設定しておくと良い感じになる           */
 " /* -> IME OFFしたくない時は<C-[>を使う                             */
@@ -704,13 +696,13 @@ command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 " tags, path {{{
 
 " タグジャンプ時に候補が複数あった場合リスト表示
-" -> リスト表示したい時だけg付ければ良い気がしてきた
+" -> リスト表示したい時だけgを付ければ良い
 " nnoremap <C-]> g<C-]>zz
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(ident)
   tablast | tabnew
-  " ctagsファイルを複数生成して優先順位を付けているなら'tag'にする
+  " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:ident
 
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
@@ -734,7 +726,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     set tags=
 
     for l:item in g:target_dir_ctags_list
-      let $SET_TAGS= $CTAGS_DIR. '\' . g:target_dir_ctags_name_list[l:item]
+      let $SET_TAGS = $CTAGS_DIR. '\' . g:target_dir_ctags_name_list[l:item]
       set tags+=$SET_TAGS
     endfor
 
@@ -779,10 +771,21 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
   endfunction
 
+  function! s:SetIncludes()
+    let g:syntastic_c_include_dirs = []
+    for l:item in g:c_include_dirs
+      call add(g:syntastic_c_include_dirs, $TARGET_DIR. '\' . l:item)
+    endfor
+  endfunction
+
   call s:SetSrcDir()
   call s:SetTags()
   call s:SetPathList()
   call s:SetCDPathList()
+
+  if neobundle#tap('syntastic')
+    call s:SetIncludes()
+  endif
 
   " ソースコードをスイッチ
   function! s:SwitchSource()
@@ -795,6 +798,10 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
+
+    if neobundle#tap('syntastic')
+      call s:SetIncludes()
+    endif
 
     " ソースコード切り替え後、バージョン名を出力
     echo 'change source to: ' . $TARGET_VER
@@ -1422,6 +1429,9 @@ if neobundle#tap('syntastic')
   " 必ず手動チェックとする
   let g:syntastic_check_on_wq = 0
   let g:syntastic_mode_map = { 'mode': 'passive' }
+
+  " エラーにジャンプ、警告は無視
+  let g:syntastic_auto_jump = 3
 
 endif " }}}
 
