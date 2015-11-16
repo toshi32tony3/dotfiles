@@ -452,7 +452,7 @@ nnoremap <silent> <F12> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-if isdirectory('~/vimfiles/winpos')
+if isdirectory(expand('~/vimfiles/winpos'))
   let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
   autocmd MyAutoCmd VimLeavePre * call s:save_window()
   function! s:save_window()
