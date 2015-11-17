@@ -1794,9 +1794,13 @@ if neobundle#tap('tagbar')
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
   function! s:ClipCurrentTag(data)
+    " cの場合、末尾の()を削除する
+    let l:funcName = &ft == 'c' ? a:data[0 : (stridx(a:data, '(') - 1)] : a:data
+
     " 選択範囲レジスタ(*)を使う
-    let @*=a:data
-    echo 'clipped: ' . a:data
+    let @*=l:funcName
+
+    echo 'clipped: ' . l:funcName
   endfunction
   command! -nargs=0 ClipCurrentTag
     \ call s:ClipCurrentTag(tagbar#currenttag('%s', ''))
