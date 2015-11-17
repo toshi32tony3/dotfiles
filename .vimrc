@@ -1806,10 +1806,13 @@ if neobundle#tap('tagbar')
     \ call s:ClipCurrentTag(tagbar#currenttag('%s', ''))
 
   function! s:PrintCurrentTag(data)
+    " cの場合、末尾の()を削除する
+    let l:funcName = &ft == 'c' ? a:data[0 : (stridx(a:data, '(') - 1)] : a:data
+
     " 無名レジスタ(")を使う
-    let @"=a:data
+    let @"=l:funcName
     normal! ""P
-    echo 'print current tag: ' . a:data
+    echo 'print current tag: ' . l:funcName
   endfunction
   command! -nargs=0 PrintCurrentTag
     \ call s:PrintCurrentTag(tagbar#currenttag('%s', ''))
