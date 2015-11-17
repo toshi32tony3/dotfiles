@@ -1907,6 +1907,7 @@ if neobundle#tap('lightline.vim')
       return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
     else
       let l:_ = tagbar#currenttag('%s', '')
+      let l:_ = &ft == 'c' ? l:_[0 : (stridx(l:_, '(') - 1)] : l:_
       return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
     endif
   endfunction
