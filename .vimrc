@@ -2015,6 +2015,10 @@ if neobundle#tap('clever-f.vim')
 
   " let g:clever_f_chars_match_any_signs = ';'
 
+  " Cの関数名にジャンプ
+  nmap [t [[F(B
+  nmap ]t ]]F(B
+
 endif " }}}
 
 " コメントアウト/コメントアウト解除を簡単に(caw.vim) {{{
