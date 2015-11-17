@@ -1794,18 +1794,25 @@ if neobundle#tap('tagbar')
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
   function! s:ClipCurrentTag(data)
+    " cの場合、末尾の()を削除する
+    let l:funcName = &ft == 'c' ? a:data[0 : (stridx(a:data, '(') - 1)] : a:data
+
     " 選択範囲レジスタ(*)を使う
-    let @*=a:data
-    echo 'clipped: ' . a:data
+    let @*=l:funcName
+
+    echo 'clipped: ' . l:funcName
   endfunction
   command! -nargs=0 ClipCurrentTag
     \ call s:ClipCurrentTag(tagbar#currenttag('%s', ''))
 
   function! s:PrintCurrentTag(data)
+    " cの場合、末尾の()を削除する
+    let l:funcName = &ft == 'c' ? a:data[0 : (stridx(a:data, '(') - 1)] : a:data
+
     " 無名レジスタ(")を使う
-    let @"=a:data
+    let @"=l:funcName
     normal! ""P
-    echo 'print current tag: ' . a:data
+    echo 'print current tag: ' . l:funcName
   endfunction
   command! -nargs=0 PrintCurrentTag
     \ call s:PrintCurrentTag(tagbar#currenttag('%s', ''))
@@ -1900,6 +1907,7 @@ if neobundle#tap('lightline.vim')
       return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
     else
       let l:_ = tagbar#currenttag('%s', '')
+      let l:_ = &ft == 'c' ? l:_[0 : (stridx(l:_, '(') - 1)] : l:_
       return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
     endif
   endfunction
@@ -2006,6 +2014,10 @@ if neobundle#tap('clever-f.vim')
   " let g:clever_f_fix_key_direction = 1
 
   " let g:clever_f_chars_match_any_signs = ';'
+
+  " Cの関数名にジャンプ
+  nmap [t [[F(B
+  nmap ]t ]]F(B
 
 endif " }}}
 
