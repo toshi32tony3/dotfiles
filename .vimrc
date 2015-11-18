@@ -1401,12 +1401,6 @@ endif " }}}
 if neobundle#tap('vim-watchdogs')
   " Caution: 裏で実行した結果を反映しているのか、pause系の処理があると固まる
 
-  call neobundle#config({
-    \   'autoload' : {
-    \     'on_source' : [ 'vim-quickrun' ]
-    \   }
-    \ })
-
   let g:watchdogs_check_BufWritePost_enable = 1
   let g:watchdogs_check_BufWritePost_enables = {
     \   'c'    : 1,
@@ -1500,13 +1494,6 @@ if neobundle#tap('open-browser.vim')
 
   nmap <Leader>L <Plug>(openbrowser-smart-search)
   vmap <Leader>L <Plug>(openbrowser-smart-search)
-
-endif " }}}
-
-" コマンド名を置き換える(vim-altercmd) {{{
-if neobundle#tap('vim-altercmd')
-
-  call altercmd#load()
 
 endif " }}}
 
@@ -2080,11 +2067,6 @@ endif " }}}
 if neobundle#tap('J6uil.vim')
 
   let g:J6uil_config_dir = '~/.cache/J6uil'
-
-endif " }}}
-
-" Visualモードで選択した2つの領域をDiffする(linediff.vim) {{{
-if neobundle#tap('linediff.vim')
 
 endif " }}}
 
