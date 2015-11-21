@@ -51,8 +51,7 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
 NeoBundleLazy 'Shougo/junkfile.vim',
-      \ { 'depends'
-      'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
+  \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
