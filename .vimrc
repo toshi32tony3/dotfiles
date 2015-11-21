@@ -98,8 +98,7 @@ NeoBundle 'tyru/open-browser.vim'
 
 NeoBundle 'deris/vim-visualinc'
 
-NeoBundleLazy 'deris/vim-rengbang',
-  \ { 'autoload' : { 'commands' : ['RengBang'] } }
+NeoBundleLazy 'deris/vim-rengbang'
 NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'kana/vim-operator-user'
@@ -1112,6 +1111,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_ml = ''
   let g:u_opt_mm = g:u_nins                       . g:u_hopt
   let g:u_opt_mp = ''
+  let g:u_opt_nl = ''
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
@@ -1138,6 +1138,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>ml ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
   nnoremap <expr> <Leader>mm ':<C-u>Unite mark'             . g:u_opt_mm . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
+  nnoremap <expr> <Leader>nl ':<C-u>Unite neobundle/lazy'   . g:u_opt_nl . '<CR>'
   nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu
   nnoremap <expr> <Leader>ol ':<C-u>Unite outline'          . g:u_opt_ol . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>Unite output'           . g:u_opt_op . '<CR>'
@@ -1629,8 +1630,8 @@ if neobundle#tap('incsearch.vim')
 
   if neobundle#tap('vim-anzu')
 
-    map n  <Plug>(incsearch-nohl-n)<Plug>(anzu-n-with-echo)
-    map N  <Plug>(incsearch-nohl-N)<Plug>(anzu-N-with-echo)
+    map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
+    map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
 
   else
 
