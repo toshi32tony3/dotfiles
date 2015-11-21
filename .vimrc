@@ -164,6 +164,8 @@ NeoBundleLazy 'basyura/J6uil.vim',
 
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
+NeoBundleLazy 'lambdalisue/vim-gita',
+  \ { 'autoload' : { 'commands' : ['Gita'] } }
 
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
