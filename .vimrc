@@ -96,11 +96,9 @@ NeoBundleLazy 'kurocode25/mdforvim',
 
 NeoBundle 'tyru/open-browser.vim'
 
-" 最新Vimでは標準搭載になったぽい？そのうち不要になる？
 NeoBundle 'deris/vim-visualinc'
 
-NeoBundleLazy 'deris/vim-rengbang',
-  \ { 'autoload' : { 'commands' : ['RengBang'] } }
+NeoBundleLazy 'deris/vim-rengbang'
 NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'kana/vim-operator-user'
@@ -163,8 +161,16 @@ NeoBundle 'tmhedberg/matchit'
 NeoBundleLazy 'basyura/J6uil.vim',
   \ { 'autoload' : { 'commands' : ['J6uil'] } }
 
+NeoBundleLazy 'basyura/twibill.vim'
+NeoBundleLazy 'basyura/TweetVim',
+  \ { 'depends'  : 'basyura/twibill.vim',
+  \   'autoload' : { 'commands' : ['TweetVimHomeTimeline', 'TweetVimSearch'] } }
+NeoBundleLazy 'basyura/TweetVim',
+
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
+NeoBundleLazy 'lambdalisue/vim-gita',
+  \ { 'autoload' : { 'commands' : ['Gita'] } }
 
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
@@ -544,6 +550,11 @@ set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 " autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
+" コロンを打った時のインデントを防ぐ
+" https://gist.github.com/myokota/8b6040da5a3d8b029be0
+autocmd MyAutoCmd BufEnter * setlocal indk-=:
+autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
+
 " /**************************************************************************/
 " /* formatoptions (Vim default: 'tcq', Vi default: 'vt')                   */
 " /* t : Auto-wrap text using textwidth                                     */
@@ -681,7 +692,7 @@ nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 function! s:VimDifInNewTab(...)
   if a:0 == 1
     tabedit %:p
-    execute 'rightbelow vertical diffsplit ' .a:1
+    execute 'rightbelow vertical diffsplit ' . a:1
   else
     execute 'tabedit ' a:1
     for l:file in a:000[1 :]
@@ -1101,6 +1112,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_ml = ''
   let g:u_opt_mm = g:u_nins                       . g:u_hopt
   let g:u_opt_mp = ''
+  let g:u_opt_nl = ''
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
@@ -1127,6 +1139,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>ml ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
   nnoremap <expr> <Leader>mm ':<C-u>Unite mark'             . g:u_opt_mm . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
+  nnoremap <expr> <Leader>nl ':<C-u>Unite neobundle/lazy'   . g:u_opt_nl . '<CR>'
   nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu
   nnoremap <expr> <Leader>ol ':<C-u>Unite outline'          . g:u_opt_ol . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>Unite output'           . g:u_opt_op . '<CR>'
@@ -1136,19 +1149,15 @@ if neobundle#tap('unite.vim')
   " call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
   " call unite#custom_default_action('directory_mru',             'vimfiler')
 
-  function! s:unite_settings()
+  function! s:UniteSettings()
     imap     <buffer> <Esc>      <Plug>(unite_insert_leave)
     nmap     <buffer> <Esc>      <Plug>(unite_exit)
-
-    " Disable dicwin.vim
-    nnoremap <buffer> <C-k>c     <Nop>
-    nnoremap <buffer> <C-k><C-k> <Nop>
 
     " Disable yankround.vim
     nnoremap <buffer> <C-n>      <Nop>
     nnoremap <buffer> <C-p>      <Nop>
   endfunction
-  autocmd MyAutoCmd FileType unite call s:unite_settings()
+  autocmd MyAutoCmd FileType unite call s:UniteSettings()
 
 endif " }}}
 
@@ -1183,23 +1192,25 @@ if neobundle#tap('vimfiler.vim')
   nnoremap <expr> <Leader>vf ':<C-u>VimFilerTab<Space>' . expand('%:h') . '<CR>'
 
   " vimfilerのマッピングを一部変更
-  function! s:vimfiler_settings()
+  function! s:VimfilerSettings()
     " #をLeader専用にする
     " default : nmap     <buffer> #  <Plug>(vimfiler_mark_similar_lines)
                 nnoremap <buffer> #  <Nop>
                 nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
     if neobundle#tap('unite.vim')
+      " Unite vimgrepを使う
+      " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
+                  nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
+                    \                                       . g:u_opt_gg . '<CR>'
 
-    " Unite vimgrepを使う
-    " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
-                nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
-                  \                                         . g:u_opt_gg . '<CR>'
-
+      " Disable yankround.vim
+      nnoremap <buffer> <C-n>      <Nop>
+      nnoremap <buffer> <C-p>      <Nop>
     endif
 
   endfunction
-  autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
+  autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
 endif " }}}
 
@@ -1620,8 +1631,8 @@ if neobundle#tap('incsearch.vim')
 
   if neobundle#tap('vim-anzu')
 
-    map n  <Plug>(incsearch-nohl-n)<Plug>(anzu-n-with-echo)
-    map N  <Plug>(incsearch-nohl-N)<Plug>(anzu-N-with-echo)
+    map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
+    map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
 
   else
 
@@ -1744,11 +1755,16 @@ endif " }}}
 " VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
 if neobundle#tap('agit.vim')
 
-  function! s:my_agit_setting()
+  function! s:AgitSettings()
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
     nmap <buffer> Rv <Plug>(agit-git-revert)
+
+    " Disable yankround.vim
+    nnoremap <buffer> <C-n>      <Nop>
+    nnoremap <buffer> <C-p>      <Nop>
+
   endfunction
-  autocmd MyAutoCmd FileType agit call s:my_agit_setting()
+  autocmd MyAutoCmd FileType agit call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
 
 endif " }}}
@@ -1828,6 +1844,9 @@ if neobundle#tap('lightline.vim')
     \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
     \ }
 
+    " for using git properly
+    " \               [ 'skk-mode', 'gita-branch', 'filename', 'currenttag' ], ],
+
   let g:lightline.component_function = {
     \   'modified'     : 'MyModified',
     \   'readonly'     : 'MyReadonly',
@@ -1840,6 +1859,9 @@ if neobundle#tap('lightline.vim')
     \   'fugitive'     : 'MyFugitive',
     \   'currenttag'   : 'MyCurrentTag',
     \ }
+
+    " for using git properly
+    " \   'gita-branch'  : 'MyGitaBranch',
 
   function! MyModified()
     return &ft =~ 'help\|vimfiler\'   ? ''  :
@@ -1904,6 +1926,20 @@ if neobundle#tap('lightline.vim')
       if &ft != 'vimfiler'
         let l:_ = fugitive#head()
         return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
+      endif
+    catch
+    endtry
+      return ''
+    else
+      return ''
+    endif
+  endfunction
+
+  function! MyGitaBranch()
+    try
+      if &ft != 'vimfiler'
+        let l:_ = gita#statusline#preset('branch_fancy')
+        return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
       endif
     catch
     endtry
@@ -2066,7 +2102,22 @@ endif " }}}
 " VimからLingrを見る(J6uil.vim) {{{
 if neobundle#tap('J6uil.vim')
 
-  let g:J6uil_config_dir = expand('~/.cache/J6uil')
+  let g:J6uil_config_dir = '~/.cache/J6uil'
+
+endif " }}}
+
+" VimからTwitterを見る(TweetVim) {{{
+if neobundle#tap('TweetVim')
+
+  let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
+
+  nmap <C-s> :<C-u>TweetVimSearch<Space>
+
+  function! s:TweetVimSettings()
+    nnoremap <buffer> <C-CR>     :<C-u>TweetVimSay<CR>
+    nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
+  endfunction
+  autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
 
 endif " }}}
 
