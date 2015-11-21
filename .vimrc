@@ -51,7 +51,8 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
 NeoBundleLazy 'Shougo/junkfile.vim',
-  \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
+      \ { 'depends'
+      'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
@@ -552,6 +553,7 @@ autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
 " コロンを打った時のインデントを防ぐ
 " https://gist.github.com/myokota/8b6040da5a3d8b029be0
+autocmd MyAutoCmd BufEnter * setlocal indk-=:
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
 
 " /**************************************************************************/
