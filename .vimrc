@@ -162,6 +162,12 @@ NeoBundle 'tmhedberg/matchit'
 NeoBundleLazy 'basyura/J6uil.vim',
   \ { 'autoload' : { 'commands' : ['J6uil'] } }
 
+NeoBundleLazy 'basyura/twibill.vim'
+NeoBundleLazy 'basyura/TweetVim',
+  \ { 'depends'  : 'basyura/twibill.vim',
+  \   'autoload' : { 'commands' : ['TweetVimHomeTimeLine', 'TweetVimSearch'] } }
+NeoBundleLazy 'basyura/TweetVim',
+
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 NeoBundleLazy 'lambdalisue/vim-gita',
