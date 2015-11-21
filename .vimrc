@@ -100,7 +100,9 @@ NeoBundle 'tyru/open-browser.vim'
 
 NeoBundle 'deris/vim-visualinc'
 
+" Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
 NeoBundleLazy 'deris/vim-rengbang'
+
 NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'kana/vim-operator-user'
@@ -126,6 +128,8 @@ NeoBundle 'haya14busa/vim-asterisk'
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundle 'tpope/vim-fugitive'
+NeoBundleLazy 'lambdalisue/vim-gita',
+  \ { 'autoload' : { 'commands' : ['Gita'] } }
 NeoBundleLazy 'cohama/agit.vim',
   \ { 'autoload' : { 'commands' : ['Agit'] } }
 NeoBundleLazy 'idanarye/vim-merginal',
@@ -167,12 +171,9 @@ NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'basyura/TweetVim',
   \ { 'depends'  : 'basyura/twibill.vim',
   \   'autoload' : { 'commands' : ['TweetVimHomeTimeline', 'TweetVimSearch'] } }
-NeoBundleLazy 'basyura/TweetVim',
 
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
-NeoBundleLazy 'lambdalisue/vim-gita',
-  \ { 'autoload' : { 'commands' : ['Gita'] } }
 
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
