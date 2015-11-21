@@ -543,6 +543,10 @@ set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 " autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
+" コロンを打った時のインデントを防ぐ
+" https://gist.github.com/myokota/8b6040da5a3d8b029be0
+autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
+
 " /**************************************************************************/
 " /* formatoptions (Vim default: 'tcq', Vi default: 'vt')                   */
 " /* t : Auto-wrap text using textwidth                                     */
