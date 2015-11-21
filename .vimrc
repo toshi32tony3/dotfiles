@@ -165,7 +165,7 @@ NeoBundleLazy 'basyura/J6uil.vim',
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'basyura/TweetVim',
   \ { 'depends'  : 'basyura/twibill.vim',
-  \   'autoload' : { 'commands' : ['TweetVimHomeTimeLine', 'TweetVimSearch'] } }
+  \   'autoload' : { 'commands' : ['TweetVimHomeTimeline', 'TweetVimSearch'] } }
 NeoBundleLazy 'basyura/TweetVim',
 
 NeoBundle 'lambdalisue/vim-unified-diff'
