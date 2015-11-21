@@ -1843,6 +1843,9 @@ if neobundle#tap('lightline.vim')
     \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
     \ }
 
+    " for using git properly
+    " \               [ 'skk-mode', 'gita-branch', 'filename', 'currenttag' ], ],
+
   let g:lightline.component_function = {
     \   'modified'     : 'MyModified',
     \   'readonly'     : 'MyReadonly',
@@ -1855,6 +1858,9 @@ if neobundle#tap('lightline.vim')
     \   'fugitive'     : 'MyFugitive',
     \   'currenttag'   : 'MyCurrentTag',
     \ }
+
+    " for using git properly
+    " \   'gita-branch'  : 'MyGitaBranch',
 
   function! MyModified()
     return &ft =~ 'help\|vimfiler\'   ? ''  :
@@ -1919,6 +1925,20 @@ if neobundle#tap('lightline.vim')
       if &ft != 'vimfiler'
         let l:_ = fugitive#head()
         return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
+      endif
+    catch
+    endtry
+      return ''
+    else
+      return ''
+    endif
+  endfunction
+
+  function! MyGitaBranch()
+    try
+      if &ft != 'vimfiler'
+        let l:_ = gita#statusline#preset('branch_fancy')
+        return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
       endif
     catch
     endtry
