@@ -2100,13 +2100,6 @@ if neobundle#tap('TweetVim')
 
 endif " }}}
 
-" Visualモードで選択した2つの領域をDiffする(linediff.vim) {{{
-if neobundle#tap('linediff.vim')
-
-  let g:J6uil_config_dir = expand('~/.cache/J6uil')
-
-endif " }}}
-
 " vimdiffに別のDiffアルゴリズムを適用する(vim-unified-diff) {{{
 if neobundle#tap('vim-unified-diff')
 
