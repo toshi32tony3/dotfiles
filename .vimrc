@@ -1143,10 +1143,6 @@ if neobundle#tap('unite.vim')
     imap     <buffer> <Esc>      <Plug>(unite_insert_leave)
     nmap     <buffer> <Esc>      <Plug>(unite_exit)
 
-    " Disable dicwin.vim
-    nnoremap <buffer> <C-k>c     <Nop>
-    nnoremap <buffer> <C-k><C-k> <Nop>
-
     " Disable yankround.vim
     nnoremap <buffer> <C-n>      <Nop>
     nnoremap <buffer> <C-p>      <Nop>
@@ -1197,10 +1193,6 @@ if neobundle#tap('vimfiler.vim')
       " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
                   nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
                     \                                       . g:u_opt_gg . '<CR>'
-
-      " Disable dicwin.vim
-      nnoremap <buffer> <C-k>c     <Nop>
-      nnoremap <buffer> <C-k><C-k> <Nop>
 
       " Disable yankround.vim
       nnoremap <buffer> <C-n>      <Nop>
@@ -1769,10 +1761,6 @@ if neobundle#tap('agit.vim')
   function! s:AgitSettings()
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
     nmap <buffer> Rv <Plug>(agit-git-revert)
-
-    " Disable dicwin.vim
-    nnoremap <buffer> <C-k>c     <Nop>
-    nnoremap <buffer> <C-k><C-k> <Nop>
 
     " Disable yankround.vim
     nnoremap <buffer> <C-n>      <Nop>
