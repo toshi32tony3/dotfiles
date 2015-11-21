@@ -179,8 +179,7 @@ NeoBundle 'tyru/eskk.vim'
 NeoBundleLazy 'tyru/restart.vim',
   \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
 
-NeoBundleLazy 'thinca/vim-prettyprint'
-  \ { 'autoload' : { 'commands' : ['PP'] } }
+NeoBundle 'thinca/vim-prettyprint'
 
 call neobundle#end()
 
@@ -693,7 +692,7 @@ nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 function! s:VimDifInNewTab(...)
   if a:0 == 1
     tabedit %:p
-    execute 'rightbelow vertical diffsplit ' .a:1
+    execute 'rightbelow vertical diffsplit ' . a:1
   else
     execute 'tabedit ' a:1
     for l:file in a:000[1 :]
@@ -2097,13 +2096,6 @@ if neobundle#tap('TweetVim')
     nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
   endfunction
   autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
-
-endif " }}}
-
-" Visualモードで選択した2つの領域をDiffする(linediff.vim) {{{
-if neobundle#tap('linediff.vim')
-
-  let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
 endif " }}}
 
