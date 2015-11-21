@@ -179,7 +179,8 @@ NeoBundle 'tyru/eskk.vim'
 NeoBundleLazy 'tyru/restart.vim',
   \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
 
-NeoBundle 'thinca/vim-prettyprint'
+NeoBundleLazy 'thinca/vim-prettyprint'
+  \ { 'autoload' : { 'commands' : ['PP'] } }
 
 call neobundle#end()
 
