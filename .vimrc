@@ -1139,7 +1139,7 @@ if neobundle#tap('unite.vim')
   " call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
   " call unite#custom_default_action('directory_mru',             'vimfiler')
 
-  function! s:unite_settings()
+  function! s:UniteSettings()
     imap     <buffer> <Esc>      <Plug>(unite_insert_leave)
     nmap     <buffer> <Esc>      <Plug>(unite_exit)
 
@@ -1151,7 +1151,7 @@ if neobundle#tap('unite.vim')
     nnoremap <buffer> <C-n>      <Nop>
     nnoremap <buffer> <C-p>      <Nop>
   endfunction
-  autocmd MyAutoCmd FileType unite call s:unite_settings()
+  autocmd MyAutoCmd FileType unite call s:UniteSettings()
 
 endif " }}}
 
@@ -1186,23 +1186,29 @@ if neobundle#tap('vimfiler.vim')
   nnoremap <expr> <Leader>vf ':<C-u>VimFilerTab<Space>' . expand('%:h') . '<CR>'
 
   " vimfilerのマッピングを一部変更
-  function! s:vimfiler_settings()
+  function! s:VimfilerSettings()
     " #をLeader専用にする
     " default : nmap     <buffer> #  <Plug>(vimfiler_mark_similar_lines)
                 nnoremap <buffer> #  <Nop>
                 nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
     if neobundle#tap('unite.vim')
+      " Unite vimgrepを使う
+      " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
+                  nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
+                    \                                       . g:u_opt_gg . '<CR>'
 
-    " Unite vimgrepを使う
-    " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
-                nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
-                  \                                         . g:u_opt_gg . '<CR>'
+      " Disable dicwin.vim
+      nnoremap <buffer> <C-k>c     <Nop>
+      nnoremap <buffer> <C-k><C-k> <Nop>
 
+      " Disable yankround.vim
+      nnoremap <buffer> <C-n>      <Nop>
+      nnoremap <buffer> <C-p>      <Nop>
     endif
 
   endfunction
-  autocmd MyAutoCmd FileType vimfiler call s:vimfiler_settings()
+  autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
 endif " }}}
 
@@ -1760,11 +1766,20 @@ endif " }}}
 " VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
 if neobundle#tap('agit.vim')
 
-  function! s:my_agit_setting()
+  function! s:AgitSettings()
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
     nmap <buffer> Rv <Plug>(agit-git-revert)
+
+    " Disable dicwin.vim
+    nnoremap <buffer> <C-k>c     <Nop>
+    nnoremap <buffer> <C-k><C-k> <Nop>
+
+    " Disable yankround.vim
+    nnoremap <buffer> <C-n>      <Nop>
+    nnoremap <buffer> <C-p>      <Nop>
+
   endfunction
-  autocmd MyAutoCmd FileType agit call s:my_agit_setting()
+  autocmd MyAutoCmd FileType agit call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
 
 endif " }}}
@@ -2083,6 +2098,21 @@ endif " }}}
 if neobundle#tap('J6uil.vim')
 
   let g:J6uil_config_dir = '~/.cache/J6uil'
+
+endif " }}}
+
+" VimからTwitterを見る(TweetVim) {{{
+if neobundle#tap('TweetVim')
+
+  let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
+
+  nmap <C-s> :<C-u>TweetVimSearch<Space>
+
+  function! s:TweetVimSettings()
+    nnoremap <buffer> <C-CR>     :<C-u>TweetVimSay<CR>
+    nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
+  endfunction
+  autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
 
 endif " }}}
 
