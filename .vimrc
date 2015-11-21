@@ -96,7 +96,6 @@ NeoBundleLazy 'kurocode25/mdforvim',
 
 NeoBundle 'tyru/open-browser.vim'
 
-" 最新Vimでは標準搭載になったぽい？そのうち不要になる？
 NeoBundle 'deris/vim-visualinc'
 
 NeoBundleLazy 'deris/vim-rengbang',
