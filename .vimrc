@@ -526,13 +526,11 @@ nnoremap <Leader>enc :<C-u>e ++enc=
 nnoremap <Leader>ff  :<C-u>e ++ff=
 
 " タブ幅、シフト幅、タブ使用有無の設定
-autocmd MyAutoCmd BufEnter *          setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4 expandtab
-autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4 expandtab
-autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4 noexpandtab
-autocmd MyAutoCmd BufEnter .gitconfig setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4 expandtab
-autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4 expandtab
+set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
+autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
+autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
+autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
+autocmd MyAutoCmd FileType markdown setlocal tabstop=4 shiftwidth=4
 
 set infercase                   " 補完時に大文字小文字を区別しない
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
