@@ -1,4 +1,7 @@
 " .vimrc for 香り屋版GVim
+" TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
+" TODO: vim-showtimeのhide_cursorを外部から書き換えてみる
+"       see: http://mattn.kaoriya.net/software/vim/20090826003359.htm
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
