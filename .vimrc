@@ -52,7 +52,8 @@ NeoBundle 'Shougo/vimfiler.vim'
 
 NeoBundleLazy 'Shougo/junkfile.vim',
   \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
-NeoBundle 'vim-scripts/gtags.vim'
+NeoBundleLazy 'vim-scripts/gtags.vim',
+  \ { 'autoload' : { 'command' : ['Gtags'] } }
 NeoBundleLazy 'hewes/unite-gtags',
   \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
 NeoBundleLazy 'tacroe/unite-mark',
@@ -67,7 +68,8 @@ NeoBundle 'thinca/vim-ambicmd'
 NeoBundle 'thinca/vim-fontzoom'
 NeoBundleLazy 'thinca/vim-scouter',
   \ { 'autoload' : { 'commands' : ['Scouter'] } }
-NeoBundle 'thinca/vim-qfreplace'
+NeoBundleLazy 'thinca/vim-qfreplace',
+  \ { 'autoload' : { 'commands' : ['Qfreplace'] } }
 
 NeoBundle 'jceb/vim-hier'
 NeoBundle 'osyo-manga/vim-brightest'
@@ -98,7 +100,9 @@ NeoBundle 'tyru/open-browser.vim'
 
 NeoBundle 'deris/vim-visualinc'
 
+" Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
 NeoBundleLazy 'deris/vim-rengbang'
+
 NeoBundle 'tpope/vim-surround'
 
 NeoBundle 'kana/vim-operator-user'
@@ -124,6 +128,8 @@ NeoBundle 'haya14busa/vim-asterisk'
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundle 'tpope/vim-fugitive'
+NeoBundleLazy 'lambdalisue/vim-gita',
+  \ { 'autoload' : { 'commands' : ['Gita'] } }
 NeoBundleLazy 'cohama/agit.vim',
   \ { 'autoload' : { 'commands' : ['Agit'] } }
 NeoBundleLazy 'idanarye/vim-merginal',
@@ -165,12 +171,9 @@ NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'basyura/TweetVim',
   \ { 'depends'  : 'basyura/twibill.vim',
   \   'autoload' : { 'commands' : ['TweetVimHomeTimeline', 'TweetVimSearch'] } }
-NeoBundleLazy 'basyura/TweetVim',
 
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
-NeoBundleLazy 'lambdalisue/vim-gita',
-  \ { 'autoload' : { 'commands' : ['Gita'] } }
 
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
@@ -535,6 +538,7 @@ set infercase                   " 補完時に大文字小文字を区別しな�
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
 set virtualedit=all             " テキストが存在しない場所でも動けるようにする
 set hidden                      " quit時はバッファを削除せず、隠す
+set confirm                     " 変更されたバッファがある時、どうするか確認する
 set switchbuf=useopen           " すでに開いてあるバッファがあればそっちを開く
 set showmatch                   " 対応する括弧などの入力時にハイライト表示する
 set matchtime=3                 " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
