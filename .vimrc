@@ -2154,7 +2154,7 @@ endif " }}}
 " VimからLingrを見る(J6uil.vim) {{{
 if neobundle#tap('J6uil.vim')
 
-  let g:J6uil_config_dir = '~/.cache/J6uil'
+  let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
 endif " }}}
 
