@@ -122,8 +122,7 @@ NeoBundleLazy 'kana/vim-textobj-function',
   \ { 'autoload' : { 'depends'  : ['kana/vim-textobj-user'],
   \                  'mappings' : ['<Plug>(textobj-function-'] } }
 
-NeoBundleLazy 'kana/vim-smartchr',
-  \ { 'autoload' : { 'functions' : ['smartchr#one_of'] } }
+NeoBundleLazy 'kana/vim-smartchr'
 NeoBundleLazy 'tyru/capture.vim',
   \ { 'autoload' : { 'commands' : ['Capture'] } }
 NeoBundleLazy 't9md/vim-quickhl',
