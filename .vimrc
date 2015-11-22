@@ -183,6 +183,9 @@ NeoBundleLazy 'tyru/restart.vim',
 
 NeoBundle 'thinca/vim-prettyprint'
 
+NeoBundleLazy 'mtth/scratch.vim',
+  \ { 'autoload' : { 'commands' : ['Scratch'] } }
+
 call neobundle#end()
 
 " ファイルタイプの自動検出をONにする
@@ -2172,6 +2175,15 @@ if neobundle#tap('restart.vim')
     \   let g:restart_sessionoptions
     \     = 'blank,curdir,folds,help,localoptions,tabpages'
     \ | Restart
+
+endif " }}}
+
+" スクラッチバッファ(scratch.vim) {{{
+if neobundle#tap('scratch.vim')
+
+  let g:scratch_insert_autohide = 0
+  let g:scratch_filetype = 'scratch'
+  let g:scratch_height = 10
 
 endif " }}}
 
