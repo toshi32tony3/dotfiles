@@ -109,22 +109,26 @@ NeoBundleLazy 'deris/vim-rengbang'
 
 NeoBundle 'tpope/vim-surround'
 
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'kana/vim-textobj-user'
+NeoBundleLazy 'kana/vim-operator-user'
+NeoBundleLazy 'kana/vim-textobj-user'
 
 NeoBundleLazy 'kana/vim-operator-replace',
-  \ { 'autoload' : { 'mappings' : ['<Plug>(operator-replace)'] } }
+  \ { 'autoload' : { 'depends'  : ['kana/vim-operator-user'],
+  \                  'mappings' : ['<Plug>(operator-replace)'] } }
 NeoBundleLazy 'osyo-manga/vim-operator-search',
-  \ { 'autoload' : { 'mappings' : ['<Plug>(operator-search)'] } }
+  \ { 'autoload' : { 'depends'  : ['kana/vim-operator-user'],
+  \                  'mappings' : ['<Plug>(operator-search)'] } }
 NeoBundleLazy 'kana/vim-textobj-function',
-  \ { 'autoload' : { 'mappings' : ['<Plug>(textobj-function-'] } }
+  \ { 'autoload' : { 'depends'  : ['kana/vim-textobj-user'],
+  \                  'mappings' : ['<Plug>(textobj-function-'] } }
 
 NeoBundleLazy 'kana/vim-smartchr',
   \ { 'autoload' : { 'functions' : ['smartchr#one_of'] } }
 NeoBundleLazy 'tyru/capture.vim',
   \ { 'autoload' : { 'commands' : ['Capture'] } }
 NeoBundleLazy 't9md/vim-quickhl',
-  \ { 'autoload' : { 'mappings' : ['<Plug>(quickhl-',
+  \ { 'autoload' : { 'depends'  : ['kana/vim-operator-user'],
+  \                  'mappings' : ['<Plug>(quickhl-',
   \                                '<Plug>(operator-quickhl-'] } }
 
 NeoBundleLazy 'haya14busa/incsearch.vim',
