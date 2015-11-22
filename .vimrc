@@ -65,7 +65,9 @@ NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun',
   \ { 'autoload' : { 'commands' : ['QuickRun'] } }
 NeoBundle 'thinca/vim-ambicmd'
-NeoBundle 'thinca/vim-fontzoom'
+NeoBundleLazy 'thinca/vim-fontzoom',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(fontzoom-'],
+  \                  'commands' : ['Fontzoom', 'Fontzoom!'] } }
 NeoBundleLazy 'thinca/vim-scouter',
   \ { 'autoload' : { 'commands' : ['Scouter'] } }
 NeoBundleLazy 'thinca/vim-qfreplace',
@@ -96,9 +98,11 @@ NeoBundleLazy 'kannokanno/previm',
 NeoBundleLazy 'kurocode25/mdforvim',
   \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
 
-NeoBundle 'tyru/open-browser.vim'
+NeoBundleLazy 'tyru/open-browser.vim',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(openbrowser-'] } }
 
-NeoBundle 'deris/vim-visualinc'
+NeoBundleLazy 'deris/vim-visualinc',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-)'] } }
 
 " Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
 NeoBundleLazy 'deris/vim-rengbang'
@@ -108,22 +112,32 @@ NeoBundle 'tpope/vim-surround'
 NeoBundle 'kana/vim-operator-user'
 NeoBundle 'kana/vim-textobj-user'
 
-NeoBundle 'kana/vim-operator-replace'
-NeoBundle 'osyo-manga/vim-operator-search'
-NeoBundle 'kana/vim-textobj-function'
+NeoBundleLazy 'kana/vim-operator-replace',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(operator-replace)'] } }
+NeoBundleLazy 'osyo-manga/vim-operator-search',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(operator-search)'] } }
+NeoBundleLazy 'kana/vim-textobj-function',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(textobj-function-'] } }
 
 NeoBundle 'kana/vim-smartchr'
 NeoBundleLazy 'tyru/capture.vim',
   \ { 'autoload' : { 'commands' : ['Capture'] } }
-NeoBundle 't9md/vim-quickhl'
+NeoBundleLazy 't9md/vim-quickhl',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(quickhl-',
+  \                                '<Plug>(operator-quickhl-'] } }
 
-NeoBundle 'haya14busa/incsearch.vim'
-NeoBundle 'haya14busa/incsearch-fuzzy.vim'
+NeoBundleLazy 'haya14busa/incsearch.vim',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-'] } }
+NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-fuzzy-',
+  \                                '<Plug>(incsearch-fuzzyspell-'] } }
 " kaoriya版GVimのmigemoと比べると遅いので不採用
 " NeoBundle 'haya14busa/incsearch-migemo.vim'
 
-NeoBundle 'osyo-manga/vim-anzu'
-NeoBundle 'haya14busa/vim-asterisk'
+NeoBundleLazy 'osyo-manga/vim-anzu',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(anzu-'] } }
+NeoBundleLazy 'haya14busa/vim-asterisk',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(asterisk-'] } }
 
 NeoBundle 'mhinz/vim-signify'
 
@@ -145,8 +159,11 @@ NeoBundle 'cocopon/lightline-hybrid.vim'
 " NeoBundle 'LeafCage/foldCC.vim'
 
 " Cygwin Vimでは使う
-" NeoBundleLazy 'kana/vim-fakeclip'
-NeoBundle 'LeafCage/yankround.vim'
+" NeoBundleLazy 'kana/vim-fakeclip',
+"   \ { 'autoload' : { 'mappings' : ['<Plug>(fakeclip-'] } }
+
+NeoBundleLazy 'LeafCage/yankround.vim',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(yankround-'] } }
 NeoBundleLazy 'junegunn/vim-easy-align',
   \ { 'autoload' : { 'commands' : ['EasyAlign'] } }
 NeoBundleLazy 'bronson/vim-trailing-whitespace',
@@ -154,10 +171,13 @@ NeoBundleLazy 'bronson/vim-trailing-whitespace',
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
   \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly', 'BufOnly', 'Bufonly'] } }
 
-NeoBundle 'justinmk/vim-sneak'
-NeoBundle 'rhysd/clever-f.vim'
+NeoBundleLazy 'justinmk/vim-sneak',
+  \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
+NeoBundleLazy 'rhysd/clever-f.vim',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
 
-NeoBundle 'tyru/caw.vim'
+NeoBundleLazy 'tyru/caw.vim',
+  \ { 'autoload' : { 'mappings' : ['<Plug>(caw'] } }
 NeoBundle 'kshenoy/vim-signature'
 
 NeoBundle 'mhinz/vim-startify'
@@ -184,7 +204,8 @@ NeoBundleLazy 'tyru/restart.vim',
 NeoBundle 'thinca/vim-prettyprint'
 
 NeoBundleLazy 'mtth/scratch.vim',
-  \ { 'autoload' : { 'commands' : ['Scratch'] } }
+  \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'],
+  \                  'commands' : ['Scratch', 'ScratchInsert'] } }
 
 call neobundle#end()
 
@@ -1339,11 +1360,17 @@ endif " }}}
 if neobundle#tap('vim-fontzoom')
 
   nnoremap <silent> ,f :<C-u>Fontzoom!<CR>
+
+  " for Lazy
+  let g:fontzoom_no_default_key_mappings = 1
+  nmap <silent> + <Plug>(fontzoom-larger)
+  nmap <silent> - <Plug>(fontzoom-smaller)
+
   " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
-  " nnoremap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
-  " nnoremap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
   " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
-  " -> (参考URL)https://github.com/vim-jp/issues/issues/73
+  " -> https://github.com/vim-jp/issues/issues/73
+  " nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
+  " nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
 
 endif " }}}
 
@@ -1515,6 +1542,10 @@ endif " }}}
 
 " Visualモードでインクリメント/デクリメント(vim-visualinc) {{{
 if neobundle#tap('vim-visualinc')
+
+  " for Lazy
+  vmap <C-a>  <Plug>(visualinc-increment)
+  vmap <C-x>  <Plug>(visualinc-decrement)
 
 endif " }}}
 
@@ -2047,6 +2078,21 @@ if neobundle#tap('clever-f.vim')
   nmap [t [[F(B
   nmap ]t ]]F(B
 
+  " for Lazy
+  let g:clever_f_not_overwrites_standard_mappings = 1
+  nmap f <Plug>(clever-f-f)
+  xmap f <Plug>(clever-f-f)
+  omap f <Plug>(clever-f-f)
+  nmap F <Plug>(clever-f-F)
+  xmap F <Plug>(clever-f-F)
+  omap F <Plug>(clever-f-F)
+  nmap t <Plug>(clever-f-t)
+  xmap t <Plug>(clever-f-t)
+  omap t <Plug>(clever-f-t)
+  nmap T <Plug>(clever-f-T)
+  xmap T <Plug>(clever-f-T)
+  omap T <Plug>(clever-f-T)
+
 endif " }}}
 
 " コメントアウト/コメントアウト解除を簡単に(caw.vim) {{{
@@ -2184,6 +2230,13 @@ if neobundle#tap('scratch.vim')
   let g:scratch_insert_autohide = 0
   let g:scratch_filetype = 'scratch'
   let g:scratch_height = 10
+
+  " for Lazy
+  let g:scratch_no_mappings = 1
+  nmap gs <Plug>(scratch-insert-reuse)
+  nmap gS <Plug>(scratch-insert-clear)
+  xmap gs <Plug>(scratch-selection-reuse)
+  xmap gS <Plug>(scratch-selection-clear)
 
 endif " }}}
 
