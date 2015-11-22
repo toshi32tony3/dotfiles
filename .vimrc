@@ -211,6 +211,9 @@ NeoBundleLazy 'mtth/scratch.vim',
   \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'],
   \                  'commands' : ['Scratch', 'ScratchInsert'] } }
 
+NeoBundleLazy 'thinca/vim-showtime',
+  \ { 'autoload' : { 'commands' : ['ShowtimeStart'] } }
+
 call neobundle#end()
 
 " ファイルタイプの自動検出をONにする
@@ -414,6 +417,9 @@ if has('gui_running')
   endif
 
 endif
+
+" カーソルを点滅させない
+set guicursor=a:blinkon0
 
 " 入力モードに応じてカーソルの形を変える
 " -> Cygwin環境で必要だった気がするので取っておく
@@ -1489,9 +1495,11 @@ if neobundle#tap('vim-tomorrow-theme')
     \  term=reverse cterm=NONE gui=NONE
     \  ctermfg=16 ctermbg=222 guifg=#1d1f21 guibg=#f0c674
 
-  " IME ONしていることをわかりやすくする
-  if has('multi_byte_ime') || has('xim')
-    autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
+  if !neobundle#tap('eskk.vim')
+    " IME ONしていることをわかりやすくする
+    if has('multi_byte_ime') || has('xim')
+      autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
+    endif
   endif
 
   colorscheme Tomorrow-Night
