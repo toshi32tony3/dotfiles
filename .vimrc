@@ -119,7 +119,8 @@ NeoBundleLazy 'osyo-manga/vim-operator-search',
 NeoBundleLazy 'kana/vim-textobj-function',
   \ { 'autoload' : { 'mappings' : ['<Plug>(textobj-function-'] } }
 
-NeoBundle 'kana/vim-smartchr'
+NeoBundleLazy 'kana/vim-smartchr',
+  \ { 'autoload' : { 'functions' : ['smartchr#one_of'] } }
 NeoBundleLazy 'tyru/capture.vim',
   \ { 'autoload' : { 'commands' : ['Capture'] } }
 NeoBundleLazy 't9md/vim-quickhl',
@@ -189,7 +190,7 @@ NeoBundleLazy 'basyura/J6uil.vim',
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'basyura/TweetVim',
-  \ { 'depends'  : 'basyura/twibill.vim',
+  \ { 'depends'  : ['basyura/twibill.vim', 'tyru/open-browser.vim'],
   \   'autoload' : { 'commands' : ['TweetVimHomeTimeline', 'TweetVimSearch'] } }
 
 NeoBundle 'lambdalisue/vim-unified-diff'
