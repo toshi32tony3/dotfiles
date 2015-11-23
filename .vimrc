@@ -215,7 +215,7 @@ NeoBundleLazy 'mtth/scratch.vim',
   \                  'commands' : ['Scratch', 'ScratchInsert'] } }
 
 NeoBundleLazy 'thinca/vim-showtime',
-  \ { 'autoload' : { 'commands' : ['ShowtimeStart'] } }
+  \ { 'autoload' : { 'commands' : ['SS'] } }
 
 call neobundle#end()
 
@@ -994,6 +994,47 @@ noremap  <C-@> <Esc>
 " The end of 誤爆防止関係 }}}
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
+
+" スクリプト内関数を書き換える {{{
+" http://mattn.kaoriya.net/software/vim/20090826003359.htm
+" http://d.hatena.ne.jp/thinca/20090826/1251258056
+" http://mattn.kaoriya.net/software/vim/20111202085236.htm
+function! GetScriptID(filename)
+  let snlist = ''
+  redir => snlist
+  silent! scriptnames
+  redir END
+  let smap = {}
+  let mx = '^\s*\(\d\+\):\s*\(.*\)$'
+  for line in split(snlist, "\n")
+    let smap[tolower(expand(substitute(line, mx, '\2', '')))] = substitute(line, mx, '\1', '')
+  endfor
+  return smap[tolower(a:filename)]
+endfunction
+
+function! GetFunc(filename, funcname)
+  let sid = GetScriptID(a:filename)
+  return function("<SNR>" . sid . "_" . a:funcname)
+endfunction
+
+function! HookFunc(funcA, funcB)
+  if type(a:funcA) == 2
+    let funcA = substitute(string(a:funcA), "^function('\\(.*\\)')$", '\1', '')
+  else
+    let funcA = a:funcA
+  endif
+  if type(a:funcB) == 2
+    let funcB = substitute(string(a:funcB), "^function('\\(.*\\)')$", '\1', '')
+  else
+    let funcB = a:funcB
+  endif
+  let oldfunc = ''
+  redir => oldfunc
+  silent! exec "function " . funcA
+  redir END
+  let g:hoge = oldfunc
+  exec "function! " . funcA . "(...)\nreturn call('" . funcB . "', a:000)\nendfunction"
+endfunction " }}}
 
 " Vimでフルスクリーンモード(scrnmode.vim)@Kaoriya版付属プラグイン {{{
 if has('kaoriya')
@@ -2257,6 +2298,39 @@ if neobundle#tap('scratch.vim')
   xmap gS <Plug>(scratch-selection-clear)
 
 endif " }}}
+
+" Vimでプレゼンテーション(vim-showtime) {{{
+if neobundle#tap('vim-showtime')
+
+  " s:hide_cursorを置き換えたい
+  function! s:hide_cursor()
+    highlight Cursor gui=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+  endfunction
+
+  " " Sourceされてもautoloadは実行時まで読み込まれないので、以下はできないはず...
+  " function! neobundle#hooks.on_post_source(bundle)
+  "   call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
+  "         \       GetFunc(expand('~\.vimrc'), 'hide_cursor'))
+  " endfunction
+
+  " 初回実行時は必ず失敗するコマンドをsilentで実行してautoloadを読ませて置き換え
+  " -> イケてないけど動くしいいか...
+  if neobundle#tap('vim-brightest')
+    command! -bar SS
+      \   silent! ShowtimeResume
+      \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
+      \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
+      \ | BrightestDisable
+      \ | ShowtimeStart
+  else
+    command! -bar SS
+      \   silent! ShowtimeResume
+      \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
+      \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
+      \ | ShowtimeStart
+  endif
+
+endif
 
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
