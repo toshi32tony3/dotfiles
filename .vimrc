@@ -1550,7 +1550,7 @@ if neobundle#tap('vim-tomorrow-theme')
     endif
   endif
 
-  colorscheme Tomorrow-Night
+  colorscheme Tomorrow-Night-Bright
 
 endif " }}}
 
