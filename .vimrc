@@ -379,6 +379,9 @@ set complete=.,w,b,u
 set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
 set pumheight=10        " 補完候補は一度に10個まで表示
 
+" チルダをoperatorライクに使えるようにする
+set tildeop
+
 " 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
 nnoremap & <silent> :<C-u>&&<CR>
 xnoremap & <silent> :<C-u>&&<CR>
