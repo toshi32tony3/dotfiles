@@ -1,4 +1,5 @@
 " .vimrc for 香り屋版GVim
+" TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -28,13 +29,13 @@ call neobundle#begin(expand('~/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'Shougo/vimproc.vim', {
-  \   'build' : {
-  \     'windows' : 'tools\\update-dll-mingw',
-  \     'cygwin'  : 'make -f make_cygwin.mak',
-  \     'mac'     : 'make -f make_mac.mak',
-  \     'unix'    : 'make -f make_unix.mak',
-  \   },
-  \ }
+      \   'build' : {
+      \     'windows' : 'tools\\update-dll-mingw',
+      \     'cygwin'  : 'make -f make_cygwin.mak',
+      \     'mac'     : 'make -f make_mac.mak',
+      \     'unix'    : 'make -f make_unix.mak',
+      \   },
+      \ }
 
 NeoBundle 'Shougo/neocomplete.vim'
 " NeoBundle 'Shougo/neosnippet'
@@ -51,25 +52,27 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
 NeoBundleLazy 'Shougo/junkfile.vim',
-  \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
+      \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundleLazy 'vim-scripts/gtags.vim',
-  \ { 'autoload' : { 'command' : ['Gtags'] } }
+      \ { 'autoload' : { 'command' : ['Gtags'] } }
 NeoBundleLazy 'hewes/unite-gtags',
-  \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
+      \ { 'autoload' : { 'unite_sources' : [ 'gtags/ref', 'gtags/def' ] } }
 NeoBundleLazy 'tacroe/unite-mark',
-  \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
+      \ { 'autoload' : { 'unite_sources' : [ 'mark' ] } }
 NeoBundleLazy 'Shougo/unite-outline',
-  \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
+      \ { 'autoload' : { 'unite_sources' : [ 'outline' ] } }
 
 NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun',
-  \ { 'autoload' : { 'commands' : ['QuickRun'] } }
+      \ { 'autoload' : { 'commands' : ['QuickRun'] } }
 NeoBundle 'thinca/vim-ambicmd'
-NeoBundle 'thinca/vim-fontzoom'
+NeoBundleLazy 'thinca/vim-fontzoom',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(fontzoom-'],
+      \                  'commands' : ['Fontzoom', 'Fontzoom!'] } }
 NeoBundleLazy 'thinca/vim-scouter',
-  \ { 'autoload' : { 'commands' : ['Scouter'] } }
+      \ { 'autoload' : { 'commands' : ['Scouter'] } }
 NeoBundleLazy 'thinca/vim-qfreplace',
-  \ { 'autoload' : { 'commands' : ['Qfreplace'] } }
+      \ { 'autoload' : { 'commands' : ['Qfreplace'] } }
 
 NeoBundle 'jceb/vim-hier'
 NeoBundle 'osyo-manga/vim-brightest'
@@ -79,64 +82,80 @@ NeoBundle 'osyo-manga/vim-brightest'
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundleLazy 'mattn/benchvimrc-vim',
-  \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
+      \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
 
 " memolist.vimはmarkdown形式でメモを生成するので、markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
 NeoBundleLazy 'glidenote/memolist.vim',
-  \ { 'autoload' : { 'commands' : ['MemoNew', 'MemoList'] } }
+      \ { 'autoload' : { 'commands' : ['MemoNew', 'MemoList'] } }
 NeoBundle 'rcmdnk/vim-markdown'
 
 " Previm便利だけど、IEではmermaidを使えないようなのでShibaメインになりそう
 " https://github.com/rhysd/Shiba
 NeoBundleLazy 'kannokanno/previm',
-  \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
+      \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
 " リアルタイムプレビューが非常に早い。乗り換えたいけれど、まだ発展途上感が...
 NeoBundleLazy 'kurocode25/mdforvim',
-  \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
+      \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
 
-NeoBundle 'tyru/open-browser.vim'
+NeoBundleLazy 'tyru/open-browser.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(openbrowser-'] } }
 
-NeoBundle 'deris/vim-visualinc'
+NeoBundleLazy 'deris/vim-visualinc',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-)'] } }
 
 " Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
 NeoBundleLazy 'deris/vim-rengbang'
 
 NeoBundle 'tpope/vim-surround'
 
-NeoBundle 'kana/vim-operator-user'
-NeoBundle 'kana/vim-textobj-user'
+NeoBundleLazy 'kana/vim-operator-user'
+NeoBundleLazy 'kana/vim-textobj-user'
 
-NeoBundle 'kana/vim-operator-replace'
-NeoBundle 'osyo-manga/vim-operator-search'
-NeoBundle 'kana/vim-textobj-function'
+NeoBundleLazy 'kana/vim-operator-replace',
+      \ { 'autoload' : { 'depends'  : ['kana/vim-operator-user'],
+      \                  'mappings' : ['<Plug>(operator-replace)'] } }
+NeoBundleLazy 'osyo-manga/vim-operator-search',
+      \ { 'autoload' : { 'depends'  : ['kana/vim-operator-user'],
+      \                  'mappings' : ['<Plug>(operator-search)'] } }
+NeoBundleLazy 'kana/vim-textobj-function',
+      \ { 'autoload' : { 'depends'  : ['kana/vim-textobj-user'],
+      \                  'mappings' : ['<Plug>(textobj-function-'] } }
 
-NeoBundle 'kana/vim-smartchr'
+NeoBundleLazy 'kana/vim-smartchr'
 NeoBundleLazy 'tyru/capture.vim',
-  \ { 'autoload' : { 'commands' : ['Capture'] } }
-NeoBundle 't9md/vim-quickhl'
+      \ { 'autoload' : { 'commands' : ['Capture'] } }
+NeoBundleLazy 't9md/vim-quickhl',
+      \ { 'autoload' : { 'depends'  : ['kana/vim-operator-user'],
+      \                  'mappings' : ['<Plug>(quickhl-',
+      \                                '<Plug>(operator-quickhl-'] } }
 
-NeoBundle 'haya14busa/incsearch.vim'
-NeoBundle 'haya14busa/incsearch-fuzzy.vim'
+NeoBundleLazy 'haya14busa/incsearch.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-'] } }
+NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-fuzzy-',
+      \                                '<Plug>(incsearch-fuzzyspell-'] } }
 " kaoriya版GVimのmigemoと比べると遅いので不採用
 " NeoBundle 'haya14busa/incsearch-migemo.vim'
 
-NeoBundle 'osyo-manga/vim-anzu'
-NeoBundle 'haya14busa/vim-asterisk'
+NeoBundleLazy 'osyo-manga/vim-anzu',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(anzu-'] } }
+NeoBundleLazy 'haya14busa/vim-asterisk',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(asterisk-'] } }
 
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita',
-  \ { 'autoload' : { 'commands' : ['Gita'] } }
+      \ { 'autoload' : { 'commands' : ['Gita'] } }
 NeoBundleLazy 'cohama/agit.vim',
-  \ { 'autoload' : { 'commands' : ['Agit'] } }
+      \ { 'autoload' : { 'commands' : ['Agit'] } }
 NeoBundleLazy 'idanarye/vim-merginal',
-  \ { 'autoload' : { 'commands' : ['Merginal'] } }
+      \ { 'autoload' : { 'commands' : ['Merginal'] } }
 
 NeoBundleLazy 'majutsushi/tagbar',
-  \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
+      \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
@@ -145,19 +164,25 @@ NeoBundle 'cocopon/lightline-hybrid.vim'
 " NeoBundle 'LeafCage/foldCC.vim'
 
 " Cygwin Vimでは使う
-" NeoBundleLazy 'kana/vim-fakeclip'
-NeoBundle 'LeafCage/yankround.vim'
+" NeoBundleLazy 'kana/vim-fakeclip',
+"   \ { 'autoload' : { 'mappings' : ['<Plug>(fakeclip-'] } }
+
+NeoBundleLazy 'LeafCage/yankround.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(yankround-'] } }
 NeoBundleLazy 'junegunn/vim-easy-align',
-  \ { 'autoload' : { 'commands' : ['EasyAlign'] } }
+      \ { 'autoload' : { 'commands' : ['EasyAlign'] } }
 NeoBundleLazy 'bronson/vim-trailing-whitespace',
-  \ { 'autoload' : { 'commands' : ['FixWhitespace'] } }
+      \ { 'autoload' : { 'commands' : ['FixWhitespace'] } }
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
-  \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly', 'BufOnly', 'Bufonly'] } }
+      \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
 
-NeoBundle 'justinmk/vim-sneak'
-NeoBundle 'rhysd/clever-f.vim'
+NeoBundleLazy 'justinmk/vim-sneak',
+      \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
+NeoBundleLazy 'rhysd/clever-f.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
 
-NeoBundle 'tyru/caw.vim'
+NeoBundleLazy 'tyru/caw.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(caw'] } }
 NeoBundle 'kshenoy/vim-signature'
 
 NeoBundle 'mhinz/vim-startify'
@@ -165,12 +190,12 @@ NeoBundle 'mhinz/vim-startify'
 NeoBundle 'tmhedberg/matchit'
 
 NeoBundleLazy 'basyura/J6uil.vim',
-  \ { 'autoload' : { 'commands' : ['J6uil'] } }
+      \ { 'autoload' : { 'commands' : ['J6uil'] } }
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'basyura/TweetVim',
-  \ { 'depends'  : 'basyura/twibill.vim',
-  \   'autoload' : { 'commands' : ['TweetVimHomeTimeline', 'TweetVimSearch'] } }
+      \ { 'depends'  : ['basyura/twibill.vim', 'tyru/open-browser.vim'],
+      \   'autoload' : { 'commands' : ['TweetVimHomeTimeline', 'TweetVimSearch'] } }
 
 NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
@@ -179,9 +204,21 @@ NeoBundleLazy 'tyru/skk.vim'
 NeoBundle 'tyru/eskk.vim'
 
 NeoBundleLazy 'tyru/restart.vim',
-  \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
+      \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
 
 NeoBundle 'thinca/vim-prettyprint'
+
+NeoBundleLazy 'mtth/scratch.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'],
+      \                  'commands' : ['Scratch', 'ScratchInsert'] } }
+
+NeoBundleLazy 'thinca/vim-showtime',
+      \ { 'autoload' : { 'commands' : ['SS'] } }
+
+" 日本語ヘルプを卒業したい
+" -> なかなかできない
+" NeoBundleLazy 'vim-jp/vimdoc-ja'
+set helplang=en
 
 call neobundle#end()
 
@@ -207,10 +244,6 @@ nnoremap #  <Nop>
 " ##で入力待ちを解除する
 nnoremap ## <Nop>
 
-" 日本語ヘルプを卒業したい
-" -> なかなかできない
-" set helplang=en
-
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
   autocmd!
@@ -220,9 +253,9 @@ augroup END
 if has('vim_starting') && has('reltime')
   let g:startuptime = reltime()
   autocmd MyAutoCmd VimEnter *
-    \   let g:startuptime = reltime(g:startuptime)
-    \ | redraw
-    \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
+        \   let g:startuptime = reltime(g:startuptime)
+        \ | redraw
+        \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
 endif
 
 " ネットワーク上ファイルのバックアップ、スワップを作ると重くなるので、作らない
@@ -345,6 +378,9 @@ set complete=.,w,b,u
 set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
 set pumheight=10        " 補完候補は一度に10個まで表示
 
+" チルダをoperatorライクに使えるようにする
+set tildeop
+
 " 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
 nnoremap & <silent> :<C-u>&&<CR>
 xnoremap & <silent> :<C-u>&&<CR>
@@ -387,6 +423,9 @@ if has('gui_running')
 
 endif
 
+" カーソルを点滅させない
+set guicursor=a:blinkon0
+
 " 入力モードに応じてカーソルの形を変える
 " -> Cygwin環境で必要だった気がするので取っておく
 let &t_ti .= "\e[1 q"
@@ -418,7 +457,7 @@ set laststatus=2  " 常にステータス行を表示する
 
 " 透明度をスイッチ
 let g:transparency_on = 0
-function! ToggleTransParency()
+function! s:ToggleTransParency()
   if g:transparency_on
     set transparency=255
     let g:transparency_on = 0
@@ -427,8 +466,8 @@ function! ToggleTransParency()
     let g:transparency_on = 1
   endif
 endfunction
-
-nnoremap <silent> <F2> :<C-u>call ToggleTransParency()<CR>
+command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
+nnoremap <silent> <F2> :<C-u>ToggleTransParency<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
@@ -464,10 +503,10 @@ if isdirectory(expand('~/vimfiles/winpos'))
   autocmd MyAutoCmd VimLeavePre * call s:save_window()
   function! s:save_window()
     let s:options = [
-      \ 'set columns=' . &columns,
-      \ 'set lines='   . &lines,
-      \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
-      \ ]
+          \ 'set columns=' . &columns,
+          \ 'set lines='   . &lines,
+          \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
+          \ ]
     call writefile(s:options, g:save_winpos_file)
   endfunction
   if filereadable(g:save_winpos_file)
@@ -526,13 +565,11 @@ nnoremap <Leader>enc :<C-u>e ++enc=
 nnoremap <Leader>ff  :<C-u>e ++ff=
 
 " タブ幅、シフト幅、タブ使用有無の設定
-autocmd MyAutoCmd BufEnter *          setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd MyAutoCmd BufEnter *.c        setlocal tabstop=4 shiftwidth=4 expandtab
-autocmd MyAutoCmd BufEnter *.cpp      setlocal tabstop=4 shiftwidth=4 expandtab
-autocmd MyAutoCmd BufEnter makefile   setlocal tabstop=4 shiftwidth=4 noexpandtab
-autocmd MyAutoCmd BufEnter .gitconfig setlocal tabstop=2 shiftwidth=2 expandtab
-autocmd MyAutoCmd BufEnter *.md       setlocal tabstop=4 shiftwidth=4 expandtab
-autocmd MyAutoCmd BufEnter *.markdown setlocal tabstop=4 shiftwidth=4 expandtab
+set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
+autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
+autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
+autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
+autocmd MyAutoCmd FileType markdown setlocal tabstop=4 shiftwidth=4
 
 set infercase                   " 補完時に大文字小文字を区別しない
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
@@ -669,7 +706,7 @@ nnoremap k gk
 
 " 最後のウィンドウがQuickfixウィンドウの場合、自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
-  \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
+      \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 
 " " 開いたファイルと同じ場所へ移動する
 " " startify/vimfilerの機能でcdするので以下の設定は使用しない
@@ -836,10 +873,10 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
         continue
       endif
       let l:upCmd =
-        \ 'ctags -f ' .
-        \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[l:item] .
-        \ ' -R ' .
-        \ $TARGET_DIR . '\' . l:item
+            \ 'ctags -f ' .
+            \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[l:item] .
+            \ ' -R ' .
+            \ $TARGET_DIR . '\' . l:item
       call system(l:upCmd)
     endfor
   endfunction
@@ -957,6 +994,52 @@ noremap  <C-@> <Esc>
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
 
+" netrwは使わない {{{
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+" }}}
+
+" スクリプト内関数を書き換える {{{
+" http://mattn.kaoriya.net/software/vim/20090826003359.htm
+" http://d.hatena.ne.jp/thinca/20090826/1251258056
+" http://mattn.kaoriya.net/software/vim/20111202085236.htm
+function! GetScriptID(filename)
+  let snlist = ''
+  redir => snlist
+  silent! scriptnames
+  redir END
+  let smap = {}
+  let mx = '^\s*\(\d\+\):\s*\(.*\)$'
+  for line in split(snlist, "\n")
+    let smap[tolower(expand(substitute(line, mx, '\2', '')))] = substitute(line, mx, '\1', '')
+  endfor
+  return smap[tolower(a:filename)]
+endfunction
+
+function! GetFunc(filename, funcname)
+  let sid = GetScriptID(a:filename)
+  return function("<SNR>" . sid . "_" . a:funcname)
+endfunction
+
+function! HookFunc(funcA, funcB)
+  if type(a:funcA) == 2
+    let funcA = substitute(string(a:funcA), "^function('\\(.*\\)')$", '\1', '')
+  else
+    let funcA = a:funcA
+  endif
+  if type(a:funcB) == 2
+    let funcB = substitute(string(a:funcB), "^function('\\(.*\\)')$", '\1', '')
+  else
+    let funcB = a:funcB
+  endif
+  let oldfunc = ''
+  redir => oldfunc
+  silent! exec "function " . funcA
+  redir END
+  let g:hoge = oldfunc
+  exec "function! " . funcA . "(...)\nreturn call('" . funcB . "', a:000)\nendfunction"
+endfunction " }}}
+
 " Vimでフルスクリーンモード(scrnmode.vim)@Kaoriya版付属プラグイン {{{
 if has('kaoriya')
 
@@ -995,13 +1078,13 @@ if neobundle#tap('neocomplete.vim')
   if neobundle#tap('neoinclude.vim')
 
     let g:neocomplete#sources._ =
-      \ ['file/include', 'member', 'buffer', 'neosnippet']
+          \ ['file/include', 'member', 'buffer', 'neosnippet']
   elseif neobundle#tap('neosnippet')
     let g:neocomplete#sources._ =
-      \ ['member', 'buffer', 'neosnippet']
+          \ ['member', 'buffer', 'neosnippet']
   else
     let g:neocomplete#sources._ =
-      \ ['member', 'buffer']
+          \ ['member', 'buffer']
 
   endif
 
@@ -1017,9 +1100,9 @@ if neobundle#tap('neocomplete.vim')
     " neocompleteとneosnippetを良い感じに使うためのキー設定
     " http://kazuph.hateblo.jp/entry/2013/01/19/193745
     imap <expr> <TAB> pumvisible() ? "\<C-n>" :
-      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+          \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
     smap <expr> <TAB>
-      \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+          \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
     inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -1040,7 +1123,7 @@ if neobundle#tap('neosnippet')
 
   " デフォルトのスニペットはコーディング規約と離れたものになっているので要修正
   let g:neosnippet#snippets_directory =
-    \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
+        \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
 
 endif " }}}
 
@@ -1065,7 +1148,7 @@ if neobundle#tap('unite.vim')
     set grepprg=pt\ --hidden\ --nogroup\ --nocolor\ --smart-case
     let g:unite_source_grep_command = 'pt'
     let g:unite_source_grep_default_opts =
-      \   '--hidden --nogroup --nocolor --smart-case'
+          \   '--hidden --nogroup --nocolor --smart-case'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding = 'utf-8'
   endif
@@ -1074,14 +1157,14 @@ if neobundle#tap('unite.vim')
   " http://d.hatena.ne.jp/osyo-manga/20140627
   " -> なんだかんだ非同期でやって貰う必要が無い気がする
   call unite#custom#profile('default', 'context', {
-    \   'start_insert'     : 1,
-    \   'prompt'           : '> ',
-    \   'prompt_visible'   : 'prompt-visible',
-    \   'prompt_direction' : 'top',
-    \   'no_empty'         : 1,
-    \   'split'            : 0,
-    \   'sync'             : 1,
-    \ })
+        \   'start_insert'     : 1,
+        \   'prompt'           : '> ',
+        \   'prompt_visible'   : 'prompt-visible',
+        \   'prompt_direction' : 'top',
+        \   'no_empty'         : 1,
+        \   'split'            : 0,
+        \   'sync'             : 1,
+        \ })
 
   " Unite line/vimgrepの結果候補数を制限しない
   call unite#custom#source('line',    'max_candidates', 0)
@@ -1139,7 +1222,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>jj ':<C-u>Unite junkfile'         . g:u_opt_jj . '<CR>'
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memofiles/*'
-    \                                                       . g:u_opt_mg . '<CR>'
+        \                                                   . g:u_opt_mg . '<CR>'
   nnoremap <expr> <Leader>ml ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
   nnoremap <expr> <Leader>mm ':<C-u>Unite mark'             . g:u_opt_mm . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
@@ -1198,15 +1281,12 @@ if neobundle#tap('vimfiler.vim')
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
     " #をLeader専用にする
-    " default : nmap     <buffer> #  <Plug>(vimfiler_mark_similar_lines)
-                nnoremap <buffer> #  <Nop>
-                nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
+    nnoremap <buffer> #  <Nop>
+    nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
     if neobundle#tap('unite.vim')
       " Unite vimgrepを使う
-      " default : nmap     <buffer>       gr <Plug>(vimfiler_grep)
-                  nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**'
-                    \                                       . g:u_opt_gg . '<CR>'
+      nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
 
       " Disable yankround.vim
       nnoremap <buffer> <C-n>      <Nop>
@@ -1244,7 +1324,7 @@ if neobundle#tap('unite-mark')
 
   " グローバルマークに対しても有効にする
   let g:unite_source_mark_marks =
-    \ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        \ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 endif " }}}
 
@@ -1264,60 +1344,60 @@ endif " }}}
 if neobundle#tap('vim-quickrun')
 
   let g:quickrun_config = {
-    \   '_' : {
-    \     'outputter/buffer/split' : ':botright 24sp',
-    \   },
-    \   'vb' : {
-    \     'command'   : 'cscript',
-    \     'cmdopt'    : '//Nologo',
-    \     'tempfile'  : '{tempname()}.vbs',
-    \   },
-    \   'c' : {
-    \     'command'   : 'gcc',
-    \     'cmdopt'    : '-Wall',
-    \   },
-    \   'cpp' : {
-    \     'command'   : 'g++',
-    \     'cmdopt'    : '-Wall',
-    \   },
-    \   'make' : {
-    \     'command'   : 'make',
-    \     'cmdopt'    : 'run',
-    \     'exec'      : '%c %o',
-    \     'outputter' : 'error:buffer:quickfix',
-    \   },
-    \ }
+        \   '_' : {
+        \     'outputter/buffer/split' : ':botright 24sp',
+        \   },
+        \   'vb' : {
+        \     'command'   : 'cscript',
+        \     'cmdopt'    : '//Nologo',
+        \     'tempfile'  : '{tempname()}.vbs',
+        \   },
+        \   'c' : {
+        \     'command'   : 'gcc',
+        \     'cmdopt'    : '-Wall',
+        \   },
+        \   'cpp' : {
+        \     'command'   : 'g++',
+        \     'cmdopt'    : '-Wall',
+        \   },
+        \   'make' : {
+        \     'command'   : 'make',
+        \     'cmdopt'    : 'run',
+        \     'exec'      : '%c %o',
+        \     'outputter' : 'error:buffer:quickfix',
+        \   },
+        \ }
 
-    " watchdogsを使う時の設定はこんな感じ？
-    " \   'watchdogs_checker/_' : {
-    " \     'runner/vimproc/updatetime'       : 40,
-    " \     'hook/close_quickfix/enable_exit' :  1,
-    " \   },
-    " \   'watchdogs_checker/gcc' : {
-    " \     'command'   : 'gcc',
-    " \     'cmdopt'    : '-Wall',
-    " \     'exec'      : '%c %o -fsyntax-only %s:p ',
-    " \   },
-    " \   'c/watchdogs_checker' : {
-    " \     'type' : 'watchdogs_checker/gcc',
-    " \   },
-    " \   'watchdogs_checker/ruby' : {
-    " \     'command'   : 'ruby',
-    " \     'exec'      : '%c %o -c %s:p ',
-    " \   },
-    " \   'ruby/watchdogs_checker' : {
-    " \     'type' : 'watchdogs_checker/ruby',
-    " \   },
+  " watchdogsを使う時の設定はこんな感じ？
+  " \   'watchdogs_checker/_' : {
+  " \     'runner/vimproc/updatetime'       : 40,
+  " \     'hook/close_quickfix/enable_exit' :  1,
+  " \   },
+  " \   'watchdogs_checker/gcc' : {
+  " \     'command'   : 'gcc',
+  " \     'cmdopt'    : '-Wall',
+  " \     'exec'      : '%c %o -fsyntax-only %s:p ',
+  " \   },
+  " \   'c/watchdogs_checker' : {
+  " \     'type' : 'watchdogs_checker/gcc',
+  " \   },
+  " \   'watchdogs_checker/ruby' : {
+  " \     'command'   : 'ruby',
+  " \     'exec'      : '%c %o -c %s:p ',
+  " \   },
+  " \   'ruby/watchdogs_checker' : {
+  " \     'type' : 'watchdogs_checker/ruby',
+  " \   },
 
-    " " clangを使う時の設定はこんな感じ？
-    " \   'cpp' : {
-    " \     'type' : 'cpp/clang3_4'
-    " \   },
-    " \   'cpp/clang3_4' : {
-    " \       'command' : 'clang++',
-    " \       'exec'    : '%c %o %s -o %s:p:r',
-    " \       'cmdopt'  : '-std=gnu++0x'
-    " \   },
+  " " clangを使う時の設定はこんな感じ？
+  " \   'cpp' : {
+  " \     'type' : 'cpp/clang3_4'
+  " \   },
+  " \   'cpp/clang3_4' : {
+  " \       'command' : 'clang++',
+  " \       'exec'    : '%c %o %s -o %s:p:r',
+  " \       'cmdopt'  : '-std=gnu++0x'
+  " \   },
 
   " デフォルトの<Leader>rだと入力待ちがあるので、別のキーでマッピングする
   let g:quickrun_no_default_key_mappings = 1
@@ -1338,11 +1418,17 @@ endif " }}}
 if neobundle#tap('vim-fontzoom')
 
   nnoremap <silent> ,f :<C-u>Fontzoom!<CR>
+
+  " for Lazy
+  let g:fontzoom_no_default_key_mappings = 1
+  nmap <silent> + <Plug>(fontzoom-larger)
+  nmap <silent> - <Plug>(fontzoom-smaller)
+
   " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
-  " nnoremap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
-  " nnoremap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
   " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
-  " -> (参考URL)https://github.com/vim-jp/issues/issues/73
+  " -> https://github.com/vim-jp/issues/issues/73
+  " nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
+  " nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
 
 endif " }}}
 
@@ -1384,8 +1470,8 @@ if neobundle#tap('vim-brightest')
 
   " <cword>を含め、<cword>と同じ単語をアンダーラインで強調したい場合
   let g:brightest#highlight = {
-    \   'group' : 'BrightestUnderline'
-    \ }
+        \   'group' : 'BrightestUnderline'
+        \ }
 
   " " <cword>を含め、<cword>と同じ単語を波線で強調したい場合
   " let g:brightest#highlight = {
@@ -1418,9 +1504,9 @@ if neobundle#tap('vim-watchdogs')
 
   let g:watchdogs_check_BufWritePost_enable = 1
   let g:watchdogs_check_BufWritePost_enables = {
-    \   'c'    : 1,
-    \   'ruby' : 1,
-    \ }
+        \   'c'    : 1,
+        \   'ruby' : 1,
+        \ }
 
   if neobundle#tap('watchdogs.vim')
 
@@ -1449,17 +1535,19 @@ if neobundle#tap('vim-tomorrow-theme')
 
   " 現在のカーソル位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight Cursor
-    \  term=bold cterm=bold gui=bold
-    \  ctermfg=15 ctermbg=12 guifg=White guibg=Red
+        \  term=bold cterm=bold gui=bold
+        \  ctermfg=15 ctermbg=12 guifg=White guibg=Red
 
   " 検索中にフォーカス位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
-    \  term=reverse cterm=NONE gui=NONE
-    \  ctermfg=16 ctermbg=222 guifg=#1d1f21 guibg=#f0c674
+        \  term=reverse cterm=NONE gui=NONE
+        \  ctermfg=16 ctermbg=222 guifg=#1d1f21 guibg=#f0c674
 
-  " IME ONしていることをわかりやすくする
-  if has('multi_byte_ime') || has('xim')
-    autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
+  if !neobundle#tap('eskk.vim')
+    " IME ONしていることをわかりやすくする
+    if has('multi_byte_ime') || has('xim')
+      autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
+    endif
   endif
 
   colorscheme Tomorrow-Night
@@ -1514,6 +1602,10 @@ endif " }}}
 
 " Visualモードでインクリメント/デクリメント(vim-visualinc) {{{
 if neobundle#tap('vim-visualinc')
+
+  " for Lazy
+  vmap <C-a>  <Plug>(visualinc-increment)
+  vmap <C-x>  <Plug>(visualinc-decrement)
 
 endif " }}}
 
@@ -1785,18 +1877,18 @@ if neobundle#tap('tagbar')
   let g:tagbar_ctags_bin = '$VIM\ctags.exe'
   let g:tagbar_sort = 0
   let g:tagbar_type_vim = {
-    \   'kinds'       : [
-    \     'v:variables',
-    \     'f:functions',
-    \   ]
-    \ }
+        \   'kinds' : [
+        \     'v:variables',
+        \     'f:functions',
+        \   ]
+        \ }
   let g:tagbar_type_c = {
-    \   'kinds'       : [
-    \     'd:macros',
-    \     'v:variables',
-    \     'f:functions',
-    \   ]
-    \ }
+        \   'kinds' : [
+        \     'd:macros',
+        \     'v:variables',
+        \     'f:functions',
+        \   ]
+        \ }
   nnoremap <silent> <F9> :<C-u>TagbarToggle<CR>
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
@@ -1810,7 +1902,7 @@ if neobundle#tap('tagbar')
     echo 'clipped: ' . l:funcName
   endfunction
   command! -nargs=0 ClipCurrentTag
-    \ call s:ClipCurrentTag(tagbar#currenttag('%s', ''))
+        \ call s:ClipCurrentTag(tagbar#currenttag('%s', ''))
 
   function! s:PrintCurrentTag(data)
     " cの場合、末尾の()を削除する
@@ -1822,7 +1914,7 @@ if neobundle#tap('tagbar')
     echo 'print current tag: ' . l:funcName
   endfunction
   command! -nargs=0 PrintCurrentTag
-    \ call s:PrintCurrentTag(tagbar#currenttag('%s', ''))
+        \ call s:PrintCurrentTag(tagbar#currenttag('%s', ''))
 
 endif " }}}
 
@@ -1841,36 +1933,36 @@ if neobundle#tap('lightline.vim')
   let g:lightline.tabline = { 'left': [ [ 'tabs' ] ], 'right': [] }
 
   let g:lightline.active = {
-    \   'left'  : [ [ 'mode' ],
-    \               [ 'skk-mode', 'fugitive', 'filename', 'currenttag' ], ],
-    \   'right' : [ [ 'lineinfo' ],
-    \               [ 'percent' ],
-    \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
-    \ }
+        \   'left'  : [ [ 'mode' ],
+        \               [ 'skk-mode', 'fugitive', 'filename', 'currenttag' ], ],
+        \   'right' : [ [ 'lineinfo' ],
+        \               [ 'percent' ],
+        \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
+        \ }
 
-    " for using git properly
-    " \               [ 'skk-mode', 'gita-branch', 'filename', 'currenttag' ], ],
+  " for using git properly
+  " \               [ 'skk-mode', 'gita-branch', 'filename', 'currenttag' ], ],
 
   let g:lightline.component_function = {
-    \   'modified'     : 'MyModified',
-    \   'readonly'     : 'MyReadonly',
-    \   'filename'     : 'MyFilename',
-    \   'fileformat'   : 'MyFileformat',
-    \   'filetype'     : 'MyFiletype',
-    \   'fileencoding' : 'MyFileencoding',
-    \   'mode'         : 'MyMode',
-    \   'skk-mode'     : 'MySKKMode',
-    \   'fugitive'     : 'MyFugitive',
-    \   'currenttag'   : 'MyCurrentTag',
-    \ }
+        \   'modified'     : 'MyModified',
+        \   'readonly'     : 'MyReadonly',
+        \   'filename'     : 'MyFilename',
+        \   'fileformat'   : 'MyFileformat',
+        \   'filetype'     : 'MyFiletype',
+        \   'fileencoding' : 'MyFileencoding',
+        \   'mode'         : 'MyMode',
+        \   'skk-mode'     : 'MySKKMode',
+        \   'fugitive'     : 'MyFugitive',
+        \   'currenttag'   : 'MyCurrentTag',
+        \ }
 
-    " for using git properly
-    " \   'gita-branch'  : 'MyGitaBranch',
+  " for using git properly
+  " \   'gita-branch'  : 'MyGitaBranch',
 
   function! MyModified()
     return &ft =~ 'help\|vimfiler\'   ? ''  :
-      \                   &modified   ? '+' :
-      \                   &modifiable ? ''  : '-'
+          \               &modified   ? '+' :
+          \               &modifiable ? ''  : '-'
   endfunction
 
   function! MyReadonly()
@@ -1882,12 +1974,12 @@ if neobundle#tap('lightline.vim')
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており、ファイル名をフルパス(%:p)出力
     " -> GVIMウィンドウ上部にフルパスが表示されているので、そちらを参照する
-    return (&ft == 'unite'       ? unite#get_status_string()    :
-      \     &ft == 'vimfiler'    ? vimfiler#get_status_string() :
-      \     &ft == 'vimshell'    ? vimshell#get_status_string() :
-      \      '' != expand('%:t') ? expand('%:t')                : '[No Name]') .
-      \    ( '' != MyReadonly()  ? ' ' . MyReadonly()           : ''         ) .
-      \    ( '' != MyModified()  ? ' ' . MyModified()           : ''         )
+    return ( &ft == 'unite'       ? unite#get_status_string()    :
+          \  &ft == 'vimfiler'    ? vimfiler#get_status_string() :
+          \  &ft == 'vimshell'    ? vimshell#get_status_string() :
+          \   '' != expand('%:t') ? expand('%:t')                : '[No Name]') .
+          \ ( '' != MyReadonly()  ? ' ' . MyReadonly()           : ''         ) .
+          \ ( '' != MyModified()  ? ' ' . MyModified()           : ''         )
   endfunction
 
   function! MyFileformat()
@@ -1933,24 +2025,24 @@ if neobundle#tap('lightline.vim')
       endif
     catch
     endtry
-      return ''
-    else
-      return ''
-    endif
-  endfunction
+    return ''
+  else
+    return ''
+  endif
+endfunction
 
-  function! MyGitaBranch()
-    try
-      if &ft != 'vimfiler'
-        let l:_ = gita#statusline#preset('branch_fancy')
-        return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
-      endif
-    catch
-    endtry
-      return ''
-    else
-      return ''
+function! MyGitaBranch()
+  try
+    if &ft != 'vimfiler'
+      let l:_ = gita#statusline#preset('branch_fancy')
+      return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
     endif
+  catch
+  endtry
+  return ''
+else
+  return ''
+endif
   endfunction
 
 endif " }}}
@@ -2046,6 +2138,21 @@ if neobundle#tap('clever-f.vim')
   nmap [t [[F(B
   nmap ]t ]]F(B
 
+  " for Lazy
+  let g:clever_f_not_overwrites_standard_mappings = 1
+  nmap f <Plug>(clever-f-f)
+  xmap f <Plug>(clever-f-f)
+  omap f <Plug>(clever-f-f)
+  nmap F <Plug>(clever-f-F)
+  xmap F <Plug>(clever-f-F)
+  omap F <Plug>(clever-f-F)
+  nmap t <Plug>(clever-f-t)
+  xmap t <Plug>(clever-f-t)
+  omap t <Plug>(clever-f-t)
+  nmap T <Plug>(clever-f-T)
+  xmap T <Plug>(clever-f-T)
+  omap T <Plug>(clever-f-T)
+
 endif " }}}
 
 " コメントアウト/コメントアウト解除を簡単に(caw.vim) {{{
@@ -2089,10 +2196,10 @@ if neobundle#tap('vim-startify')
   "   \ ]
 
   let g:startify_list_order = [
-    \   [ 'My bookmarks:' ],        'bookmarks',
-    \   [ 'Recently used files:' ], 'files',
-    \   [ 'My sessions:' ],         'sessions',
-    \ ]
+        \   [ 'My bookmarks:' ],        'bookmarks',
+        \   [ 'Recently used files:' ], 'files',
+        \   [ 'My sessions:' ],         'sessions',
+        \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
 
@@ -2106,7 +2213,7 @@ endif " }}}
 " VimからLingrを見る(J6uil.vim) {{{
 if neobundle#tap('J6uil.vim')
 
-  let g:J6uil_config_dir = '~/.cache/J6uil'
+  let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
 endif " }}}
 
@@ -2150,10 +2257,13 @@ if neobundle#tap('eskk.vim')
 
   let g:eskk#directory = '~/.cache/eskk'
   let g:eskk#dictionary
-      \ = { 'path': '~/dotfiles/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
+        \ = { 'path': '~/dotfiles/.skk-jisyo', 'sorted': 0, 'encoding': 'utf-8', }
   if filereadable(expand('~/vimfiles/dict/SKK-JISYO.L'))
-    let g:eskk#large_dictionary =
-      \ { 'path': '~/vimfiles/dict/SKK-JISYO.L', 'sorted': 1, 'encoding': 'euc-jp', }
+    let g:eskk#large_dictionary = {
+          \   'path'    : '~/vimfiles/dict/SKK-JISYO.L',
+          \   'sorted'  : 1,
+          \   'encoding': 'euc-jp',
+          \ }
   endif
 
   let g:eskk#show_annotation = 1
@@ -2171,11 +2281,65 @@ endif " }}}
 if neobundle#tap('restart.vim')
 
   command! -bar RestartWithSession
-    \   let g:restart_sessionoptions
-    \     = 'blank,curdir,folds,help,localoptions,tabpages'
-    \ | Restart
+        \   let g:restart_sessionoptions
+        \     = 'blank,curdir,folds,help,localoptions,tabpages'
+        \ | Restart
 
 endif " }}}
+
+" スクラッチバッファ(scratch.vim) {{{
+if neobundle#tap('scratch.vim')
+
+  let g:scratch_insert_autohide = 0
+  let g:scratch_filetype = 'scratch'
+  let g:scratch_height = 10
+
+  " for Lazy
+  let g:scratch_no_mappings = 1
+  nmap gs <Plug>(scratch-insert-reuse)
+  nmap gS <Plug>(scratch-insert-clear)
+  xmap gs <Plug>(scratch-selection-reuse)
+  xmap gS <Plug>(scratch-selection-clear)
+
+  function! s:ScratchVimSettings()
+    nnoremap <buffer> <Esc> :<C-u>q<CR>
+  endfunction
+  autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
+
+endif " }}}
+
+" Vimでプレゼンテーション(vim-showtime) {{{
+if neobundle#tap('vim-showtime')
+
+  " s:hide_cursorを置き換えたい
+  function! s:hide_cursor()
+    highlight Cursor gui=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+  endfunction
+
+  " " Sourceされてもautoloadは実行時まで読み込まれないので、以下はできないはず...
+  " function! neobundle#hooks.on_post_source(bundle)
+  "   call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
+  "         \       GetFunc(expand('~\.vimrc'), 'hide_cursor'))
+  " endfunction
+
+  " 初回実行時は必ず失敗するコマンドをsilentで実行してautoloadを読ませて置き換え
+  " -> イケてないけど動くしいいか...
+  if neobundle#tap('vim-brightest')
+    command! -bar SS
+          \   silent! ShowtimeResume
+          \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
+          \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
+          \ | BrightestDisable
+          \ | ShowtimeStart
+  else
+    command! -bar SS
+          \   silent! ShowtimeResume
+          \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
+          \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
+          \ | ShowtimeStart
+  endif
+
+endif
 
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
