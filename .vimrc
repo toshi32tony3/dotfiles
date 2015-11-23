@@ -2331,12 +2331,14 @@ if neobundle#tap('vim-showtime')
           \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
           \ | BrightestDisable
           \ | ShowtimeStart
+          \ | delcommand SS
   else
     command! -bar SS
           \   silent! ShowtimeResume
           \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
           \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
           \ | ShowtimeStart
+          \ | delcommand SS
   endif
 
 endif
