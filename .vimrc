@@ -215,7 +215,10 @@ NeoBundleLazy 'mtth/scratch.vim',
 NeoBundleLazy 'thinca/vim-showtime',
   \ { 'autoload' : { 'commands' : ['SS'] } }
 
-NeoBundleLazy 'vim-jp/vimdoc-ja'
+" 日本語ヘルプを卒業したい
+" -> なかなかできない
+" NeoBundleLazy 'vim-jp/vimdoc-ja'
+set helplang=en
 
 call neobundle#end()
 
@@ -240,10 +243,6 @@ nnoremap #  <Nop>
 
 " ##で入力待ちを解除する
 nnoremap ## <Nop>
-
-" 日本語ヘルプを卒業したい
-" -> なかなかできない
-set helplang=en
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
