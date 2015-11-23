@@ -2295,6 +2295,11 @@ if neobundle#tap('scratch.vim')
   xmap gs <Plug>(scratch-selection-reuse)
   xmap gS <Plug>(scratch-selection-clear)
 
+  function! s:ScratchVimSettings()
+    nnoremap <buffer> <Esc> :<C-u>q<CR>
+  endfunction
+  autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
+
 endif " }}}
 
 " Vimでプレゼンテーション(vim-showtime) {{{
