@@ -993,6 +993,11 @@ noremap  <C-@> <Esc>
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
 
+" netrwは使わない {{{
+let g:loaded_netrw       = 1
+let g:loaded_netrwPlugin = 1
+" }}}
+
 " スクリプト内関数を書き換える {{{
 " http://mattn.kaoriya.net/software/vim/20090826003359.htm
 " http://d.hatena.ne.jp/thinca/20090826/1251258056
