@@ -455,7 +455,7 @@ set laststatus=2  " 常にステータス行を表示する
 
 " 透明度をスイッチ
 let g:transparency_on = 0
-function! ToggleTransParency()
+function! s:ToggleTransParency()
   if g:transparency_on
     set transparency=255
     let g:transparency_on = 0
@@ -464,8 +464,8 @@ function! ToggleTransParency()
     let g:transparency_on = 1
   endif
 endfunction
-
-nnoremap <silent> <F2> :<C-u>call ToggleTransParency()<CR>
+command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
+nnoremap <silent> <F2> :<C-u>ToggleTransParency<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
