@@ -215,6 +215,8 @@ NeoBundleLazy 'mtth/scratch.vim',
 NeoBundleLazy 'thinca/vim-showtime',
   \ { 'autoload' : { 'commands' : ['SS'] } }
 
+NeoBundleLazy 'vim-jp/vimdoc-ja'
+
 call neobundle#end()
 
 " ファイルタイプの自動検出をONにする
@@ -241,7 +243,7 @@ nnoremap ## <Nop>
 
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
-" set helplang=en
+set helplang=en
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
