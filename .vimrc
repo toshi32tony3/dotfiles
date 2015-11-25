@@ -1309,6 +1309,12 @@ if neobundle#tap('junkfile.vim')
 
   let g:junkfile#directory = expand('~/junkfiles')
 
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand JunkfileOpen
+
+  endfunction
+
 endif " }}}
 
 " シンボル、関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
