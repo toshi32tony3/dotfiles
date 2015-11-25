@@ -2333,6 +2333,7 @@ endif " }}}
 " スクラッチバッファ(scratch.vim) {{{
 if neobundle#tap('scratch.vim')
 
+  let g:scratch_autohide = 0
   let g:scratch_insert_autohide = 0
   let g:scratch_filetype = 'scratch'
   let g:scratch_height = 10
