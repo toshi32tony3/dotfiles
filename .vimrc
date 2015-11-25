@@ -2394,7 +2394,7 @@ if neobundle#tap('vim-showtime')
           \ | delcommand SS
   endif
 
-endif
+endif " }}}
 
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
