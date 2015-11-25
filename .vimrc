@@ -74,7 +74,9 @@ NeoBundleLazy 'thinca/vim-scouter',
 NeoBundleLazy 'thinca/vim-qfreplace',
       \ { 'autoload' : { 'commands' : ['Qfreplace'] } }
 
-NeoBundle 'jceb/vim-hier'
+" そこまで強調しなくても良い気がしてきた
+" NeoBundle 'jceb/vim-hier'
+
 NeoBundle 'osyo-manga/vim-brightest'
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
