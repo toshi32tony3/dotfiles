@@ -2230,6 +2230,7 @@ if neobundle#tap('vim-startify')
 
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    delcommand StartifyDebug
     delcommand SLoad
     delcommand SSave
     delcommand SDelete
