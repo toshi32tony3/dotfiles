@@ -213,8 +213,7 @@ NeoBundleLazy 'tyru/restart.vim',
 NeoBundle 'thinca/vim-prettyprint'
 
 NeoBundleLazy 'mtth/scratch.vim',
-      \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'],
-      \                  'commands' : ['Scratch', 'ScratchInsert'] } }
+      \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'] } }
 
 NeoBundleLazy 'thinca/vim-showtime',
       \ { 'autoload' : { 'commands' : ['SS'] } }
