@@ -65,7 +65,7 @@ NeoBundleLazy 'Shougo/unite-outline',
 NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun',
       \ { 'autoload' : { 'commands' : ['QuickRun'] } }
-NeoBundle 'thinca/vim-ambicmd'
+NeoBundleLazy 'thinca/vim-ambicmd'
 NeoBundleLazy 'thinca/vim-fontzoom',
       \ { 'autoload' : { 'mappings' : ['<Plug>(fontzoom-'],
       \                  'commands' : ['Fontzoom', 'Fontzoom!'] } }
