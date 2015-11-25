@@ -2025,48 +2025,45 @@ if neobundle#tap('lightline.vim')
   function! MySKKMode()
     if neobundle#tap('eskk.vim')
       return winwidth(0) > 30 ? eskk#statusline() : ''
+    endif
+    return ''
+  endfunction
+
+  function! MyCurrentTag()
+    if &ft == 'vim'
+      if neobundle#is_installed('foldCC')
+        let l:_ = FoldCCnavi()
+        return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
+      endif
+      return ''
     else
+      if neobundle#is_sourced('tagbar')
+        let l:_ = tagbar#currenttag('%s', '')
+        let l:_ = &ft == 'c' ? l:_[0 : (stridx(l:_, '(') - 1)] : l:_
+        return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
+      endif
       return ''
     endif
   endfunction
 
-  function! MyCurrentTag()
-    if &ft == 'vim' && exists('*FoldCCnavi()')
-      let l:_ = FoldCCnavi()
-      return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
-    else
-      let l:_ = tagbar#currenttag('%s', '')
-      let l:_ = &ft == 'c' ? l:_[0 : (stridx(l:_, '(') - 1)] : l:_
-      return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
-    endif
-  endfunction
-
   function! MyFugitive()
-    try
-      if &ft != 'vimfiler'
+    if &ft != 'vimfiler'
+      try
         let l:_ = fugitive#head()
         return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
-      endif
-    catch
-    endtry
-    return ''
-  else
-    return ''
-  endif
-endfunction
-
-function! MyGitaBranch()
-  try
-    if &ft != 'vimfiler'
-      let l:_ = gita#statusline#preset('branch_fancy')
-      return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
+      endtry
     endif
-  catch
-  endtry
-  return ''
-else
-  return ''
-endif
+    return ''
+  endfunction
+
+  function! MyGitaBranch()
+    if &ft != 'vimfiler'
+      try
+        let l:_ = gita#statusline#preset('branch_fancy')
+        return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
+      endtry
+    endif
+    return ''
   endfunction
 
 endif " }}}
