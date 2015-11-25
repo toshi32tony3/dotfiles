@@ -204,7 +204,8 @@ NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
 NeoBundleLazy 'tyru/skk.vim'
-NeoBundle 'tyru/eskk.vim'
+NeoBundleLazy 'tyru/eskk.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(eskk'] } }
 
 NeoBundleLazy 'tyru/restart.vim',
       \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
