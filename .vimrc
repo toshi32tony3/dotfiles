@@ -145,7 +145,7 @@ NeoBundleLazy 'haya14busa/vim-asterisk',
       \ { 'autoload' : { 'mappings' : ['<Plug>(asterisk-'] } }
 
 NeoBundleLazy 'mhinz/vim-signify',
-      \ { 'autoload' : { 'commands' : ['SignifyToggle'] } }
+      \ { 'autoload' : { 'commands' : ['SignifyStart'] } }
 
 NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita',
@@ -1840,11 +1840,17 @@ if neobundle#tap('vim-signify')
   let g:signify_vcs_list = [ 'git', 'cvs' ]
   let g:signify_disable_by_default = 1
   let g:signify_update_on_bufenter = 0
-  let g:signify_update_on_focusgained = 0
+  let g:signify_update_on_focusgained = 1
 
   nmap gj <Plug>(signify-next-hunk)zz
   nmap gk <Plug>(signify-prev-hunk)zz
   nmap gh <Plug>(signify-toggle-highlight)
+
+  " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
+  command! -bar SignifyStart
+        \ | SignifyToggle
+        \ | SignifyToggle
+        \ | delcommand SignifyStart
 
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
@@ -2340,6 +2346,14 @@ if neobundle#tap('scratch.vim')
     nnoremap <buffer> <Esc> :<C-u>q<CR>
   endfunction
   autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand Scratch
+    delcommand ScratchInsert
+    delcommand ScratchSelection
+
+  endfunction
 
 endif " }}}
 
