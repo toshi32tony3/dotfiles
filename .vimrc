@@ -2344,6 +2344,16 @@ if neobundle#tap('restart.vim')
 
 endif " }}}
 
+" VimScript変数の中身を整形して出力(vim-prettyprint) {{{
+if neobundle#tap('vim-prettyprint')
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand PrettyPrint
+  endfunction
+
+endif " }}}
+
 " スクラッチバッファ(scratch.vim) {{{
 if neobundle#tap('scratch.vim')
 
