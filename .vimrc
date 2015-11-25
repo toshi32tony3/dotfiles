@@ -1998,12 +1998,24 @@ if neobundle#tap('lightline.vim')
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており、ファイル名をフルパス(%:p)出力
     " -> GVIMウィンドウ上部にフルパスが表示されているので、そちらを参照する
-    return ( &ft == 'unite'       ? unite#get_status_string()    :
-          \  &ft == 'vimfiler'    ? vimfiler#get_status_string() :
-          \  &ft == 'vimshell'    ? vimshell#get_status_string() :
-          \   '' != expand('%:t') ? expand('%:t')                : '[No Name]') .
-          \ ( '' != MyReadonly()  ? ' ' . MyReadonly()           : ''         ) .
-          \ ( '' != MyModified()  ? ' ' . MyModified()           : ''         )
+    if       neobundle#is_installed('unite.vim')    &&
+          \  neobundle#is_installed('vimfiler.vim') &&
+          \  neobundle#is_installed('vimshell.vim')
+      return ( &ft == 'unite'       ? unite#get_status_string()    :
+            \  &ft == 'vimfiler'    ? vimfiler#get_status_string() :
+            \  &ft == 'vimshell'    ? vimshell#get_status_string() :
+            \   '' != expand('%:t') ? expand('%:t')                : '[No Name]') .
+            \ ( '' != MyReadonly()  ? ' ' . MyReadonly()           : ''         ) .
+            \ ( '' != MyModified()  ? ' ' . MyModified()           : ''         )
+    else
+      return ( &ft == 'unite'       ? ''                 :
+            \  &ft == 'vimfiler'    ? ''                 :
+            \  &ft == 'vimshell'    ? ''                 :
+            \   '' != expand('%:t') ? expand('%:t')      : '[No Name]') .
+            \ ( '' != MyReadonly()  ? ' ' . MyReadonly() : ''         ) .
+            \ ( '' != MyModified()  ? ' ' . MyModified() : ''         )
+    endif
+    return ''
   endfunction
 
   function! MyFileformat()
@@ -2023,7 +2035,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    if neobundle#tap('eskk.vim')
+    if neobundle#is_installed('eskk.vim')
       return winwidth(0) > 30 ? eskk#statusline() : ''
     endif
     return ''
@@ -2048,20 +2060,24 @@ if neobundle#tap('lightline.vim')
 
   function! MyFugitive()
     if &ft != 'vimfiler'
-      try
-        let l:_ = fugitive#head()
-        return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
-      endtry
+      if neobundle#is_installed('vim-fugitive')
+        try
+          let l:_ = fugitive#head()
+          return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
+        endtry
+      endif
     endif
     return ''
   endfunction
 
   function! MyGitaBranch()
     if &ft != 'vimfiler'
-      try
-        let l:_ = gita#statusline#preset('branch_fancy')
-        return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
-      endtry
+      if neobundle#is_installed('vim-gita')
+        try
+          let l:_ = gita#statusline#preset('branch_fancy')
+          return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
+        endtry
+      endif
     endif
     return ''
   endfunction
