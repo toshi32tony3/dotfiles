@@ -1836,9 +1836,24 @@ endif " }}}
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
+  let g:signify_vcs_list = [ 'git', 'cvs' ]
+  let g:signify_disable_by_default = 1
+  let g:signify_update_on_bufenter = 0
+  let g:signify_update_on_focusgained = 0
+
   nmap gj <Plug>(signify-next-hunk)zz
   nmap gk <Plug>(signify-prev-hunk)zz
   nmap gh <Plug>(signify-toggle-highlight)
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand SignifyDebug
+    delcommand SignifyDebugDiff
+    delcommand SignifyDebugUnknown
+    delcommand SignifyFold
+    delcommand SignifyRefresh
+
+  endfunction
 
 endif " }}}
 
@@ -2179,6 +2194,15 @@ if neobundle#tap('vim-signature')
   " m<Space> : PurgeMarks
   nmap mm m.
 
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand SignatureListMarkers
+    delcommand SignatureListMarks
+    delcommand SignatureRefresh
+    delcommand SignatureToggleSigns
+
+  endfunction
+
 endif " }}}
 
 " vimにスタート画面を用意(vim-startify) {{{
@@ -2202,6 +2226,15 @@ if neobundle#tap('vim-startify')
         \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand SLoad
+    delcommand SSave
+    delcommand SDelete
+    delcommand SClose
+
+  endfunction
 
 endif " }}}
 
