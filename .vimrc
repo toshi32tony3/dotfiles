@@ -144,7 +144,8 @@ NeoBundleLazy 'osyo-manga/vim-anzu',
 NeoBundleLazy 'haya14busa/vim-asterisk',
       \ { 'autoload' : { 'mappings' : ['<Plug>(asterisk-'] } }
 
-NeoBundle 'mhinz/vim-signify'
+NeoBundleLazy 'mhinz/vim-signify',
+      \ { 'autoload' : { 'commands' : ['SignifyToggle'] } }
 
 NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita',
