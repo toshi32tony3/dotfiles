@@ -65,7 +65,7 @@ NeoBundleLazy 'Shougo/unite-outline',
 NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun',
       \ { 'autoload' : { 'commands' : ['QuickRun'] } }
-NeoBundle 'thinca/vim-ambicmd'
+NeoBundleLazy 'thinca/vim-ambicmd'
 NeoBundleLazy 'thinca/vim-fontzoom',
       \ { 'autoload' : { 'mappings' : ['<Plug>(fontzoom-'],
       \                  'commands' : ['Fontzoom', 'Fontzoom!'] } }
@@ -74,7 +74,9 @@ NeoBundleLazy 'thinca/vim-scouter',
 NeoBundleLazy 'thinca/vim-qfreplace',
       \ { 'autoload' : { 'commands' : ['Qfreplace'] } }
 
-NeoBundle 'jceb/vim-hier'
+" そこまで強調しなくても良い気がしてきた
+" NeoBundle 'jceb/vim-hier'
+
 NeoBundle 'osyo-manga/vim-brightest'
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
@@ -144,7 +146,8 @@ NeoBundleLazy 'osyo-manga/vim-anzu',
 NeoBundleLazy 'haya14busa/vim-asterisk',
       \ { 'autoload' : { 'mappings' : ['<Plug>(asterisk-'] } }
 
-NeoBundle 'mhinz/vim-signify'
+NeoBundleLazy 'mhinz/vim-signify',
+      \ { 'autoload' : { 'commands' : ['SignifyStart'] } }
 
 NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita',
@@ -201,16 +204,17 @@ NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundle 'lambdalisue/vim-improve-diff'
 
 NeoBundleLazy 'tyru/skk.vim'
-NeoBundle 'tyru/eskk.vim'
+NeoBundleLazy 'tyru/eskk.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(eskk'] } }
 
 NeoBundleLazy 'tyru/restart.vim',
       \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
 
-NeoBundle 'thinca/vim-prettyprint'
+NeoBundleLazy 'thinca/vim-prettyprint',
+      \ { 'autoload' : { 'commands' : ['PP'] } }
 
 NeoBundleLazy 'mtth/scratch.vim',
-      \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'],
-      \                  'commands' : ['Scratch', 'ScratchInsert'] } }
+      \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'] } }
 
 NeoBundleLazy 'thinca/vim-showtime',
       \ { 'autoload' : { 'commands' : ['SS'] } }
@@ -591,10 +595,12 @@ set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 " autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
-" コロンを打った時のインデントを防ぐ
+" インデントを入れるキーのリストを調整
 " https://gist.github.com/myokota/8b6040da5a3d8b029be0
 autocmd MyAutoCmd BufEnter * setlocal indk-=:
+autocmd MyAutoCmd BufEnter * setlocal indk-=0#
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
+autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
 
 " /**************************************************************************/
 " /* formatoptions (Vim default: 'tcq', Vi default: 'vt')                   */
@@ -1550,7 +1556,7 @@ if neobundle#tap('vim-tomorrow-theme')
     endif
   endif
 
-  colorscheme Tomorrow-Night
+  colorscheme Tomorrow-Night-Bright
 
 endif " }}}
 
@@ -1836,9 +1842,30 @@ endif " }}}
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
+  let g:signify_vcs_list = [ 'git', 'cvs' ]
+  let g:signify_disable_by_default = 1
+  let g:signify_update_on_bufenter = 0
+  let g:signify_update_on_focusgained = 1
+
   nmap gj <Plug>(signify-next-hunk)zz
   nmap gk <Plug>(signify-prev-hunk)zz
   nmap gh <Plug>(signify-toggle-highlight)
+
+  " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
+  command! -bar SignifyStart
+        \ | SignifyToggle
+        \ | SignifyToggle
+        \ | delcommand SignifyStart
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand SignifyDebug
+    delcommand SignifyDebugDiff
+    delcommand SignifyDebugUnknown
+    delcommand SignifyFold
+    delcommand SignifyRefresh
+
+  endfunction
 
 endif " }}}
 
@@ -1974,12 +2001,24 @@ if neobundle#tap('lightline.vim')
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており、ファイル名をフルパス(%:p)出力
     " -> GVIMウィンドウ上部にフルパスが表示されているので、そちらを参照する
-    return ( &ft == 'unite'       ? unite#get_status_string()    :
-          \  &ft == 'vimfiler'    ? vimfiler#get_status_string() :
-          \  &ft == 'vimshell'    ? vimshell#get_status_string() :
-          \   '' != expand('%:t') ? expand('%:t')                : '[No Name]') .
-          \ ( '' != MyReadonly()  ? ' ' . MyReadonly()           : ''         ) .
-          \ ( '' != MyModified()  ? ' ' . MyModified()           : ''         )
+    if       neobundle#is_installed('unite.vim')    &&
+          \  neobundle#is_installed('vimfiler.vim') &&
+          \  neobundle#is_installed('vimshell.vim')
+      return ( &ft == 'unite'       ? unite#get_status_string()    :
+            \  &ft == 'vimfiler'    ? vimfiler#get_status_string() :
+            \  &ft == 'vimshell'    ? vimshell#get_status_string() :
+            \   '' != expand('%:t') ? expand('%:t')                : '[No Name]') .
+            \ ( '' != MyReadonly()  ? ' ' . MyReadonly()           : ''         ) .
+            \ ( '' != MyModified()  ? ' ' . MyModified()           : ''         )
+    else
+      return ( &ft == 'unite'       ? ''                 :
+            \  &ft == 'vimfiler'    ? ''                 :
+            \  &ft == 'vimshell'    ? ''                 :
+            \   '' != expand('%:t') ? expand('%:t')      : '[No Name]') .
+            \ ( '' != MyReadonly()  ? ' ' . MyReadonly() : ''         ) .
+            \ ( '' != MyModified()  ? ' ' . MyModified() : ''         )
+    endif
+    return ''
   endfunction
 
   function! MyFileformat()
@@ -1999,50 +2038,51 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    if neobundle#tap('eskk.vim')
+    if neobundle#is_installed('eskk.vim')
       return winwidth(0) > 30 ? eskk#statusline() : ''
+    endif
+    return ''
+  endfunction
+
+  function! MyCurrentTag()
+    if &ft == 'vim'
+      if neobundle#is_installed('foldCC')
+        let l:_ = FoldCCnavi()
+        return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
+      endif
+      return ''
     else
+      if neobundle#is_sourced('tagbar')
+        let l:_ = tagbar#currenttag('%s', '')
+        let l:_ = &ft == 'c' ? l:_[0 : (stridx(l:_, '(') - 1)] : l:_
+        return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
+      endif
       return ''
     endif
   endfunction
 
-  function! MyCurrentTag()
-    if &ft == 'vim' && exists('*FoldCCnavi()')
-      let l:_ = FoldCCnavi()
-      return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
-    else
-      let l:_ = tagbar#currenttag('%s', '')
-      let l:_ = &ft == 'c' ? l:_[0 : (stridx(l:_, '(') - 1)] : l:_
-      return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
+  function! MyFugitive()
+    if &ft != 'vimfiler'
+      if neobundle#is_installed('vim-fugitive')
+        try
+          let l:_ = fugitive#head()
+          return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
+        endtry
+      endif
     endif
+    return ''
   endfunction
 
-  function! MyFugitive()
-    try
-      if &ft != 'vimfiler'
-        let l:_ = fugitive#head()
-        return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
-      endif
-    catch
-    endtry
-    return ''
-  else
-    return ''
-  endif
-endfunction
-
-function! MyGitaBranch()
-  try
+  function! MyGitaBranch()
     if &ft != 'vimfiler'
-      let l:_ = gita#statusline#preset('branch_fancy')
-      return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
+      if neobundle#is_installed('vim-gita')
+        try
+          let l:_ = gita#statusline#preset('branch_fancy')
+          return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
+        endtry
+      endif
     endif
-  catch
-  endtry
-  return ''
-else
-  return ''
-endif
+    return ''
   endfunction
 
 endif " }}}
@@ -2179,6 +2219,15 @@ if neobundle#tap('vim-signature')
   " m<Space> : PurgeMarks
   nmap mm m.
 
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand SignatureListMarkers
+    delcommand SignatureListMarks
+    delcommand SignatureRefresh
+    delcommand SignatureToggleSigns
+
+  endfunction
+
 endif " }}}
 
 " vimにスタート画面を用意(vim-startify) {{{
@@ -2202,6 +2251,16 @@ if neobundle#tap('vim-startify')
         \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand StartifyDebug
+    delcommand SLoad
+    delcommand SSave
+    delcommand SDelete
+    delcommand SClose
+
+  endfunction
 
 endif " }}}
 
@@ -2287,9 +2346,20 @@ if neobundle#tap('restart.vim')
 
 endif " }}}
 
+" VimScript変数の中身を整形して出力(vim-prettyprint) {{{
+if neobundle#tap('vim-prettyprint')
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand PrettyPrint
+  endfunction
+
+endif " }}}
+
 " スクラッチバッファ(scratch.vim) {{{
 if neobundle#tap('scratch.vim')
 
+  let g:scratch_autohide = 0
   let g:scratch_insert_autohide = 0
   let g:scratch_filetype = 'scratch'
   let g:scratch_height = 10
@@ -2305,6 +2375,14 @@ if neobundle#tap('scratch.vim')
     nnoremap <buffer> <Esc> :<C-u>q<CR>
   endfunction
   autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand Scratch
+    delcommand ScratchInsert
+    delcommand ScratchSelection
+
+  endfunction
 
 endif " }}}
 
@@ -2341,7 +2419,7 @@ if neobundle#tap('vim-showtime')
           \ | delcommand SS
   endif
 
-endif
+endif " }}}
 
 " The end of Plugin Settings }}}
 "-----------------------------------------------------------------------------
