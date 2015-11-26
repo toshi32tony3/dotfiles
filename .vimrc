@@ -682,9 +682,8 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
-" パターンマッチが修正前だと:helpなどにも反応してしまうので修正
-" -> プラグインの挙動とぶつかってエラーになるらしいこともあるらしいので使わない
-"    https://github.com/Shougo/vimproc.vim/issues/116
+" -> プラグインの挙動とぶつかることもあるらしいので使わない
+" -> https://github.com/Shougo/vimproc.vim/issues/116
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
 
