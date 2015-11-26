@@ -594,7 +594,7 @@ autocmd MyAutoCmd BufEnter * setlocal textwidth=80
 " autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
-" インデントを入れるキーのリストを調整
+" インデントを入れるキーのリストを調整(コロン, 行頭の#でインデントしない)
 " https://gist.github.com/myokota/8b6040da5a3d8b029be0
 autocmd MyAutoCmd BufEnter * setlocal indk-=:
 autocmd MyAutoCmd BufEnter * setlocal indk-=0#
