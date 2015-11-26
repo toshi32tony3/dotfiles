@@ -174,8 +174,10 @@ NeoBundleLazy 'LeafCage/yankround.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(yankround-'] } }
 NeoBundleLazy 'junegunn/vim-easy-align',
       \ { 'autoload' : { 'commands' : ['EasyAlign'] } }
-NeoBundleLazy 'bronson/vim-trailing-whitespace',
-      \ { 'autoload' : { 'commands' : ['FixWhitespace'] } }
+
+" 常に行末スペースを検知したいので、Lazyしない
+NeoBundle 'bronson/vim-trailing-whitespace'
+
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
 
