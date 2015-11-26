@@ -219,7 +219,7 @@ NeoBundleLazy 'mtth/scratch.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'] } }
 
 NeoBundleLazy 'thinca/vim-showtime',
-      \ { 'autoload' : { 'commands' : ['SS'] } }
+      \ { 'autoload' : { 'commands' : ['Showtime'] } }
 
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
@@ -654,9 +654,13 @@ nnoremap ,r :<C-u>source $MYVIMRC<CR><Esc>
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
-" j, k による移動を折り返されたテキストでも自然に振る舞うようにする
+" j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
 nnoremap k gk
+
+" gj/gkで次のhunkへ移動
+nnoremap gj ]c
+nnoremap gk [c
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
@@ -1243,7 +1247,7 @@ if neobundle#tap('vimfiler.vim')
 
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
-    " #をLeader専用にする
+    " #を<Leader>としているのでsimilarは##にする
     nnoremap <buffer> #  <Nop>
     nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
@@ -1252,8 +1256,8 @@ if neobundle#tap('vimfiler.vim')
       nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
 
       " Disable yankround.vim
-      nnoremap <buffer> <C-n>      <Nop>
-      nnoremap <buffer> <C-p>      <Nop>
+      nnoremap <buffer> <C-n> <Nop>
+      nnoremap <buffer> <C-p> <Nop>
     endif
 
   endfunction
@@ -1337,38 +1341,17 @@ if neobundle#tap('vim-quickrun')
         \   },
         \ }
 
-  " watchdogsを使う時の設定はこんな感じ？
-  " \   'watchdogs_checker/_' : {
-  " \     'runner/vimproc/updatetime'       : 40,
-  " \     'hook/close_quickfix/enable_exit' :  1,
-  " \   },
-  " \   'watchdogs_checker/gcc' : {
-  " \     'command'   : 'gcc',
-  " \     'cmdopt'    : '-Wall',
-  " \     'exec'      : '%c %o -fsyntax-only %s:p ',
-  " \   },
-  " \   'c/watchdogs_checker' : {
-  " \     'type' : 'watchdogs_checker/gcc',
-  " \   },
-  " \   'watchdogs_checker/ruby' : {
-  " \     'command'   : 'ruby',
-  " \     'exec'      : '%c %o -c %s:p ',
-  " \   },
-  " \   'ruby/watchdogs_checker' : {
-  " \     'type' : 'watchdogs_checker/ruby',
-  " \   },
+        " " clangを使う時の設定はこんな感じ？
+        " \   'cpp' : {
+        " \     'type' : 'cpp/clang3_4'
+        " \   },
+        " \   'cpp/clang3_4' : {
+        " \       'command' : 'clang++',
+        " \       'exec'    : '%c %o %s -o %s:p:r',
+        " \       'cmdopt'  : '-std=gnu++0x'
+        " \   },
 
-  " " clangを使う時の設定はこんな感じ？
-  " \   'cpp' : {
-  " \     'type' : 'cpp/clang3_4'
-  " \   },
-  " \   'cpp/clang3_4' : {
-  " \       'command' : 'clang++',
-  " \       'exec'    : '%c %o %s -o %s:p:r',
-  " \       'cmdopt'  : '-std=gnu++0x'
-  " \   },
-
-  " デフォルトの<Leader>rだと入力待ちがあるので、別のキーでマッピングする
+  " デフォルトの<Leader>rだと入力待ちになるので、別のキーでマッピングする
   let g:quickrun_no_default_key_mappings = 1
   nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
   vnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
@@ -1396,8 +1379,8 @@ if neobundle#tap('vim-fontzoom')
   " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
   " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
   " -> https://github.com/vim-jp/issues/issues/73
-  " nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
-  " nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
+  nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
+  nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
 
 endif " }}}
 
@@ -1448,12 +1431,12 @@ if neobundle#tap('vim-brightest')
   "   \ }
 
   " " ハイライトする単語のパターンを設定
-  " " デフォルト（空の文字列の場合）は <cword> が使用される
-  " " NOTE: <cword> の場合は前方にある単語も検出する
+  " " デフォルト(空の文字列の場合)は<cword>が使用される
+  " " NOTE: <cword>は前方にある単語も検出する
   " let g:brightest#pattern = '\k\+'
 
-  " " シンタックスが Statement の場合はハイライトしない
-  " " e.g. Vim script だと let とか if とか function とか
+  " " シンタックスがStatementの場合はハイライトしない
+  " " (e.g.) let, if, function
   " let g:brightest#ignore_syntax_list = [ 'Statement' ]
 
   " " brightestの背景をcursorlineに合わせる
@@ -1533,6 +1516,7 @@ if neobundle#tap('memolist.vim')
   " カテゴリまで決めるの面倒なので...
   let g:memolist_prompt_categories = 0
 
+  " markdownテンプレートを指定
   if filereadable(expand('~/configs/memolist/md.txt'))
     let g:memolist_template_dir_path = '~/configs/memolist'
   endif
@@ -1588,7 +1572,6 @@ endif " }}}
 " 囲む / 囲まなくする / 別の何かで囲む(vim-surround) {{{
 if neobundle#tap('vim-surround')
 
-  " " s-sneakとclever-fの使い分けに慣れるため、コメントアウトしておく
   " " (例) sw' /* 次の単語を''で囲む */
   " nmap s <plug>Ysurround
   "
@@ -1644,7 +1627,7 @@ if neobundle#tap('vim-smartchr')
     inoremap <buffer><expr> { smartchr#one_of('{', '#{', '{{')
   endfunction
 
-  " for matchit }} } } }
+  " for match }} } } }
 
 endif " }}}
 
@@ -1694,12 +1677,10 @@ if neobundle#tap('incsearch.vim')
   " map ? <Plug>(incsearch-stay)
 
   if neobundle#tap('vim-anzu')
-
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
     map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
 
   else
-
     map n  <Plug>(incsearch-nohl-n)
     map N  <Plug>(incsearch-nohl-N)
 
@@ -1707,7 +1688,6 @@ if neobundle#tap('incsearch.vim')
 
   " アスタリスク検索の対象をクリップボードにコピー
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
-
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
@@ -1717,7 +1697,6 @@ if neobundle#tap('incsearch.vim')
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
 
   elseif neobundle#tap('vim-asterisk')
-
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
@@ -1727,7 +1706,6 @@ if neobundle#tap('incsearch.vim')
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
 
   else
-
     nmap *          yiw<Plug>(incsearch-nohl-*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl-*)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
@@ -1737,7 +1715,6 @@ if neobundle#tap('incsearch.vim')
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
 
   endif
-
 endif " }}}
 
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
@@ -1766,7 +1743,6 @@ endif " }}}
 if neobundle#tap('vim-asterisk')
 
   if !neobundle#tap('incsearch.vim')
-
     nmap *          yiw<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(asterisk-z*)
     vmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
@@ -1792,7 +1768,6 @@ if neobundle#tap('vim-anzu')
   " nmap * <Plug>(anzu-star-with-echo)N
 
   if !neobundle#tap('incsearch.vim')
-
     " コマンド結果出力画面にecho
     nmap n <Plug>(anzu-n-with-echo)
     nmap N <Plug>(anzu-N-with-echo)
@@ -1804,14 +1779,10 @@ endif " }}}
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
-  let g:signify_vcs_list = [ 'git', 'cvs' ]
+  let g:signify_vcs_list = ['git', 'cvs']
   let g:signify_disable_by_default = 1
   let g:signify_update_on_bufenter = 0
   let g:signify_update_on_focusgained = 1
-
-  nmap gj <Plug>(signify-next-hunk)zz
-  nmap gk <Plug>(signify-prev-hunk)zz
-  nmap gh <Plug>(signify-toggle-highlight)
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
   command! -bar SignifyStart
@@ -1821,6 +1792,10 @@ if neobundle#tap('vim-signify')
 
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    nmap gj <Plug>(signify-next-hunk)zz
+    nmap gk <Plug>(signify-prev-hunk)zz
+    nmap gh <Plug>(signify-toggle-highlight)
+
     delcommand SignifyDebug
     delcommand SignifyDebugDiff
     delcommand SignifyDebugUnknown
@@ -1835,6 +1810,7 @@ endif " }}}
 if neobundle#tap('vim-fugitive')
 
   autocmd MyAutoCmd FileType gitcommit setlocal nofoldenable
+
 endif " }}}
 
 " VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
@@ -1845,8 +1821,8 @@ if neobundle#tap('agit.vim')
     nmap <buffer> Rv <Plug>(agit-git-revert)
 
     " Disable yankround.vim
-    nnoremap <buffer> <C-n>      <Nop>
-    nnoremap <buffer> <C-p>      <Nop>
+    nnoremap <buffer> <C-n> <Nop>
+    nnoremap <buffer> <C-p> <Nop>
 
   endfunction
   autocmd MyAutoCmd FileType agit call s:AgitSettings()
@@ -1887,7 +1863,6 @@ if neobundle#tap('tagbar')
 
     " 選択範囲レジスタ(*)を使う
     let @*=l:funcName
-
     echo 'clipped: ' . l:funcName
   endfunction
   command! -nargs=0 ClipCurrentTag
@@ -1919,7 +1894,7 @@ if neobundle#tap('lightline.vim')
   let g:lightline.mode_map     = { 'c'    : 'NORMAL'                     }
   let g:lightline.separator    = { 'left' : "\u2B80", 'right' : "\u2B82" }
   let g:lightline.subseparator = { 'left' : "\u2B81", 'right' : "\u2B83" }
-  let g:lightline.tabline = { 'left': [ [ 'tabs' ] ], 'right': [] }
+  let g:lightline.tabline      = { 'left': [ [ 'tabs' ] ], 'right': []   }
 
   let g:lightline.active = {
         \   'left'  : [ [ 'mode' ],
@@ -2097,7 +2072,7 @@ endif " }}}
 " clever-fの2文字版(vim-sneak) {{{
 if neobundle#tap('vim-sneak')
 
-  let g:sneak#s_next = 1     " clever-f ならぬ clever-s な動作にする
+  let g:sneak#s_next = 1     " clever-sな挙動にする
   let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
 
   " " sは進む、Sは戻るで固定する
@@ -2106,7 +2081,7 @@ if neobundle#tap('vim-sneak')
 
   if neobundle#tap('clever-f.vim')
 
-    " clever-fと併用する時はs-sneak
+    " s-sneak
     nmap s <Plug>Sneak_s
     nmap S <Plug>Sneak_S
     xmap s <Plug>Sneak_s
@@ -2114,7 +2089,7 @@ if neobundle#tap('vim-sneak')
     omap s <Plug>Sneak_s
     omap S <Plug>Sneak_S
   else
-    " clever-fと併用しない時はf-sneak
+    " f-sneak
     nmap f <Plug>Sneak_s
     nmap F <Plug>Sneak_S
     xmap f <Plug>Sneak_s
@@ -2271,7 +2246,6 @@ if neobundle#tap('eskk.vim')
   endif
 
   if neobundle#tap('skk.vim')
-
     " disable skk.vim
     " -> Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
@@ -2316,6 +2290,7 @@ if neobundle#tap('vim-prettyprint')
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
     delcommand PrettyPrint
+
   endfunction
 
 endif " }}}
@@ -2367,20 +2342,20 @@ if neobundle#tap('vim-showtime')
   " 初回実行時は必ず失敗するコマンドをsilentで実行してautoloadを読ませて置き換え
   " -> イケてないけど動くしいいか...
   if neobundle#tap('vim-brightest')
-    command! -bar SS
+    command! -bar Showtime
           \   silent! ShowtimeResume
           \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
           \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
           \ | BrightestDisable
           \ | ShowtimeStart
-          \ | delcommand SS
+          \ | delcommand Showtime
   else
-    command! -bar SS
+    command! -bar Showtime
           \   silent! ShowtimeResume
           \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
           \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
           \ | ShowtimeStart
-          \ | delcommand SS
+          \ | delcommand Showtime
   endif
 
 endif " }}}
