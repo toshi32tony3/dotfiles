@@ -1085,7 +1085,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources = {}
   endif
 
-  if neobundle#tap('neoinclude.vim')
+  if neobundle#tap('neoinclude.vim') && neobundle#tap('neosnippet')
 
     let g:neocomplete#sources._ =
           \ ['file/include', 'member', 'buffer', 'neosnippet']
@@ -1708,8 +1708,7 @@ endif " }}}
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  nmap <Leader>H <Plug>(quickhl-manual-this)
-  map          H <Plug>(operator-quickhl-manual-this-motion)
+  map <Leader>H <Plug>(operator-quickhl-manual-this-motion)
 
   " " QuickhlManualResetも一緒にやってしまうと間違えて消すのが若干怖い
   " " -> ambicmdのおかげで :qmr<Space> で呼び出せるのでコメントアウト
