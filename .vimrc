@@ -476,9 +476,6 @@ nnoremap <silent> <F2> :<C-u>ToggleTransParency<CR>
 " スペルチェックから日本語を除外
 set spelllang+=cjk
 
-" スペルチェック機能をスイッチ
-nnoremap <silent> <F3> :<C-u>set spell!<CR>
-
 " fold(折り畳み)機能の設定
 set foldcolumn=1
 set foldlevel=0
