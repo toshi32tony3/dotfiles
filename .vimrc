@@ -638,22 +638,6 @@ command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<q-args>)
 " insertモードで保存
 inoremap <C-s> <Esc>:w<CR>a
 
-if !neobundle#tap('eskk.vim')
-
-  " iminsert=2だとinsertモードに入った時にIME ONになって邪魔
-  autocmd MyAutoCmd BufEnter * setlocal iminsert=0
-
-  " 日本語検索はmigemoで十分
-  autocmd MyAutoCmd BufEnter * setlocal imsearch=0
-
-endif
-
-" コマンドモードで日本語が使えないと何かと不便(ファイル名、ディレクトリ名など)
-" if has('kaoriya')
-"   autocmd MyAutoCmd InsertLeave * setlocal imdisable
-"   autocmd MyAutoCmd InsertEnter * setlocal noimdisable
-" endif
-
 " キー入力タイムアウトはあると邪魔だし、待つ意味も無い気がする
 set notimeout
 
@@ -2291,7 +2275,9 @@ endif " }}}
 " vimでskkする(eskk.vim) {{{
 if neobundle#tap('eskk.vim')
 
-  autocmd MyAutoCmd VimEnter * set imdisable
+  if has('kaoriya')
+    autocmd MyAutoCmd VimEnter * set imdisable
+  endif
 
   if neobundle#tap('skk.vim')
 
