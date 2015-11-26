@@ -530,7 +530,7 @@ set incsearch  " インクリメンタルサーチ
 set hlsearch   " 検索マッチテキストをハイライト
 
 " " 検索状態をバッファ毎に保持する
-" " -> 便利な時もあるんだけど、バッファ間で共通の方が都合の良いケースが多い
+" " -> 便利な時もあるがバッファ間で共通の方が都合の良いケースが多い
 " " http://d.hatena.ne.jp/tyru/20140129/localize_search_options
 " " Localize search options.
 " autocmd MyAutoCmd WinLeave *
