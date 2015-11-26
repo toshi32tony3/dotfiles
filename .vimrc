@@ -471,7 +471,7 @@ function! s:ToggleTransParency()
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
-nnoremap <silent> <F2> :<C-u>ToggleTransParency<CR>
+nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
@@ -494,7 +494,7 @@ set foldmethod=marker
 set commentstring=%s
 
 " 折りたたみ機能をスイッチ
-nnoremap <silent> <F12> :set foldenable!<CR>
+nnoremap <silent> <F9> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
@@ -658,9 +658,8 @@ nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 nnoremap j gj
 nnoremap k gk
 
-" <F1>, <Esc>でヘルプを閉じる
+" <Esc>でヘルプを閉じる
 function! s:HelpSettings()
-  nnoremap <buffer> <F1>  :<C-u>q<CR>
   nnoremap <buffer> <Esc> :<C-u>q<CR>
 endfunction
 autocmd MyAutoCmd FileType help call s:HelpSettings()
@@ -938,12 +937,12 @@ nnoremap <A-Down>  :<C-u>tabnext<CR>
 nnoremap <A-Up>    :<C-u>tabprevious<CR>
 nnoremap <A-Right> :<C-u>tabnext<CR>
 
-" F5 command history
-nnoremap <F5> <Esc>q:
+" F3 command history
+nnoremap <F3> <Esc>q:
 nnoremap q:   <Nop>
 
-" F6 search history
-nnoremap <F6> <Esc>q/
+" F4 search history
+nnoremap <F4> <Esc>q/
 nnoremap q/   <Nop>
 nnoremap q?   <Nop>
 
@@ -1605,7 +1604,7 @@ endif " }}}
 if neobundle#tap('vim-operator-replace')
 
   map R <Plug>(operator-replace)
-  noremap <F4> R
+  noremap <F2> R
 
 endif " }}}
 
@@ -1879,7 +1878,7 @@ if neobundle#tap('tagbar')
         \     'f:functions',
         \   ]
         \ }
-  nnoremap <silent> <F9> :<C-u>TagbarToggle<CR>
+  nnoremap <silent> <F1> :<C-u>TagbarToggle<CR>
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
   function! s:ClipCurrentTag(data)
