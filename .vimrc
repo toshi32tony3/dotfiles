@@ -651,9 +651,6 @@ nnoremap ,o  :<C-u>only<CR>
 " .vimrcをリロード
 nnoremap ,r :<C-u>source $MYVIMRC<CR><Esc>
 
-" " オート版は違和感あったりlightlineの表示がおかしくなったりで微妙
-" autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
-
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
