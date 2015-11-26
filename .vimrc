@@ -743,6 +743,10 @@ function! s:VimDifInNewTab(...)
 endfunction
 command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 
+" :messageで表示される履歴を削除
+" http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
+command! MessageClear for n in range(200) | echom "" | endfor
+
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
 " tags, path {{{
