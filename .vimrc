@@ -582,11 +582,14 @@ set matchtime=3                 " 対応括弧入力時カーソルが飛ぶ時�
 set matchpairs& matchpairs+=<:> " 対応括弧に'<'と'>'のペアを追加
 set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 
-" " 自動改行を無効化
-" set textwidth=0
+" j : 行連結時にコメントリーダーを削除
+" l : insertモードの自動改行を無効化
+" m : 整形時、255よりも大きいマルチバイト文字間でも改行する
+" q : gqでコメント行を整形
+autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmq
 
-" " Kaoriya版ではvimrc_exampleの都合、以下の設定をするらしいが上手くいかない
-" autocmd MyAutoCmd BufEnter text setlocal textwidth=0
+" gqで使うtextwidthの設定
+autocmd MyAutoCmd BufEnter * setlocal textwidth=80
 
 " autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
@@ -597,32 +600,6 @@ autocmd MyAutoCmd BufEnter * setlocal indk-=:
 autocmd MyAutoCmd BufEnter * setlocal indk-=0#
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
-
-" /**************************************************************************/
-" /* formatoptions (Vim default: 'tcq', Vi default: 'vt')                   */
-" /* t : Auto-wrap text using textwidth                                     */
-" /* c : Auto-wrap comments using textwidth, inserting the current comment  */
-" /*     leader automatically.                                              */
-" /* q : Allow formatting of comments with 'gq'.                            */
-" /* l : Long lines are not broken in insert mode                           */
-" /**************************************************************************/
-
-" " コメント記入中に自動改行させない
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=c
-"
-" " コメントを自動挿入させない
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=r
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=o
-"
-" " 日本語も自動改行させないのでmMは削除
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=m
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=M
-"
-" " insertモードに入った時の自動改行はさせない
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions+=l
-
-" 長々と書いてコメントアウトしているけれど、要するにこれだけあれば良い
-autocmd MyAutoCmd BufEnter * setlocal formatoptions=l
 
 " Dは実質d$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
