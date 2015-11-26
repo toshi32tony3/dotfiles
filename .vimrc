@@ -651,12 +651,12 @@ command! -nargs=0 ClipFile call s:Clip(expand('%:t'))
 command! -nargs=0 ClipDir  call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果をクリップボードに格納
-function! s:CopyCmdOutput(cmd)
+function! s:ClipCmdOutput(cmd)
   redir @*>
   silent execute a:cmd
   redir END
 endfunction
-command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
+command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<q-args>)
 
 " The end of 編集 }}}
 "-----------------------------------------------------------------------------
