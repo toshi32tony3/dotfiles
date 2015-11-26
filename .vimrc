@@ -219,7 +219,7 @@ NeoBundleLazy 'mtth/scratch.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(scratch-'] } }
 
 NeoBundleLazy 'thinca/vim-showtime',
-      \ { 'autoload' : { 'commands' : ['SS'] } }
+      \ { 'autoload' : { 'commands' : ['Showtime'] } }
 
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
@@ -424,9 +424,6 @@ if has('gui_running')
   " M : メニュー・ツールバー領域を削除する
   " c : ポップアップダイアログを使用しない
   set guioptions=Mc
-  if &guioptions =~# 'M'
-    let &guioptions = substitute(&guioptions, '[mT]', '', 'g')
-  endif
 
 endif
 
@@ -474,34 +471,30 @@ function! s:ToggleTransParency()
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
-nnoremap <silent> <F2> :<C-u>ToggleTransParency<CR>
+nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
-
-" スペルチェック機能をスイッチ
-nnoremap <silent> <F3> :<C-u>set spell!<CR>
 
 " fold(折り畳み)機能の設定
 set foldcolumn=1
 set foldlevel=0
 set foldnestmax=1
 set fillchars=vert:\|
-nnoremap <Leader>h  zc
-nnoremap <Leader>l  zo
-nnoremap <Leader>j  ]z
-nnoremap <Leader>k  [z
+
+" fold間の移動はzj, zkで行うので, 閉じる/開くはzh, zlで行なう
+nnoremap zh zc
+nnoremap zl zo
+
+" foldをまとめて閉じる(folds close)/まとめて開く(folds open)
 nnoremap <Leader>fc zM
 nnoremap <Leader>fo zR
 
 set foldmethod=marker
 set commentstring=%s
 
-" " 差分ファイル確認時は折り畳み無効
-" autocmd MyAutoCmd FileType diff setlocal nofoldenable
-
 " 折りたたみ機能をスイッチ
-nnoremap <silent> <F12> :set foldenable!<CR>
+nnoremap <silent> <F9> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
@@ -589,47 +582,24 @@ set matchtime=3                 " 対応括弧入力時カーソルが飛ぶ時�
 set matchpairs& matchpairs+=<:> " 対応括弧に'<'と'>'のペアを追加
 set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 
-" " 自動改行を無効化
-" set textwidth=0
+" j : 行連結時にコメントリーダーを削除
+" l : insertモードの自動改行を無効化
+" m : 整形時、255よりも大きいマルチバイト文字間でも改行する
+" q : gqでコメント行を整形
+autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmq
 
-" " Kaoriya版ではvimrc_exampleの都合、以下の設定をするらしいが上手くいかない
-" autocmd MyAutoCmd BufEnter text setlocal textwidth=0
+" gqで使うtextwidthの設定
+autocmd MyAutoCmd BufEnter * setlocal textwidth=80
 
 " autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
-" インデントを入れるキーのリストを調整
+" インデントを入れるキーのリストを調整(コロン, 行頭の#でインデントしない)
 " https://gist.github.com/myokota/8b6040da5a3d8b029be0
 autocmd MyAutoCmd BufEnter * setlocal indk-=:
 autocmd MyAutoCmd BufEnter * setlocal indk-=0#
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
-
-" /**************************************************************************/
-" /* formatoptions (Vim default: 'tcq', Vi default: 'vt')                   */
-" /* t : Auto-wrap text using textwidth                                     */
-" /* c : Auto-wrap comments using textwidth, inserting the current comment  */
-" /*     leader automatically.                                              */
-" /* q : Allow formatting of comments with 'gq'.                            */
-" /* l : Long lines are not broken in insert mode                           */
-" /**************************************************************************/
-
-" " コメント記入中に自動改行させない
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=c
-"
-" " コメントを自動挿入させない
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=r
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=o
-"
-" " 日本語も自動改行させないのでmMは削除
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=m
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions-=M
-"
-" " insertモードに入った時の自動改行はさせない
-" autocmd MyAutoCmd BufEnter * setlocal formatoptions+=l
-
-" 長々と書いてコメントアウトしているけれど、要するにこれだけあれば良い
-autocmd MyAutoCmd BufEnter * setlocal formatoptions=l
 
 " Dは実質d$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
@@ -668,22 +638,6 @@ command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<q-args>)
 " insertモードで保存
 inoremap <C-s> <Esc>:w<CR>a
 
-if !neobundle#tap('eskk.vim')
-
-  " iminsert=2だとinsertモードに入った時にIME ONになって邪魔
-  autocmd MyAutoCmd BufEnter * setlocal iminsert=0
-
-  " 日本語検索はmigemoで十分
-  autocmd MyAutoCmd BufEnter * setlocal imsearch=0
-
-endif
-
-" コマンドモードで日本語が使えないと何かと不便(ファイル名、ディレクトリ名など)
-" if has('kaoriya')
-"   autocmd MyAutoCmd InsertLeave * setlocal imdisable
-"   autocmd MyAutoCmd InsertEnter * setlocal noimdisable
-" endif
-
 " キー入力タイムアウトはあると邪魔だし、待つ意味も無い気がする
 set notimeout
 
@@ -697,29 +651,42 @@ nnoremap ,o  :<C-u>only<CR>
 " .vimrcをリロード
 nnoremap ,r :<C-u>source $MYVIMRC<CR><Esc>
 
-" " オート版は違和感あったりlightlineの表示がおかしくなったりで微妙
-" autocmd MyAutoCmd BufWritePost $MYVIMRC source $MYVIMRC
-
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
-" j, k による移動を折り返されたテキストでも自然に振る舞うようにする
+" j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
 nnoremap k gk
+
+" gj/gkで次のhunkへ移動
+nnoremap gj ]c
+nnoremap gk [c
+
+" <Esc>でヘルプを閉じる
+function! s:HelpSettings()
+  nnoremap <buffer> <Esc> :<C-u>q<CR>
+endfunction
+autocmd MyAutoCmd FileType help call s:HelpSettings()
 
 " 最後のウィンドウがQuickfixウィンドウの場合、自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 
+" 現在開いているファイルのディレクトリに移動
+function! s:ChangeDir(dir)
+  lcd %:p:h
+  echo 'change directory to: ' . a:dir
+endfunction
+command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
+
 " " 開いたファイルと同じ場所へ移動する
-" " startify/vimfilerの機能でcdするので以下の設定は使用しない
+" " -> startify/vimfiler/CDコマンドでcdするので以下の設定は使用しない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
-" パターンマッチが修正前だと:helpなどにも反応してしまうので修正
-" -> プラグインの挙動とぶつかってエラーになるらしいこともあるらしいので使わない
-"    https://github.com/Shougo/vimproc.vim/issues/116
+" -> プラグインの挙動とぶつかることもあるらしいので使わない
+" -> https://github.com/Shougo/vimproc.vim/issues/116
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
 
@@ -753,10 +720,6 @@ command! MessageClear for n in range(200) | echom "" | endfor
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
 " tags, path {{{
-
-" タグジャンプ時に候補が複数あった場合リスト表示
-" -> リスト表示したい時だけgを付ければ良い
-" nnoremap <C-]> g<C-]>zz
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(ident)
@@ -794,7 +757,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " GTAGSROOTの登録
-    " -> GNU Globalのタグはルートで生成する
+    " -> GNU Globalのタグはプロジェクトルートで生成する
     let $GTAGSROOT = $TARGET_DIR
   endfunction
 
@@ -895,13 +858,6 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
 endif
 
-" 現在開いているファイルのディレクトリに移動
-function! s:ChangeDir(dir)
-  cd %:p:h
-  echo 'change directory to: ' . a:dir
-endfunction
-command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
-
 " The end of tags, path }}}
 "-----------------------------------------------------------------------------
 " 誤爆防止関係 {{{
@@ -985,12 +941,12 @@ nnoremap <A-Down>  :<C-u>tabnext<CR>
 nnoremap <A-Up>    :<C-u>tabprevious<CR>
 nnoremap <A-Right> :<C-u>tabnext<CR>
 
-" F5 command history
-nnoremap <F5> <Esc>q:
+" F3 command history
+nnoremap <F3> <Esc>q:
 nnoremap q:   <Nop>
 
-" F6 search history
-nnoremap <F6> <Esc>q/
+" F4 search history
+nnoremap <F4> <Esc>q/
 nnoremap q/   <Nop>
 nnoremap q?   <Nop>
 
@@ -1283,7 +1239,7 @@ if neobundle#tap('vimfiler.vim')
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
 
-  " タブで開く時は自分で指定することにしたのでコメントアウト
+  " タブで開く時は自分で指定することにした
   " let g:vimfiler_edit_action = 'tabopen'
 
   " 開いているファイルのパスでVimFilerを開く
@@ -1291,7 +1247,7 @@ if neobundle#tap('vimfiler.vim')
 
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
-    " #をLeader専用にする
+    " #を<Leader>としているのでsimilarは##にする
     nnoremap <buffer> #  <Nop>
     nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
@@ -1300,8 +1256,8 @@ if neobundle#tap('vimfiler.vim')
       nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
 
       " Disable yankround.vim
-      nnoremap <buffer> <C-n>      <Nop>
-      nnoremap <buffer> <C-p>      <Nop>
+      nnoremap <buffer> <C-n> <Nop>
+      nnoremap <buffer> <C-p> <Nop>
     endif
 
   endfunction
@@ -1385,38 +1341,17 @@ if neobundle#tap('vim-quickrun')
         \   },
         \ }
 
-  " watchdogsを使う時の設定はこんな感じ？
-  " \   'watchdogs_checker/_' : {
-  " \     'runner/vimproc/updatetime'       : 40,
-  " \     'hook/close_quickfix/enable_exit' :  1,
-  " \   },
-  " \   'watchdogs_checker/gcc' : {
-  " \     'command'   : 'gcc',
-  " \     'cmdopt'    : '-Wall',
-  " \     'exec'      : '%c %o -fsyntax-only %s:p ',
-  " \   },
-  " \   'c/watchdogs_checker' : {
-  " \     'type' : 'watchdogs_checker/gcc',
-  " \   },
-  " \   'watchdogs_checker/ruby' : {
-  " \     'command'   : 'ruby',
-  " \     'exec'      : '%c %o -c %s:p ',
-  " \   },
-  " \   'ruby/watchdogs_checker' : {
-  " \     'type' : 'watchdogs_checker/ruby',
-  " \   },
+        " " clangを使う時の設定はこんな感じ？
+        " \   'cpp' : {
+        " \     'type' : 'cpp/clang3_4'
+        " \   },
+        " \   'cpp/clang3_4' : {
+        " \       'command' : 'clang++',
+        " \       'exec'    : '%c %o %s -o %s:p:r',
+        " \       'cmdopt'  : '-std=gnu++0x'
+        " \   },
 
-  " " clangを使う時の設定はこんな感じ？
-  " \   'cpp' : {
-  " \     'type' : 'cpp/clang3_4'
-  " \   },
-  " \   'cpp/clang3_4' : {
-  " \       'command' : 'clang++',
-  " \       'exec'    : '%c %o %s -o %s:p:r',
-  " \       'cmdopt'  : '-std=gnu++0x'
-  " \   },
-
-  " デフォルトの<Leader>rだと入力待ちがあるので、別のキーでマッピングする
+  " デフォルトの<Leader>rだと入力待ちになるので、別のキーでマッピングする
   let g:quickrun_no_default_key_mappings = 1
   nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
   vnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
@@ -1444,8 +1379,8 @@ if neobundle#tap('vim-fontzoom')
   " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
   " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
   " -> https://github.com/vim-jp/issues/issues/73
-  " nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
-  " nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
+  nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
+  nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
 
 endif " }}}
 
@@ -1496,12 +1431,12 @@ if neobundle#tap('vim-brightest')
   "   \ }
 
   " " ハイライトする単語のパターンを設定
-  " " デフォルト（空の文字列の場合）は <cword> が使用される
-  " " NOTE: <cword> の場合は前方にある単語も検出する
+  " " デフォルト(空の文字列の場合)は<cword>が使用される
+  " " NOTE: <cword>は前方にある単語も検出する
   " let g:brightest#pattern = '\k\+'
 
-  " " シンタックスが Statement の場合はハイライトしない
-  " " e.g. Vim script だと let とか if とか function とか
+  " " シンタックスがStatementの場合はハイライトしない
+  " " (e.g.) let, if, function
   " let g:brightest#ignore_syntax_list = [ 'Statement' ]
 
   " " brightestの背景をcursorlineに合わせる
@@ -1581,6 +1516,7 @@ if neobundle#tap('memolist.vim')
   " カテゴリまで決めるの面倒なので...
   let g:memolist_prompt_categories = 0
 
+  " markdownテンプレートを指定
   if filereadable(expand('~/configs/memolist/md.txt'))
     let g:memolist_template_dir_path = '~/configs/memolist'
   endif
@@ -1636,7 +1572,6 @@ endif " }}}
 " 囲む / 囲まなくする / 別の何かで囲む(vim-surround) {{{
 if neobundle#tap('vim-surround')
 
-  " " s-sneakとclever-fの使い分けに慣れるため、コメントアウトしておく
   " " (例) sw' /* 次の単語を''で囲む */
   " nmap s <plug>Ysurround
   "
@@ -1652,7 +1587,7 @@ endif " }}}
 if neobundle#tap('vim-operator-replace')
 
   map R <Plug>(operator-replace)
-  noremap <F4> R
+  noremap <F2> R
 
 endif " }}}
 
@@ -1692,7 +1627,7 @@ if neobundle#tap('vim-smartchr')
     inoremap <buffer><expr> { smartchr#one_of('{', '#{', '{{')
   endfunction
 
-  " for matchit }} } } }
+  " for match }} } } }
 
 endif " }}}
 
@@ -1742,12 +1677,10 @@ if neobundle#tap('incsearch.vim')
   " map ? <Plug>(incsearch-stay)
 
   if neobundle#tap('vim-anzu')
-
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
     map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
 
   else
-
     map n  <Plug>(incsearch-nohl-n)
     map N  <Plug>(incsearch-nohl-N)
 
@@ -1755,7 +1688,6 @@ if neobundle#tap('incsearch.vim')
 
   " アスタリスク検索の対象をクリップボードにコピー
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
-
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
@@ -1765,7 +1697,6 @@ if neobundle#tap('incsearch.vim')
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
 
   elseif neobundle#tap('vim-asterisk')
-
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
@@ -1775,7 +1706,6 @@ if neobundle#tap('incsearch.vim')
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
 
   else
-
     nmap *          yiw<Plug>(incsearch-nohl-*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl-*)
     vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
@@ -1785,7 +1715,6 @@ if neobundle#tap('incsearch.vim')
     vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
 
   endif
-
 endif " }}}
 
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
@@ -1814,7 +1743,6 @@ endif " }}}
 if neobundle#tap('vim-asterisk')
 
   if !neobundle#tap('incsearch.vim')
-
     nmap *          yiw<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(asterisk-z*)
     vmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
@@ -1840,7 +1768,6 @@ if neobundle#tap('vim-anzu')
   " nmap * <Plug>(anzu-star-with-echo)N
 
   if !neobundle#tap('incsearch.vim')
-
     " コマンド結果出力画面にecho
     nmap n <Plug>(anzu-n-with-echo)
     nmap N <Plug>(anzu-N-with-echo)
@@ -1852,14 +1779,10 @@ endif " }}}
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
-  let g:signify_vcs_list = [ 'git', 'cvs' ]
+  let g:signify_vcs_list = ['git', 'cvs']
   let g:signify_disable_by_default = 1
   let g:signify_update_on_bufenter = 0
   let g:signify_update_on_focusgained = 1
-
-  nmap gj <Plug>(signify-next-hunk)zz
-  nmap gk <Plug>(signify-prev-hunk)zz
-  nmap gh <Plug>(signify-toggle-highlight)
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
   command! -bar SignifyStart
@@ -1869,6 +1792,10 @@ if neobundle#tap('vim-signify')
 
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    nmap gj <Plug>(signify-next-hunk)zz
+    nmap gk <Plug>(signify-prev-hunk)zz
+    nmap gh <Plug>(signify-toggle-highlight)
+
     delcommand SignifyDebug
     delcommand SignifyDebugDiff
     delcommand SignifyDebugUnknown
@@ -1883,6 +1810,7 @@ endif " }}}
 if neobundle#tap('vim-fugitive')
 
   autocmd MyAutoCmd FileType gitcommit setlocal nofoldenable
+
 endif " }}}
 
 " VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
@@ -1893,8 +1821,8 @@ if neobundle#tap('agit.vim')
     nmap <buffer> Rv <Plug>(agit-git-revert)
 
     " Disable yankround.vim
-    nnoremap <buffer> <C-n>      <Nop>
-    nnoremap <buffer> <C-p>      <Nop>
+    nnoremap <buffer> <C-n> <Nop>
+    nnoremap <buffer> <C-p> <Nop>
 
   endfunction
   autocmd MyAutoCmd FileType agit call s:AgitSettings()
@@ -1926,7 +1854,7 @@ if neobundle#tap('tagbar')
         \     'f:functions',
         \   ]
         \ }
-  nnoremap <silent> <F9> :<C-u>TagbarToggle<CR>
+  nnoremap <silent> <F1> :<C-u>TagbarToggle<CR>
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
   function! s:ClipCurrentTag(data)
@@ -1935,7 +1863,6 @@ if neobundle#tap('tagbar')
 
     " 選択範囲レジスタ(*)を使う
     let @*=l:funcName
-
     echo 'clipped: ' . l:funcName
   endfunction
   command! -nargs=0 ClipCurrentTag
@@ -1967,7 +1894,7 @@ if neobundle#tap('lightline.vim')
   let g:lightline.mode_map     = { 'c'    : 'NORMAL'                     }
   let g:lightline.separator    = { 'left' : "\u2B80", 'right' : "\u2B82" }
   let g:lightline.subseparator = { 'left' : "\u2B81", 'right' : "\u2B83" }
-  let g:lightline.tabline = { 'left': [ [ 'tabs' ] ], 'right': [] }
+  let g:lightline.tabline      = { 'left': [ [ 'tabs' ] ], 'right': []   }
 
   let g:lightline.active = {
         \   'left'  : [ [ 'mode' ],
@@ -2145,7 +2072,7 @@ endif " }}}
 " clever-fの2文字版(vim-sneak) {{{
 if neobundle#tap('vim-sneak')
 
-  let g:sneak#s_next = 1     " clever-f ならぬ clever-s な動作にする
+  let g:sneak#s_next = 1     " clever-sな挙動にする
   let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
 
   " " sは進む、Sは戻るで固定する
@@ -2154,7 +2081,7 @@ if neobundle#tap('vim-sneak')
 
   if neobundle#tap('clever-f.vim')
 
-    " clever-fと併用する時はs-sneak
+    " s-sneak
     nmap s <Plug>Sneak_s
     nmap S <Plug>Sneak_S
     xmap s <Plug>Sneak_s
@@ -2162,7 +2089,7 @@ if neobundle#tap('vim-sneak')
     omap s <Plug>Sneak_s
     omap S <Plug>Sneak_S
   else
-    " clever-fと併用しない時はf-sneak
+    " f-sneak
     nmap f <Plug>Sneak_s
     nmap F <Plug>Sneak_S
     xmap f <Plug>Sneak_s
@@ -2314,10 +2241,11 @@ endif " }}}
 " vimでskkする(eskk.vim) {{{
 if neobundle#tap('eskk.vim')
 
-  autocmd MyAutoCmd VimEnter * set imdisable
+  if has('kaoriya')
+    autocmd MyAutoCmd VimEnter * set imdisable
+  endif
 
   if neobundle#tap('skk.vim')
-
     " disable skk.vim
     " -> Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
@@ -2362,6 +2290,7 @@ if neobundle#tap('vim-prettyprint')
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
     delcommand PrettyPrint
+
   endfunction
 
 endif " }}}
@@ -2413,20 +2342,20 @@ if neobundle#tap('vim-showtime')
   " 初回実行時は必ず失敗するコマンドをsilentで実行してautoloadを読ませて置き換え
   " -> イケてないけど動くしいいか...
   if neobundle#tap('vim-brightest')
-    command! -bar SS
+    command! -bar Showtime
           \   silent! ShowtimeResume
           \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
           \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
           \ | BrightestDisable
           \ | ShowtimeStart
-          \ | delcommand SS
+          \ | delcommand Showtime
   else
-    command! -bar SS
+    command! -bar Showtime
           \   silent! ShowtimeResume
           \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
           \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
           \ | ShowtimeStart
-          \ | delcommand SS
+          \ | delcommand Showtime
   endif
 
 endif " }}}
