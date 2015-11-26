@@ -424,9 +424,6 @@ if has('gui_running')
   " M : メニュー・ツールバー領域を削除する
   " c : ポップアップダイアログを使用しない
   set guioptions=Mc
-  if &guioptions =~# 'M'
-    let &guioptions = substitute(&guioptions, '[mT]', '', 'g')
-  endif
 
 endif
 
