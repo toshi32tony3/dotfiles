@@ -704,6 +704,13 @@ nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 nnoremap j gj
 nnoremap k gk
 
+" <F1>, <Esc>でヘルプを閉じる
+function! s:HelpSettings()
+  nnoremap <buffer> <F1>  :<C-u>q<CR>
+  nnoremap <buffer> <Esc> :<C-u>q<CR>
+endfunction
+autocmd MyAutoCmd FileType help call s:HelpSettings()
+
 " 最後のウィンドウがQuickfixウィンドウの場合、自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
