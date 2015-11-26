@@ -718,10 +718,6 @@ command! MessageClear for n in range(200) | echom "" | endfor
 "-----------------------------------------------------------------------------
 " tags, path {{{
 
-" タグジャンプ時に候補が複数あった場合リスト表示
-" -> リスト表示したい時だけgを付ければ良い
-" nnoremap <C-]> g<C-]>zz
-
 " 新規タブでタグジャンプ
 function! s:TabTagJump(ident)
   let l:duration = reltime()
@@ -758,7 +754,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " GTAGSROOTの登録
-    " -> GNU Globalのタグはルートで生成する
+    " -> GNU Globalのタグはプロジェクトルートで生成する
     let $GTAGSROOT = $TARGET_DIR
   endfunction
 
