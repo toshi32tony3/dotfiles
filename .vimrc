@@ -481,18 +481,17 @@ set foldcolumn=1
 set foldlevel=0
 set foldnestmax=1
 set fillchars=vert:\|
-nnoremap <Leader>h  zc
-nnoremap <Leader>l  zo
-nnoremap <Leader>j  ]z
-nnoremap <Leader>k  [z
+
+" fold間の移動はzj, zkで行うので, 閉じる/開くはzh, zlで行なう
+nnoremap zh zc
+nnoremap zl zo
+
+" foldをまとめて閉じる(folds close)/まとめて開く(folds open)
 nnoremap <Leader>fc zM
 nnoremap <Leader>fo zR
 
 set foldmethod=marker
 set commentstring=%s
-
-" " 差分ファイル確認時は折り畳み無効
-" autocmd MyAutoCmd FileType diff setlocal nofoldenable
 
 " 折りたたみ機能をスイッチ
 nnoremap <silent> <F12> :set foldenable!<CR>
