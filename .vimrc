@@ -669,8 +669,15 @@ autocmd MyAutoCmd FileType help call s:HelpSettings()
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 
+" 現在開いているファイルのディレクトリに移動
+function! s:ChangeDir(dir)
+  lcd %:p:h
+  echo 'change directory to: ' . a:dir
+endfunction
+command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
+
 " " 開いたファイルと同じ場所へ移動する
-" " startify/vimfilerの機能でcdするので以下の設定は使用しない
+" " -> startify/vimfiler/CDコマンドでcdするので以下の設定は使用しない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
@@ -852,13 +859,6 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
   command! -nargs=0 UpdateCtags call s:UpdateCtags()
 
 endif
-
-" 現在開いているファイルのディレクトリに移動
-function! s:ChangeDir(dir)
-  cd %:p:h
-  echo 'change directory to: ' . a:dir
-endfunction
-command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 
 " The end of tags, path }}}
 "-----------------------------------------------------------------------------
