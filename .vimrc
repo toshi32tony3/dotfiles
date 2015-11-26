@@ -174,8 +174,10 @@ NeoBundleLazy 'LeafCage/yankround.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(yankround-'] } }
 NeoBundleLazy 'junegunn/vim-easy-align',
       \ { 'autoload' : { 'commands' : ['EasyAlign'] } }
-NeoBundleLazy 'bronson/vim-trailing-whitespace',
-      \ { 'autoload' : { 'commands' : ['FixWhitespace'] } }
+
+" 常に行末スペースを検知したいので、Lazyしない
+NeoBundle 'bronson/vim-trailing-whitespace'
+
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
 
@@ -299,8 +301,9 @@ set shortmess=aoOotTWI
 
 " " カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
 " -> 再描画がうっとおしいのでやっぱり15にする。再描画必要なら<C-e>や<C-y>を使う
+" -> やっぱり0にする
 " set scrolloff=50
-set scrolloff=15
+" set scrolloff=15
 
 " VimDiffは基本縦分割とする
 set diffopt+=vertical
@@ -651,25 +654,19 @@ command! -nargs=0 ClipFile call s:Clip(expand('%:t'))
 command! -nargs=0 ClipDir  call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果をクリップボードに格納
-function! s:CopyCmdOutput(cmd)
+function! s:ClipCmdOutput(cmd)
   redir @*>
   silent execute a:cmd
   redir END
 endfunction
-command! -nargs=1 -complete=command CopyCmdOutput call s:CopyCmdOutput(<q-args>)
+command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<q-args>)
 
 " The end of 編集 }}}
 "-----------------------------------------------------------------------------
 " 操作の簡単化 {{{
 
-" /*******************************************************************/
-" /* IMEに関して、以下のように設定しておくと良い感じになる           */
-" /* -> IME OFFしたくない時は<C-[>を使う                             */
-" /* MS-IMEの設定            : <C-j> 入力/変換済み文字なし ; IME OFF */
-" /* MS-IMEの設定            : <Esc> 入力/変換済み文字なし ; IME OFF */
-" /* Google 日本語入力の設定 : <C-j> 入力文字なし          ; IME OFF */
-" /* Google 日本語入力の設定 : <Esc> 入力文字なし          ; IME OFF */
-" /*******************************************************************/
+" insertモードで保存
+inoremap <C-s> <Esc>:w<CR>a
 
 if !neobundle#tap('eskk.vim')
 
@@ -749,6 +746,10 @@ function! s:VimDifInNewTab(...)
 endfunction
 command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 
+" :messageで表示される履歴を削除
+" http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
+command! MessageClear for n in range(200) | echom "" | endfor
+
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
 " tags, path {{{
@@ -759,12 +760,16 @@ command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(ident)
+  let l:duration = reltime()
+  let l:duration = reltime(l:duration)
   tablast | tabnew
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:ident
 
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
   " execute 'tjump' a:ident
+  redraw
+  echomsg 'duration(tag): ' . reltimestr(l:duration)
 endfunction
 command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
@@ -1081,7 +1086,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources = {}
   endif
 
-  if neobundle#tap('neoinclude.vim')
+  if neobundle#tap('neoinclude.vim') && neobundle#tap('neosnippet')
 
     let g:neocomplete#sources._ =
           \ ['file/include', 'member', 'buffer', 'neosnippet']
@@ -1704,8 +1709,7 @@ endif " }}}
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  nmap <Leader>H <Plug>(quickhl-manual-this)
-  map          H <Plug>(operator-quickhl-manual-this-motion)
+  map <Leader>H <Plug>(operator-quickhl-manual-this-motion)
 
   " " QuickhlManualResetも一緒にやってしまうと間違えて消すのが若干怖い
   " " -> ambicmdのおかげで :qmr<Space> で呼び出せるのでコメントアウト
