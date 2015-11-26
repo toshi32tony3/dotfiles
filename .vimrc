@@ -1235,7 +1235,7 @@ if neobundle#tap('vimfiler.vim')
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
 
-  " タブで開く時は自分で指定することにしたのでコメントアウト
+  " タブで開く時は自分で指定することにした
   " let g:vimfiler_edit_action = 'tabopen'
 
   " 開いているファイルのパスでVimFilerを開く
