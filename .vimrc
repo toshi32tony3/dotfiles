@@ -530,7 +530,7 @@ set incsearch  " インクリメンタルサーチ
 set hlsearch   " 検索マッチテキストをハイライト
 
 " " 検索状態をバッファ毎に保持する
-" " -> 便利な時もあるんだけど、バッファ間で共通の方が都合の良いケースが多い
+" " -> 便利な時もあるがバッファ間で共通の方が都合の良いケースが多い
 " " http://d.hatena.ne.jp/tyru/20140129/localize_search_options
 " " Localize search options.
 " autocmd MyAutoCmd WinLeave *
@@ -715,7 +715,7 @@ command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
 
 " :messageで表示される履歴を削除
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! MessageClear for n in range(200) | echom "" | endfor
+command! MessageClear for l:n in range(200) | echom "" | endfor
 
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
@@ -971,40 +971,45 @@ let g:loaded_netrwPlugin = 1
 " http://d.hatena.ne.jp/thinca/20090826/1251258056
 " http://mattn.kaoriya.net/software/vim/20111202085236.htm
 function! GetScriptID(filename)
-  let snlist = ''
-  redir => snlist
+  let l:snlist = ''
+  redir => l:snlist
   silent! scriptnames
   redir END
-  let smap = {}
-  let mx = '^\s*\(\d\+\):\s*\(.*\)$'
-  for line in split(snlist, "\n")
-    let smap[tolower(expand(substitute(line, mx, '\2', '')))] = substitute(line, mx, '\1', '')
+  let l:smap = {}
+  let l:mx = '^\s*\(\d\+\):\s*\(.*\)$'
+  for l:line in split(l:snlist, "\n")
+    let l:smap[tolower(expand(substitute(l:line, l:mx, '\2', '')))] = substitute(l:line, mx, '\1', '')
   endfor
-  return smap[tolower(a:filename)]
+  return l:smap[tolower(a:filename)]
 endfunction
 
 function! GetFunc(filename, funcname)
-  let sid = GetScriptID(a:filename)
-  return function("<SNR>" . sid . "_" . a:funcname)
+  let l:sid = GetScriptID(a:filename)
+  return function("<SNR>" . l:sid . "_" . a:funcname)
 endfunction
 
 function! HookFunc(funcA, funcB)
   if type(a:funcA) == 2
-    let funcA = substitute(string(a:funcA), "^function('\\(.*\\)')$", '\1', '')
+    let l:funcA = substitute(string(a:funcA), "^function('\\(.*\\)')$", '\1', '')
   else
-    let funcA = a:funcA
+    let l:funcA = a:funcA
   endif
   if type(a:funcB) == 2
-    let funcB = substitute(string(a:funcB), "^function('\\(.*\\)')$", '\1', '')
+    let l:funcB = substitute(string(a:funcB), "^function('\\(.*\\)')$", '\1', '')
   else
-    let funcB = a:funcB
+    let l:funcB = a:funcB
   endif
-  let oldfunc = ''
-  redir => oldfunc
-  silent! exec "function " . funcA
-  redir END
-  let g:hoge = oldfunc
-  exec "function! " . funcA . "(...)\nreturn call('" . funcB . "', a:000)\nendfunction"
+
+  " " 置き換え前の関数定義を退避
+  " " -> 退避したところでアレなのでコメントアウト
+  " let l:oldfunc = ''
+  " redir => l:oldfunc
+  " silent! exec "function " . l:funcA
+  " redir END
+  " let g:hoge = l:oldfunc
+
+  " 関数定義を上書き
+  exec "function! " . l:funcA . "(...)\nreturn call('" . l:funcB . "', a:000)\nendfunction"
 endfunction " }}}
 
 " Vimでフルスクリーンモード(scrnmode.vim)@Kaoriya版付属プラグイン {{{
