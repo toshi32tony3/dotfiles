@@ -224,7 +224,7 @@ NeoBundleLazy 'thinca/vim-showtime',
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
-set helplang=en
+set helplang=ja
 
 call neobundle#end()
 
@@ -400,21 +400,14 @@ xnoremap & <silent> :<C-u>&&<CR>
 set cmdheight=2
 
 if has('gui_running')
-  " フォント種/フォントサイズ設定
-  if has('win32')
-    " Ricty for Powerline
-    set guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
+  " Ricty for Powerline
+  set guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
 
-    " 行間隔[pixel]の設定(default 1 for Win32 GUI)
-    set linespace=0
-    if has('kaoriya')
-      set ambiwidth=auto
-    endif
-  elseif has('mac')
-    set guifont=Osaka－等幅:h14
-  elseif has('xfontset')
-    " UNIX用 (xfontsetを使用)
-    set guifontset=a14,r14,k14
+  " 行間隔[pixel]の設定(default 1 for Win32 GUI)
+  set linespace=0
+
+  if has('kaoriya') && has('win32')
+    set ambiwidth=auto
   endif
 
   set mouse=a      " マウス機能有効
@@ -555,7 +548,11 @@ set fileencoding=
 
 " ファイル読み込み時の変換候補
 " -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
-set fileencodings=utf-8,cp932,euc-jp
+if has('kaoriya')
+  set fileencodings=guess
+else
+  set fileencodings=utf-8,cp932,euc-jp
+endif
 
 " 文字コードを指定してファイルを開き直す
 nnoremap <Leader>enc :<C-u>e ++enc=
@@ -1682,8 +1679,12 @@ if neobundle#tap('incsearch.vim')
   map ?  <Plug>(incsearch-backward)
 
   if has('kaoriya') && has('migemo')
+    " 逆方向migemo検索g?を有効化
+    set migemo
+
     " kaoriya版のmigemo searchを再マッピング
     noremap m/ g/
+    noremap m? g?
   endif
   map g/ <Plug>(incsearch-stay)
   map g? <Plug>(incsearch-stay)
