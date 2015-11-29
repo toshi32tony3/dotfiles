@@ -492,6 +492,7 @@ nnoremap <Leader>fo zR
 
 set foldmethod=marker
 set commentstring=%s
+autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"\ %s
 
 " 折りたたみ機能をスイッチ
 nnoremap <silent> <F9> :set foldenable!<CR>
@@ -1988,7 +1989,7 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentTag()
     if &ft == 'vim'
-      if neobundle#is_installed('foldCC')
+      if neobundle#is_installed('foldCC.vim')
         let l:_ = FoldCCnavi()
         return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
       endif
