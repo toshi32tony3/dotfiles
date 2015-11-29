@@ -347,7 +347,7 @@ function! s:PutMemoFormat()
 endfunction
 command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
 
-" 全角数字を半角数字に変更
+" 全角数字を半角数字に変更(eskk.vimを使っている時は意味がない設定)
 inoremap ０ 0
 inoremap １ 1
 inoremap ２ 2
@@ -359,7 +359,7 @@ inoremap ７ 7
 inoremap ８ 8
 inoremap ９ 9
 
-" 全角記号を半角記号に変更
+" 全角記号を半角記号に変更(eskk.vimを使っている時は意味がない設定)
 inoremap ＃ #
 inoremap ＄ $
 inoremap ％ %
@@ -499,8 +499,8 @@ nnoremap <silent> <F9> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-if isdirectory(expand('~/vimfiles/winpos'))
-  let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
+let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
+if filereadable(g:save_winpos_file)
   autocmd MyAutoCmd VimLeavePre * call s:save_window()
   function! s:save_window()
     let s:options = [
@@ -510,9 +510,7 @@ if isdirectory(expand('~/vimfiles/winpos'))
           \ ]
     call writefile(s:options, g:save_winpos_file)
   endfunction
-  if filereadable(g:save_winpos_file)
-    execute 'source' g:save_winpos_file
-  endif
+  execute 'source' g:save_winpos_file
 endif
 
 " The end of 表示 }}}
