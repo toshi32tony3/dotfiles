@@ -89,7 +89,7 @@ NeoBundleLazy 'mattn/benchvimrc-vim',
 " memolist.vimはmarkdown形式でメモを生成するので、markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
 NeoBundleLazy 'glidenote/memolist.vim',
-      \ { 'autoload' : { 'commands' : ['MemoNew', 'MemoList'] } }
+      \ { 'autoload' : { 'commands' : ['MemoNew'] } }
 NeoBundle 'rcmdnk/vim-markdown'
 
 " Previm便利だけど、IEではmermaidを使えないようなのでShibaメインになりそう
@@ -154,8 +154,9 @@ NeoBundleLazy 'lambdalisue/vim-gita',
       \ { 'autoload' : { 'commands' : ['Gita'] } }
 NeoBundleLazy 'cohama/agit.vim',
       \ { 'autoload' : { 'commands' : ['Agit'] } }
-NeoBundleLazy 'idanarye/vim-merginal',
-      \ { 'autoload' : { 'commands' : ['Merginal'] } }
+NeoBundle 'idanarye/vim-merginal'
+" NeoBundleLazy 'idanarye/vim-merginal',
+"       \ { 'autoload' : { 'commands' : ['Merginal'] } }
 
 NeoBundleLazy 'majutsushi/tagbar',
       \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
