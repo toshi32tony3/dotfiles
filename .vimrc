@@ -697,7 +697,7 @@ nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
 " 引数が2つ以上 : 引数指定ファイル同士の比較
 " http://koturn.hatenablog.com/entry/2013/08/10/034242
-function! s:VimDifInNewTab(...)
+function! s:TabDiff(...)
   if a:0 == 1
     tabedit %:p
     execute 'rightbelow vertical diffsplit ' . a:1
@@ -708,7 +708,7 @@ function! s:VimDifInNewTab(...)
     endfor
   endif
 endfunction
-command! -nargs=+ -bar -complete=file Diff call s:VimDifInNewTab(<f-args>)
+command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " :messageで表示される履歴を削除
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
