@@ -576,7 +576,7 @@ set confirm                     " 変更されたバッファがある時、ど�
 set switchbuf=useopen           " すでに開いてあるバッファがあればそっちを開く
 set showmatch                   " 対応する括弧などの入力時にハイライト表示する
 set matchtime=3                 " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
-set matchpairs& matchpairs+=<:> " 対応括弧に'<'と'>'のペアを追加
+set matchpairs+=<:>             " 対応括弧に'<'と'>'のペアを追加
 set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 
 " j : 行連結時にコメントリーダーを削除
