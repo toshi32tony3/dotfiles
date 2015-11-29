@@ -301,9 +301,10 @@ set shortmess=aoOotTWI
 
 " " カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
 " -> 再描画がうっとおしいのでやっぱり15にする。再描画必要なら<C-e>や<C-y>を使う
-" -> やっぱり0にする
+" -> やっぱり0(default)にする
 " set scrolloff=50
 " set scrolloff=15
+set scrolloff=0
 
 " VimDiffは基本縦分割とする
 set diffopt+=vertical
