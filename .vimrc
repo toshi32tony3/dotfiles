@@ -482,7 +482,7 @@ set foldlevel=0
 set foldnestmax=1
 set fillchars=vert:\|
 
-" fold間の移動はzj, zkで行うので, 閉じる/開くはzh, zlで行なう
+" fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てる
 nnoremap zh zc
 nnoremap zl zo
 
