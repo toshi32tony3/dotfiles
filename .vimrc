@@ -1029,6 +1029,19 @@ if has('kaoriya')
 
 endif " }}}
 
+" Vimで辞書を引く(dicwin.vim)@Kaoriya版付属プラグイン {{{
+if has('kaoriya')
+
+  if filereadable(expand('~/vimfiles/dict/gene.dict'))
+    autocmd MyAutoCmd BufRead *.dict setlocal filetype=dict
+    function! s:DicwinSettings()
+      nnoremap <buffer> <Esc> :<C-u>q<CR>
+    endfunction
+    autocmd MyAutoCmd FileType dict call s:DicwinSettings()
+  endif
+
+endif " }}}
+
 " 入力補完(neocomplete.vim) {{{
 if neobundle#tap('neocomplete.vim')
 
