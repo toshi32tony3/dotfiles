@@ -954,6 +954,12 @@ nnoremap q?   <Nop>
 inoremap <C-@> <Esc>
 noremap  <C-@> <Esc>
 
+" 謎のマッピングを使えないようにする
+map <S-CR>    <CR>
+map <C-CR>    <CR>
+map <S-Space> <Space>
+map <C-Space> <Space>
+
 " The end of 誤爆防止関係 }}}
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
