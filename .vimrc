@@ -961,7 +961,7 @@ noremap  <C-@> <Esc>
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
 
-" netrwは使わない {{{
+" netrw(Vim標準のファイラ)は使わない {{{
 let g:loaded_netrw       = 1
 let g:loaded_netrwPlugin = 1
 " }}}
