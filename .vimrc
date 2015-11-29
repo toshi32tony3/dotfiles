@@ -223,7 +223,7 @@ NeoBundleLazy 'thinca/vim-showtime',
 
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
-" NeoBundleLazy 'vim-jp/vimdoc-ja'
+NeoBundleLazy 'vim-jp/vimdoc-ja'
 set helplang=en
 
 call neobundle#end()
@@ -710,11 +710,11 @@ function! s:VimDifInNewTab(...)
     endfor
   endif
 endfunction
-command! -bar -nargs=+ -complete=file Diff call s:VimDifInNewTab(<f-args>)
+command! -nargs=+ -bar -complete=file Diff call s:VimDifInNewTab(<f-args>)
 
 " :messageで表示される履歴を削除
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! MessageClear for l:n in range(200) | echom "" | endfor
+command! -nargs=0 MessageClear for l:n in range(200) | echom "" | endfor
 
 " The end of 操作の簡単化 }}}
 "-----------------------------------------------------------------------------
@@ -733,7 +733,7 @@ function! s:TabTagJump(ident)
   redraw
   echomsg 'duration(tag): ' . reltimestr(l:duration)
 endfunction
-command! -nargs=1 TabTagJump call s:TabTagJump(<f-args>)
+command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
@@ -1802,7 +1802,7 @@ if neobundle#tap('vim-signify')
   let g:signify_update_on_focusgained = 1
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
-  command! -bar SignifyStart
+  command! -nargs=0 -bar SignifyStart
         \ | SignifyToggle
         \ | SignifyToggle
         \ | delcommand SignifyStart
@@ -2294,7 +2294,7 @@ endif " }}}
 " 元の状態を復元してVimを再起動(restart.vim) {{{
 if neobundle#tap('restart.vim')
 
-  command! -bar RestartWithSession
+  command! -nargs=0 -bar RestartWithSession
         \   let g:restart_sessionoptions
         \     = 'blank,curdir,folds,help,localoptions,tabpages'
         \ | Restart
@@ -2359,7 +2359,7 @@ if neobundle#tap('vim-showtime')
   " 初回実行時は必ず失敗するコマンドをsilentで実行してautoloadを読ませて置き換え
   " -> イケてないけど動くしいいか...
   if neobundle#tap('vim-brightest')
-    command! -bar Showtime
+    command! -nargs=0 -bar Showtime
           \   silent! ShowtimeResume
           \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
           \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
@@ -2367,7 +2367,7 @@ if neobundle#tap('vim-showtime')
           \ | ShowtimeStart
           \ | delcommand Showtime
   else
-    command! -bar Showtime
+    command! -nargs=0 -bar Showtime
           \   silent! ShowtimeResume
           \ | call HookFunc(GetFunc(expand('~\.vim\bundle\vim-showtime\autoload\showtime.vim'), 'hide_cursor'),
           \                 GetFunc(expand('~\.vimrc'), 'hide_cursor'))
