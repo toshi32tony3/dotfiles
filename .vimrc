@@ -154,9 +154,8 @@ NeoBundleLazy 'lambdalisue/vim-gita',
       \ { 'autoload' : { 'commands' : ['Gita'] } }
 NeoBundleLazy 'cohama/agit.vim',
       \ { 'autoload' : { 'commands' : ['Agit'] } }
+" 何故かLazyできなかった
 NeoBundle 'idanarye/vim-merginal'
-" NeoBundleLazy 'idanarye/vim-merginal',
-"       \ { 'autoload' : { 'commands' : ['Merginal'] } }
 
 NeoBundleLazy 'majutsushi/tagbar',
       \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
