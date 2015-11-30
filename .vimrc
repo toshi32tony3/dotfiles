@@ -724,8 +724,6 @@ command! -nargs=0 MessageClear for l:n in range(200) | echom "" | endfor
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(ident)
-  let l:duration = reltime()
-  let l:duration = reltime(l:duration)
   tablast | tabnew
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:ident
@@ -733,7 +731,6 @@ function! s:TabTagJump(ident)
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
   " execute 'tjump' a:ident
   redraw
-  echomsg 'duration(tag): ' . reltimestr(l:duration)
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
