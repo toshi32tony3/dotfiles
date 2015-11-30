@@ -681,6 +681,9 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 " " -> startify/vimfiler/CDコマンドでcdするので以下の設定は使用しない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
+" 最後のカーソル位置を記憶していたらジャンプ
+autocmd MyAutoCmd BufRead * silent normal! `"
+
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
 " -> プラグインの挙動とぶつかることもあるらしいので使わない
@@ -721,8 +724,6 @@ command! -nargs=0 MessageClear for l:n in range(200) | echom "" | endfor
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(ident)
-  let l:duration = reltime()
-  let l:duration = reltime(l:duration)
   tablast | tabnew
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:ident
@@ -730,7 +731,6 @@ function! s:TabTagJump(ident)
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
   " execute 'tjump' a:ident
   redraw
-  echomsg 'duration(tag): ' . reltimestr(l:duration)
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
 nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
@@ -1531,7 +1531,7 @@ if neobundle#tap('vim-tomorrow-theme')
     endif
   endif
 
-  colorscheme Tomorrow-Night-Bright
+  colorscheme Tomorrow-Night
 
 endif " }}}
 
