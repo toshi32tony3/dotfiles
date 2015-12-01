@@ -666,6 +666,7 @@ nnoremap gk [c
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
+  nnoremap <buffer> <F1>  :<C-u>q<CR>
   nnoremap <buffer> <Esc> :<C-u>q<CR>
 endfunction
 autocmd MyAutoCmd FileType help call s:HelpSettings()
@@ -1618,7 +1619,7 @@ endif " }}}
 if neobundle#tap('vim-operator-replace')
 
   map R <Plug>(operator-replace)
-  noremap <F2> R
+  noremap <A-r> R
 
 endif " }}}
 
@@ -1889,7 +1890,7 @@ if neobundle#tap('tagbar')
         \     'f:functions',
         \   ]
         \ }
-  nnoremap <silent> <F1> :<C-u>TagbarToggle<CR>
+  nnoremap <silent> <F2> :<C-u>TagbarToggle<CR>
 
   " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
   function! s:ClipCurrentTag(data)
