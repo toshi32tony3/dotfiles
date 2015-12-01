@@ -1520,13 +1520,11 @@ if neobundle#tap('vim-tomorrow-theme')
 
   " 現在のカーソル位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight Cursor
-        \   term=bold cterm=bold gui=bold
-        \   ctermfg=15 ctermbg=12 guifg=White guibg=Red
+        \   gui=bold guifg=White guibg=Red
 
   " 検索中にフォーカス位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
-        \   term=reverse cterm=NONE gui=NONE
-        \   ctermfg=16 ctermbg=222 guifg=#1d1f21 guibg=#f0c674
+        \   term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
 
   if !neobundle#tap('eskk.vim')
     " IME ONしていることをわかりやすくする
