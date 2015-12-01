@@ -1673,7 +1673,7 @@ endif " }}}
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  map <Leader>H <Plug>(operator-quickhl-manual-this-motion)
+  map <A-h> <Plug>(operator-quickhl-manual-this-motion)
 
   " " QuickhlManualResetも一緒にやってしまうと間違えて消すのが若干怖い
   " " -> ambicmdのおかげで :qmr<Space> で呼び出せるのでコメントアウト
