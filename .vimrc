@@ -343,8 +343,12 @@ function! s:PutMemoFormat()
   let @" = '='
   normal! 080""Po
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""PA {{{
-  normal! o}}}
+  normal! ""P
+  let @" = '{'
+  normal! $l3""p
+  let @" = '}'
+  normal! o
+  normal! 03""P
   normal! ko
 endfunction
 command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
