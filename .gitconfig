@@ -24,3 +24,6 @@
   ui = auto
 [alias]
   co = checkout
+[credential]
+  helper = manager
+  interactive = never
