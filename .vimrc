@@ -343,8 +343,12 @@ function! s:PutMemoFormat()
   let @" = '='
   normal! 080""Po
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""PA {{{
-  normal! o}}}
+  normal! ""P
+  let @" = '{'
+  normal! $l3""p
+  let @" = '}'
+  normal! o
+  normal! 03""P
   normal! ko
 endfunction
 command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
@@ -1516,13 +1520,11 @@ if neobundle#tap('vim-tomorrow-theme')
 
   " 現在のカーソル位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight Cursor
-        \   term=bold cterm=bold gui=bold
-        \   ctermfg=15 ctermbg=12 guifg=White guibg=Red
+        \   gui=bold guifg=White guibg=Red
 
   " 検索中にフォーカス位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
-        \   term=reverse cterm=NONE gui=NONE
-        \   ctermfg=16 ctermbg=222 guifg=#1d1f21 guibg=#f0c674
+        \   term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
 
   if !neobundle#tap('eskk.vim')
     " IME ONしていることをわかりやすくする
@@ -1673,7 +1675,7 @@ endif " }}}
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  map <Leader>H <Plug>(operator-quickhl-manual-this-motion)
+  map <A-h> <Plug>(operator-quickhl-manual-this-motion)
 
   " " QuickhlManualResetも一緒にやってしまうと間違えて消すのが若干怖い
   " " -> ambicmdのおかげで :qmr<Space> で呼び出せるのでコメントアウト
