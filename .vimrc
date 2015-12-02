@@ -657,7 +657,7 @@ nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 nnoremap j gj
 nnoremap k gk
 
-" gj/gkで次のhunkへ移動
+" gj/gkで次の差分hunkへ移動
 nnoremap gj ]c
 nnoremap gk [c
 
