@@ -683,8 +683,9 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 " " -> startify/vimfiler/CDコマンドでcdするので以下の設定は使用しない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
-" 最後のカーソル位置を記憶していたらジャンプ
-autocmd MyAutoCmd BufRead * silent normal! `"
+" " 最後のカーソル位置を記憶していたらジャンプ
+" " -> Gdiff時に不便なことがあったので手動でマークジャンプする
+" autocmd MyAutoCmd BufRead * silent normal! `"
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
