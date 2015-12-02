@@ -2314,8 +2314,13 @@ if neobundle#tap('eskk.vim')
 
   " すぐにskkしたい
   nmap <expr> <C-j> "i\<C-j>"
-  nmap <expr> <C-a> "a\<C-j>"
   nmap <expr> <C-s> "s\<C-j>"
+
+  " " Vimで<C-i>は<Tab>と同義なので潰せない
+  " nmap <expr> <C-i> "i\<C-j>"
+
+  " " インクリメントは潰せない
+  " nmap <expr> <C-a> "a\<C-j>"
 
   " もっとすぐにskkしたい
   nmap <expr> <A-j> "I\<C-j>"
