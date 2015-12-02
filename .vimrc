@@ -662,16 +662,10 @@ nnoremap gj ]c
 nnoremap gk [c
 
 " Cの関数名にジャンプ
-function! s:JumpFuncC(isForward)
-  if a:isForward == 1
-    execute "normal! ]]?(\<CR>B"
-  else
-    execute "normal! [[?(\<CR>B"
-  endif
-endfunction
-command! -nargs=1 JumpFuncC call s:JumpFuncC(<f-args>)
-nnoremap <silent> [t :<C-u>JumpFuncC(0)<CR>
-nnoremap <silent> ]t :<C-u>JumpFuncC(1)<CR>
+nnoremap <silent> [t :<C-u>execute "normal! [[" <bar> call search('(','b') <bar>
+      \                    execute "normal! B"<CR>
+nnoremap <silent> ]t :<C-u>execute "normal! ]]" <bar> call search('(','b') <bar>
+      \                    execute "normal! B"<CR>
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
