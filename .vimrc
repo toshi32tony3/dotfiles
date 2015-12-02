@@ -631,7 +631,7 @@ function! s:ClipCmdOutput(cmd)
   silent execute a:cmd
   redir END
 endfunction
-command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<q-args>)
+command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<f-args>)
 
 " The end of 編集 }}}
 "-----------------------------------------------------------------------------
@@ -725,13 +725,13 @@ command! -nargs=0 MessageClear for l:n in range(200) | echom "" | endfor
 " tags, path {{{
 
 " 新規タブでタグジャンプ
-function! s:TabTagJump(ident)
+function! s:TabTagJump(funcName)
   tablast | tabnew
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
-  execute 'tag' a:ident
+  execute 'tag' a:funcName
 
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
-  " execute 'tjump' a:ident
+  " execute 'tjump' a:funcName
   redraw
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
