@@ -2315,6 +2315,22 @@ if neobundle#tap('eskk.vim')
   nmap <expr> <A-c> "C\<C-j>"
   nmap <expr> <A-s> "S\<C-j>"
 
+  " skk-jisyoを開いた時にソートしたい
+  if filereadable(expand('~/dotfiles/.skk-jisyo'))
+    function! s:SortSKKDictionary()
+      let l:currentCursorPosition = getcurpos()
+      execute "normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
+      execute "normal! /okuri\<CR>0jvG:sort\<CR>\<Esc>"
+      call setpos('.', l:currentCursorPosition)
+      echo 'ソートしました!!'
+    endfunction
+
+    function! s:SKKDictionarySettings()
+      command! -nargs=0 -buffer SortSKKDictionary call s:SortSKKDictionary()
+    endfunction
+    autocmd MyAutoCmd FileType skkdict call s:SKKDictionarySettings()
+  endif
+
 endif " }}}
 
 " 元の状態を復元してVimを再起動(restart.vim) {{{
