@@ -158,7 +158,7 @@ NeoBundleLazy 'cohama/agit.vim',
 NeoBundle 'idanarye/vim-merginal'
 
 NeoBundleLazy 'majutsushi/tagbar',
-      \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
+      \ { 'autoload' : { 'commands' : ['TagbarCurrentTag', 'TagbarToggle'] } }
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
