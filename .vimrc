@@ -1655,7 +1655,7 @@ if neobundle#tap('vim-smartchr')
   " ruby / eruby の時だけ設定
   autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
   function! s:RubySettings()
-    inoremap <buffer><expr> { smartchr#one_of('{', '#{', '{{')
+    inoremap <buffer> <expr> { smartchr#one_of('{', '#{', '{{')
   endfunction
 
   " for match }} } } }
