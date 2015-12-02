@@ -661,6 +661,18 @@ nnoremap k gk
 nnoremap gj ]c
 nnoremap gk [c
 
+" Cの関数名にジャンプ
+function! s:JumpFuncC(isForward)
+  if a:isForward == 1
+    execute "normal! ]]?(\<CR>B"
+  else
+    execute "normal! [[?(\<CR>B"
+  endif
+endfunction
+command! -nargs=1 JumpFuncC call s:JumpFuncC(<f-args>)
+nnoremap <silent> [t :<C-u>JumpFuncC(0)<CR>
+nnoremap <silent> ]t :<C-u>JumpFuncC(1)<CR>
+
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
   nnoremap <buffer> <F1>  :<C-u>q<CR>
@@ -2141,10 +2153,6 @@ if neobundle#tap('clever-f.vim')
   " let g:clever_f_fix_key_direction = 1
 
   " let g:clever_f_chars_match_any_signs = ';'
-
-  " Cの関数名にジャンプ
-  nmap [t [[F(B
-  nmap ]t ]]F(B
 
   " for Lazy
   let g:clever_f_not_overwrites_standard_mappings = 1
