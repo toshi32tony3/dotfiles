@@ -158,7 +158,7 @@ NeoBundleLazy 'cohama/agit.vim',
 NeoBundle 'idanarye/vim-merginal'
 
 NeoBundleLazy 'majutsushi/tagbar',
-      \ { 'autoload' : { 'commands' : ['TagbarToggle'] } }
+      \ { 'autoload' : { 'commands' : ['TagbarCurrentTag', 'TagbarToggle'] } }
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
@@ -183,8 +183,8 @@ NeoBundleLazy 'vim-scripts/BufOnly.vim',
 
 NeoBundleLazy 'justinmk/vim-sneak',
       \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
-NeoBundleLazy 'rhysd/clever-f.vim',
-      \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
+" NeoBundleLazy 'rhysd/clever-f.vim',
+"       \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
 
 NeoBundleLazy 'tyru/caw.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(caw'] } }
@@ -631,14 +631,11 @@ function! s:ClipCmdOutput(cmd)
   silent execute a:cmd
   redir END
 endfunction
-command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<q-args>)
+command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<f-args>)
 
 " The end of 編集 }}}
 "-----------------------------------------------------------------------------
 " 操作の簡単化 {{{
-
-" insertモードで保存
-inoremap <C-s> <Esc>:w<CR>a
 
 " キー入力タイムアウトはあると邪魔だし、待つ意味も無い気がする
 set notimeout
@@ -664,6 +661,18 @@ nnoremap k gk
 nnoremap gj ]c
 nnoremap gk [c
 
+" Cの関数名にジャンプ
+function! s:JumpFuncC(isForward)
+  if a:isForward == 1
+    execute "normal! ]]?(\<CR>B"
+  else
+    execute "normal! [[?(\<CR>B"
+  endif
+endfunction
+command! -nargs=1 JumpFuncC call s:JumpFuncC(<f-args>)
+nnoremap <silent> [t :<C-u>JumpFuncC(0)<CR>
+nnoremap <silent> ]t :<C-u>JumpFuncC(1)<CR>
+
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
   nnoremap <buffer> <F1>  :<C-u>q<CR>
@@ -686,8 +695,9 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 " " -> startify/vimfiler/CDコマンドでcdするので以下の設定は使用しない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
-" 最後のカーソル位置を記憶していたらジャンプ
-autocmd MyAutoCmd BufRead * silent normal! `"
+" " 最後のカーソル位置を記憶していたらジャンプ
+" " -> Gdiff時に不便なことがあったので手動でマークジャンプする
+" autocmd MyAutoCmd BufRead * silent normal! `"
 
 " 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
@@ -728,13 +738,13 @@ command! -nargs=0 MessageClear for l:n in range(200) | echom "" | endfor
 " tags, path {{{
 
 " 新規タブでタグジャンプ
-function! s:TabTagJump(ident)
+function! s:TabTagJump(funcName)
   tablast | tabnew
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
-  execute 'tag' a:ident
+  execute 'tag' a:funcName
 
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
-  " execute 'tjump' a:ident
+  " execute 'tjump' a:funcName
   redraw
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
@@ -1526,11 +1536,9 @@ if neobundle#tap('vim-tomorrow-theme')
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
         \   term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
 
-  if !neobundle#tap('eskk.vim')
-    " IME ONしていることをわかりやすくする
-    if has('multi_byte_ime') || has('xim')
-      autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
-    endif
+  " IME ONしていることをわかりやすくする
+  if has('multi_byte_ime') || has('xim')
+    autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
   endif
 
   colorscheme Tomorrow-Night
@@ -1655,7 +1663,7 @@ if neobundle#tap('vim-smartchr')
   " ruby / eruby の時だけ設定
   autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
   function! s:RubySettings()
-    inoremap <buffer><expr> { smartchr#one_of('{', '#{', '{{')
+    inoremap <buffer> <expr> { smartchr#one_of('{', '#{', '{{')
   endfunction
 
   " for match }} } } }
@@ -2146,10 +2154,6 @@ if neobundle#tap('clever-f.vim')
 
   " let g:clever_f_chars_match_any_signs = ';'
 
-  " Cの関数名にジャンプ
-  nmap [t [[F(B
-  nmap ]t ]]F(B
-
   " for Lazy
   let g:clever_f_not_overwrites_standard_mappings = 1
   nmap f <Plug>(clever-f-f)
@@ -2253,8 +2257,6 @@ if neobundle#tap('TweetVim')
 
   let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
 
-  nmap <C-s> :<C-u>TweetVimSearch<Space>
-
   function! s:TweetVimSettings()
     nnoremap <buffer> <C-CR>     :<C-u>TweetVimSay<CR>
     nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
@@ -2309,6 +2311,39 @@ if neobundle#tap('eskk.vim')
   let g:eskk#egg_like_newline = 1
   let g:eskk#egg_like_newline_completion = 1
   let g:eskk#rom_input_style = 'msime'
+
+  " すぐにskkしたい
+  nmap <expr> <C-j> "i\<C-j>"
+  nmap <expr> <C-s> "s\<C-j>"
+
+  " " Vimで<C-i>は<Tab>と同義なので潰せない
+  " nmap <expr> <C-i> "i\<C-j>"
+
+  " " インクリメントは潰せない
+  " nmap <expr> <C-a> "a\<C-j>"
+
+  " もっとすぐにskkしたい
+  nmap <expr> <A-j> "I\<C-j>"
+  nmap <expr> <A-i> "I\<C-j>"
+  nmap <expr> <A-a> "A\<C-j>"
+  nmap <expr> <A-c> "C\<C-j>"
+  nmap <expr> <A-s> "S\<C-j>"
+
+  " skk-jisyoを開いた時にソートしたい
+  if filereadable(expand('~/dotfiles/.skk-jisyo'))
+    function! s:SortSKKDictionary()
+      let l:currentCursorPosition = getcurpos()
+      execute "normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
+      execute "normal! /okuri\<CR>0jvG:sort\<CR>\<Esc>"
+      call setpos('.', l:currentCursorPosition)
+      echo 'ソートしました!!'
+    endfunction
+
+    function! s:SKKDictionarySettings()
+      command! -nargs=0 -buffer SortSKKDictionary call s:SortSKKDictionary()
+    endfunction
+    autocmd MyAutoCmd FileType skkdict call s:SKKDictionarySettings()
+  endif
 
 endif " }}}
 
