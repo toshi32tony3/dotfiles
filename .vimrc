@@ -2310,6 +2310,13 @@ if neobundle#tap('eskk.vim')
   let g:eskk#egg_like_newline_completion = 1
   let g:eskk#rom_input_style = 'msime'
 
+  " すぐにskkしたい
+  nmap <expr> <C-j> "i\<C-j>"
+  nmap <expr> <C-a> "A\<C-j>"
+
+  " Vimにとって<C-i>は<TAB>と同義なんだよなあ...
+  nmap <expr> <C-i> "I\<C-j>"
+
 endif " }}}
 
 " 元の状態を復元してVimを再起動(restart.vim) {{{
