@@ -1523,11 +1523,9 @@ if neobundle#tap('vim-tomorrow-theme')
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
         \   term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
 
-  if !neobundle#tap('eskk.vim')
-    " IME ONしていることをわかりやすくする
-    if has('multi_byte_ime') || has('xim')
-      autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
-    endif
+  " IME ONしていることをわかりやすくする
+  if has('multi_byte_ime') || has('xim')
+    autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
   endif
 
   colorscheme Tomorrow-Night
@@ -2313,8 +2311,9 @@ if neobundle#tap('eskk.vim')
   " もっとすぐにskkしたい
   nmap <expr> <A-j> "I\<C-j>"
   nmap <expr> <A-i> "I\<C-j>"
-  nmap <expr> <A-s> "S\<C-j>"
   nmap <expr> <A-a> "A\<C-j>"
+  nmap <expr> <A-c> "C\<C-j>"
+  nmap <expr> <A-s> "S\<C-j>"
 
 endif " }}}
 
