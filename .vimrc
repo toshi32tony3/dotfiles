@@ -183,8 +183,8 @@ NeoBundleLazy 'vim-scripts/BufOnly.vim',
 
 NeoBundleLazy 'justinmk/vim-sneak',
       \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
-NeoBundleLazy 'rhysd/clever-f.vim',
-      \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
+" NeoBundleLazy 'rhysd/clever-f.vim',
+"       \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
 
 NeoBundleLazy 'tyru/caw.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(caw'] } }
@@ -636,9 +636,6 @@ command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<q-args>)
 " The end of 編集 }}}
 "-----------------------------------------------------------------------------
 " 操作の簡単化 {{{
-
-" insertモードで保存
-inoremap <C-s> <Esc>:w<CR>a
 
 " キー入力タイムアウトはあると邪魔だし、待つ意味も無い気がする
 set notimeout
@@ -2253,8 +2250,6 @@ if neobundle#tap('TweetVim')
 
   let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
 
-  nmap <C-s> :<C-u>TweetVimSearch<Space>
-
   function! s:TweetVimSettings()
     nnoremap <buffer> <C-CR>     :<C-u>TweetVimSay<CR>
     nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
@@ -2312,10 +2307,14 @@ if neobundle#tap('eskk.vim')
 
   " すぐにskkしたい
   nmap <expr> <C-j> "i\<C-j>"
-  nmap <expr> <C-a> "A\<C-j>"
+  nmap <expr> <C-a> "a\<C-j>"
+  nmap <expr> <C-s> "s\<C-j>"
 
-  " Vimにとって<C-i>は<TAB>と同義なんだよなあ...
-  nmap <expr> <C-i> "I\<C-j>"
+  " もっとすぐにskkしたい
+  nmap <expr> <A-j> "I\<C-j>"
+  nmap <expr> <A-i> "I\<C-j>"
+  nmap <expr> <A-s> "S\<C-j>"
+  nmap <expr> <A-a> "A\<C-j>"
 
 endif " }}}
 
