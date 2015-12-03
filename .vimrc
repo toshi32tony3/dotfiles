@@ -160,8 +160,8 @@ NeoBundle 'idanarye/vim-merginal'
 
 NeoBundle 'tyru/current-func-info.vim'
 
-" はっきりとした原因が判らなかったのでforkして暫定修正を追加した版
-NeoBundle 'toshi32tony3/foldCC.vim'
+" foldCCnavi()がnormal modeで頻繁に例外を吐くので使えない
+" NeoBundle 'LeafCage/foldCC.vim'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
@@ -457,6 +457,7 @@ set showcmd
 
 set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
+" set statusline=%!mode('no')
 
 " 透明度をスイッチ
 let g:transparency_on = 0
@@ -2025,8 +2026,10 @@ if neobundle#tap('lightline.vim')
     if &ft == 'vim' || 'markdown'
       if neobundle#is_installed('foldCC.vim')
         let l:_ = FoldCCnavi()
-        let l:_ = &ft == 'vim' && strlen(l:_) ? l:_ . ' "' : ''
-        return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
+        " TODO: "<Space>を検知して削除する方法を調べる
+        " TODO: 
+        let l:_ = &ft == 'vim' && strlen(l:_) ? l:_[2 : (strlen(l:_) - 1)] : ''
+        return winwidth(0) > 80 ? l:_ : ''
       endif
       return ''
     else
