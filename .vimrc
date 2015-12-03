@@ -160,11 +160,11 @@ NeoBundle 'idanarye/vim-merginal'
 
 NeoBundle 'tyru/current-func-info.vim'
 
+" はっきりとした原因が判らなかったのでforkして暫定修正を追加した版
+NeoBundle 'toshi32tony3/foldCC.vim'
+
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
-
-" 画面の再描画を含むプラグインとの相性が悪いようなので、使わないことにする
-NeoBundle 'LeafCage/foldCC.vim'
 
 " Cygwin Vimでは使う
 " NeoBundleLazy 'kana/vim-fakeclip',
@@ -1913,6 +1913,15 @@ if neobundle#tap('current-func-info.vim')
 
 endif " }}}
 
+" vimの折り畳み(fold)機能を便利に(foldCC.vim) {{{
+if neobundle#tap('foldCC.vim')
+
+  let g:foldCCtext_enable_autofdc_adjuster = 1
+  let g:foldCCnavi_maxchars = 70
+  set foldtext=FoldCCtext()
+
+endif " }}}
+
 " カッコいいステータスラインを使う(lightline.vim) {{{
 if neobundle#tap('lightline.vim')
 
@@ -2051,15 +2060,6 @@ if neobundle#tap('lightline.vim')
     endif
     return ''
   endfunction
-
-endif " }}}
-
-" vimの折り畳み(fold)機能を便利に(foldCC.vim) {{{
-if neobundle#tap('foldCC.vim')
-
-  let g:foldCCtext_enable_autofdc_adjuster = 1
-  let g:foldCCnavi_maxchars = 70
-  set foldtext=FoldCCtext()
 
 endif " }}}
 
