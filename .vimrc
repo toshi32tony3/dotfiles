@@ -105,7 +105,7 @@ NeoBundleLazy 'tyru/open-browser.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(openbrowser-'] } }
 
 NeoBundleLazy 'deris/vim-visualinc',
-      \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-)'] } }
+      \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-'] } }
 
 " Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
 NeoBundleLazy 'deris/vim-rengbang'
@@ -1550,8 +1550,8 @@ if neobundle#tap('memolist.vim')
   let g:memolist_prompt_categories = 0
 
   " markdownテンプレートを指定
-  if filereadable(expand('~/configs/memolist/md.txt'))
-    let g:memolist_template_dir_path = '~/configs/memolist'
+  if filereadable(expand('~/configs/template/md.txt'))
+    let g:memolist_template_dir_path = '~/configs/template'
   endif
 
   nnoremap <Leader>mn :<C-u>MemoNew<CR>
@@ -1590,8 +1590,8 @@ endif " }}}
 if neobundle#tap('vim-visualinc')
 
   " for Lazy
-  vmap <C-a>  <Plug>(visualinc-increment)
-  vmap <C-x>  <Plug>(visualinc-decrement)
+  vmap <C-a> <Plug>(visualinc-increment)
+  vmap <C-x> <Plug>(visualinc-decrement)
 
 endif " }}}
 
