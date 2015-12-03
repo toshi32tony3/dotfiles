@@ -2341,6 +2341,21 @@ if neobundle#tap('eskk.vim')
   nmap <expr> <A-c> "C\<C-j>"
   nmap <expr> <A-s> "S\<C-j>"
 
+  autocmd MyAutoCmd User eskk-initialize-pre call s:eskk_initial_pre()
+  function! s:eskk_initial_pre()
+      let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
+      " zenkaku -> hankaku
+      call t.add_map('!!', '!')
+      call t.add_map('??', '?')
+      call t.add_map('::', ':')
+
+      " special
+      call t.add_map('..', '->')
+      call t.add_map('. ', '. ')
+
+      call eskk#register_mode_table('hira', t)
+  endfunction
+
   " skk-jisyoを開いた時にソートしたい
   if filereadable(expand('~/dotfiles/.skk-jisyo'))
     function! s:SortSKKDictionary()
