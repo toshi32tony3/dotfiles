@@ -2307,20 +2307,27 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " すぐにskkしたい
-  nmap <expr> <C-j> "i\<C-j>"
-  nmap <expr> <C-s> "s\<C-j>"
-
-  " " Vimで<C-i>は<Tab>と同義なので潰せない
-  " nmap <expr> <C-i> "i\<C-j>"
-
-  " " インクリメントは潰せない
+  " nmap <expr> <C-j> "i\<C-j>"
+  " " aも使いたいが、インクリメントは潰せない
   " nmap <expr> <C-a> "a\<C-j>"
+  " Vimで<C-i>は<Tab>と同義なので潰せない
+  " -> 実害があるかわからないので、<C-j>をa, <C-i>をiで試してみる
+  nmap <expr> <C-i> "i\<C-j>"
+  nmap <expr> <C-j> "a\<C-j>"
 
   " もっとすぐにskkしたい
-  nmap <expr> <A-j> "I\<C-j>"
   nmap <expr> <A-i> "I\<C-j>"
-  nmap <expr> <A-a> "A\<C-j>"
+  " <C-a>を使わないので<A-a>も使わない方が良いかも？
+  " 加えて<A-a>は両方左手なので多分押しづらい
+  " nmap <expr> <A-a> "A\<C-j>"
+  nmap <expr> <A-j> "A\<C-j>"
+
+  " " oも使いたいが、<C-o>は潰せないので<A-o>を使う。Oは我慢
+  " nmap <expr> <C-o> "o\<C-j>"
   nmap <expr> <A-o> "o\<C-j>"
+
+  " もっともっとすぐにskkしたい
+  nmap <expr> <C-s> "s\<C-j>"
   nmap <expr> <A-c> "C\<C-j>"
   nmap <expr> <A-s> "S\<C-j>"
 
