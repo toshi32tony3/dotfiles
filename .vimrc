@@ -164,7 +164,7 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
 " 画面の再描画を含むプラグインとの相性が悪いようなので、使わないことにする
-" NeoBundle 'LeafCage/foldCC.vim'
+NeoBundle 'LeafCage/foldCC.vim'
 
 " Cygwin Vimでは使う
 " NeoBundleLazy 'kana/vim-fakeclip',
@@ -2013,9 +2013,10 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyCurrentFunc()
-    if &ft == 'vim'
+    if &ft == 'vim' || 'markdown'
       if neobundle#is_installed('foldCC.vim')
         let l:_ = FoldCCnavi()
+        let l:_ = &ft == 'vim' && strlen(l:_) ? l:_ . ' "' : ''
         return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
       endif
       return ''
@@ -2053,10 +2054,11 @@ if neobundle#tap('lightline.vim')
 
 endif " }}}
 
-" vimの折り畳み(fold)機能を便利に(foldCC) {{{
-if neobundle#tap('foldCC')
+" vimの折り畳み(fold)機能を便利に(foldCC.vim) {{{
+if neobundle#tap('foldCC.vim')
 
   let g:foldCCtext_enable_autofdc_adjuster = 1
+  let g:foldCCnavi_maxchars = 70
   set foldtext=FoldCCtext()
 
 endif " }}}
