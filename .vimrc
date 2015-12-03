@@ -108,7 +108,8 @@ NeoBundleLazy 'deris/vim-visualinc',
       \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-'] } }
 
 " Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
-NeoBundleLazy 'deris/vim-rengbang'
+NeoBundleLazy 'deris/vim-rengbang',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(operator-rengbang)'] } }
 
 NeoBundle 'tpope/vim-surround'
 
@@ -1599,6 +1600,15 @@ endif " }}}
 if neobundle#tap('vim-rengbang')
 
   let g:rengbang_default_start = 1
+  map <A-r> <Plug>(operator-rengbang)
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand RengBang
+    delcommand RengBangConfirm
+    delcommand RengBangUsePrev
+
+  endfunction
 
 endif " }}}
 
@@ -1620,7 +1630,7 @@ endif " }}}
 if neobundle#tap('vim-operator-replace')
 
   map R <Plug>(operator-replace)
-  noremap <A-r> R
+  " noremap <A-r> R
 
 endif " }}}
 
