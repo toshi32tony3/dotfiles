@@ -2320,6 +2320,7 @@ if neobundle#tap('eskk.vim')
   nmap <expr> <A-j> "I\<C-j>"
   nmap <expr> <A-i> "I\<C-j>"
   nmap <expr> <A-a> "A\<C-j>"
+  nmap <expr> <A-o> "o\<C-j>"
   nmap <expr> <A-c> "C\<C-j>"
   nmap <expr> <A-s> "S\<C-j>"
 
