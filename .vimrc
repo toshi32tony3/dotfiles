@@ -105,10 +105,11 @@ NeoBundleLazy 'tyru/open-browser.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(openbrowser-'] } }
 
 NeoBundleLazy 'deris/vim-visualinc',
-      \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-)'] } }
+      \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-'] } }
 
 " Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
-NeoBundleLazy 'deris/vim-rengbang'
+NeoBundleLazy 'deris/vim-rengbang',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(operator-rengbang)'] } }
 
 NeoBundle 'tpope/vim-surround'
 
@@ -1550,8 +1551,8 @@ if neobundle#tap('memolist.vim')
   let g:memolist_prompt_categories = 0
 
   " markdownテンプレートを指定
-  if filereadable(expand('~/configs/memolist/md.txt'))
-    let g:memolist_template_dir_path = '~/configs/memolist'
+  if filereadable(expand('~/configs/template/md.txt'))
+    let g:memolist_template_dir_path = '~/configs/template'
   endif
 
   nnoremap <Leader>mn :<C-u>MemoNew<CR>
@@ -1590,8 +1591,8 @@ endif " }}}
 if neobundle#tap('vim-visualinc')
 
   " for Lazy
-  vmap <C-a>  <Plug>(visualinc-increment)
-  vmap <C-x>  <Plug>(visualinc-decrement)
+  vmap <C-a> <Plug>(visualinc-increment)
+  vmap <C-x> <Plug>(visualinc-decrement)
 
 endif " }}}
 
@@ -1599,6 +1600,15 @@ endif " }}}
 if neobundle#tap('vim-rengbang')
 
   let g:rengbang_default_start = 1
+  map <A-r> <Plug>(operator-rengbang)
+
+  " 不要なコマンドを削除する
+  function! neobundle#hooks.on_post_source(bundle)
+    delcommand RengBang
+    delcommand RengBangConfirm
+    delcommand RengBangUsePrev
+
+  endfunction
 
 endif " }}}
 
@@ -1620,7 +1630,7 @@ endif " }}}
 if neobundle#tap('vim-operator-replace')
 
   map R <Plug>(operator-replace)
-  noremap <A-r> R
+  " noremap <A-r> R
 
 endif " }}}
 
@@ -2307,21 +2317,44 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " すぐにskkしたい
-  nmap <expr> <C-j> "i\<C-j>"
-  nmap <expr> <C-s> "s\<C-j>"
-
-  " " Vimで<C-i>は<Tab>と同義なので潰せない
-  " nmap <expr> <C-i> "i\<C-j>"
-
-  " " インクリメントは潰せない
+  " nmap <expr> <C-j> "i\<C-j>"
+  " " aも使いたいが、インクリメントは潰せない
   " nmap <expr> <C-a> "a\<C-j>"
+  " Vimで<C-i>は<Tab>と同義なので潰せない
+  " -> 実害があるかわからないので、<C-j>をa, <C-i>をiで試してみる
+  nmap <expr> <C-i> "i\<C-j>"
+  nmap <expr> <C-j> "a\<C-j>"
 
   " もっとすぐにskkしたい
-  nmap <expr> <A-j> "I\<C-j>"
   nmap <expr> <A-i> "I\<C-j>"
-  nmap <expr> <A-a> "A\<C-j>"
+  " <C-a>を使わないので<A-a>も使わない方が良いかも？
+  " 加えて<A-a>は両方左手なので多分押しづらい
+  " nmap <expr> <A-a> "A\<C-j>"
+  nmap <expr> <A-j> "A\<C-j>"
+
+  " " oも使いたいが、<C-o>は潰せないので<A-o>を使う。Oは我慢
+  " nmap <expr> <C-o> "o\<C-j>"
+  nmap <expr> <A-o> "o\<C-j>"
+
+  " もっともっとすぐにskkしたい
+  nmap <expr> <C-s> "s\<C-j>"
   nmap <expr> <A-c> "C\<C-j>"
   nmap <expr> <A-s> "S\<C-j>"
+
+  autocmd MyAutoCmd User eskk-initialize-pre call s:eskk_initial_pre()
+  function! s:eskk_initial_pre()
+      let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
+      " zenkaku -> hankaku
+      call t.add_map('!!', '!')
+      call t.add_map('??', '?')
+      call t.add_map('::', ':')
+
+      " special
+      call t.add_map('..', '->')
+      call t.add_map('. ', '. ')
+
+      call eskk#register_mode_table('hira', t)
+  endfunction
 
   " skk-jisyoを開いた時にソートしたい
   if filereadable(expand('~/dotfiles/.skk-jisyo'))
