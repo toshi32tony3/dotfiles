@@ -2069,7 +2069,7 @@ if neobundle#tap('vim-fakeclip')
 
 endif " }}}
 
-" ペーストからの<C-n>,<C-p>でクリップボードの履歴をぐるぐる(yankround.vim) {{{
+" pからの<C-n>,<C-p>でクリップボード履歴をぐるぐる(yankround.vim) {{{
 if neobundle#tap('yankround.vim')
 
   let g:yankround_dir = '~/.cache/yankround'
