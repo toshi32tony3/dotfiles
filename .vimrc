@@ -158,14 +158,13 @@ NeoBundleLazy 'cohama/agit.vim',
 " 何故かLazyできなかった
 NeoBundle 'idanarye/vim-merginal'
 
-NeoBundleLazy 'majutsushi/tagbar',
-      \ { 'autoload' : { 'commands' : ['TagbarCurrentTag', 'TagbarToggle'] } }
+NeoBundle 'tyru/current-func-info.vim'
+
+" foldCCnavi()がnormal modeで頻繁に例外を吐くので使えない
+" NeoBundle 'LeafCage/foldCC.vim'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
-
-" 画面の再描画を含むプラグインとの相性が悪いようなので、使わないことにする
-" NeoBundle 'LeafCage/foldCC.vim'
 
 " Cygwin Vimでは使う
 " NeoBundleLazy 'kana/vim-fakeclip',
@@ -458,6 +457,7 @@ set showcmd
 
 set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
+" set statusline=%!mode('no')
 
 " 透明度をスイッチ
 let g:transparency_on = 0
@@ -1882,50 +1882,44 @@ if neobundle#tap('vim-merginal')
 
 endif " }}}
 
-" ctagsを使ってアウトラインを作成(tagbar) {{{
-if neobundle#tap('tagbar')
+" カーソル位置の関数を取得(current-func-info.vim) {{{
+if neobundle#tap('current-func-info.vim')
 
-  " http://hp.vector.co.jp/authors/VA025040/ctags/
-  let g:tagbar_ctags_bin = '$VIM\ctags.exe'
-  let g:tagbar_sort = 0
-  let g:tagbar_type_vim = {
-        \   'kinds' : [
-        \     'v:variables',
-        \     'f:functions',
-        \   ]
-        \ }
-  let g:tagbar_type_c = {
-        \   'kinds' : [
-        \     'd:macros',
-        \     'v:variables',
-        \     'f:functions',
-        \   ]
-        \ }
-  nnoremap <silent> <F2> :<C-u>TagbarToggle<CR>
-
-  " tagbarの機能を使って現在の関数名を取得するショートカットコマンドを作る
-  function! s:ClipCurrentTag(data)
-    " cの場合、末尾の()を削除する
-    let l:funcName = &ft == 'c' ? a:data[0 : (stridx(a:data, '(') - 1)] : a:data
+  function! s:ClipCurrentTag(funcName)
+    if strlen(a:funcName) == 0
+      echo 'There is no function nearby cursor.'
+      return
+    endif
 
     " 選択範囲レジスタ(*)を使う
-    let @* = l:funcName
-    echo 'clipped: ' . l:funcName
+    let @* = a:funcName
+    echo 'clipped: ' . a:funcName
   endfunction
   command! -nargs=0 ClipCurrentTag
-        \ call s:ClipCurrentTag(tagbar#currenttag('%s', ''))
+        \ call s:ClipCurrentTag(cfi#get_func_name())
 
-  function! s:PrintCurrentTag(data)
-    " cの場合、末尾の()を削除する
-    let l:funcName = &ft == 'c' ? a:data[0 : (stridx(a:data, '(') - 1)] : a:data
+  function! s:PrintCurrentTag(funcName)
+    if strlen(a:funcName) == 0
+      echo 'There is no function nearby cursor.'
+      return
+    endif
 
     " 無名レジスタ(")を使う
-    let @" = l:funcName
+    let @" = a:funcName
     normal! ""P
-    echo 'print current tag: ' . l:funcName
+    echo 'print current tag: ' . a:funcName
   endfunction
   command! -nargs=0 PrintCurrentTag
-        \ call s:PrintCurrentTag(tagbar#currenttag('%s', ''))
+        \ call s:PrintCurrentTag(cfi#get_func_name())
+
+endif " }}}
+
+" vimの折り畳み(fold)機能を便利に(foldCC.vim) {{{
+if neobundle#tap('foldCC.vim')
+
+  let g:foldCCtext_enable_autofdc_adjuster = 1
+  let g:foldCCnavi_maxchars = 70
+  set foldtext=FoldCCtext()
 
 endif " }}}
 
@@ -1945,7 +1939,7 @@ if neobundle#tap('lightline.vim')
 
   let g:lightline.active = {
         \   'left'  : [ [ 'mode' ],
-        \               [ 'skk-mode', 'fugitive', 'filename', 'currenttag' ], ],
+        \               [ 'skkmode', 'fugitive', 'filename', 'currentfunc' ], ],
         \   'right' : [ [ 'lineinfo' ],
         \               [ 'percent' ],
         \               [ 'fileformat', 'fileencoding', 'filetype' ], ]
@@ -1962,9 +1956,9 @@ if neobundle#tap('lightline.vim')
         \   'filetype'     : 'MyFiletype',
         \   'fileencoding' : 'MyFileencoding',
         \   'mode'         : 'MyMode',
-        \   'skk-mode'     : 'MySKKMode',
+        \   'skkmode'      : 'MySKKMode',
         \   'fugitive'     : 'MyFugitive',
-        \   'currenttag'   : 'MyCurrentTag',
+        \   'currentfunc'  : 'MyCurrentFunc',
         \ }
 
   " for using git properly
@@ -2028,18 +2022,19 @@ if neobundle#tap('lightline.vim')
     return ''
   endfunction
 
-  function! MyCurrentTag()
-    if &ft == 'vim'
+  function! MyCurrentFunc()
+    if &ft == 'vim' || 'markdown'
       if neobundle#is_installed('foldCC.vim')
         let l:_ = FoldCCnavi()
-        return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
+        " TODO: "<Space>を検知して削除する方法を調べる
+        " TODO: 
+        let l:_ = &ft == 'vim' && strlen(l:_) ? l:_[2 : (strlen(l:_) - 1)] : ''
+        return winwidth(0) > 80 ? l:_ : ''
       endif
       return ''
     else
-      if neobundle#is_sourced('tagbar')
-        let l:_ = tagbar#currenttag('%s', '')
-        let l:_ = &ft == 'c' ? l:_[0 : (stridx(l:_, '(') - 1)] : l:_
-        return winwidth(0) > 60 ? (strlen(l:_) ? l:_ : '') : ''
+      if neobundle#is_installed('current-func-info.vim')
+        return winwidth(0) > 60 ? cfi#get_func_name() : ''
       endif
       return ''
     endif
@@ -2071,14 +2066,6 @@ if neobundle#tap('lightline.vim')
 
 endif " }}}
 
-" vimの折り畳み(fold)機能を便利に(foldCC) {{{
-if neobundle#tap('foldCC')
-
-  let g:foldCCtext_enable_autofdc_adjuster = 1
-  set foldtext=FoldCCtext()
-
-endif " }}}
-
 " Cygwin Vimでクリップボード連携(vim-fakeclip) {{{
 if neobundle#tap('vim-fakeclip')
 
@@ -2087,7 +2074,7 @@ if neobundle#tap('vim-fakeclip')
 
 endif " }}}
 
-" ペーストからの<C-n>,<C-p>でクリップボードの履歴をぐるぐる(yankround.vim) {{{
+" pからの<C-n>,<C-p>でクリップボード履歴をぐるぐる(yankround.vim) {{{
 if neobundle#tap('yankround.vim')
 
   let g:yankround_dir = '~/.cache/yankround'
