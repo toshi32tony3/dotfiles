@@ -2304,13 +2304,12 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " すぐにskkしたい
-  " nmap <expr> <C-j> "i\<C-j>"
+  nmap <expr> <C-j> "i\<C-j>"
   " " aも使いたいが、インクリメントは潰せない
   " nmap <expr> <C-a> "a\<C-j>"
-  " Vimで<C-i>は<Tab>と同義なので潰せない
-  " -> 実害があるかわからないので、<C-j>をa, <C-i>をiで試してみる
-  nmap <expr> <C-i> "i\<C-j>"
-  nmap <expr> <C-j> "a\<C-j>"
+  " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
+  " nmap <expr> <C-i> "i\<C-j>"
+  " nmap <expr> <C-j> "a\<C-j>"
 
   " もっとすぐにskkしたい
   nmap <expr> <A-i> "I\<C-j>"
@@ -2319,7 +2318,7 @@ if neobundle#tap('eskk.vim')
   " nmap <expr> <A-a> "A\<C-j>"
   nmap <expr> <A-j> "A\<C-j>"
 
-  " " oも使いたいが、<C-o>は潰せないので<A-o>を使う。Oは我慢
+  " " oも使いたいが、<C-o>はjumplist戻るなので潰せないため<A-o>を使う。Oは我慢
   " nmap <expr> <C-o> "o\<C-j>"
   nmap <expr> <A-o> "o\<C-j>"
 
