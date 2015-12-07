@@ -2350,12 +2350,12 @@ if neobundle#tap('eskk.vim')
       call eskk#register_mode_table('hira', t)
   endfunction
 
-  " skk-jisyoを開いた時にソートしたい
+  " skk-jisyoをソートしたい
   if filereadable(expand('~/dotfiles/.skk-jisyo'))
     function! s:SortSKKDictionary()
       let l:currentCursorPosition = getcurpos()
-      execute "normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
-      execute "normal! /okuri\<CR>0jvG:sort\<CR>\<Esc>"
+      execute "keepjumps normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
+      execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>\<Esc>"
       call setpos('.', l:currentCursorPosition)
       echo 'ソートしました!!'
     endfunction
