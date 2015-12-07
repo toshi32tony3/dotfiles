@@ -2344,8 +2344,8 @@ if neobundle#tap('eskk.vim')
       call t.add_map('~~', '～')
 
       " special
-      call t.add_map('. ', '. ')
-      call t.add_map('..', '->')
+      call t.add_map('.', '.')
+      call t.add_map('..', '。')
 
       call eskk#register_mode_table('hira', t)
   endfunction
