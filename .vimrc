@@ -973,6 +973,21 @@ map <C-Space> <Space>
 
 " The end of 誤爆防止関係 }}}
 "-----------------------------------------------------------------------------
+" その他 {{{
+
+" カウンタ
+function! s:MyCounter()
+  if !exists('b:mycounter')
+    let b:mycounter = 0
+  else
+    let b:mycounter += 1
+  endif
+  echomsg 'count: ' . b:mycounter
+endfunction
+command! -nargs=0 MyCounter call s:MyCounter()
+
+" The end of その他 }}}
+"-----------------------------------------------------------------------------
 " Plugin Settings {{{
 
 " netrw(Vim標準のファイラ)は使わない {{{
