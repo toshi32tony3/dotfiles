@@ -1069,7 +1069,6 @@ function! s:GetFoldLevel()
   " Viewを復元
   call winrestview(l:savedView)
 
-  echomsg 'foldlevel: ' . l:foldlevel
   return l:foldlevel
 endfunction
 command! -nargs=0 GetFoldLevel call s:GetFoldLevel()
