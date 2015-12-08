@@ -2339,10 +2339,10 @@ if neobundle#tap('eskk.vim')
   " skk-jisyoをソートしたい
   if filereadable(expand('~/dotfiles/.skk-jisyo'))
     function! s:SortSKKDictionary()
-      let l:currentCursorPosition = getcurpos()
+      let l:savedView = winsaveview()
       execute "keepjumps normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
       execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>\<Esc>"
-      call setpos('.', l:currentCursorPosition)
+      call winrestview(l:savedView)
       echo 'ソートしました!!'
     endfunction
 
