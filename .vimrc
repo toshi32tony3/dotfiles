@@ -1038,44 +1038,74 @@ function s:OnCursorMove()
 endfunction
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 
-" カーソル位置の親Fold名を更新
-let g:currentFold = ''
-function! s:UpdateCurrentFold()
-  let l:foldlevel = foldlevel('.')
-  if l:foldlevel == 0
-    return
+function! s:GetFoldLevel()
+  " foldlevel('.')はnofoldenableの時に必ず0を返すので, foldlevelを自分で数える
+  " NOTE:1行, 1foldまでとする
+  let l:foldlevel = 0
+  let l:currentLine = getline('.')
+  let l:currentLineNumber = line('.')
+  let l:lastLineNumber = l:currentLineNumber
+
+  " 現在の行にfoldmarkerが含まれているかチェック
+  let l:pattern = '\v\ \{\{\{$' " for match } } }
+  if match(l:currentLine, l:pattern) >= 0
+    let l:foldlevel += 1
   endif
 
   " Viewを保存
   let l:savedView = winsaveview()
 
+  " foldlevelをカウント
+  while 1
+    keepjumps normal! [z
+    let l:currentLineNumber = line('.')
+    if l:lastLineNumber == l:currentLineNumber
+      break
+    endif
+    let l:foldlevel += 1
+    let l:lastLineNumber = l:currentLineNumber
+  endwhile
+
+  " Viewを復元
+  call winrestview(l:savedView)
+
+  echomsg 'foldlevel: ' . l:foldlevel
+  return l:foldlevel
+endfunction
+command! -nargs=0 GetFoldLevel call s:GetFoldLevel()
+
+" カーソル位置の親Fold名を更新
+let g:currentFold = ''
+function! s:UpdateCurrentFold()
+  let l:foldlevel = s:GetFoldLevel()
+  if l:foldlevel == 0
+    return
+  endif
+
+  " View/カーソル位置を保存
+  let l:savedView = winsaveview()
+  let l:cursorPosition = getcurpos()
+
   " 走査回数の設定
   let l:searchCounter = l:foldlevel
 
-  " 結果格納変数を定義
+  " 変数初期化
   let l:foldList = []
   let l:currentFold = ''
+  let l:lastLineNumber = -1
 
   while 1
-    let l:currentCursorPosition = getcurpos()
     keepjumps normal! [z
     let l:currentLine = getline('.')
-
-    if l:searchCounter == l:foldlevel
-      " 初回
+    let l:currentLineNumber = line('.')
+    if l:lastLineNumber != l:currentLineNumber
       call insert(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)], 0)
     else
-      " 二回目以降
-      if l:lastGetLine == l:currentLine
-        call setpos('.', l:lastCursorPosition)
-        let l:currentLine = getline('.')
-        call add(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)])
-      else
-        call insert(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)], 0)
-      endif
+      call setpos('.', l:cursorPosition)
+      let l:currentLine = getline('.')
+      call add(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)])
     endif
-    let l:lastGetLine = l:currentLine
-    let l:lastCursorPosition = l:currentCursorPosition
+    let l:lastLineNumber = l:currentLineNumber
     let l:searchCounter -= 1
     if l:searchCounter == 0
       break
