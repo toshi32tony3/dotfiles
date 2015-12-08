@@ -160,9 +160,6 @@ NeoBundle 'idanarye/vim-merginal'
 
 NeoBundle 'tyru/current-func-info.vim'
 
-" foldCCnavi()がnormal modeで頻繁に例外を吐くので使えない
-" NeoBundle 'LeafCage/foldCC.vim'
-
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
@@ -985,6 +982,115 @@ function! s:MyCounter()
   echomsg 'count: ' . b:mycounter
 endfunction
 command! -nargs=0 MyCounter call s:MyCounter()
+
+" キーリピート時のCursorMoved autocmdを無効にする、行移動を検出する
+" http://d.hatena.ne.jp/gnarl/20080130/1201624546
+let g:throttleTimeSpan = 200
+function s:OnCursorMove()
+  " run on normal/visual mode only
+  let l:m = mode()
+  if m != 'n' && m != 'v'
+    let b:IsLineChanged = 0
+    let b:IsCursorMoved = 0
+    return
+  endif
+
+  " 初回のCursorMoved発火時の処理
+  if !exists('b:LastVisitedLine')
+    let b:IsCursorMoved = 0
+    let b:IsLineChanged = 0
+    let b:LastVisitedLine = line('.')
+    let b:LastCursorMoveTime = 0
+  endif
+
+  " ミリ秒単位の現在時刻を取得
+  let l:ml = matchlist('0000' . reltimestr(reltime()), '\(\d\{4}\)\.\(\d\{3}\)')
+  let l:now = str2nr(ml[1] . ml[2])
+
+  " 前回のCursorMoved発火時からの経過時間を算出
+  let l:timespan = now - b:LastCursorMoveTime
+
+  " LastCursorMoveTimeを更新
+  let b:LastCursorMoveTime = now
+
+  " 指定時間経過しているか否かで処理分岐
+  if l:timespan <= g:throttleTimeSpan
+    let b:IsLineChanged = 0
+    let b:IsCursorMoved = 0
+    return
+  endif
+
+  " CursorMoved!!
+  let b:IsCursorMoved = 1
+
+  if b:LastVisitedLine != line('.')
+    " LineChanged!!
+    let b:IsLineChanged = 1
+    let b:LastVisitedLine = line('.')
+
+    " NOTE: If no "User LineChanged" events,
+    " Vim say "No matching autocommands".
+    autocmd User LineChanged :
+    doautocmd User LineChanged
+  else
+    let b:IsLineChanged = 0
+  endif
+endfunction
+autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
+
+" カーソル位置の親Fold名を更新
+let g:currentFold = ''
+function! s:UpdateCurrentFold()
+  let l:foldlevel = foldlevel('.')
+  if l:foldlevel == 0
+    return
+  endif
+
+  " Viewを保存
+  let l:savedView = winsaveview()
+
+  " 走査回数の設定
+  let l:searchCounter = l:foldlevel
+
+  " 結果格納変数を定義
+  let l:foldList = []
+  let l:currentFold = ''
+
+  while 1
+    let l:currentCursorPosition = getcurpos()
+    keepjumps normal! [z
+    let l:currentLine = getline('.')
+
+    if l:searchCounter == l:foldlevel
+      " 初回
+      call insert(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)], 0)
+    else
+      " 二回目以降
+      if l:lastGetLine == l:currentLine
+        call setpos('.', l:lastCursorPosition)
+        let l:currentLine = getline('.')
+        call add(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)])
+      else
+        call insert(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)], 0)
+      endif
+    endif
+    let l:lastGetLine = l:currentLine
+    let l:lastCursorPosition = l:currentCursorPosition
+    let l:searchCounter -= 1
+    if l:searchCounter == 0
+      break
+    endif
+  endwhile
+
+  " Fold情報の生成, 結果の格納
+  let l:currentFold = join(l:foldList, " \u2B81 ")
+  let g:currentFold = l:currentFold
+
+  " Viewを復元
+  call winrestview(l:savedView)
+endfunction
+command! -nargs=0 UpdateCurrentFold call s:UpdateCurrentFold()
+autocmd MyAutoCmd User LineChanged call s:UpdateCurrentFold()
 
 " The end of その他 }}}
 "-----------------------------------------------------------------------------
@@ -2039,14 +2145,8 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentFunc()
     if &ft == 'vim' || 'markdown'
-      if neobundle#is_installed('foldCC.vim')
-        let l:_ = FoldCCnavi()
-        " TODO: "<Space>を検知して削除する方法を調べる
-        " TODO: 
-        let l:_ = &ft == 'vim' && strlen(l:_) ? l:_[2 : (strlen(l:_) - 1)] : ''
-        return winwidth(0) > 80 ? l:_ : ''
-      endif
-      return ''
+      return winwidth(0) > 80 ? g:currentFold : ''
+  return ''
     else
       if neobundle#is_installed('current-func-info.vim')
         try
