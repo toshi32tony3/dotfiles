@@ -2331,20 +2331,7 @@ if neobundle#tap('eskk.vim')
   function! s:eskk_initial_pre()
       let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
       " hankaku -> zenkaku
-      call t.add_map('!',  '!')
-      call t.add_map('?',  '?')
-      call t.add_map(':',  ':')
-      call t.add_map('ー', '-')
-      call t.add_map('~',  '~')
-      call t.add_map('!!', '！')
-      call t.add_map('??', '？')
-      call t.add_map('::', '：')
-      call t.add_map('--', 'ー')
-      call t.add_map('~~', '～')
-
-      " special
-      call t.add_map('.', '.')
-      call t.add_map('..', '。')
+      call t.add_map('~',  '～')
 
       call eskk#register_mode_table('hira', t)
   endfunction
