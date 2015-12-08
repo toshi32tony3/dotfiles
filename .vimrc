@@ -1029,7 +1029,7 @@ function s:OnCursorMove()
     let b:LastVisitedLine = line('.')
 
     " NOTE: If no "User LineChanged" events,
-    " Vim say "No matching autocommands".
+    " Vim says "No matching autocommands".
     autocmd User LineChanged :
     doautocmd User LineChanged
   else
