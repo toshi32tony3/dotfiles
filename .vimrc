@@ -2072,7 +2072,14 @@ if neobundle#tap('vim-merginal')
 endif " }}}
 
 " カーソル位置の関数を取得(current-func-info.vim) {{{
+let g:currentFunc = ''
 if neobundle#tap('current-func-info.vim')
+
+  " 処理負荷が気になるのでLineChangedでcurrentFuncを更新
+  autocmd MyAutoCmd User LineChanged
+        \   if &ft == 'c'
+        \ | try | let g:currentFunc = cfi#get_func_name() | endtry
+        \ | endif
 
   function! s:ClipCurrentTag(funcName)
     if strlen(a:funcName) == 0
@@ -2083,6 +2090,11 @@ if neobundle#tap('current-func-info.vim')
     " 選択範囲レジスタ(*)を使う
     let @* = a:funcName
     echo 'clipped: ' . a:funcName
+
+    " ついでにcurrentFuncを更新
+    if &ft == 'c'
+      try | let g:currentFunc = cfi#get_func_name() | endtry
+    endif
   endfunction
   command! -nargs=0 ClipCurrentTag
         \ call s:ClipCurrentTag(cfi#get_func_name())
@@ -2097,6 +2109,11 @@ if neobundle#tap('current-func-info.vim')
     let @" = a:funcName
     normal! ""P
     echo 'print current tag: ' . a:funcName
+
+    " ついでにcurrentFuncを更新
+    if &ft == 'c'
+      try | let g:currentFunc = cfi#get_func_name() | endtry
+    endif
   endfunction
   command! -nargs=0 PrintCurrentTag
         \ call s:PrintCurrentTag(cfi#get_func_name())
@@ -2215,12 +2232,7 @@ if neobundle#tap('lightline.vim')
     if &ft == 'vim'
       return winwidth(0) > 80 ? g:currentFold : ''
     else
-      if neobundle#is_installed('current-func-info.vim')
-        try
-          return winwidth(0) > 60 ? cfi#get_func_name() : ''
-        endtry
-      endif
-      return ''
+      return winwidth(0) > 80 ? g:currentFunc : ''
     endif
   endfunction
 
