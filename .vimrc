@@ -38,19 +38,17 @@ NeoBundle 'Shougo/vimproc.vim', {
       \ }
 
 NeoBundle 'Shougo/neocomplete.vim'
-" NeoBundle 'Shougo/neosnippet'
-" NeoBundle 'Shougo/neosnippet-snippets'
-" NeoBundle 'Shougo/neoinclude.vim'
+NeoBundle 'Shougo/neosnippet.vim'
+" neosnippet-snippetsはfork版を使う
+NeoBundle 'toshi32tony3/neosnippet-snippets'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/vimfiler.vim'
+
 " NeoBundleLazy 'Shougo/neomru.vim',
 "   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
 " NeoBundleLazy 'Shougo/neoyank.vim',
 "   \ { 'autoload' : { 'unite_sources' : [ 'history/yank' ] } }
-
-NeoBundle 'Shougo/unite.vim'
-" NeoBundle 'Shougo/neossh.vim'
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'Shougo/vimfiler.vim'
-
 NeoBundleLazy 'Shougo/junkfile.vim',
       \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundleLazy 'vim-scripts/gtags.vim',
@@ -1268,20 +1266,10 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources = {}
   endif
 
-  if neobundle#tap('neoinclude.vim') && neobundle#tap('neosnippet')
-    let g:neocomplete#sources._ =
-          \ ['file/include', 'member', 'buffer', 'neosnippet']
-  elseif neobundle#tap('neosnippet')
-    " let g:neocomplete#sources._ =
-    "       \ ['member', 'buffer', 'neosnippet']
-
+  if neobundle#tap('neosnippet.vim')
     " use for neosnippet and eskk.vim only
-    let g:neocomplete#sources._ =
-          \ ['neosnippet']
+    let g:neocomplete#sources._ = ['neosnippet']
   else
-    " let g:neocomplete#sources._ =
-    "       \ ['member', 'buffer']
-
     " use for eskk.vim only
     let g:neocomplete#sources._ = []
   endif
@@ -1293,8 +1281,7 @@ if neobundle#tap('neocomplete.vim')
   " 日本語を補完候補として取得しない
   let g:neocomplete#keyword_patterns._ = '\h\w*'
 
-  if neobundle#tap('neosnippet')
-
+  if neobundle#tap('neosnippet.vim')
     " neocompleteとneosnippetを良い感じに使うためのキー設定
     " http://kazuph.hateblo.jp/entry/2013/01/19/193745
     imap <expr> <TAB> pumvisible() ? "\<C-n>" :
@@ -1318,12 +1305,15 @@ if neobundle#tap('neocomplete.vim')
 
 endif " }}}
 
-" 入力補助(neosnippet) {{{
-if neobundle#tap('neosnippet')
+" コードスニペットによる入力補助(neosnippet.vim) {{{
+if neobundle#tap('neosnippet.vim')
 
-  " デフォルトのスニペットはコーディング規約と離れたものになっているので要修正
   let g:neosnippet#snippets_directory =
         \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
+
+  if neobundle#tap('unite.vim')
+    imap <C-s> <Plug>(neosnippet_start_unite_snippet)
+  endif
 
 endif " }}}
 
