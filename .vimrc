@@ -160,9 +160,6 @@ NeoBundle 'idanarye/vim-merginal'
 
 NeoBundle 'tyru/current-func-info.vim'
 
-" foldCCnavi()がnormal modeで頻繁に例外を吐くので使えない
-" NeoBundle 'LeafCage/foldCC.vim'
-
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
@@ -477,10 +474,13 @@ nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 set spelllang+=cjk
 
 " fold(折り畳み)機能の設定
+set foldmarker={{{,}}}
 set foldcolumn=1
-set foldlevel=0
 set foldnestmax=1
 set fillchars=vert:\|
+
+" ファイルを開いた時点でどこまで折り畳むか
+set foldlevel=0
 
 " fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てる
 nnoremap zh zc
@@ -973,6 +973,196 @@ map <C-Space> <Space>
 
 " The end of 誤爆防止関係 }}}
 "-----------------------------------------------------------------------------
+" Vim scripts {{{
+
+" カウンタ
+function! s:MyCounter() " {{{
+  if !exists('b:mycounter')
+    let b:mycounter = 0
+  else
+    let b:mycounter += 1
+  endif
+  echomsg 'count: ' . b:mycounter
+endfunction " }}}
+command! -nargs=0 MyCounter call s:MyCounter()
+
+" キーリピート時のCursorMoved autocmdを無効にする、行移動を検出する
+" http://d.hatena.ne.jp/gnarl/20080130/1201624546
+let g:throttleTimeSpan = 100
+function s:OnCursorMove() " {{{
+  " run on normal/visual mode only
+  let l:m = mode()
+  if m != 'n' && m != 'v'
+    let b:IsLineChanged = 0
+    let b:IsCursorMoved = 0
+    return
+  endif
+
+  " 初回のCursorMoved発火時の処理
+  if !exists('b:LastVisitedLine')
+    let b:IsCursorMoved = 0
+    let b:IsLineChanged = 0
+    let b:LastVisitedLine = line('.')
+    let b:LastCursorMoveTime = 0
+  endif
+
+  " ミリ秒単位の現在時刻を取得
+  let l:ml = matchlist('0000' . reltimestr(reltime()), '\(\d\{4}\)\.\(\d\{3}\)')
+  let l:now = str2nr(ml[1] . ml[2])
+
+  " 前回のCursorMoved発火時からの経過時間を算出
+  let l:timespan = now - b:LastCursorMoveTime
+
+  " LastCursorMoveTimeを更新
+  let b:LastCursorMoveTime = now
+
+  " 指定時間経過しているか否かで処理分岐
+  if l:timespan <= g:throttleTimeSpan
+    let b:IsLineChanged = 0
+    let b:IsCursorMoved = 0
+    return
+  endif
+
+  " CursorMoved!!
+  let b:IsCursorMoved = 1
+
+  if b:LastVisitedLine != line('.')
+    " LineChanged!!
+    let b:IsLineChanged = 1
+    let b:LastVisitedLine = line('.')
+
+    " NOTE: If no "User LineChanged" events,
+    " Vim says "No matching autocommands".
+    autocmd User LineChanged :
+    doautocmd User LineChanged
+  else
+    let b:IsLineChanged = 0
+  endif
+endfunction " }}}
+autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
+
+" foldlevel('.')はnofoldenableの時に必ず0を返すので, foldlevelを自分で数える
+" NOTE: 1行, 1foldまでとする
+function! s:GetFoldLevel() " {{{
+  " ------------------------------------------------------------
+  " 小細工
+  " ------------------------------------------------------------
+  " [z, ]zは'foldlevel'が1の時は動作しない。nofoldenableの時は'foldlevel'が
+  " 設定される機会がないので、foldlevelに大きめの値をセットして解決する
+  " NOTE: 'foldlevel'は「ファイルを開いた時点でどこまで折り畳むか」を設定する
+  " -> 勝手に変更しても問題無い、はず
+  if &foldenable == 'nofoldenable'
+    setlocal foldlevel=10
+  endif
+
+  " ------------------------------------------------------------
+  " 前処理
+  " ------------------------------------------------------------
+  let l:foldlevel = 0
+  let l:currentLine = getline('.')
+  let l:currentLineNumber = line('.')
+  let l:lastLineNumber = l:currentLineNumber
+
+  " Viewを保存
+  let l:savedView = winsaveview()
+
+  " ------------------------------------------------------------
+  " foldlevelをカウント
+  " ------------------------------------------------------------
+  " 現在の行にfoldmarkerが含まれているかチェック
+  let l:pattern = '\v\ \{\{\{$' " for match } } }
+  if match(l:currentLine, l:pattern) >= 0
+    let l:foldlevel += 1
+  endif
+
+  " [zを使ってカーソルが移動していればfoldlevelをインクリメント
+  while 1
+    keepjumps normal! [z
+    let l:currentLineNumber = line('.')
+    if l:lastLineNumber == l:currentLineNumber
+      break
+    endif
+    let l:foldlevel += 1
+    let l:lastLineNumber = l:currentLineNumber
+  endwhile
+
+  " ------------------------------------------------------------
+  " 後処理
+  " ------------------------------------------------------------
+  " Viewを復元
+  call winrestview(l:savedView)
+
+  return l:foldlevel
+endfunction " }}}
+
+" カーソル位置の親Fold名を更新
+" NOTE: &ft == 'vim' only
+let g:currentFold = ''
+function! s:UpdateCurrentFold() " {{{
+  " ------------------------------------------------------------
+  " 前処理
+  " ------------------------------------------------------------
+  " foldlevel('.')はあてにならないことがあるので自作関数で求める
+  let l:foldlevel = s:GetFoldLevel()
+  if l:foldlevel <= 0
+    return
+  endif
+
+  " View/カーソル位置を保存
+  let l:savedView = winsaveview()
+  let l:cursorPosition = getcurpos()
+
+  " 走査回数の設定
+  let l:searchCounter = l:foldlevel
+
+  " 変数初期化
+  let l:foldList = []
+  let l:currentFold = ''
+  let l:lastLineNumber = -1
+
+  " ------------------------------------------------------------
+  " カーソル位置の親Fold名を取得
+  " ------------------------------------------------------------
+  while 1
+    if l:searchCounter <= 0
+      break
+    endif
+    keepjumps normal! [z
+    let l:currentLine = getline('.')
+    let l:currentLineNumber = line('.')
+    let l:pattern = '\v^(\"\ )'
+    let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
+    let l:sufIndex = strlen(l:currentLine)
+          \        - ((match(l:currentLine, l:pattern) == -1) ? 7 : 5)
+    if l:lastLineNumber != l:currentLineNumber
+      call insert(l:foldList, l:currentLine[l:preIndex : l:sufIndex], 0)
+    else
+      call setpos('.', l:cursorPosition)
+      let l:currentLine = getline('.')
+    let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
+    let l:sufIndex = strlen(l:currentLine)
+          \        - ((match(l:currentLine, l:pattern) == -1) ? 7 : 5)
+      call add(l:foldList, l:currentLine[l:preIndex : l:sufIndex])
+    endif
+    let l:lastLineNumber = l:currentLineNumber
+    let l:searchCounter -= 1
+  endwhile
+
+  " ------------------------------------------------------------
+  " 後処理
+  " ------------------------------------------------------------
+  " Fold情報の生成, 結果の格納
+  let l:currentFold = join(l:foldList, " \u2B81 ")
+  let g:currentFold = l:currentFold
+
+  " Viewを復元
+  call winrestview(l:savedView)
+endfunction " }}}
+command! -nargs=0 UpdateCurrentFold call s:UpdateCurrentFold()
+autocmd MyAutoCmd User LineChanged call s:UpdateCurrentFold()
+
+" The end of その他 }}}
+"-----------------------------------------------------------------------------
 " Plugin Settings {{{
 
 " netrw(Vim標準のファイラ)は使わない {{{
@@ -1043,6 +1233,7 @@ if has('kaoriya')
   endfunction
   command! -nargs=0 ToggleScreenMode call s:ToggleScreenMode()
   nnoremap <F11> :<C-u>ToggleScreenMode<CR>
+  xnoremap <F11> :<C-u>ToggleScreenMode<CR>
 
 endif " }}}
 
@@ -2024,17 +2215,14 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentFunc()
     if &ft == 'vim' || 'markdown'
-      if neobundle#is_installed('foldCC.vim')
-        let l:_ = FoldCCnavi()
-        " TODO: "<Space>を検知して削除する方法を調べる
-        " TODO: 
-        let l:_ = &ft == 'vim' && strlen(l:_) ? l:_[2 : (strlen(l:_) - 1)] : ''
-        return winwidth(0) > 80 ? l:_ : ''
-      endif
-      return ''
+      return winwidth(0) > 80 ? g:currentFold : ''
+  return ''
     else
       if neobundle#is_installed('current-func-info.vim')
-        return winwidth(0) > 60 ? cfi#get_func_name() : ''
+        try
+          return winwidth(0) > 60 ? cfi#get_func_name() : ''
+        endtry
+        return ''
       endif
       return ''
     endif
@@ -2304,13 +2492,12 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " すぐにskkしたい
-  " nmap <expr> <C-j> "i\<C-j>"
+  nmap <expr> <C-j> "i\<C-j>"
   " " aも使いたいが、インクリメントは潰せない
   " nmap <expr> <C-a> "a\<C-j>"
-  " Vimで<C-i>は<Tab>と同義なので潰せない
-  " -> 実害があるかわからないので、<C-j>をa, <C-i>をiで試してみる
-  nmap <expr> <C-i> "i\<C-j>"
-  nmap <expr> <C-j> "a\<C-j>"
+  " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
+  " nmap <expr> <C-i> "i\<C-j>"
+  " nmap <expr> <C-j> "a\<C-j>"
 
   " もっとすぐにskkしたい
   nmap <expr> <A-i> "I\<C-j>"
@@ -2319,7 +2506,7 @@ if neobundle#tap('eskk.vim')
   " nmap <expr> <A-a> "A\<C-j>"
   nmap <expr> <A-j> "A\<C-j>"
 
-  " " oも使いたいが、<C-o>は潰せないので<A-o>を使う。Oは我慢
+  " " oも使いたいが、<C-o>はjumplist戻るなので潰せないため<A-o>を使う。Oは我慢
   " nmap <expr> <C-o> "o\<C-j>"
   nmap <expr> <A-o> "o\<C-j>"
 
@@ -2331,25 +2518,19 @@ if neobundle#tap('eskk.vim')
   autocmd MyAutoCmd User eskk-initialize-pre call s:eskk_initial_pre()
   function! s:eskk_initial_pre()
       let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
-      " zenkaku -> hankaku
-      call t.add_map('!!', '!')
-      call t.add_map('??', '?')
-      call t.add_map('::', ':')
-
-      " special
-      call t.add_map('..', '->')
-      call t.add_map('. ', '. ')
+      " hankaku -> zenkaku
+      call t.add_map('~',  '～')
 
       call eskk#register_mode_table('hira', t)
   endfunction
 
-  " skk-jisyoを開いた時にソートしたい
+  " skk-jisyoをソートしたい
   if filereadable(expand('~/dotfiles/.skk-jisyo'))
     function! s:SortSKKDictionary()
-      let l:currentCursorPosition = getcurpos()
-      execute "normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
-      execute "normal! /okuri\<CR>0jvG:sort\<CR>\<Esc>"
-      call setpos('.', l:currentCursorPosition)
+      let l:savedView = winsaveview()
+      execute "keepjumps normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
+      execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>\<Esc>"
+      call winrestview(l:savedView)
       echo 'ソートしました!!'
     endfunction
 
