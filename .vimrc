@@ -1140,9 +1140,9 @@ function! s:UpdateCurrentFold() " {{{
     else
       call setpos('.', l:cursorPosition)
       let l:currentLine = getline('.')
-    let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
-    let l:sufIndex = strlen(l:currentLine)
-          \        - ((match(l:currentLine, l:pattern) == -1) ? 7 : 5)
+      let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
+      let l:sufIndex = strlen(l:currentLine)
+            \        - ((match(l:currentLine, l:pattern) == -1) ? 7 : 5)
       call add(l:foldList, l:currentLine[l:preIndex : l:sufIndex])
     endif
     let l:lastLineNumber = l:currentLineNumber
@@ -2224,7 +2224,7 @@ if neobundle#tap('lightline.vim')
   function! MyCurrentFunc()
     if &ft == 'vim' || 'markdown'
       return winwidth(0) > 80 ? g:currentFold : ''
-  return ''
+      return ''
     else
       if neobundle#is_installed('current-func-info.vim')
         try
@@ -2525,11 +2525,11 @@ if neobundle#tap('eskk.vim')
 
   autocmd MyAutoCmd User eskk-initialize-pre call s:eskk_initial_pre()
   function! s:eskk_initial_pre()
-      let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
-      " hankaku -> zenkaku
-      call t.add_map('~',  '～')
+    let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
+    " hankaku -> zenkaku
+    call t.add_map('~',  '～')
 
-      call eskk#register_mode_table('hira', t)
+    call eskk#register_mode_table('hira', t)
   endfunction
 
   " skk-jisyoをソートしたい
