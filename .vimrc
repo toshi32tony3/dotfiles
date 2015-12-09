@@ -474,10 +474,16 @@ nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 set spelllang+=cjk
 
 " fold(折り畳み)機能の設定
+set foldmarker={{{,}}}
 set foldcolumn=1
-set foldlevel=0
 set foldnestmax=1
 set fillchars=vert:\|
+
+" ファイルを開いた時点でどこまで折り畳むか
+set foldlevel=0
+
+" " for DEBUG
+" set nofoldenable
 
 " fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てる
 nnoremap zh zc
@@ -970,23 +976,23 @@ map <C-Space> <Space>
 
 " The end of 誤爆防止関係 }}}
 "-----------------------------------------------------------------------------
-" その他 {{{
+" Vim scripts {{{
 
 " カウンタ
-function! s:MyCounter()
+function! s:MyCounter() " {{{
   if !exists('b:mycounter')
     let b:mycounter = 0
   else
     let b:mycounter += 1
   endif
   echomsg 'count: ' . b:mycounter
-endfunction
+endfunction " }}}
 command! -nargs=0 MyCounter call s:MyCounter()
 
 " キーリピート時のCursorMoved autocmdを無効にする、行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
 let g:throttleTimeSpan = 100
-function s:OnCursorMove()
+function s:OnCursorMove() " {{{
   " run on normal/visual mode only
   let l:m = mode()
   if m != 'n' && m != 'v'
@@ -1035,27 +1041,44 @@ function s:OnCursorMove()
   else
     let b:IsLineChanged = 0
   endif
-endfunction
+endfunction " }}}
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 
-function! s:GetFoldLevel()
-  " foldlevel('.')はnofoldenableの時に必ず0を返すので, foldlevelを自分で数える
-  " NOTE:1行, 1foldまでとする
+" foldlevel('.')はnofoldenableの時に必ず0を返すので, foldlevelを自分で数える
+" NOTE: 1行, 1foldまでとする
+function! s:GetFoldLevel() " {{{
+  " ------------------------------------------------------------
+  " 小細工
+  " ------------------------------------------------------------
+  " [z, ]zは'foldlevel'が1の時は動作しない。nofoldenableの時は'foldlevel'が
+  " 設定される機会がないので、foldlevelに大きめの値をセットして解決する
+  " NOTE: 'foldlevel'は「ファイルを開いた時点でどこまで折り畳むか」を設定する
+  " -> 勝手に変更しても問題無い、はず
+  if &foldenable == 'nofoldenable'
+    setlocal foldlevel=10
+  endif
+
+  " ------------------------------------------------------------
+  " 前処理
+  " ------------------------------------------------------------
   let l:foldlevel = 0
   let l:currentLine = getline('.')
   let l:currentLineNumber = line('.')
   let l:lastLineNumber = l:currentLineNumber
 
+  " Viewを保存
+  let l:savedView = winsaveview()
+
+  " ------------------------------------------------------------
+  " foldlevelをカウント
+  " ------------------------------------------------------------
   " 現在の行にfoldmarkerが含まれているかチェック
   let l:pattern = '\v\ \{\{\{$' " for match } } }
   if match(l:currentLine, l:pattern) >= 0
     let l:foldlevel += 1
   endif
 
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  " foldlevelをカウント
+  " [zを使ってカーソルが移動していればfoldlevelをインクリメント
   while 1
     keepjumps normal! [z
     let l:currentLineNumber = line('.')
@@ -1066,18 +1089,25 @@ function! s:GetFoldLevel()
     let l:lastLineNumber = l:currentLineNumber
   endwhile
 
+  " ------------------------------------------------------------
+  " 後処理
+  " ------------------------------------------------------------
   " Viewを復元
   call winrestview(l:savedView)
 
   return l:foldlevel
-endfunction
-command! -nargs=0 GetFoldLevel call s:GetFoldLevel()
+endfunction " }}}
 
 " カーソル位置の親Fold名を更新
+" NOTE: &ft == 'vim' only
 let g:currentFold = ''
-function! s:UpdateCurrentFold()
+function! s:UpdateCurrentFold() " {{{
+  " ------------------------------------------------------------
+  " 前処理
+  " ------------------------------------------------------------
+  " foldlevel('.')はあてにならないことがあるので自作関数で求める
   let l:foldlevel = s:GetFoldLevel()
-  if l:foldlevel == 0
+  if l:foldlevel <= 0
     return
   endif
 
@@ -1093,31 +1123,44 @@ function! s:UpdateCurrentFold()
   let l:currentFold = ''
   let l:lastLineNumber = -1
 
+  " ------------------------------------------------------------
+  " カーソル位置の親Fold名を取得
+  " ------------------------------------------------------------
   while 1
+    if l:searchCounter <= 0
+      break
+    endif
     keepjumps normal! [z
     let l:currentLine = getline('.')
     let l:currentLineNumber = line('.')
+    let l:pattern = '\v^(\"\ )'
+    let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
+    let l:sufIndex = strlen(l:currentLine)
+          \        - ((match(l:currentLine, l:pattern) == -1) ? 7 : 5)
     if l:lastLineNumber != l:currentLineNumber
-      call insert(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)], 0)
+      call insert(l:foldList, l:currentLine[l:preIndex : l:sufIndex], 0)
     else
       call setpos('.', l:cursorPosition)
       let l:currentLine = getline('.')
-      call add(l:foldList, l:currentLine[2 : (strlen(l:currentLine) - 5)])
+    let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
+    let l:sufIndex = strlen(l:currentLine)
+          \        - ((match(l:currentLine, l:pattern) == -1) ? 7 : 5)
+      call add(l:foldList, l:currentLine[l:preIndex : l:sufIndex])
     endif
     let l:lastLineNumber = l:currentLineNumber
     let l:searchCounter -= 1
-    if l:searchCounter == 0
-      break
-    endif
   endwhile
 
+  " ------------------------------------------------------------
+  " 後処理
+  " ------------------------------------------------------------
   " Fold情報の生成, 結果の格納
   let l:currentFold = join(l:foldList, " \u2B81 ")
   let g:currentFold = l:currentFold
 
   " Viewを復元
   call winrestview(l:savedView)
-endfunction
+endfunction " }}}
 command! -nargs=0 UpdateCurrentFold call s:UpdateCurrentFold()
 autocmd MyAutoCmd User LineChanged call s:UpdateCurrentFold()
 
@@ -1193,6 +1236,7 @@ if has('kaoriya')
   endfunction
   command! -nargs=0 ToggleScreenMode call s:ToggleScreenMode()
   nnoremap <F11> :<C-u>ToggleScreenMode<CR>
+  xnoremap <F11> :<C-u>ToggleScreenMode<CR>
 
 endif " }}}
 
