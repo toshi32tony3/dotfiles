@@ -2120,15 +2120,6 @@ if neobundle#tap('current-func-info.vim')
 
 endif " }}}
 
-" vimの折り畳み(fold)機能を便利に(foldCC.vim) {{{
-if neobundle#tap('foldCC.vim')
-
-  let g:foldCCtext_enable_autofdc_adjuster = 1
-  let g:foldCCnavi_maxchars = 70
-  set foldtext=FoldCCtext()
-
-endif " }}}
-
 " カッコいいステータスラインを使う(lightline.vim) {{{
 if neobundle#tap('lightline.vim')
 
