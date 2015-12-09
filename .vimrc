@@ -482,9 +482,6 @@ set fillchars=vert:\|
 " ファイルを開いた時点でどこまで折り畳むか
 set foldlevel=0
 
-" " for DEBUG
-" set nofoldenable
-
 " fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てる
 nnoremap zh zc
 nnoremap zl zo
