@@ -2212,40 +2212,34 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyCurrentFunc()
-    if &ft == 'vim' || 'markdown'
+    if &ft == 'vim'
       return winwidth(0) > 80 ? g:currentFold : ''
-      return ''
     else
       if neobundle#is_installed('current-func-info.vim')
         try
           return winwidth(0) > 60 ? cfi#get_func_name() : ''
         endtry
-        return ''
       endif
       return ''
     endif
   endfunction
 
   function! MyFugitive()
-    if &ft != 'vimfiler'
-      if neobundle#is_installed('vim-fugitive')
-        try
-          let l:_ = fugitive#head()
-          return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
-        endtry
-      endif
+    if &ft != 'vimfiler' && neobundle#is_installed('vim-fugitive')
+      try
+        let l:_ = fugitive#head()
+        return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
+      endtry
     endif
     return ''
   endfunction
 
   function! MyGitaBranch()
-    if &ft != 'vimfiler'
-      if neobundle#is_installed('vim-gita')
-        try
-          let l:_ = gita#statusline#preset('branch_fancy')
-          return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
-        endtry
-      endif
+    if &ft != 'vimfiler' && neobundle#is_installed('vim-gita')
+      try
+        let l:_ = gita#statusline#preset('branch_fancy')
+        return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
+      endtry
     endif
     return ''
   endfunction
