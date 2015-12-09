@@ -375,15 +375,16 @@ inoremap ） )
 " 汎用補完設定
 " Default: complete=.,w,b,u,t,i
 " . :      current buffer
-" w :              buffer in other windows
-" b : other loaded buffer in the buffer list
-" u :     unloaded buffer in the buffer list
+" w :              buffers in other windows
+" b : other loaded buffers in the buffer list
+" u :     unloaded buffers in the buffer list
+" U :              buffers that are not in the buffer list
 " t : tag completion
 "     -> タグファイルが大きいと時間がかかるので、汎用補完からtを外す
 " i : current and included files
 "     -> インクルードファイルが多いと時間がかかるので、汎用補完からiを外す
 " d : current and included files for defined name or macro
-set complete=.,w,b,u
+set complete=.,w,b,u,U
 
 set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
 set pumheight=10        " 補完候補は一度に10個まで表示
