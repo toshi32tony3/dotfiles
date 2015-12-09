@@ -2230,9 +2230,9 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentFunc()
     if &ft == 'vim'
-      return winwidth(0) > 80 ? g:currentFold : ''
+      return winwidth(0) > 70 ? g:currentFold : ''
     else
-      return winwidth(0) > 80 ? g:currentFunc : ''
+      return winwidth(0) > 70 ? g:currentFunc : ''
     endif
   endfunction
 
