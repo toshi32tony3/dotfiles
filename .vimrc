@@ -1272,11 +1272,18 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources._ =
           \ ['file/include', 'member', 'buffer', 'neosnippet']
   elseif neobundle#tap('neosnippet')
+    " let g:neocomplete#sources._ =
+    "       \ ['member', 'buffer', 'neosnippet']
+
+    " use for neosnippet and eskk.vim only
     let g:neocomplete#sources._ =
-          \ ['member', 'buffer', 'neosnippet']
+          \ ['neosnippet']
   else
-    let g:neocomplete#sources._ =
-          \ ['member', 'buffer']
+    " let g:neocomplete#sources._ =
+    "       \ ['member', 'buffer']
+
+    " use for eskk.vim only
+    let g:neocomplete#sources._ = []
   endif
 
   if !exists('g:neocomplete#keyword_patterns')
@@ -1291,11 +1298,11 @@ if neobundle#tap('neocomplete.vim')
     " neocompleteとneosnippetを良い感じに使うためのキー設定
     " http://kazuph.hateblo.jp/entry/2013/01/19/193745
     imap <expr> <TAB> pumvisible() ? "\<C-n>" :
-          \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-          \ "\<TAB>"
+          \  neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
+          \  "\<TAB>"
     smap <expr> <TAB>
-          \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-          \ "\<TAB>"
+          \  neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
+          \  "\<TAB>"
     inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
