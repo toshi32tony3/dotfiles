@@ -293,10 +293,6 @@ set history=100
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
 
-" モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
-" -> TODO: 適切な設定にする
-set belloff=all
-
 " メッセージ省略設定
 set shortmess=aoOotTWI
 
@@ -1072,6 +1068,10 @@ function! s:GetFoldLevel() "{{{
   " Viewを保存
   let l:savedView = winsaveview()
 
+  " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+  let l:belloff_tmp = &l:belloff
+  let &l:belloff = 'error'
+
   " ------------------------------------------------------------
   " foldlevelをカウント
   " ------------------------------------------------------------
@@ -1095,6 +1095,9 @@ function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " 後処理
   " ------------------------------------------------------------
+  " 退避していたbelloffを戻す
+  let &l:belloff = l:belloff_tmp
+
   " Viewを復元
   call winrestview(l:savedView)
 
@@ -1117,6 +1120,10 @@ function! s:UpdateCurrentFold() "{{{
   " View/カーソル位置を保存
   let l:savedView = winsaveview()
   let l:cursorPosition = getcurpos()
+
+  " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+  let l:belloff_tmp = &l:belloff
+  let &l:belloff = 'error'
 
   " 走査回数の設定
   let l:searchCounter = l:foldlevel
@@ -1160,6 +1167,9 @@ function! s:UpdateCurrentFold() "{{{
   " Fold情報の生成, 結果の格納
   let l:currentFold = join(l:foldList, " \u2B81 ")
   let g:currentFold = l:currentFold
+
+  " 退避していたbelloffを戻す
+  let &l:belloff = l:belloff_tmp
 
   " Viewを復元
   call winrestview(l:savedView)
