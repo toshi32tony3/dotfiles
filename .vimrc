@@ -178,10 +178,10 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
 
+NeoBundleLazy 'rhysd/clever-f.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
 NeoBundleLazy 'justinmk/vim-sneak',
       \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
-" NeoBundleLazy 'rhysd/clever-f.vim',
-"       \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
 
 NeoBundleLazy 'tyru/caw.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(caw'] } }
@@ -2304,37 +2304,6 @@ if neobundle#tap('vim-trailing-whitespace')
 
 endif "}}}
 
-" clever-fの2文字版(vim-sneak) {{{
-if neobundle#tap('vim-sneak')
-
-  let g:sneak#s_next = 1     " clever-sな挙動にする
-  let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
-
-  " " sは進む、Sは戻るで固定する
-  " " -> Vimの標準の挙動は0
-  " let g:sneak#absolute_dir = 1
-
-  if neobundle#tap('clever-f.vim')
-
-    " s-sneak
-    nmap s <Plug>Sneak_s
-    nmap S <Plug>Sneak_S
-    xmap s <Plug>Sneak_s
-    xmap S <Plug>Sneak_S
-    omap s <Plug>Sneak_s
-    omap S <Plug>Sneak_S
-  else
-    " f-sneak
-    nmap f <Plug>Sneak_s
-    nmap F <Plug>Sneak_S
-    xmap f <Plug>Sneak_s
-    xmap F <Plug>Sneak_S
-    omap f <Plug>Sneak_s
-    omap F <Plug>Sneak_S
-  endif
-
-endif "}}}
-
 " f検索を便利に(clever-f.vim) {{{
 if neobundle#tap('clever-f.vim')
 
@@ -2360,6 +2329,26 @@ if neobundle#tap('clever-f.vim')
   nmap T <Plug>(clever-f-T)
   xmap T <Plug>(clever-f-T)
   omap T <Plug>(clever-f-T)
+
+endif "}}}
+
+" f検索の2文字版(vim-sneak) {{{
+if neobundle#tap('vim-sneak')
+
+  let g:sneak#s_next = 1     " clever-sな挙動にする
+  let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
+
+  " " sは進む、Sは戻るで固定する
+  " " -> Vimの標準の挙動は0
+  " let g:sneak#absolute_dir = 1
+
+  " s-sneak
+  nmap s <Plug>Sneak_s
+  nmap S <Plug>Sneak_S
+  xmap s <Plug>Sneak_s
+  xmap S <Plug>Sneak_S
+  omap s <Plug>Sneak_s
+  omap S <Plug>Sneak_S
 
 endif "}}}
 
