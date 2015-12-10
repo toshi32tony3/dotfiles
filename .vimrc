@@ -293,6 +293,10 @@ set history=100
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
 
+" モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+" -> TODO: 適切な設定にする
+set belloff=all
+
 " メッセージ省略設定
 set shortmess=aoOotTWI
 
