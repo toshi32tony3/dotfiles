@@ -178,8 +178,10 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
 
-NeoBundleLazy 'rhysd/clever-f.vim',
-      \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
+NeoBundleLazy 'deris/vim-shot-f',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(shot-f-'] } }
+" NeoBundleLazy 'rhysd/clever-f.vim',
+"       \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
 NeoBundleLazy 'justinmk/vim-sneak',
       \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
 
@@ -2301,6 +2303,26 @@ endif "}}}
 
 " 文末の空白削除を簡易化(vim-trailing-whitespace) {{{
 if neobundle#tap('vim-trailing-whitespace')
+
+endif "}}}
+
+" f検索を便利に(vim-shot-f) {{{
+if neobundle#tap('vim-shot-f')
+
+  " for Lazy
+  let g:shot_f_no_default_key_mappings = 1
+  nmap f <Plug>(shot-f-f)
+  nmap F <Plug>(shot-f-F)
+  nmap t <Plug>(shot-f-t)
+  nmap T <Plug>(shot-f-T)
+  xmap f <Plug>(shot-f-f)
+  xmap F <Plug>(shot-f-F)
+  xmap t <Plug>(shot-f-t)
+  xmap T <Plug>(shot-f-T)
+  omap f <Plug>(shot-f-f)
+  omap F <Plug>(shot-f-F)
+  omap t <Plug>(shot-f-t)
+  omap T <Plug>(shot-f-T)
 
 endif "}}}
 
