@@ -293,6 +293,10 @@ set history=100
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
 
+" モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+" -> TODO: 適切な設定にする
+set belloff=all
+
 " メッセージ省略設定
 set shortmess=aoOotTWI
 
@@ -2491,21 +2495,19 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " すぐにskkしたい
-  nmap <expr> <C-j> "i\<C-j>"
-  " " aも使いたいが、インクリメントは潰せない
-  " nmap <expr> <C-a> "a\<C-j>"
   " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
   " nmap <expr> <C-i> "i\<C-j>"
-  " nmap <expr> <C-j> "a\<C-j>"
+  nmap <expr> <C-j> "i\<C-j>"
+
+  " インクリメントは潰せない
+  " nmap <expr> <C-a> "a\<C-j>"
+  nmap <expr> <A-j> "a\<C-j>"
 
   " もっとすぐにskkしたい
   nmap <expr> <A-i> "I\<C-j>"
-  " <C-a>を使わないので<A-a>も使わない方が良いかも？
-  " 加えて<A-a>は両方左手なので多分押しづらい
-  " nmap <expr> <A-a> "A\<C-j>"
-  nmap <expr> <A-j> "A\<C-j>"
+  nmap <expr> <A-a> "A\<C-j>"
 
-  " " oも使いたいが、<C-o>はjumplist戻るなので潰せないため<A-o>を使う。Oは我慢
+  " " oも使いたいが、<C-o>はjumplist戻るなので潰せない。Oは我慢
   " nmap <expr> <C-o> "o\<C-j>"
   nmap <expr> <A-o> "o\<C-j>"
 
