@@ -478,9 +478,10 @@ set foldnestmax=1
 set fillchars=vert:\|
 
 " ファイルを開いた時点でどこまで折り畳むか
+" -> 全て閉じた状態で開く
 set foldlevel=0
 
-" fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てる
+" fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てるといい感じ
 nnoremap zh zc
 nnoremap zl zo
 
@@ -490,9 +491,9 @@ nnoremap <Leader>fo zR
 
 set foldmethod=marker
 set commentstring=%s
-autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"\ %s
+autocmd MyAutoCmd FileType vim setlocal &commentstring=\ \"\ %s
 
-" 折りたたみ機能をスイッチ
+" 折りたたみ機能をON/OFF
 nnoremap <silent> <F9> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
@@ -553,6 +554,8 @@ set fileencoding=
 
 " ファイル読み込み時の変換候補
 " -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
+"    utf-8以外を左側に持ってきた時にうまく判定できないことがあった。要検証。
+" -> よくわかってないけど, 香り屋版GVimのguessを使おう
 if has('kaoriya')
   set fileencodings=guess
 else
@@ -560,10 +563,10 @@ else
 endif
 
 " 文字コードを指定してファイルを開き直す
-nnoremap <Leader>enc :<C-u>e ++enc=
+nnoremap <Leader>enc :<C-u>e ++encoding=
 
 " 改行コードを指定してファイルを開き直す
-nnoremap <Leader>ff  :<C-u>e ++ff=
+nnoremap <Leader>ff  :<C-u>e ++fileformat=
 
 " タブ幅、シフト幅、タブ使用有無の設定
 set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
@@ -848,16 +851,15 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
       call system('mkdir ' . $CTAGS_DIR)
     endif
     for l:item in g:target_dir_ctags_list
-      let l:exists = has_key(g:target_dir_ctags_name_list, l:item)
-      if !l:exists
+      if !has_key(g:target_dir_ctags_name_list, l:item)
         continue
       endif
-      let l:upCmd =
+      let l:updateCommand =
             \ 'ctags -f ' .
             \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[l:item] .
             \ ' -R ' .
             \ $TARGET_DIR . '\' . l:item
-      call system(l:upCmd)
+      call system(l:updateCommand)
     endfor
   endfunction
   command! -nargs=0 UpdateCtags call s:UpdateCtags()
@@ -981,6 +983,7 @@ function! s:MyCounter() "{{{
     let b:mycounter += 1
   endif
   echomsg 'count: ' . b:mycounter
+
 endfunction "}}}
 command! -nargs=0 MyCounter call s:MyCounter()
 
@@ -1048,7 +1051,7 @@ function! s:GetFoldLevel() "{{{
   " [z, ]zは'foldlevel'が1の時は動作しない。nofoldenableの時は'foldlevel'が
   " 設定される機会がないので、foldlevelに大きめの値をセットして解決する
   " NOTE: 'foldlevel'は「ファイルを開いた時点でどこまで折り畳むか」を設定する
-  " -> 勝手に変更しても問題無い、はず
+  "       -> 勝手に変更しても問題無い、はず
   if &foldenable == 'nofoldenable'
     setlocal foldlevel=10
   endif
@@ -1344,6 +1347,7 @@ if neobundle#tap('unite.vim')
 
   " unite.vimのデフォルトコンテキストを設定する
   " http://d.hatena.ne.jp/osyo-manga/20140627
+  " -> 最初に馴染んだUIは早々変えられない
   " -> なんだかんだ非同期でやって貰う必要が無い気がする
   call unite#custom#profile('default', 'context', {
         \   'start_insert'     : 1,
@@ -1395,8 +1399,8 @@ if neobundle#tap('unite.vim')
   let g:u_opt_re = g:u_nins                                  . g:u_sbuf
   " let g:u_opt_ya = g:u_nins
 
-  " 各unite-source用のマッピング定義は別に用意した方が良いが、ここにまとめる
-  " -> 空いているキーがわかりにくくなるデメリットの方が大きいため
+  " 各unite-source用のマッピング定義もここにまとめる
+  " -> 空いているキーがわかりにくくなるのを避けるため
   nnoremap <expr> <Leader>bu ':<C-u>Unite buffer'           . g:u_opt_bu . '<CR>'
   " nnoremap <expr> <Leader>bo ':<C-u>Unite bookmark'       . g:u_opt_bo . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>Unite file'             . g:u_opt_fi . '<CR>'
@@ -1426,12 +1430,12 @@ if neobundle#tap('unite.vim')
   " call unite#custom_default_action('directory_mru',             'vimfiler')
 
   function! s:UniteSettings()
-    imap     <buffer> <Esc>      <Plug>(unite_insert_leave)
-    nmap     <buffer> <Esc>      <Plug>(unite_exit)
+    imap <buffer> <Esc> <Plug>(unite_insert_leave)
+    nmap <buffer> <Esc> <Plug>(unite_exit)
 
     " Disable yankround.vim
-    nnoremap <buffer> <C-n>      <Nop>
-    nnoremap <buffer> <C-p>      <Nop>
+    nnoremap <buffer> <C-n> <Nop>
+    nnoremap <buffer> <C-p> <Nop>
   endfunction
   autocmd MyAutoCmd FileType unite call s:UniteSettings()
 
@@ -1576,14 +1580,14 @@ if neobundle#tap('vim-quickrun')
   " デフォルトの<Leader>rだと入力待ちになるので、別のキーでマッピングする
   let g:quickrun_no_default_key_mappings = 1
   nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
-  vnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
+  xnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
 
 endif "}}}
 
 " コマンド名補完(vim-ambicmd) {{{
 if neobundle#tap('vim-ambicmd')
 
-  " 下手にマッピングするよりもambicmdで補完した方が捗る
+  " 下手にマッピングするよりもambicmdで補完する方が捗る
   cnoremap <expr> <Space> ambicmd#expand("\<Space>")
 
 endif "}}}
@@ -1599,7 +1603,7 @@ if neobundle#tap('vim-fontzoom')
   nmap <silent> - <Plug>(fontzoom-smaller)
 
   " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
-  " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
+  " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
   " -> https://github.com/vim-jp/issues/issues/73
   nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
   nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
@@ -1685,7 +1689,6 @@ if neobundle#tap('vim-watchdogs')
         \ }
 
   if neobundle#tap('watchdogs.vim')
-
     " quickrun_configにwatchdogs.vimの設定を追加
     call watchdogs#setup(g:quickrun_config)
 
@@ -1818,6 +1821,8 @@ endif "}}}
 if neobundle#tap('vim-operator-replace')
 
   map R <Plug>(operator-replace)
+
+  " " 置換モードは滅多に使わないし, 潰してもいいかな...
   " noremap <A-r> R
 
 endif "}}}
@@ -1856,9 +1861,8 @@ if neobundle#tap('vim-smartchr')
   autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
   function! s:RubySettings()
     inoremap <buffer> <expr> { smartchr#one_of('{', '#{', '{{')
+    " for match }} } } }
   endfunction
-
-  " for match }} } } }
 
 endif "}}}
 
@@ -1967,7 +1971,7 @@ if neobundle#tap('incsearch-fuzzy.vim')
   map z/ <Plug>(incsearch-fuzzy-stay)
   map z? <Plug>(incsearch-fuzzy-stay)
 
-  " 消す程でもないけれど、fuzzyspellはあまり使わないかも
+  " マッピングを消す程でもないけれど、fuzzyspellはあまり使わないかも
   map <Leader>/ <Plug>(incsearch-fuzzyspell-stay)
   map <Leader>? <Plug>(incsearch-fuzzyspell-stay)
 
@@ -2273,14 +2277,14 @@ if neobundle#tap('yankround.vim')
 
 endif "}}}
 
-" 簡単にテキスト整形(vim-easy-align) {{{
+" テキスト整形を簡易化(vim-easy-align) {{{
 if neobundle#tap('vim-easy-align')
 
   vnoremap <silent> <CR> :EasyAlign<CR>
 
 endif "}}}
 
-" 簡単に文末の空白を削除(vim-trailing-whitespace) {{{
+" 文末の空白削除を簡易化(vim-trailing-whitespace) {{{
 if neobundle#tap('vim-trailing-whitespace')
 
 endif "}}}
@@ -2292,7 +2296,7 @@ if neobundle#tap('vim-sneak')
   let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
 
   " " sは進む、Sは戻るで固定する
-  " " -> 標準Vimの挙動は0
+  " " -> Vimの標準の挙動は0
   " let g:sneak#absolute_dir = 1
 
   if neobundle#tap('clever-f.vim')
@@ -2322,7 +2326,7 @@ if neobundle#tap('clever-f.vim')
   let g:clever_f_smart_case = 1
 
   " " fは進む、Fは戻るで固定する
-  " " -> 標準Vimの挙動は0
+  " " -> Vimの標準の挙動は0
   " let g:clever_f_fix_key_direction = 1
 
   " let g:clever_f_chars_match_any_signs = ';'
