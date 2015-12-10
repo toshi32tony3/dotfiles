@@ -156,7 +156,7 @@ NeoBundleLazy 'cohama/agit.vim',
 " 何故かLazyできなかった
 NeoBundle 'idanarye/vim-merginal'
 
-NeoBundle 'tyru/current-func-info.vim'
+NeoBundleLazy 'tyru/current-func-info.vim'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
