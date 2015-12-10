@@ -1035,8 +1035,8 @@ function s:OnCursorMove() "{{{
 
     " NOTE: If no "User LineChanged" events,
     " Vim says "No matching autocommands".
-    autocmd User LineChanged :
-    doautocmd User LineChanged
+    autocmd MyAutoCmd User LineChanged :
+    doautocmd MyAutoCmd User LineChanged
   else
     let b:IsLineChanged = 0
   endif
