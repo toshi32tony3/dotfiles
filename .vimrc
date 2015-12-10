@@ -1,6 +1,7 @@
 " vimrc for 香り屋版GVim
 " TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
 " TODO: vim-watchdogsを使えるように設定する
+" TODO: vim-templateを使えるように設定する
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -177,10 +178,12 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
 
-NeoBundleLazy 'justinmk/vim-sneak',
-      \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
+NeoBundleLazy 'deris/vim-shot-f',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(shot-f-'] } }
 " NeoBundleLazy 'rhysd/clever-f.vim',
 "       \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
+NeoBundleLazy 'justinmk/vim-sneak',
+      \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
 
 NeoBundleLazy 'tyru/caw.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(caw'] } }
@@ -292,10 +295,6 @@ set history=100
 
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
-
-" モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
-" -> TODO: 適切な設定にする
-set belloff=all
 
 " メッセージ省略設定
 set shortmess=aoOotTWI
@@ -578,7 +577,6 @@ set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
 autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
-autocmd MyAutoCmd FileType markdown setlocal tabstop=4 shiftwidth=4
 
 set infercase                   " 補完時に大文字小文字を区別しない
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
@@ -1039,8 +1037,8 @@ function s:OnCursorMove() "{{{
 
     " NOTE: If no "User LineChanged" events,
     " Vim says "No matching autocommands".
-    autocmd User LineChanged :
-    doautocmd User LineChanged
+    autocmd MyAutoCmd User LineChanged :
+    doautocmd MyAutoCmd User LineChanged
   else
     let b:IsLineChanged = 0
   endif
@@ -1072,6 +1070,10 @@ function! s:GetFoldLevel() "{{{
   " Viewを保存
   let l:savedView = winsaveview()
 
+  " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+  let l:belloff_tmp = &l:belloff
+  let &l:belloff = 'error'
+
   " ------------------------------------------------------------
   " foldlevelをカウント
   " ------------------------------------------------------------
@@ -1095,6 +1097,9 @@ function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " 後処理
   " ------------------------------------------------------------
+  " 退避していたbelloffを戻す
+  let &l:belloff = l:belloff_tmp
+
   " Viewを復元
   call winrestview(l:savedView)
 
@@ -1117,6 +1122,10 @@ function! s:UpdateCurrentFold() "{{{
   " View/カーソル位置を保存
   let l:savedView = winsaveview()
   let l:cursorPosition = getcurpos()
+
+  " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+  let l:belloff_tmp = &l:belloff
+  let &l:belloff = 'error'
 
   " 走査回数の設定
   let l:searchCounter = l:foldlevel
@@ -1160,6 +1169,9 @@ function! s:UpdateCurrentFold() "{{{
   " Fold情報の生成, 結果の格納
   let l:currentFold = join(l:foldList, " \u2B81 ")
   let g:currentFold = l:currentFold
+
+  " 退避していたbelloffを戻す
+  let &l:belloff = l:belloff_tmp
 
   " Viewを復元
   call winrestview(l:savedView)
@@ -2294,34 +2306,23 @@ if neobundle#tap('vim-trailing-whitespace')
 
 endif "}}}
 
-" clever-fの2文字版(vim-sneak) {{{
-if neobundle#tap('vim-sneak')
+" f検索を便利に(vim-shot-f) {{{
+if neobundle#tap('vim-shot-f')
 
-  let g:sneak#s_next = 1     " clever-sな挙動にする
-  let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
-
-  " " sは進む、Sは戻るで固定する
-  " " -> Vimの標準の挙動は0
-  " let g:sneak#absolute_dir = 1
-
-  if neobundle#tap('clever-f.vim')
-
-    " s-sneak
-    nmap s <Plug>Sneak_s
-    nmap S <Plug>Sneak_S
-    xmap s <Plug>Sneak_s
-    xmap S <Plug>Sneak_S
-    omap s <Plug>Sneak_s
-    omap S <Plug>Sneak_S
-  else
-    " f-sneak
-    nmap f <Plug>Sneak_s
-    nmap F <Plug>Sneak_S
-    xmap f <Plug>Sneak_s
-    xmap F <Plug>Sneak_S
-    omap f <Plug>Sneak_s
-    omap F <Plug>Sneak_S
-  endif
+  " for Lazy
+  let g:shot_f_no_default_key_mappings = 1
+  nmap f <Plug>(shot-f-f)
+  nmap F <Plug>(shot-f-F)
+  nmap t <Plug>(shot-f-t)
+  nmap T <Plug>(shot-f-T)
+  xmap f <Plug>(shot-f-f)
+  xmap F <Plug>(shot-f-F)
+  xmap t <Plug>(shot-f-t)
+  xmap T <Plug>(shot-f-T)
+  omap f <Plug>(shot-f-f)
+  omap F <Plug>(shot-f-F)
+  omap t <Plug>(shot-f-t)
+  omap T <Plug>(shot-f-T)
 
 endif "}}}
 
@@ -2350,6 +2351,26 @@ if neobundle#tap('clever-f.vim')
   nmap T <Plug>(clever-f-T)
   xmap T <Plug>(clever-f-T)
   omap T <Plug>(clever-f-T)
+
+endif "}}}
+
+" f検索の2文字版(vim-sneak) {{{
+if neobundle#tap('vim-sneak')
+
+  let g:sneak#s_next = 1     " clever-sな挙動にする
+  let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
+
+  " " sは進む、Sは戻るで固定する
+  " " -> Vimの標準の挙動は0
+  " let g:sneak#absolute_dir = 1
+
+  " s-sneak
+  nmap s <Plug>Sneak_s
+  nmap S <Plug>Sneak_S
+  xmap s <Plug>Sneak_s
+  xmap S <Plug>Sneak_S
+  omap s <Plug>Sneak_s
+  omap S <Plug>Sneak_S
 
 endif "}}}
 
