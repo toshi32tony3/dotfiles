@@ -2386,9 +2386,10 @@ if neobundle#tap('vim-signature')
   " " -> viminfoに直接書き込まれるためか、消しても反映されないことが多々
   " let g:SignatureIncludeMarks = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-  " " _viminfoファイルからグローバルマークの削除を行う
-  " " -> Unix系だと「~/.viminfo」、Windowsだと「~/_viminfo」を対象とする
-  " let g:SignatureForceRemoveGlobal = 1
+  " _viminfoファイルからグローバルマークの削除を行う
+  " -> Unix系だと「~/.viminfo」、Windowsだと「~/_viminfo」を対象とする
+  " -> Windowsでは_viminfoが書き込み禁止になり削除失敗するので無効化する
+  let g:SignatureForceRemoveGlobal = 0
 
   " これだけあれば十分
   " mm       : ToggleMarkAtLine
