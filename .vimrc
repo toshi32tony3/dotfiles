@@ -180,10 +180,11 @@ NeoBundleLazy 'vim-scripts/BufOnly.vim',
 
 NeoBundleLazy 'deris/vim-shot-f',
       \ { 'autoload' : { 'mappings' : ['<Plug>(shot-f-'] } }
+" incsearch.vimの高機能な検索を多用したい
 " NeoBundleLazy 'rhysd/clever-f.vim',
 "       \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
-NeoBundleLazy 'justinmk/vim-sneak',
-      \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
+" NeoBundleLazy 'justinmk/vim-sneak',
+"       \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
 
 NeoBundleLazy 'tyru/caw.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(caw'] } }
