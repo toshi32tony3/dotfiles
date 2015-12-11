@@ -482,7 +482,9 @@ set fillchars=vert:\|
 
 " ファイルを開いた時点でどこまで折り畳むか
 " -> 全て閉じた状態で開く
-set foldlevel=0
+if has('vim_starting')
+  set foldlevel=0
+endif
 
 " fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てるといい感じ
 nnoremap zh zc
