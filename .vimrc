@@ -2,6 +2,13 @@
 " TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
 " TODO: vim-watchdogsを使えるように設定する
 " TODO: vim-templateを使えるように設定する
+" TODO: dicwinの改善
+"       # Can't findで閉じるように
+"       # 幅を2行固定に
+" TODO: incsearch.vim
+"       # Tabの挙動, カーソルの移動先が画面内でも, 画面移動を伴うことがある
+" DONE: vim-shot-f
+"       # redraw! -> redraw
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -180,10 +187,11 @@ NeoBundleLazy 'vim-scripts/BufOnly.vim',
 
 NeoBundleLazy 'deris/vim-shot-f',
       \ { 'autoload' : { 'mappings' : ['<Plug>(shot-f-'] } }
+" incsearch.vimの高機能な検索を多用したい
 " NeoBundleLazy 'rhysd/clever-f.vim',
 "       \ { 'autoload' : { 'mappings' : ['<Plug>(clever-'] } }
-NeoBundleLazy 'justinmk/vim-sneak',
-      \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
+" NeoBundleLazy 'justinmk/vim-sneak',
+"       \ { 'autoload' : { 'mappings' : ['<Plug>Sneak_'] } }
 
 NeoBundleLazy 'tyru/caw.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(caw'] } }
@@ -482,7 +490,9 @@ set fillchars=vert:\|
 
 " ファイルを開いた時点でどこまで折り畳むか
 " -> 全て閉じた状態で開く
-set foldlevel=0
+if has('vim_starting')
+  set foldlevel=0
+endif
 
 " fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てるといい感じ
 nnoremap zh zc
@@ -667,6 +677,7 @@ nnoremap gj ]c
 nnoremap gk [c
 
 " Cの関数名にジャンプ
+" TODO: ジャンプリストが正しく更新されない問題の対策
 nnoremap <silent> [t :<C-u>execute "normal! [[" <bar> call search('(','b') <bar>
       \                    execute "normal! B"<CR>
 nnoremap <silent> ]t :<C-u>execute "normal! ]]" <bar> call search('(','b') <bar>
@@ -709,7 +720,7 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 nnoremap ,tt :<C-u>tabnew<CR>
 
 " 新規タブでgf
-nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
+nnoremap <Leader>gf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 
 " 新規タブでvimdiff
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
@@ -747,7 +758,7 @@ function! s:TabTagJump(funcName)
   redraw
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
-nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
+nnoremap <Leader>}     :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/local.rc.vim
@@ -993,7 +1004,7 @@ command! -nargs=0 MyCounter call s:MyCounter()
 " キーリピート時のCursorMoved autocmdを無効にする、行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
 let g:throttleTimeSpan = 100
-function s:OnCursorMove() "{{{
+function! s:OnCursorMove() "{{{
   " run on normal/visual mode only
   let l:m = mode()
   if m != 'n' && m != 'v'
@@ -1390,7 +1401,7 @@ if neobundle#tap('unite.vim')
   let g:u_vopt = ' -split -vertical -winwidth=90'
 
   " 各 unite source に応じた変数を定義して使う
-  let g:u_opt_bu = g:u_nins
+  let g:u_opt_bu = g:u_nins                       . g:u_hopt
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
@@ -2376,9 +2387,10 @@ if neobundle#tap('vim-signature')
   " " -> viminfoに直接書き込まれるためか、消しても反映されないことが多々
   " let g:SignatureIncludeMarks = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
-  " " _viminfoファイルからグローバルマークの削除を行う
-  " " -> Unix系だと「~/.viminfo」、Windowsだと「~/_viminfo」を対象とする
-  " let g:SignatureForceRemoveGlobal = 1
+  " _viminfoファイルからグローバルマークの削除を行う
+  " -> Unix系だと「~/.viminfo」、Windowsだと「~/_viminfo」を対象とする
+  " -> Windowsでは_viminfoが書き込み禁止になり削除失敗するので無効化する
+  let g:SignatureForceRemoveGlobal = 0
 
   " これだけあれば十分
   " mm       : ToggleMarkAtLine
@@ -2399,7 +2411,7 @@ endif "}}}
 " vimにスタート画面を用意(vim-startify) {{{
 if neobundle#tap('vim-startify')
 
-  let g:startify_files_number = 4
+  let g:startify_files_number = 2
   let g:startify_change_to_dir = 1
   let g:startify_session_dir = '~/vimfiles/session'
 
@@ -2412,8 +2424,8 @@ if neobundle#tap('vim-startify')
 
   let g:startify_list_order = [
         \   [ 'My bookmarks:' ],        'bookmarks',
-        \   [ 'Recently used files:' ], 'files',
         \   [ 'My sessions:' ],         'sessions',
+        \   [ 'Recently used files:' ], 'files',
         \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
@@ -2421,9 +2433,13 @@ if neobundle#tap('vim-startify')
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
     delcommand StartifyDebug
-    delcommand SLoad
-    delcommand SSave
-    delcommand SDelete
+
+    " :Restartすると何故かGVimがエラー終了するPCがあるので...
+    " delcommand SLoad
+    " delcommand SSave
+    " delcommand SDelete
+
+    " SCloseは期待する動作ではないので消す
     delcommand SClose
 
   endfunction
