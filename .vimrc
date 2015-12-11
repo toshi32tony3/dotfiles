@@ -97,7 +97,7 @@ NeoBundle 'rcmdnk/vim-markdown'
 NeoBundleLazy 'kannokanno/previm',
       \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
 
-" リアルタイムプレビューが非常に早い。乗り換えたいけれど、まだ発展途上感が...
+" リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
 NeoBundleLazy 'kurocode25/mdforvim',
       \ { 'autoload' : { 'commands' : ['MdPreview', 'MdConvert'] } }
 
@@ -391,7 +391,7 @@ set complete=.,w,b,u,U
 set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
 set pumheight=10        " 補完候補は一度に10個まで表示
 
-" チルダをoperatorライクに使えるようにする
+" チルダをoperatorのように使う
 set tildeop
 
 " 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
@@ -457,12 +457,11 @@ set showcmd
 
 set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
-" set statusline=%!mode('no')
 
 " 透明度をスイッチ
 let g:transparency_on = 0
 function! s:ToggleTransParency()
-  if g:transparency_on
+  if g:transparency_on == 1
     set transparency=255
     let g:transparency_on = 0
   else
@@ -542,8 +541,9 @@ set hlsearch   " 検索マッチテキストをハイライト
 " \     let @/ = get(b:, 'vimrc_pattern', @/)
 " \   | let &l:hlsearch = get(b:, 'vimrc_hlsearch', &l:hlsearch)
 
-" vimgrep/grep後にQuickfixを開く。ただし、候補が0件の場合、Quickfixを開かない
-autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
+" " vimgrep/grep後にQuickfixを開く。ただし、候補が0件の場合、Quickfixを開かない
+" " 逆にわかりにくい気がしたのでコメントアウト
+" autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -691,7 +691,7 @@ endfunction
 command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 
 " " 開いたファイルと同じ場所へ移動する
-" " -> startify/vimfiler/CDコマンドでcdするので以下の設定は使用しない
+" " -> startify/vimfiler/:CDでcdするので以下の設定は使用しない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " " 最後のカーソル位置を記憶していたらジャンプ
@@ -730,7 +730,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " :messageで表示される履歴を削除
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! -nargs=0 MessageClear for l:n in range(200) | echom "" | endfor
+command! -nargs=0 MessageClear for n in range(200) | echomsg '' | endfor
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -1015,10 +1015,10 @@ function s:OnCursorMove() "{{{
   let l:now = str2nr(ml[1] . ml[2])
 
   " 前回のCursorMoved発火時からの経過時間を算出
-  let l:timespan = now - b:LastCursorMoveTime
+  let l:timespan = l:now - b:LastCursorMoveTime
 
   " LastCursorMoveTimeを更新
-  let b:LastCursorMoveTime = now
+  let b:LastCursorMoveTime = l:now
 
   " 指定時間経過しているか否かで処理分岐
   if l:timespan <= g:throttleTimeSpan
@@ -1202,7 +1202,7 @@ function! GetScriptID(filename)
   let l:mx = '^\s*\(\d\+\):\s*\(.*\)$'
   for l:line in split(l:snlist, "\n")
     let l:smap[tolower(expand(substitute(l:line, l:mx, '\2', '')))] =
-          \ substitute(l:line, mx, '\1', '')
+          \ substitute(l:line, l:mx, '\1', '')
   endfor
   return l:smap[tolower(a:filename)]
 endfunction
@@ -1336,11 +1336,6 @@ if neobundle#tap('neosnippet.vim')
 
 endif "}}}
 
-" インクルード補完(neoinclude.vim) {{{
-if neobundle#tap('neoinclude.vim')
-
-endif "}}}
-
 " 検索やリスト表示の拡張(unite.vim) {{{
 if neobundle#tap('unite.vim')
 
@@ -1371,7 +1366,7 @@ if neobundle#tap('unite.vim')
         \   'prompt'           : '> ',
         \   'prompt_visible'   : 'prompt-visible',
         \   'prompt_direction' : 'top',
-        \   'no_empty'         : 1,
+        \   'no_empty'         : 0,
         \   'split'            : 0,
         \   'sync'             : 1,
         \ })
@@ -1976,14 +1971,6 @@ endif "}}}
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
 if neobundle#tap('incsearch-fuzzy.vim')
 
-  " map z/ <Plug>(incsearch-fuzzy-/)
-  " map z? <Plug>(incsearch-fuzzy-?)
-  " map zg/ <Plug>(incsearch-fuzzy-stay)
-
-  " map z/ <Plug>(incsearch-fuzzyspell-/)
-  " map z? <Plug>(incsearch-fuzzyspell-?)
-  " map zg/ <Plug>(incsearch-fuzzyspell-stay)
-
   " 入力中に飛びたくないのでstayのみ使う
   map z/ <Plug>(incsearch-fuzzy-stay)
   map z? <Plug>(incsearch-fuzzy-stay)
@@ -2095,7 +2082,7 @@ endif "}}}
 let g:currentFunc = ''
 if neobundle#tap('current-func-info.vim')
 
-  " 処理負荷が気になるのでLineChangedでcurrentFuncを更新
+  " 処理負荷が気になるのでUser LineChangedでcurrentFuncを更新
   autocmd MyAutoCmd User LineChanged
         \   if &ft == 'c'
         \ | try | let g:currentFunc = cfi#get_func_name() | endtry
