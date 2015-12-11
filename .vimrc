@@ -719,7 +719,7 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 nnoremap ,tt :<C-u>tabnew<CR>
 
 " 新規タブでgf
-nnoremap tgf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
+nnoremap <Leader>gf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
 
 " 新規タブでvimdiff
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
@@ -757,7 +757,7 @@ function! s:TabTagJump(funcName)
   redraw
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
-nnoremap t<C-]> :<C-u>TabTagJump <C-r><C-w><CR>
+nnoremap <Leader>}     :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/local.rc.vim
