@@ -450,7 +450,7 @@ set colorcolumn=81
 
 set number           " 行番号を表示
 set relativenumber   " 行番号を相対表示
-nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>
+nnoremap <F10> :<C-u>set relativenumber!<CR>
 
 " 不可視文字の可視化
 set list
@@ -476,13 +476,13 @@ function! s:ToggleTransParency()
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
-nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
+nnoremap <F12> :<C-u>ToggleTransParency<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
 
 " スペルチェック機能をトグル
-nnoremap <silent> <F2> :<C-u>set spell!<CR>
+nnoremap <F2> :<C-u>set spell!<CR>
 
 " fold(折り畳み)機能の設定
 set foldcolumn=1
@@ -508,7 +508,7 @@ set commentstring=%s
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"\ %s
 
 " 折りたたみ機能をON/OFF
-nnoremap <silent> <F9> :set foldenable!<CR>
+nnoremap <F9> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
@@ -1622,12 +1622,12 @@ endif "}}}
 " Vimの文字サイズ変更を簡易化(vim-fontzoom) {{{
 if neobundle#tap('vim-fontzoom')
 
-  nnoremap <silent> ,f :<C-u>Fontzoom!<CR>
+  nnoremap ,f :<C-u>Fontzoom!<CR>
 
   " for Lazy
   let g:fontzoom_no_default_key_mappings = 1
-  nmap <silent> + <Plug>(fontzoom-larger)
-  nmap <silent> - <Plug>(fontzoom-smaller)
+  nmap + <Plug>(fontzoom-larger)
+  nmap - <Plug>(fontzoom-smaller)
 
   " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
   " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
