@@ -2299,7 +2299,7 @@ endif "}}}
 " テキスト整形を簡易化(vim-easy-align) {{{
 if neobundle#tap('vim-easy-align')
 
-  vnoremap <silent> <CR> :EasyAlign<CR>
+  xnoremap <silent> <CR> :EasyAlign<CR>
 
 endif "}}}
 
