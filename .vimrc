@@ -2410,7 +2410,7 @@ endif "}}}
 " vimにスタート画面を用意(vim-startify) {{{
 if neobundle#tap('vim-startify')
 
-  let g:startify_files_number = 4
+  let g:startify_files_number = 2
   let g:startify_change_to_dir = 1
   let g:startify_session_dir = '~/vimfiles/session'
 
@@ -2423,8 +2423,8 @@ if neobundle#tap('vim-startify')
 
   let g:startify_list_order = [
         \   [ 'My bookmarks:' ],        'bookmarks',
-        \   [ 'Recently used files:' ], 'files',
         \   [ 'My sessions:' ],         'sessions',
+        \   [ 'Recently used files:' ], 'files',
         \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
@@ -2432,9 +2432,13 @@ if neobundle#tap('vim-startify')
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
     delcommand StartifyDebug
-    delcommand SLoad
-    delcommand SSave
-    delcommand SDelete
+
+    " :Restartすると何故かGVimがエラー終了するPCがあるので...
+    " delcommand SLoad
+    " delcommand SSave
+    " delcommand SDelete
+
+    " SCloseは期待する動作ではないので消す
     delcommand SClose
 
   endfunction
