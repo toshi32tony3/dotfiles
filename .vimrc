@@ -1934,10 +1934,13 @@ if neobundle#tap('incsearch.vim')
     endif
   endif
 
-  map /  <Plug>(incsearch-forward)
-  map ?  <Plug>(incsearch-backward)
-  map g/ <Plug>(incsearch-stay)
-  map g? <Plug>(incsearch-stay)
+  " 入力中に飛びたくないのでstayのみ使う
+  " map /  <Plug>(incsearch-forward)
+  " map ?  <Plug>(incsearch-backward)
+  " map g/ <Plug>(incsearch-stay)
+  " map g? <Plug>(incsearch-stay)
+  map / <Plug>(incsearch-stay)
+  map ? <Plug>(incsearch-stay)
 
   if neobundle#tap('vim-anzu')
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
@@ -1995,8 +1998,8 @@ endif "}}}
 if neobundle#tap('incsearch-migemo.vim')
 
   " 入力中に飛びたくないのでstayのみ使う
-  map gg/ <Plug>(incsearch-migemo-stay)
-  map gg? <Plug>(incsearch-migemo-stay)
+  map g/ <Plug>(incsearch-migemo-stay)
+  map g? <Plug>(incsearch-migemo-stay)
 
 endif "}}}
 
