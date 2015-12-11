@@ -677,6 +677,7 @@ nnoremap gj ]c
 nnoremap gk [c
 
 " Cの関数名にジャンプ
+" TODO: ジャンプリストが正しく更新されない問題の対策
 nnoremap <silent> [t :<C-u>execute "normal! [[" <bar> call search('(','b') <bar>
       \                    execute "normal! B"<CR>
 nnoremap <silent> ]t :<C-u>execute "normal! ]]" <bar> call search('(','b') <bar>
