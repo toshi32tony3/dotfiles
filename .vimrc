@@ -141,13 +141,11 @@ NeoBundleLazy 't9md/vim-quickhl',
 
 NeoBundleLazy 'haya14busa/incsearch.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-'] } }
-NeoBundle 'haya14busa/incsearch-fuzzy.vim'
-" NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim',
-"       \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-fuzzy-',
-"       \                                '<Plug>(incsearch-fuzzyspell-'] } }
-NeoBundle 'haya14busa/incsearch-migemo.vim'
-" NeoBundleLazy 'haya14busa/incsearch-migemo.vim',
-"       \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-migemo-'] } }
+NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-fuzzy-',
+      \                                '<Plug>(incsearch-fuzzyspell-'] } }
+NeoBundleLazy 'haya14busa/incsearch-migemo.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-migemo-'] } }
 
 NeoBundleLazy 'osyo-manga/vim-anzu',
       \ { 'autoload' : { 'mappings' : ['<Plug>(anzu-'] } }
@@ -1987,35 +1985,21 @@ endif "}}}
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
 if neobundle#tap('incsearch-fuzzy.vim')
 
-  " " 入力中に飛びたくないのでstayのみ使う
-  " map z/ <Plug>(incsearch-fuzzy-stay)
-  " map z? <Plug>(incsearch-fuzzy-stay)
-  " map zz/ <Plug>(incsearch-fuzzyspell-stay)
-  " map zz? <Plug>(incsearch-fuzzyspell-stay)
+  " 入力中に飛びたくないのでstayのみ使う
+  map z/ <Plug>(incsearch-fuzzy-stay)
+  map z? <Plug>(incsearch-fuzzy-stay)
+  map zz/ <Plug>(incsearch-fuzzyspell-stay)
+  map zz? <Plug>(incsearch-fuzzyspell-stay)
 
-  " 小細工してbackward-stayを作成
-  function! neobundle#hooks.on_post_source(bundle)
-    let g:sid_fuzzy = GetScriptID(expand('~/.vim/bundle/incsearch-fuzzy.vim/plugin/incsearch/fuzzy.vim'))
-    noremap <silent> <expr> z/  ':<C-u>call incsearch#call(<SNR>' . g:sid_fuzzy . "_config_fuzzy({'command' : '/', 'is_stay' : 1}))<CR>"
-    noremap <silent> <expr> z?  ':<C-u>call incsearch#call(<SNR>' . g:sid_fuzzy . "_config_fuzzy({'command' : '?', 'is_stay' : 1}))<CR>"
-    noremap <silent> <expr> zz/ ':<C-u>call incsearch#call(<SNR>' . g:sid_fuzzy . "_config_fuzzyspell({'command' : '/', 'is_stay' : 1}))<CR>"
-    noremap <silent> <expr> zz? ':<C-u>call incsearch#call(<SNR>' . g:sid_fuzzy . "_config_fuzzyspell({'command' : '?', 'is_stay' : 1}))<CR>"
-  endfunction
 endif "}}}
 
 " incsearch.vimをパワーアップ(incsearch-migemo.vim) {{{
 if neobundle#tap('incsearch-migemo.vim')
 
-  " " 入力中に飛びたくないのでstayのみ使う
-  " map g/ <Plug>(incsearch-migemo-stay)
-  " map g? <Plug>(incsearch-migemo-stay)
+  " 入力中に飛びたくないのでstayのみ使う
+  map g/ <Plug>(incsearch-migemo-stay)
+  map g? <Plug>(incsearch-migemo-stay)
 
-  " 小細工してbackward-stayを作成
-  function! neobundle#hooks.on_post_source(bundle)
-    let g:sid_migemo = GetScriptID(expand('~/.vim/bundle/incsearch-migemo.vim/plugin/incsearch/migemo.vim'))
-    noremap <silent> <expr> g/  ':<C-u>call incsearch#call(<SNR>' . g:sid_migemo . "_config({'command' : '/', 'is_stay' : 1}))<CR>"
-    noremap <silent> <expr> g?  ':<C-u>call incsearch#call(<SNR>' . g:sid_migemo . "_config({'command' : '?', 'is_stay' : 1}))<CR>"
-  endfunction
 endif "}}}
 
 " asterisk検索をパワーアップ(vim-asterisk) {{{
