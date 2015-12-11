@@ -1921,7 +1921,8 @@ if neobundle#tap('incsearch.vim')
   let g:incsearch#magic = '\v'
 
   " 検索後、カーソル移動すると自動でnohlsearchする
-  let g:incsearch#auto_nohlsearch = 1
+  " -> 自動でnohlsearchするべきか非常に悩ましい
+  " let g:incsearch#auto_nohlsearch = 1
 
   if has('kaoriya') && has('migemo')
     if !neobundle#is_installed('incsearch-migemo.vim')
