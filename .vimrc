@@ -1801,7 +1801,7 @@ endif "}}}
 if neobundle#tap('open-browser.vim')
 
   nmap <Leader>L <Plug>(openbrowser-smart-search)
-  vmap <Leader>L <Plug>(openbrowser-smart-search)
+  xmap <Leader>L <Plug>(openbrowser-smart-search)
 
 endif "}}}
 
@@ -1809,8 +1809,8 @@ endif "}}}
 if neobundle#tap('vim-visualinc')
 
   " for Lazy
-  vmap <C-a> <Plug>(visualinc-increment)
-  vmap <C-x> <Plug>(visualinc-decrement)
+  xmap <C-a> <Plug>(visualinc-increment)
+  xmap <C-x> <Plug>(visualinc-decrement)
 
 endif "}}}
 
@@ -1956,29 +1956,29 @@ if neobundle#tap('incsearch.vim')
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
 
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
 
   elseif neobundle#tap('vim-asterisk')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
 
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
 
   else
     nmap *          yiw<Plug>(incsearch-nohl-*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl-*)
-    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
 
     nmap g*         yiw<Plug>(incsearch-nohl-g*)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)
-    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
 
   endif
 endif "}}}
@@ -2003,11 +2003,11 @@ if neobundle#tap('vim-asterisk')
   if !neobundle#tap('incsearch.vim')
     nmap *          yiw<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(asterisk-z*)
-    vmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
+    xmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
 
     nmap g*         yiw<Plug>(asterisk-gz*)
     omap g*    <Esc>yiw<Plug>(asterisk-gz*)
-    vmap g* <Esc>gvyvgv<Plug>(asterisk-gz*)
+    xmap g* <Esc>gvyvgv<Plug>(asterisk-gz*)
 
   endif
 
@@ -2274,7 +2274,7 @@ endif "}}}
 " Cygwin Vimでクリップボード連携(vim-fakeclip) {{{
 if neobundle#tap('vim-fakeclip')
 
-  vmap <Leader>y <Plug>(fakeclip-y)
+  xmap <Leader>y <Plug>(fakeclip-y)
   nmap <Leader>p <Plug>(fakeclip-p)
 
 endif "}}}
@@ -2380,7 +2380,7 @@ endif "}}}
 if neobundle#tap('caw.vim')
 
   nmap <Leader>c <Plug>(caw:i:toggle)
-  vmap <Leader>c <Plug>(caw:i:toggle)
+  xmap <Leader>c <Plug>(caw:i:toggle)
 
 endif "}}}
 
