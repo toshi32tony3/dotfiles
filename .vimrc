@@ -144,8 +144,8 @@ NeoBundleLazy 'haya14busa/incsearch.vim',
 NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-fuzzy-',
       \                                '<Plug>(incsearch-fuzzyspell-'] } }
-" kaoriya版GVimのmigemoと比べると遅いので不採用
-" NeoBundle 'haya14busa/incsearch-migemo.vim'
+NeoBundleLazy 'haya14busa/incsearch-migemo.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-migemo-'] } }
 
 NeoBundleLazy 'osyo-manga/vim-anzu',
       \ { 'autoload' : { 'mappings' : ['<Plug>(anzu-'] } }
@@ -1923,24 +1923,21 @@ if neobundle#tap('incsearch.vim')
   " 検索後、カーソル移動すると自動でnohlsearchする
   let g:incsearch#auto_nohlsearch = 1
 
+  if has('kaoriya') && has('migemo')
+    if !neobundle#is_installed('incsearch-migemo.vim')
+      " 逆方向migemo検索g?を有効化
+      set migemo
+
+      " kaoriya版のmigemo searchを再マッピング
+      noremap m/ g/
+      noremap m? g?
+    endif
+  endif
+
   map /  <Plug>(incsearch-forward)
   map ?  <Plug>(incsearch-backward)
-
-  if has('kaoriya') && has('migemo')
-    " 逆方向migemo検索g?を有効化
-    set migemo
-
-    " kaoriya版のmigemo searchを再マッピング
-    noremap m/ g/
-    noremap m? g?
-  endif
   map g/ <Plug>(incsearch-stay)
   map g? <Plug>(incsearch-stay)
-
-  " 入力中に飛びたくないのでstayのみ使う
-  " -> 検索をモーションとして使う時にフベンだったので元に戻す
-  " map / <Plug>(incsearch-stay)
-  " map ? <Plug>(incsearch-stay)
 
   if neobundle#tap('vim-anzu')
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
@@ -1989,10 +1986,17 @@ if neobundle#tap('incsearch-fuzzy.vim')
   " 入力中に飛びたくないのでstayのみ使う
   map z/ <Plug>(incsearch-fuzzy-stay)
   map z? <Plug>(incsearch-fuzzy-stay)
+  map zz/ <Plug>(incsearch-fuzzyspell-stay)
+  map zz? <Plug>(incsearch-fuzzyspell-stay)
 
-  " マッピングを消す程でもないけれど、fuzzyspellはあまり使わないかも
-  map <Leader>/ <Plug>(incsearch-fuzzyspell-stay)
-  map <Leader>? <Plug>(incsearch-fuzzyspell-stay)
+endif "}}}
+
+" incsearch.vimをパワーアップ(incsearch-migemo.vim) {{{
+if neobundle#tap('incsearch-migemo.vim')
+
+  " 入力中に飛びたくないのでstayのみ使う
+  map gg/ <Plug>(incsearch-migemo-stay)
+  map gg? <Plug>(incsearch-migemo-stay)
 
 endif "}}}
 
