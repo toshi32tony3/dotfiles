@@ -1400,7 +1400,7 @@ if neobundle#tap('unite.vim')
   let g:u_vopt = ' -split -vertical -winwidth=90'
 
   " 各 unite source に応じた変数を定義して使う
-  let g:u_opt_bu = g:u_nins
+  let g:u_opt_bu = g:u_nins                       . g:u_hopt
   " let g:u_opt_bo =                       g:u_vopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   " let g:u_opt_fm =                                  g:u_fbuf
