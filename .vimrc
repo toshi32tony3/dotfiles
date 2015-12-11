@@ -5,8 +5,6 @@
 " TODO: dicwinの改善
 "       # Can't findで閉じるように
 "       # 幅を2行固定に
-" TODO: incsearch.vim
-"       # Tabの挙動, カーソルの移動先が画面内でも, 画面移動を伴うことがある
 " DONE: vim-shot-f
 "       # redraw! -> redraw
 
@@ -146,8 +144,8 @@ NeoBundleLazy 'haya14busa/incsearch.vim',
 NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-fuzzy-',
       \                                '<Plug>(incsearch-fuzzyspell-'] } }
-" kaoriya版GVimのmigemoと比べると遅いので不採用
-" NeoBundle 'haya14busa/incsearch-migemo.vim'
+NeoBundleLazy 'haya14busa/incsearch-migemo.vim',
+      \ { 'autoload' : { 'mappings' : ['<Plug>(incsearch-migemo-'] } }
 
 NeoBundleLazy 'osyo-manga/vim-anzu',
       \ { 'autoload' : { 'mappings' : ['<Plug>(anzu-'] } }
@@ -452,7 +450,7 @@ set colorcolumn=81
 
 set number           " 行番号を表示
 set relativenumber   " 行番号を相対表示
-nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>
+nnoremap <F10> :<C-u>set relativenumber!<CR>
 
 " 不可視文字の可視化
 set list
@@ -478,10 +476,13 @@ function! s:ToggleTransParency()
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
-nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
+nnoremap <F12> :<C-u>ToggleTransParency<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
+
+" スペルチェック機能をトグル
+nnoremap <F2> :<C-u>set spell!<CR>
 
 " fold(折り畳み)機能の設定
 set foldcolumn=1
@@ -507,7 +508,7 @@ set commentstring=%s
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"\ %s
 
 " 折りたたみ機能をON/OFF
-nnoremap <silent> <F9> :set foldenable!<CR>
+nnoremap <F9> :set foldenable!<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
@@ -677,11 +678,14 @@ nnoremap gj ]c
 nnoremap gk [c
 
 " Cの関数名にジャンプ
-" TODO: ジャンプリストが正しく更新されない問題の対策
-nnoremap <silent> [t :<C-u>execute "normal! [[" <bar> call search('(','b') <bar>
-      \                    execute "normal! B"<CR>
-nnoremap <silent> ]t :<C-u>execute "normal! ]]" <bar> call search('(','b') <bar>
-      \                    execute "normal! B"<CR>
+nnoremap <silent> [t :<C-u>execute "normal! m'"
+      \              <bar> execute "keepjumps normal! [["
+      \              <bar> call search('(','b')
+      \              <bar> execute "normal! B"<CR>
+nnoremap <silent> ]t :<C-u>execute "normal! m'"
+      \              <bar> execute "keepjumps normal! ]]"
+      \              <bar> call search('(','b')
+      \              <bar> execute "normal! B"<CR>
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
@@ -1618,12 +1622,12 @@ endif "}}}
 " Vimの文字サイズ変更を簡易化(vim-fontzoom) {{{
 if neobundle#tap('vim-fontzoom')
 
-  nnoremap <silent> ,f :<C-u>Fontzoom!<CR>
+  nnoremap ,f :<C-u>Fontzoom!<CR>
 
   " for Lazy
   let g:fontzoom_no_default_key_mappings = 1
-  nmap <silent> + <Plug>(fontzoom-larger)
-  nmap <silent> - <Plug>(fontzoom-smaller)
+  nmap + <Plug>(fontzoom-larger)
+  nmap - <Plug>(fontzoom-smaller)
 
   " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
   " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
@@ -1797,7 +1801,7 @@ endif "}}}
 if neobundle#tap('open-browser.vim')
 
   nmap <Leader>L <Plug>(openbrowser-smart-search)
-  vmap <Leader>L <Plug>(openbrowser-smart-search)
+  xmap <Leader>L <Plug>(openbrowser-smart-search)
 
 endif "}}}
 
@@ -1805,8 +1809,8 @@ endif "}}}
 if neobundle#tap('vim-visualinc')
 
   " for Lazy
-  vmap <C-a> <Plug>(visualinc-increment)
-  vmap <C-x> <Plug>(visualinc-decrement)
+  xmap <C-a> <Plug>(visualinc-increment)
+  xmap <C-x> <Plug>(visualinc-decrement)
 
 endif "}}}
 
@@ -1917,26 +1921,25 @@ if neobundle#tap('incsearch.vim')
   let g:incsearch#magic = '\v'
 
   " 検索後、カーソル移動すると自動でnohlsearchする
-  let g:incsearch#auto_nohlsearch = 1
-
-  map /  <Plug>(incsearch-forward)
-  map ?  <Plug>(incsearch-backward)
+  " -> 自動でnohlsearchするべきか非常に悩ましい
+  " let g:incsearch#auto_nohlsearch = 1
 
   if has('kaoriya') && has('migemo')
-    " 逆方向migemo検索g?を有効化
-    set migemo
+    if !neobundle#is_installed('incsearch-migemo.vim')
+      " 逆方向migemo検索g?を有効化
+      set migemo
 
-    " kaoriya版のmigemo searchを再マッピング
-    noremap m/ g/
-    noremap m? g?
+      " kaoriya版のmigemo searchを再マッピング
+      noremap m/ g/
+      noremap m? g?
+    endif
   endif
-  map g/ <Plug>(incsearch-stay)
-  map g? <Plug>(incsearch-stay)
 
   " 入力中に飛びたくないのでstayのみ使う
-  " -> 検索をモーションとして使う時にフベンだったので元に戻す
-  " map / <Plug>(incsearch-stay)
-  " map ? <Plug>(incsearch-stay)
+  " map /  <Plug>(incsearch-forward)
+  " map ?  <Plug>(incsearch-backward)
+  noremap <silent> <expr> / incsearch#go({'command' : '/', 'is_stay' : 1})
+  noremap <silent> <expr> ? incsearch#go({'command' : '?', 'is_stay' : 1})
 
   if neobundle#tap('vim-anzu')
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
@@ -1952,29 +1955,29 @@ if neobundle#tap('incsearch.vim')
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
 
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
 
   elseif neobundle#tap('vim-asterisk')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
 
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
 
   else
     nmap *          yiw<Plug>(incsearch-nohl-*)
     omap *     <Esc>yiw<Plug>(incsearch-nohl-*)
-    vmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
 
     nmap g*         yiw<Plug>(incsearch-nohl-g*)
     omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)
-    vmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
 
   endif
 endif "}}}
@@ -1984,11 +1987,15 @@ if neobundle#tap('incsearch-fuzzy.vim')
 
   " 入力中に飛びたくないのでstayのみ使う
   map z/ <Plug>(incsearch-fuzzy-stay)
-  map z? <Plug>(incsearch-fuzzy-stay)
+  map zz/ <Plug>(incsearch-fuzzyspell-stay)
 
-  " マッピングを消す程でもないけれど、fuzzyspellはあまり使わないかも
-  map <Leader>/ <Plug>(incsearch-fuzzyspell-stay)
-  map <Leader>? <Plug>(incsearch-fuzzyspell-stay)
+endif "}}}
+
+" incsearch.vimをパワーアップ(incsearch-migemo.vim) {{{
+if neobundle#tap('incsearch-migemo.vim')
+
+  " 入力中に飛びたくないのでstayのみ使う
+  map g/ <Plug>(incsearch-migemo-stay)
 
 endif "}}}
 
@@ -1999,11 +2006,11 @@ if neobundle#tap('vim-asterisk')
   if !neobundle#tap('incsearch.vim')
     nmap *          yiw<Plug>(asterisk-z*)
     omap *     <Esc>yiw<Plug>(asterisk-z*)
-    vmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
+    xmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
 
     nmap g*         yiw<Plug>(asterisk-gz*)
     omap g*    <Esc>yiw<Plug>(asterisk-gz*)
-    vmap g* <Esc>gvyvgv<Plug>(asterisk-gz*)
+    xmap g* <Esc>gvyvgv<Plug>(asterisk-gz*)
 
   endif
 
@@ -2094,10 +2101,10 @@ let g:currentFunc = ''
 if neobundle#tap('current-func-info.vim')
 
   " 処理負荷が気になるのでUser LineChangedでcurrentFuncを更新
-  autocmd MyAutoCmd User LineChanged
-        \   if &ft == 'c'
-        \ | try | let g:currentFunc = cfi#get_func_name() | endtry
-        \ | endif
+  " autocmd MyAutoCmd User LineChanged
+  "       \   if &ft == 'c'
+  "       \ | try | let g:currentFunc = cfi#get_func_name() | endtry
+  "       \ | endif
 
   function! s:ClipCurrentTag(funcName)
     if strlen(a:funcName) == 0
@@ -2270,7 +2277,7 @@ endif "}}}
 " Cygwin Vimでクリップボード連携(vim-fakeclip) {{{
 if neobundle#tap('vim-fakeclip')
 
-  vmap <Leader>y <Plug>(fakeclip-y)
+  xmap <Leader>y <Plug>(fakeclip-y)
   nmap <Leader>p <Plug>(fakeclip-p)
 
 endif "}}}
@@ -2295,7 +2302,7 @@ endif "}}}
 " テキスト整形を簡易化(vim-easy-align) {{{
 if neobundle#tap('vim-easy-align')
 
-  vnoremap <silent> <CR> :EasyAlign<CR>
+  xnoremap <silent> <CR> :EasyAlign<CR>
 
 endif "}}}
 
@@ -2376,7 +2383,7 @@ endif "}}}
 if neobundle#tap('caw.vim')
 
   nmap <Leader>c <Plug>(caw:i:toggle)
-  vmap <Leader>c <Plug>(caw:i:toggle)
+  xmap <Leader>c <Plug>(caw:i:toggle)
 
 endif "}}}
 
