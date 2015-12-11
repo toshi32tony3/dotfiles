@@ -677,11 +677,14 @@ nnoremap gj ]c
 nnoremap gk [c
 
 " Cの関数名にジャンプ
-" TODO: ジャンプリストが正しく更新されない問題の対策
-nnoremap <silent> [t :<C-u>execute "normal! [[" <bar> call search('(','b') <bar>
-      \                    execute "normal! B"<CR>
-nnoremap <silent> ]t :<C-u>execute "normal! ]]" <bar> call search('(','b') <bar>
-      \                    execute "normal! B"<CR>
+nnoremap <silent> [t :<C-u>execute "normal! m'"
+      \              <bar> execute "keepjumps normal! [["
+      \              <bar> call search('(','b')
+      \              <bar> execute "normal! B"<CR>
+nnoremap <silent> ]t :<C-u>execute "normal! m'"
+      \              <bar> execute "keepjumps normal! ]]"
+      \              <bar> call search('(','b')
+      \              <bar> execute "normal! B"<CR>
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
@@ -2094,10 +2097,10 @@ let g:currentFunc = ''
 if neobundle#tap('current-func-info.vim')
 
   " 処理負荷が気になるのでUser LineChangedでcurrentFuncを更新
-  autocmd MyAutoCmd User LineChanged
-        \   if &ft == 'c'
-        \ | try | let g:currentFunc = cfi#get_func_name() | endtry
-        \ | endif
+  " autocmd MyAutoCmd User LineChanged
+  "       \   if &ft == 'c'
+  "       \ | try | let g:currentFunc = cfi#get_func_name() | endtry
+  "       \ | endif
 
   function! s:ClipCurrentTag(funcName)
     if strlen(a:funcName) == 0
