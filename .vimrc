@@ -2248,7 +2248,41 @@ if neobundle#tap('lightline.vim')
 
   function! MySKKMode()
     if neobundle#is_installed('eskk.vim')
-      return winwidth(0) > 30 ? eskk#statusline() : ''
+      let l:CurrentMode = eskk#statusline()
+
+      " 初回の処理
+      if !exists('b:LastMode')
+        " モードを覚えておく
+        let b:LastMode = l:CurrentMode
+        NeoCompleteLock
+      endif
+
+      " モード変更時の処理
+      if l:CurrentMode != b:LastMode
+        " normal -> skk
+        if b:LastMode == ''
+          " 必要ならunlock
+          if neocomplete#get_current_neocomplete().lock == 0
+            let b:IsAlreadyUnlocked = 1
+          else
+            NeoCompleteUnlock
+          endif
+
+        " skk -> normal
+        else
+          " 必要ならlock
+          if exists('b:IsAlreadyUnlocked')
+            unlet b:IsAlreadyUnlocked
+          else
+            NeoCompleteLock
+          endif
+
+        endif
+        " 直前のモード情報を更新
+        let b:LastMode = l:CurrentMode
+      endif
+
+      return winwidth(0) > 30 ? l:CurrentMode : ''
     endif
     return ''
   endfunction
@@ -2534,6 +2568,9 @@ if neobundle#tap('eskk.vim')
   let g:eskk#egg_like_newline_completion = 1
   let g:eskk#rom_input_style = 'msime'
 
+  " for Lazy
+  imap <C-j> <Plug>(eskk:toggle)
+
   " すぐにskkしたい
   " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
   " nmap <expr> <C-i> "i\<C-j>"
@@ -2673,8 +2710,11 @@ endif "}}}
 " Vimでミニマップ(vim-minimap) {{{
 if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
   if neobundle#tap('vim-minimap')
-    set virtualedit=onemore
     map <Leader>mm :Minimap<CR>
+
+    function! neobundle#hooks.on_post_source(bundle)
+      set virtualedit=onemore
+    endfunction
   endif
 endif "}}}
 
