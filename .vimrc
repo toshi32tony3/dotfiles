@@ -310,12 +310,24 @@ set autoread
 " メッセージ省略設定
 set shortmess=aoOotTWI
 
-" " カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
-" -> 再描画がうっとおしいのでやっぱり15にする。再描画必要なら<C-e>や<C-y>を使う
-" -> やっぱり0(default)にする
-" set scrolloff=50
-" set scrolloff=15
+" カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
 set scrolloff=0
+
+" scrolloffをスイッチ
+let g:scrolloff_on = 0
+function! s:ToggleScrollOffSet()
+  if g:scrolloff_on == 1
+    setlocal scrolloff=0
+    echo 'setlocal scrolloff=0'
+    let g:scrolloff_on = 0
+  else
+    setlocal scrolloff=100
+    echo 'setlocal scrolloff=100'
+    let g:scrolloff_on = 1
+  endif
+endfunction
+command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
+nnoremap <F2> :<C-u>ToggleScrollOffSet<CR>
 
 " VimDiffは基本縦分割とする
 set diffopt+=vertical
