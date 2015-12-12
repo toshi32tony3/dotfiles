@@ -2248,7 +2248,40 @@ if neobundle#tap('lightline.vim')
 
   function! MySKKMode()
     if neobundle#is_installed('eskk.vim')
-      return winwidth(0) > 30 ? eskk#statusline() : ''
+      let l:CurrentMode = eskk#statusline()
+
+      " 初回の処理
+      if !exists('b:LastMode')
+        " モードを覚えておく
+        let b:LastMode = l:CurrentMode
+      endif
+
+      " モード変更時の処理
+      if l:CurrentMode != b:LastMode
+        " normal -> skk
+        if b:LastMode == ''
+          " 必要ならunlock
+          if neocomplete#get_current_neocomplete().lock == 0
+            let b:IsAlreadyUnlocked = 1
+          else
+            NeoCompleteUnlock
+          endif
+
+        " skk -> normal
+        else
+          " 必要ならlock
+          if exists('b:IsAlreadyUnlocked')
+            unlet b:IsAlreadyUnlocked
+          else
+            NeoCompleteLock
+          endif
+
+        endif
+        " 直前のモード情報を更新
+        let b:LastMode = l:CurrentMode
+      endif
+
+      return winwidth(0) > 30 ? l:CurrentMode : ''
     endif
     return ''
   endfunction
