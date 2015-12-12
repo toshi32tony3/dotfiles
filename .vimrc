@@ -183,7 +183,10 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
 
-NeoBundleLazy 'deris/vim-shot-f',
+" 本家
+" NeoBundleLazy 'deris/vim-shot-f',
+"       \ { 'autoload' : { 'mappings' : ['<Plug>(shot-f-'] } }
+NeoBundleLazy 'toshi32tony3/vim-shot-f',
       \ { 'autoload' : { 'mappings' : ['<Plug>(shot-f-'] } }
 " incsearch.vimの高機能な検索を多用したい
 " NeoBundleLazy 'rhysd/clever-f.vim',
