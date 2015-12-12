@@ -183,7 +183,10 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
 
-NeoBundleLazy 'deris/vim-shot-f',
+" 本家
+" NeoBundleLazy 'deris/vim-shot-f',
+"       \ { 'autoload' : { 'mappings' : ['<Plug>(shot-f-'] } }
+NeoBundleLazy 'toshi32tony3/vim-shot-f',
       \ { 'autoload' : { 'mappings' : ['<Plug>(shot-f-'] } }
 " incsearch.vimの高機能な検索を多用したい
 " NeoBundleLazy 'rhysd/clever-f.vim',
@@ -310,12 +313,24 @@ set autoread
 " メッセージ省略設定
 set shortmess=aoOotTWI
 
-" " カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
-" -> 再描画がうっとおしいのでやっぱり15にする。再描画必要なら<C-e>や<C-y>を使う
-" -> やっぱり0(default)にする
-" set scrolloff=50
-" set scrolloff=15
+" カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
 set scrolloff=0
+
+" scrolloffをスイッチ
+let g:scrolloff_on = 0
+function! s:ToggleScrollOffSet()
+  if g:scrolloff_on == 1
+    setlocal scrolloff=0
+    echo 'setlocal scrolloff=0'
+    let g:scrolloff_on = 0
+  else
+    setlocal scrolloff=100
+    echo 'setlocal scrolloff=100'
+    let g:scrolloff_on = 1
+  endif
+endfunction
+command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
+nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
 
 " VimDiffは基本縦分割とする
 set diffopt+=vertical
@@ -442,10 +457,12 @@ set guicursor=a:blinkon0
 
 " 入力モードに応じてカーソルの形を変える
 " -> Cygwin環境で必要だった気がするので取っておく
-let &t_ti .= "\e[1 q"
-let &t_SI .= "\e[5 q"
-let &t_EI .= "\e[1 q"
-let &t_te .= "\e[0 q"
+if has('vim_starting')
+  let &t_ti .= "\e[1 q"
+  let &t_SI .= "\e[5 q"
+  let &t_EI .= "\e[1 q"
+  let &t_te .= "\e[0 q"
+endif
 
 set wrap             " 長いテキストの折り返し
 set display=lastline " 長いテキストを省略しない
@@ -455,7 +472,7 @@ set colorcolumn=81
 
 set number           " 行番号を表示
 set relativenumber   " 行番号を相対表示
-nnoremap <F10> :<C-u>set relativenumber!<CR>
+nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>:set relativenumber?<CR>
 
 " 不可視文字の可視化
 set list
@@ -474,20 +491,19 @@ let g:transparency_on = 0
 function! s:ToggleTransParency()
   if g:transparency_on == 1
     set transparency=255
+    echo 'set transparency=255'
     let g:transparency_on = 0
   else
     set transparency=220
+    echo 'set transparency=220'
     let g:transparency_on = 1
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
-nnoremap <F12> :<C-u>ToggleTransParency<CR>
+nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
-
-" スペルチェック機能をトグル
-nnoremap <F2> :<C-u>set spell!<CR>
 
 " fold(折り畳み)機能の設定
 set foldcolumn=1
@@ -509,11 +525,13 @@ nnoremap <Leader>fc zM
 nnoremap <Leader>fo zR
 
 set foldmethod=marker
-set commentstring=%s
-autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"\ %s
+if has('vim_starting')
+  set commentstring=%s
+endif
+autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " 折りたたみ機能をON/OFF
-nnoremap <F9> :set foldenable!<CR>
+nnoremap <silent> <F9> :set foldenable!<CR>:set foldenable?<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
@@ -565,21 +583,23 @@ set hlsearch   " 検索マッチテキストをハイライト
 "-----------------------------------------------------------------------------
 " 編集 {{{
 
-" Vim内部で使う文字コード
-set encoding=utf-8
+if has('vim_starting')
+  " Vim内部で使う文字コード
+  set encoding=utf-8
 
-" ファイル書き込み時の文字コード
-" -> 空の場合、encodingで指定した文字コードが使用される
-set fileencoding=
+  " ファイル書き込み時の文字コード
+  " -> 空の場合、encodingで指定した文字コードが使用される
+  set fileencoding=
 
-" ファイル読み込み時の変換候補
-" -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
-"    utf-8以外を左側に持ってきた時にうまく判定できないことがあった。要検証。
-" -> よくわかってないけど, 香り屋版GVimのguessを使おう
-if has('kaoriya')
-  set fileencodings=guess
-else
-  set fileencodings=utf-8,cp932,euc-jp
+  " ファイル読み込み時の変換候補
+  " -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
+  "    utf-8以外を左側に持ってきた時にうまく判定できないことがあった。要検証。
+  " -> よくわかってないけど, 香り屋版GVimのguessを使おう
+  if has('kaoriya')
+    set fileencodings=guess
+  else
+    set fileencodings=utf-8,cp932,euc-jp
+  endif
 endif
 
 " 文字コードを指定してファイルを開き直す
@@ -669,7 +689,7 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 nnoremap ,o  :<C-u>only<CR>
 
 " vimrcをリロード
-nnoremap ,r :<C-u>source $MYVIMRC<CR><Esc>
+nnoremap ,r :<C-u>source $MYVIMRC<CR>
 
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
@@ -2268,7 +2288,7 @@ if neobundle#tap('lightline.vim')
             NeoCompleteUnlock
           endif
 
-        " skk -> normal
+          " skk -> normal
         else
           " 必要ならlock
           if exists('b:IsAlreadyUnlocked')
