@@ -2676,8 +2676,11 @@ endif "}}}
 " Vimでミニマップ(vim-minimap) {{{
 if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
   if neobundle#tap('vim-minimap')
-    set virtualedit=onemore
     map <Leader>mm :Minimap<CR>
+
+    function! neobundle#hooks.on_post_source(bundle)
+      set virtualedit=onemore
+    endfunction
   endif
 endif "}}}
 
