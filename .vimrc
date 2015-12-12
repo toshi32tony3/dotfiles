@@ -454,10 +454,12 @@ set guicursor=a:blinkon0
 
 " 入力モードに応じてカーソルの形を変える
 " -> Cygwin環境で必要だった気がするので取っておく
-let &t_ti .= "\e[1 q"
-let &t_SI .= "\e[5 q"
-let &t_EI .= "\e[1 q"
-let &t_te .= "\e[0 q"
+if has('vim_starting')
+  let &t_ti .= "\e[1 q"
+  let &t_SI .= "\e[5 q"
+  let &t_EI .= "\e[1 q"
+  let &t_te .= "\e[0 q"
+endif
 
 set wrap             " 長いテキストの折り返し
 set display=lastline " 長いテキストを省略しない
