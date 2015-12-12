@@ -156,7 +156,7 @@ NeoBundleLazy 'lambdalisue/vim-gita',
       \ { 'autoload' : { 'commands' : ['Gita'] } }
 NeoBundleLazy 'cohama/agit.vim',
       \ { 'autoload' : { 'commands' : ['Agit'] } }
-" 何故かLazyできなかった
+" fugitive同様, Lazyできない
 NeoBundle 'idanarye/vim-merginal'
 
 NeoBundleLazy 'tyru/current-func-info.vim'
