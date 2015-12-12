@@ -2534,6 +2534,9 @@ if neobundle#tap('eskk.vim')
   let g:eskk#egg_like_newline_completion = 1
   let g:eskk#rom_input_style = 'msime'
 
+  " for Lazy
+  imap <C-j> <Plug>(eskk:toggle)
+
   " すぐにskkしたい
   " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
   " nmap <expr> <C-i> "i\<C-j>"
