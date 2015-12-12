@@ -227,6 +227,11 @@ NeoBundleLazy 'mtth/scratch.vim',
 NeoBundleLazy 'thinca/vim-showtime',
       \ { 'autoload' : { 'commands' : ['Showtime'] } }
 
+if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
+  NeoBundleLazy 'severin-lemaignan/vim-minimap',
+        \ { 'autoload' : { 'commands' : ['Minimap'] } }
+endif
+
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
@@ -2663,6 +2668,14 @@ if neobundle#tap('vim-showtime')
           \ | delcommand Showtime
   endif
 
+endif "}}}
+
+" Vimでミニマップ(vim-minimap) {{{
+if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
+  if neobundle#tap('vim-minimap')
+    set virtualedit=onemore
+    map <Leader>mm :Minimap<CR>
+  endif
 endif "}}}
 
 "}}}
