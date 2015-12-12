@@ -2013,8 +2013,8 @@ endif "}}}
 if neobundle#tap('incsearch-fuzzy.vim')
 
   " 入力中に飛びたくないのでstayのみ使う
-  map z/ <Plug>(incsearch-fuzzy-stay)
-  map zz/ <Plug>(incsearch-fuzzyspell-stay)
+  map g/ <Plug>(incsearch-fuzzy-stay)
+  map z/ <Plug>(incsearch-fuzzyspell-stay)
 
 endif "}}}
 
@@ -2022,7 +2022,7 @@ endif "}}}
 if neobundle#tap('incsearch-migemo.vim')
 
   " 入力中に飛びたくないのでstayのみ使う
-  map g/ <Plug>(incsearch-migemo-stay)
+  map m/ <Plug>(incsearch-migemo-stay)
 
 endif "}}}
 
