@@ -574,21 +574,23 @@ set hlsearch   " 検索マッチテキストをハイライト
 "-----------------------------------------------------------------------------
 " 編集 {{{
 
-" Vim内部で使う文字コード
-set encoding=utf-8
+if has('vim_starting')
+  " Vim内部で使う文字コード
+  set encoding=utf-8
 
-" ファイル書き込み時の文字コード
-" -> 空の場合、encodingで指定した文字コードが使用される
-set fileencoding=
+  " ファイル書き込み時の文字コード
+  " -> 空の場合、encodingで指定した文字コードが使用される
+  set fileencoding=
 
-" ファイル読み込み時の変換候補
-" -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
-"    utf-8以外を左側に持ってきた時にうまく判定できないことがあった。要検証。
-" -> よくわかってないけど, 香り屋版GVimのguessを使おう
-if has('kaoriya')
-  set fileencodings=guess
-else
-  set fileencodings=utf-8,cp932,euc-jp
+  " ファイル読み込み時の変換候補
+  " -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
+  "    utf-8以外を左側に持ってきた時にうまく判定できないことがあった。要検証。
+  " -> よくわかってないけど, 香り屋版GVimのguessを使おう
+  if has('kaoriya')
+    set fileencodings=guess
+  else
+    set fileencodings=utf-8,cp932,euc-jp
+  endif
 endif
 
 " 文字コードを指定してファイルを開き直す
@@ -2277,7 +2279,7 @@ if neobundle#tap('lightline.vim')
             NeoCompleteUnlock
           endif
 
-        " skk -> normal
+          " skk -> normal
         else
           " 必要ならlock
           if exists('b:IsAlreadyUnlocked')
