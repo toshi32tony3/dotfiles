@@ -1420,8 +1420,8 @@ if neobundle#tap('unite.vim')
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
   let g:u_opt_mg = g:u_nins                                  . g:u_sbuf
+  let g:u_opt_mk = g:u_nins                       . g:u_hopt
   let g:u_opt_ml = ''
-  let g:u_opt_mm = g:u_nins                       . g:u_hopt
   let g:u_opt_mp = ''
   let g:u_opt_nl = ''
   let g:u_opt_nu = g:u_nins
@@ -1447,8 +1447,8 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memofiles/*'
         \                                                   . g:u_opt_mg . '<CR>'
+  nnoremap <expr> <Leader>mk ':<C-u>Unite mark'             . g:u_opt_mk . '<CR>'
   nnoremap <expr> <Leader>ml ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
-  nnoremap <expr> <Leader>mm ':<C-u>Unite mark'             . g:u_opt_mm . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
   nnoremap <expr> <Leader>nl ':<C-u>Unite neobundle/lazy'   . g:u_opt_nl . '<CR>'
   nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu
