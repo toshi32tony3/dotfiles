@@ -1026,8 +1026,12 @@ function! s:OnCursorMove() "{{{
   endif
 
   " ミリ秒単位の現在時刻を取得
-  let l:ml = matchlist('0000' . reltimestr(reltime()), '\(\d\{4}\)\.\(\d\{3}\)')
-  let l:now = str2nr(ml[1] . ml[2])
+  let l:ml = matchlist(reltimestr(reltime()), '\(\d*\)\.\(\d\{3}\)')
+  if l:ml == []
+    return
+  endif
+  let l:ml[0] = ''
+  let l:now = str2nr(join(l:ml, ''))
 
   " 前回のCursorMoved発火時からの経過時間を算出
   let l:timespan = l:now - b:LastCursorMoveTime
