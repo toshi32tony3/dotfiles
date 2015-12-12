@@ -522,8 +522,10 @@ nnoremap <Leader>fc zM
 nnoremap <Leader>fo zR
 
 set foldmethod=marker
-set commentstring=%s
-if &ft == 'vim' | let &l:commentstring = '" %s' | endif
+if has('vim_starting')
+  set commentstring=%s
+endif
+autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " 折りたたみ機能をON/OFF
 nnoremap <silent> <F9> :set foldenable!<CR>:set foldenable?<CR>
