@@ -2254,6 +2254,7 @@ if neobundle#tap('lightline.vim')
       if !exists('b:LastMode')
         " モードを覚えておく
         let b:LastMode = l:CurrentMode
+        NeoCompleteLock
       endif
 
       " モード変更時の処理
