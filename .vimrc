@@ -2,11 +2,6 @@
 " TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
 " TODO: vim-watchdogsを使えるように設定する
 " TODO: vim-templateを使えるように設定する
-" TODO: dicwinの改善
-"       # Can't findで閉じるように
-"       # 幅を2行固定に
-" DONE: vim-shot-f
-"       # redraw! -> redraw
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
