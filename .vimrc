@@ -689,6 +689,9 @@ nnoremap ,r :<C-u>source $MYVIMRC<CR>
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
+" カレントファイルをフルパスで表示
+nnoremap <C-g> 1<C-g>
+
 " j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
 nnoremap k gk
