@@ -2,6 +2,7 @@
 " TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
 " TODO: vim-watchdogsを使えるように設定する
 " TODO: vim-templateを使えるように設定する
+" TODO: 'bronson/vim-trailing-whitespace'のハイライトカラー変わる問題対応
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
