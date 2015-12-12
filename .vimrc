@@ -327,7 +327,7 @@ function! s:ToggleScrollOffSet()
   endif
 endfunction
 command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
-nnoremap <F2> :<C-u>ToggleScrollOffSet<CR>
+nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
 
 " VimDiffは基本縦分割とする
 set diffopt+=vertical
@@ -467,7 +467,7 @@ set colorcolumn=81
 
 set number           " 行番号を表示
 set relativenumber   " 行番号を相対表示
-nnoremap <F10> :<C-u>set relativenumber!<CR>
+nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>:set relativenumber?<CR>
 
 " 不可視文字の可視化
 set list
@@ -486,14 +486,16 @@ let g:transparency_on = 0
 function! s:ToggleTransParency()
   if g:transparency_on == 1
     set transparency=255
+    echo 'set transparency=255'
     let g:transparency_on = 0
   else
     set transparency=220
+    echo 'set transparency=220'
     let g:transparency_on = 1
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
-nnoremap <F12> :<C-u>ToggleTransParency<CR>
+nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 
 " スペルチェックから日本語を除外
 set spelllang+=cjk
@@ -522,7 +524,7 @@ set commentstring=%s
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"\ %s
 
 " 折りたたみ機能をON/OFF
-nnoremap <F9> :set foldenable!<CR>
+nnoremap <silent> <F9> :set foldenable!<CR>:set foldenable?<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
