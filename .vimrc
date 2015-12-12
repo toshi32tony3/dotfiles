@@ -684,7 +684,7 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 nnoremap ,o  :<C-u>only<CR>
 
 " vimrcをリロード
-nnoremap ,r :<C-u>source $MYVIMRC<CR><Esc>
+nnoremap ,r :<C-u>source $MYVIMRC<CR>
 
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
