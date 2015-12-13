@@ -108,7 +108,6 @@ NeoBundleLazy 'tyru/open-browser.vim',
 NeoBundleLazy 'deris/vim-visualinc',
       \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-'] } }
 
-" Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
 NeoBundleLazy 'deris/vim-rengbang',
       \ { 'autoload' : { 'mappings' : ['<Plug>(operator-rengbang)'] } }
 
@@ -788,7 +787,7 @@ function! s:TabTagJump(funcName)
   redraw
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
-nnoremap <Leader>}     :<C-u>TabTagJump <C-r><C-w><CR>
+nnoremap <Leader>} :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/local.rc.vim
@@ -1397,7 +1396,7 @@ if neobundle#tap('unite.vim')
     set grepprg=pt\ --hidden\ --nogroup\ --nocolor\ --smart-case
     let g:unite_source_grep_command = 'pt'
     let g:unite_source_grep_default_opts =
-          \   '--hidden --nogroup --nocolor --smart-case'
+          \ '--hidden --nogroup --nocolor --smart-case'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding = 'utf-8'
   endif
@@ -1695,10 +1694,6 @@ if neobundle#tap('vim-brightest')
   "   \   'group' : 'ErrorMsg',
   "   \ }
 
-  " " 強調を始めるまで間を置く
-  " set updatetime=50
-  " let g:brightest#enable_on_CursorHold = 1
-
   " " <cword>を含め、<cword>と同じ単語を文字色で強調したい場合
   " let g:brightest#highlight = {
   "   \   'group'    : 'ErrorMsg',
@@ -1723,7 +1718,7 @@ if neobundle#tap('vim-brightest')
 
   " " シンタックスがStatementの場合はハイライトしない
   " " (e.g.) let, if, function
-  " let g:brightest#ignore_syntax_list = [ 'Statement' ]
+  " let g:brightest#ignore_syntax_list = ['Statement']
 
   " " brightestの背景をcursorlineに合わせる
   " let g:brightest#highlight_in_cursorline = {
@@ -1867,13 +1862,13 @@ endif "}}}
 if neobundle#tap('vim-surround')
 
   " " (例) sw' /* 次の単語を''で囲む */
-  " nmap s <plug>Ysurround
+  " nmap s <Plug>Ysurround
   "
   " " (例) S'  /* カーソル行以降を''で囲む */
-  " nmap S <plug>Ysurround$
+  " nmap S <Plug>Ysurround$
   "
   " " (例) ss' /* 行を''で囲む */
-  " nmap ss <plug>Yssurround
+  " nmap ss <Plug>Yssurround
 
 endif "}}}
 
@@ -2734,7 +2729,7 @@ endif "}}}
 " Vimでミニマップ(vim-minimap) {{{
 if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
   if neobundle#tap('vim-minimap')
-    map <Leader>mm :Minimap<CR>
+    map <Leader>mm :<C-u>Minimap<CR>
 
     function! neobundle#hooks.on_post_source(bundle)
       set virtualedit=onemore
