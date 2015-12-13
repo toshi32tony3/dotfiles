@@ -38,6 +38,10 @@ NeoBundle 'Shougo/vimproc.vim', {
       \   },
       \ }
 
+" 本家
+" NeoBundle 'koron/dicwin-vim'
+NeoBundle 'toshi32tony3/dicwin-vim'
+
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet.vim'
 " neosnippet-snippetsはfork版を使う
@@ -1299,15 +1303,22 @@ if has('kaoriya')
 
 endif "}}}
 
-" Vimで辞書を引く(dicwin.vim)@Kaoriya版付属プラグイン {{{
-if has('kaoriya')
+" Vimで辞書を引く(dicwin-vim)@Kaoriya版付属プラグイン {{{
+if neobundle#tap('dicwin-vim')
 
-  if filereadable(expand('~/vimfiles/dict/gene.dict'))
-    autocmd MyAutoCmd BufRead *.dict setlocal filetype=dict
+  let g:dicwin_no_default_mappings = 1
+  nmap <silent> <A-k><A-k> <Plug>(dicwin-cword)
+  imap <silent> <A-k><A-k> <Plug>(dicwin-cword-i)
+  nmap <silent> <A-k>c     <Plug>(dicwin-close)
+  imap <silent> <A-k>c     <Plug>(dicwin-close-i)
+  nmap <silent> <A-/>      <Plug>(dicwin-query)
+
+  if filereadable(expand('~/vimfiles/dict/gene.txt'))
+    autocmd MyAutoCmd BufRead gene.txt setlocal filetype=dicwin
     function! s:DicwinSettings()
       nnoremap <buffer> <Esc> :<C-u>q<CR>
     endfunction
-    autocmd MyAutoCmd FileType dict call s:DicwinSettings()
+    autocmd MyAutoCmd FileType dicwin call s:DicwinSettings()
   endif
 
 endif "}}}
