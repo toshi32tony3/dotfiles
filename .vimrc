@@ -1848,15 +1848,6 @@ endif "}}}
 if neobundle#tap('vim-rengbang')
 
   let g:rengbang_default_start = 1
-  map <A-r> <Plug>(operator-rengbang)
-
-  " 不要なコマンドを削除する
-  function! neobundle#hooks.on_post_source(bundle)
-    delcommand RengBang
-    delcommand RengBangConfirm
-    delcommand RengBangUsePrev
-
-  endfunction
 
 endif "}}}
 
@@ -1879,8 +1870,8 @@ if neobundle#tap('vim-operator-replace')
 
   map R <Plug>(operator-replace)
 
-  " " 置換モードは滅多に使わないし, 潰してもいいかな...
-  " noremap <A-r> R
+  " 置換モードは滅多に使わないけど一応...
+  noremap <A-r> R
 
 endif "}}}
 
