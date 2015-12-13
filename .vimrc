@@ -46,10 +46,8 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
-" NeoBundleLazy 'Shougo/neomru.vim',
-"   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
-" NeoBundleLazy 'Shougo/neoyank.vim',
-"   \ { 'autoload' : { 'unite_sources' : [ 'history/yank' ] } }
+NeoBundleLazy 'Shougo/neomru.vim',
+      \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
 NeoBundleLazy 'Shougo/junkfile.vim',
       \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundleLazy 'vim-scripts/gtags.vim',
@@ -1437,9 +1435,9 @@ if neobundle#tap('unite.vim')
 
   " 各 unite source に応じた変数を定義して使う
   let g:u_opt_bu = g:u_nins                       . g:u_hopt
-  " let g:u_opt_bo =                       g:u_vopt
+  let g:u_opt_bo =                       g:u_hopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
-  " let g:u_opt_fm =                                  g:u_fbuf
+  let g:u_opt_fm =                                  g:u_fbuf
   let g:u_opt_gd = g:u_nins                       . g:u_hopt . g:u_sbuf
   let g:u_opt_gg = g:u_nins                                  . g:u_sbuf
   let g:u_opt_gr = g:u_nins                       . g:u_hopt . g:u_sbuf
@@ -1455,14 +1453,13 @@ if neobundle#tap('unite.vim')
   let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
   let g:u_opt_re = g:u_nins                                  . g:u_sbuf
-  " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義もここにまとめる
   " -> 空いているキーがわかりにくくなるのを避けるため
   nnoremap <expr> <Leader>bu ':<C-u>Unite buffer'           . g:u_opt_bu . '<CR>'
-  " nnoremap <expr> <Leader>bo ':<C-u>Unite bookmark'       . g:u_opt_bo . '<CR>'
+  nnoremap <expr> <Leader>bo ':<C-u>Unite bookmark'         . g:u_opt_bo . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>Unite file'             . g:u_opt_fi . '<CR>'
-  " nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'       . g:u_opt_fm . '<CR>'
+  nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'         . g:u_opt_fm . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>Unite gtags/def'        . g:u_opt_gd . '<CR>'
 
   " Unite lineと同じことをしている気がした
@@ -1485,10 +1482,9 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>ol ':<C-u>Unite outline'          . g:u_opt_ol . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>Unite output'           . g:u_opt_op . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>UniteResume'            . g:u_opt_re . '<CR>'
-  " nnoremap <expr> <Leader>ya ':<C-u>Unite history/yank'   . g:u_opt_ya . '<CR>'
 
-  " call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
-  " call unite#custom_default_action('directory_mru',             'vimfiler')
+  call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
+  call unite#custom_default_action('directory_mru',             'vimfiler')
 
   function! s:UniteSettings()
     imap <buffer> <Esc> <Plug>(unite_insert_leave)
