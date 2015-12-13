@@ -2,7 +2,6 @@
 " TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
 " TODO: vim-watchdogsを使えるように設定する
 " TODO: vim-templateを使えるように設定する
-" TODO: 'bronson/vim-trailing-whitespace'のハイライトカラー変わる問題対応
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -172,8 +171,9 @@ NeoBundleLazy 'LeafCage/yankround.vim',
 NeoBundleLazy 'junegunn/vim-easy-align',
       \ { 'autoload' : { 'commands' : ['EasyAlign'] } }
 
-" 常に行末スペースを検知したいので、Lazyしない
-NeoBundle 'bronson/vim-trailing-whitespace'
+" 本家
+" NeoBundle 'bronson/vim-trailing-whitespace'
+NeoBundle 'toshi32tony3/vim-trailing-whitespace'
 
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
