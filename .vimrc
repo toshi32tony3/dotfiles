@@ -605,7 +605,9 @@ nnoremap <Leader>enc :<C-u>e ++encoding=
 nnoremap <Leader>ff  :<C-u>e ++fileformat=
 
 " タブ幅、シフト幅、タブ使用有無の設定
-set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
+if has('vim_starting')
+  set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
+endif
 autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
