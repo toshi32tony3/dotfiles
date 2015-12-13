@@ -1,5 +1,5 @@
 " vimrc for 香り屋版GVim
-" TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
+" TODO: 使わないコマンドを洗い出して:delcommandをぶちかます
 " TODO: vim-watchdogsを使えるように設定する
 
 "-----------------------------------------------------------------------------
@@ -37,6 +37,10 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'unix'    : 'make -f make_unix.mak',
       \   },
       \ }
+
+" 本家
+" NeoBundle 'koron/dicwin-vim'
+NeoBundle 'toshi32tony3/dicwin-vim'
 
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet.vim'
@@ -225,15 +229,15 @@ NeoBundleLazy 'thinca/vim-showtime',
 " 使い方は大体わかったけれど, 今のところ使えてない
 NeoBundle 'thinca/vim-template'
 
-if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
-  NeoBundleLazy 'severin-lemaignan/vim-minimap',
-        \ { 'autoload' : { 'commands' : ['Minimap'] } }
-endif
-
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
 set helplang=ja
+
+if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
+  NeoBundleLazy 'severin-lemaignan/vim-minimap',
+        \ { 'autoload' : { 'commands' : ['Minimap'] } }
+endif
 
 call neobundle#end()
 
@@ -1299,15 +1303,22 @@ if has('kaoriya')
 
 endif "}}}
 
-" Vimで辞書を引く(dicwin.vim)@Kaoriya版付属プラグイン {{{
-if has('kaoriya')
+" Vimで辞書を引く(dicwin-vim)@Kaoriya版付属プラグイン {{{
+if neobundle#tap('dicwin-vim')
 
-  if filereadable(expand('~/vimfiles/dict/gene.dict'))
-    autocmd MyAutoCmd BufRead *.dict setlocal filetype=dict
+  let g:dicwin_no_default_mappings = 1
+  nmap <silent> <A-k><A-k> <Plug>(dicwin-cword)
+  imap <silent> <A-k><A-k> <Plug>(dicwin-cword-i)
+  nmap <silent> <A-k>c     <Plug>(dicwin-close)
+  imap <silent> <A-k>c     <Plug>(dicwin-close-i)
+  nmap <silent> <A-/>      <Plug>(dicwin-query)
+
+  if filereadable(expand('~/vimfiles/dict/gene.txt'))
+    autocmd MyAutoCmd BufRead gene.txt setlocal filetype=dicwin
     function! s:DicwinSettings()
       nnoremap <buffer> <Esc> :<C-u>q<CR>
     endfunction
-    autocmd MyAutoCmd FileType dict call s:DicwinSettings()
+    autocmd MyAutoCmd FileType dicwin call s:DicwinSettings()
   endif
 
 endif "}}}
@@ -1553,8 +1564,8 @@ if neobundle#tap('junkfile.vim')
 
   let g:junkfile#directory = expand('~/junkfiles')
 
-  " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    " 使わないコマンドを削除する
     delcommand JunkfileOpen
 
   endfunction
@@ -2068,12 +2079,12 @@ if neobundle#tap('vim-signify')
         \ | SignifyToggle
         \ | delcommand SignifyStart
 
-  nmap gj <Plug>(signify-next-hunk)zz
-  nmap gk <Plug>(signify-prev-hunk)zz
-  nmap gh <Plug>(signify-toggle-highlight)
-
-  " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    nmap gj <Plug>(signify-next-hunk)zz
+    nmap gk <Plug>(signify-prev-hunk)zz
+    nmap gh <Plug>(signify-toggle-highlight)
+
+    " 使わないコマンドを削除する
     delcommand SignifyDebug
     delcommand SignifyDebugDiff
     delcommand SignifyDebugUnknown
@@ -2455,8 +2466,8 @@ if neobundle#tap('vim-signature')
   " m<Space> : PurgeMarks
   nmap mm m.
 
-  " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    " 使わないコマンドを削除する
     delcommand SignatureListMarkers
     delcommand SignatureListMarks
     delcommand SignatureRefresh
@@ -2488,8 +2499,8 @@ if neobundle#tap('vim-startify')
 
   nnoremap ,, :<C-u>Startify<CR>
 
-  " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    " 使わないコマンドを削除する
     delcommand StartifyDebug
 
     " :Restartすると何故かGVimがエラー終了するPCがあるので...
@@ -2641,8 +2652,8 @@ endif "}}}
 " VimScript変数の中身を整形して出力(vim-prettyprint) {{{
 if neobundle#tap('vim-prettyprint')
 
-  " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    " 使わないコマンドを削除する
     delcommand PrettyPrint
 
   endfunction
@@ -2669,8 +2680,8 @@ if neobundle#tap('scratch.vim')
   endfunction
   autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
 
-  " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
+    " 使わないコマンドを削除する
     delcommand Scratch
     delcommand ScratchInsert
     delcommand ScratchSelection
