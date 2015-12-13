@@ -2084,12 +2084,12 @@ if neobundle#tap('vim-signify')
         \ | SignifyToggle
         \ | delcommand SignifyStart
 
+  nmap gj <Plug>(signify-next-hunk)zz
+  nmap gk <Plug>(signify-prev-hunk)zz
+  nmap gh <Plug>(signify-toggle-highlight)
+
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
-    nmap gj <Plug>(signify-next-hunk)zz
-    nmap gk <Plug>(signify-prev-hunk)zz
-    nmap gh <Plug>(signify-toggle-highlight)
-
     delcommand SignifyDebug
     delcommand SignifyDebugDiff
     delcommand SignifyDebugUnknown
