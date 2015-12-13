@@ -1,7 +1,6 @@
 " vimrc for 香り屋版GVim
 " TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
 " TODO: vim-watchdogsを使えるように設定する
-" TODO: vim-templateを使えるように設定する
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -224,6 +223,9 @@ NeoBundleLazy 'mtth/scratch.vim',
 
 NeoBundleLazy 'thinca/vim-showtime',
       \ { 'autoload' : { 'commands' : ['Showtime'] } }
+
+" 使い方は大体わかったけれど, 今のところ使えてない
+NeoBundle 'thinca/vim-template'
 
 if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
   NeoBundleLazy 'severin-lemaignan/vim-minimap',
@@ -2723,6 +2725,18 @@ if neobundle#tap('vim-showtime')
           \ | ShowtimeStart
           \ | delcommand Showtime
   endif
+
+endif "}}}
+
+" 空ファイルを開く時にテンプレートを使う(vim-template) {{{
+if neobundle#tap('vim-template')
+
+  let g:template_basedir = '~/configs'
+
+  autocmd User plugin-template-loaded call s:template_keywords()
+  function! s:template_keywords()
+    %s/{{_date_}}/\=strftime('%Y-%m-%d %H:%M')/g
+  endfunction
 
 endif "}}}
 
