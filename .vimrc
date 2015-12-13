@@ -1,12 +1,6 @@
 " vimrc for 香り屋版GVim
 " TODO: 不要なコマンドを洗い出して:delcommandをぶちかます
 " TODO: vim-watchdogsを使えるように設定する
-" TODO: vim-templateを使えるように設定する
-" TODO: dicwinの改善
-"       # Can't findで閉じるように
-"       # 幅を2行固定に
-" DONE: vim-shot-f
-"       # redraw! -> redraw
 
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
@@ -52,10 +46,8 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
-" NeoBundleLazy 'Shougo/neomru.vim',
-"   \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
-" NeoBundleLazy 'Shougo/neoyank.vim',
-"   \ { 'autoload' : { 'unite_sources' : [ 'history/yank' ] } }
+NeoBundleLazy 'Shougo/neomru.vim',
+      \ { 'autoload' : { 'unite_sources' : [ 'file_mru' ] } }
 NeoBundleLazy 'Shougo/junkfile.vim',
       \ { 'autoload' : { 'unite_sources' : [ 'junkfile', 'junkfile/new' ] } }
 NeoBundleLazy 'vim-scripts/gtags.vim',
@@ -112,7 +104,6 @@ NeoBundleLazy 'tyru/open-browser.vim',
 NeoBundleLazy 'deris/vim-visualinc',
       \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-'] } }
 
-" Restartよりも先に候補になるのが若干困るので、使う時はUnite neobundle/lazyする
 NeoBundleLazy 'deris/vim-rengbang',
       \ { 'autoload' : { 'mappings' : ['<Plug>(operator-rengbang)'] } }
 
@@ -160,7 +151,7 @@ NeoBundleLazy 'lambdalisue/vim-gita',
       \ { 'autoload' : { 'commands' : ['Gita'] } }
 NeoBundleLazy 'cohama/agit.vim',
       \ { 'autoload' : { 'commands' : ['Agit'] } }
-" 何故かLazyできなかった
+" fugitive同様, Lazyできない
 NeoBundle 'idanarye/vim-merginal'
 
 NeoBundleLazy 'tyru/current-func-info.vim'
@@ -177,8 +168,9 @@ NeoBundleLazy 'LeafCage/yankround.vim',
 NeoBundleLazy 'junegunn/vim-easy-align',
       \ { 'autoload' : { 'commands' : ['EasyAlign'] } }
 
-" 常に行末スペースを検知したいので、Lazyしない
-NeoBundle 'bronson/vim-trailing-whitespace'
+" 本家
+" NeoBundle 'bronson/vim-trailing-whitespace'
+NeoBundle 'toshi32tony3/vim-trailing-whitespace'
 
 NeoBundleLazy 'vim-scripts/BufOnly.vim',
       \ { 'autoload' : { 'commands' : ['BOnly', 'Bonly'] } }
@@ -229,6 +221,9 @@ NeoBundleLazy 'mtth/scratch.vim',
 
 NeoBundleLazy 'thinca/vim-showtime',
       \ { 'autoload' : { 'commands' : ['Showtime'] } }
+
+" 使い方は大体わかったけれど, 今のところ使えてない
+NeoBundle 'thinca/vim-template'
 
 if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
   NeoBundleLazy 'severin-lemaignan/vim-minimap',
@@ -609,7 +604,9 @@ nnoremap <Leader>enc :<C-u>e ++encoding=
 nnoremap <Leader>ff  :<C-u>e ++fileformat=
 
 " タブ幅、シフト幅、タブ使用有無の設定
-set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
+if has('vim_starting')
+  set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
+endif
 autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
@@ -693,6 +690,9 @@ nnoremap ,r :<C-u>source $MYVIMRC<CR>
 
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
+
+" カレントファイルをfull pathで表示(ただし$HOME以下はrelative path)
+nnoremap <C-g> 1<C-g>
 
 " j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
@@ -787,7 +787,7 @@ function! s:TabTagJump(funcName)
   redraw
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
-nnoremap <Leader>}     :<C-u>TabTagJump <C-r><C-w><CR>
+nnoremap <Leader>} :<C-u>TabTagJump <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/local.rc.vim
@@ -1396,7 +1396,7 @@ if neobundle#tap('unite.vim')
     set grepprg=pt\ --hidden\ --nogroup\ --nocolor\ --smart-case
     let g:unite_source_grep_command = 'pt'
     let g:unite_source_grep_default_opts =
-          \   '--hidden --nogroup --nocolor --smart-case'
+          \ '--hidden --nogroup --nocolor --smart-case'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding = 'utf-8'
   endif
@@ -1435,9 +1435,9 @@ if neobundle#tap('unite.vim')
 
   " 各 unite source に応じた変数を定義して使う
   let g:u_opt_bu = g:u_nins                       . g:u_hopt
-  " let g:u_opt_bo =                       g:u_vopt
+  let g:u_opt_bo =                       g:u_hopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
-  " let g:u_opt_fm =                                  g:u_fbuf
+  let g:u_opt_fm =                                  g:u_fbuf
   let g:u_opt_gd = g:u_nins                       . g:u_hopt . g:u_sbuf
   let g:u_opt_gg = g:u_nins                                  . g:u_sbuf
   let g:u_opt_gr = g:u_nins                       . g:u_hopt . g:u_sbuf
@@ -1453,16 +1453,18 @@ if neobundle#tap('unite.vim')
   let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
   let g:u_opt_re = g:u_nins                                  . g:u_sbuf
-  " let g:u_opt_ya = g:u_nins
 
   " 各unite-source用のマッピング定義もここにまとめる
   " -> 空いているキーがわかりにくくなるのを避けるため
   nnoremap <expr> <Leader>bu ':<C-u>Unite buffer'           . g:u_opt_bu . '<CR>'
-  " nnoremap <expr> <Leader>bo ':<C-u>Unite bookmark'       . g:u_opt_bo . '<CR>'
+  nnoremap <expr> <Leader>bo ':<C-u>Unite bookmark'         . g:u_opt_bo . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>Unite file'             . g:u_opt_fi . '<CR>'
-  " nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'       . g:u_opt_fm . '<CR>'
+  nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'         . g:u_opt_fm . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>Unite gtags/def'        . g:u_opt_gd . '<CR>'
+
+  " Unite lineと同じことをしている気がした
   nnoremap <expr> <Leader>g% ':<C-u>Unite vimgrep:%'        . g:u_opt_gg . '<CR>'
+
   nnoremap <expr> <Leader>g* ':<C-u>Unite vimgrep:*'        . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>Unite vimgrep:.*'       . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>Unite vimgrep:**'       . g:u_opt_gg . '<CR>'
@@ -1480,10 +1482,9 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>ol ':<C-u>Unite outline'          . g:u_opt_ol . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>Unite output'           . g:u_opt_op . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>UniteResume'            . g:u_opt_re . '<CR>'
-  " nnoremap <expr> <Leader>ya ':<C-u>Unite history/yank'   . g:u_opt_ya . '<CR>'
 
-  " call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
-  " call unite#custom_default_action('directory_mru',             'vimfiler')
+  call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
+  call unite#custom_default_action('directory_mru',             'vimfiler')
 
   function! s:UniteSettings()
     imap <buffer> <Esc> <Plug>(unite_insert_leave)
@@ -1691,10 +1692,6 @@ if neobundle#tap('vim-brightest')
   "   \   'group' : 'ErrorMsg',
   "   \ }
 
-  " " 強調を始めるまで間を置く
-  " set updatetime=50
-  " let g:brightest#enable_on_CursorHold = 1
-
   " " <cword>を含め、<cword>と同じ単語を文字色で強調したい場合
   " let g:brightest#highlight = {
   "   \   'group'    : 'ErrorMsg',
@@ -1719,7 +1716,7 @@ if neobundle#tap('vim-brightest')
 
   " " シンタックスがStatementの場合はハイライトしない
   " " (e.g.) let, if, function
-  " let g:brightest#ignore_syntax_list = [ 'Statement' ]
+  " let g:brightest#ignore_syntax_list = ['Statement']
 
   " " brightestの背景をcursorlineに合わせる
   " let g:brightest#highlight_in_cursorline = {
@@ -1847,15 +1844,6 @@ endif "}}}
 if neobundle#tap('vim-rengbang')
 
   let g:rengbang_default_start = 1
-  map <A-r> <Plug>(operator-rengbang)
-
-  " 不要なコマンドを削除する
-  function! neobundle#hooks.on_post_source(bundle)
-    delcommand RengBang
-    delcommand RengBangConfirm
-    delcommand RengBangUsePrev
-
-  endfunction
 
 endif "}}}
 
@@ -1863,13 +1851,13 @@ endif "}}}
 if neobundle#tap('vim-surround')
 
   " " (例) sw' /* 次の単語を''で囲む */
-  " nmap s <plug>Ysurround
+  " nmap s <Plug>Ysurround
   "
   " " (例) S'  /* カーソル行以降を''で囲む */
-  " nmap S <plug>Ysurround$
+  " nmap S <Plug>Ysurround$
   "
   " " (例) ss' /* 行を''で囲む */
-  " nmap ss <plug>Yssurround
+  " nmap ss <Plug>Yssurround
 
 endif "}}}
 
@@ -1878,8 +1866,8 @@ if neobundle#tap('vim-operator-replace')
 
   map R <Plug>(operator-replace)
 
-  " " 置換モードは滅多に使わないし, 潰してもいいかな...
-  " noremap <A-r> R
+  " 置換モードは滅多に使わないけど一応...
+  noremap <A-r> R
 
 endif "}}}
 
@@ -2015,8 +2003,8 @@ endif "}}}
 if neobundle#tap('incsearch-fuzzy.vim')
 
   " 入力中に飛びたくないのでstayのみ使う
-  map z/ <Plug>(incsearch-fuzzy-stay)
-  map zz/ <Plug>(incsearch-fuzzyspell-stay)
+  map g/ <Plug>(incsearch-fuzzy-stay)
+  map z/ <Plug>(incsearch-fuzzyspell-stay)
 
 endif "}}}
 
@@ -2024,7 +2012,7 @@ endif "}}}
 if neobundle#tap('incsearch-migemo.vim')
 
   " 入力中に飛びたくないのでstayのみ使う
-  map g/ <Plug>(incsearch-migemo-stay)
+  map m/ <Plug>(incsearch-migemo-stay)
 
 endif "}}}
 
@@ -2080,12 +2068,12 @@ if neobundle#tap('vim-signify')
         \ | SignifyToggle
         \ | delcommand SignifyStart
 
+  nmap gj <Plug>(signify-next-hunk)zz
+  nmap gk <Plug>(signify-prev-hunk)zz
+  nmap gh <Plug>(signify-toggle-highlight)
+
   " 不要なコマンドを削除する
   function! neobundle#hooks.on_post_source(bundle)
-    nmap gj <Plug>(signify-next-hunk)zz
-    nmap gk <Plug>(signify-prev-hunk)zz
-    nmap gh <Plug>(signify-toggle-highlight)
-
     delcommand SignifyDebug
     delcommand SignifyDebugDiff
     delcommand SignifyDebugUnknown
@@ -2727,10 +2715,22 @@ if neobundle#tap('vim-showtime')
 
 endif "}}}
 
+" 空ファイルを開く時にテンプレートを使う(vim-template) {{{
+if neobundle#tap('vim-template')
+
+  let g:template_basedir = '~/configs'
+
+  autocmd User plugin-template-loaded call s:template_keywords()
+  function! s:template_keywords()
+    %s/{{_date_}}/\=strftime('%Y-%m-%d %H:%M')/g
+  endfunction
+
+endif "}}}
+
 " Vimでミニマップ(vim-minimap) {{{
 if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
   if neobundle#tap('vim-minimap')
-    map <Leader>mm :Minimap<CR>
+    map <Leader>mm :<C-u>Minimap<CR>
 
     function! neobundle#hooks.on_post_source(bundle)
       set virtualedit=onemore
