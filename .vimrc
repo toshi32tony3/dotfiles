@@ -711,11 +711,11 @@ nnoremap gk [c
 nnoremap <silent> [t :<C-u>execute "normal! m'"
       \              <bar> execute "keepjumps normal! [["
       \              <bar> call search('(','b')
-      \              <bar> execute "normal! B"<CR>
+      \              <bar> execute "normal! bzz"<CR>
 nnoremap <silent> ]t :<C-u>execute "normal! m'"
       \              <bar> execute "keepjumps normal! ]]"
       \              <bar> call search('(','b')
-      \              <bar> execute "normal! B"<CR>
+      \              <bar> execute "normal! bzz"<CR>
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
