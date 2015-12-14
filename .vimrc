@@ -783,7 +783,7 @@ command! -nargs=0 MessageClear for n in range(200) | echomsg '' | endfor
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(funcName)
-  tablast | tabnew
+  tablast | tab sp
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:funcName
 
