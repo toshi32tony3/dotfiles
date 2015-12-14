@@ -712,14 +712,37 @@ nnoremap gj ]c
 nnoremap gk [c
 
 " Cの関数名にジャンプ
-nnoremap <silent> [t :<C-u>execute "normal! m'"
-      \              <bar> execute "keepjumps normal! [["
-      \              <bar> call search('(','b')
-      \              <bar> execute "normal! bzz"<CR>
-nnoremap <silent> ]t :<C-u>execute "normal! m'"
-      \              <bar> execute "keepjumps normal! ]]"
-      \              <bar> call search('(','b')
-      \              <bar> execute "normal! bzz"<CR>
+function! s:JumpFuncC(flag)
+  " 現在位置をjumplistに追加
+  mark '
+
+  if a:flag == 'b' " 上方向検索
+    execute "keepjumps normal! [["
+    keepjumps call search('(', 'b')
+    execute "keepjumps normal! b"
+
+  else             " 下方向検索
+    let l:LastLine = line('.')
+    execute "keepjumps normal! ]]"
+    keepjumps call search('(', 'b')
+    execute "keepjumps normal! b"
+
+    " Cの関数名上から下方向検索するには, ]]を2回使う必要がある
+    if l:LastLine == line('.')
+      execute "keepjumps normal! ]]"
+      execute "keepjumps normal! ]]"
+      keepjumps call search('(', 'b')
+      execute "keepjumps normal! b"
+
+    endif
+  endif
+
+  " 現在位置をjumplistに追加
+  mark '
+endfunction
+command! -nargs=1 JumpFuncC call s:JumpFuncC(<f-args>)
+nnoremap <silent> [t :<C-u>JumpFuncC b<CR>
+nnoremap <silent> ]t :<C-u>JumpFuncC f<CR>
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
