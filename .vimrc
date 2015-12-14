@@ -158,7 +158,8 @@ NeoBundleLazy 'cohama/agit.vim',
 " fugitive同様, Lazyできない
 NeoBundle 'idanarye/vim-merginal'
 
-NeoBundleLazy 'tyru/current-func-info.vim'
+" BufEnterでautoload関数を呼び出すようにしたので, Lazy不可
+NeoBundle 'tyru/current-func-info.vim'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
@@ -710,11 +711,11 @@ nnoremap gk [c
 nnoremap <silent> [t :<C-u>execute "normal! m'"
       \              <bar> execute "keepjumps normal! [["
       \              <bar> call search('(','b')
-      \              <bar> execute "normal! B"<CR>
+      \              <bar> execute "normal! bzz"<CR>
 nnoremap <silent> ]t :<C-u>execute "normal! m'"
       \              <bar> execute "keepjumps normal! ]]"
       \              <bar> call search('(','b')
-      \              <bar> execute "normal! B"<CR>
+      \              <bar> execute "normal! bzz"<CR>
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
@@ -782,7 +783,7 @@ command! -nargs=0 MessageClear for n in range(200) | echomsg '' | endfor
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(funcName)
-  tablast | tabnew
+  tablast | tab sp
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:funcName
 
@@ -1417,12 +1418,13 @@ if neobundle#tap('unite.vim')
   " -> 最初に馴染んだUIは早々変えられない
   " -> なんだかんだ非同期でやって貰う必要が無い気がする
   call unite#custom#profile('default', 'context', {
-        \   'start_insert'     : 1,
+        \   'no_empty'         : 0,
+        \   'no_quit'          : 0,
         \   'prompt'           : '> ',
         \   'prompt_visible'   : 'prompt-visible',
         \   'prompt_direction' : 'top',
-        \   'no_empty'         : 0,
         \   'split'            : 0,
+        \   'start_insert'     : 1,
         \   'sync'             : 1,
         \ })
 
@@ -1449,9 +1451,9 @@ if neobundle#tap('unite.vim')
   let g:u_opt_bo =                       g:u_hopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd = g:u_nins                       . g:u_hopt . g:u_sbuf
-  let g:u_opt_gg = g:u_nins                                  . g:u_sbuf
-  let g:u_opt_gr = g:u_nins                       . g:u_hopt . g:u_sbuf
+  let g:u_opt_gd = g:u_nins                       . g:u_hopt
+  let g:u_opt_gg = g:u_nins                       . g:u_hopt . g:u_sbuf
+  let g:u_opt_gr = g:u_nins                       . g:u_hopt . g:u_sbuf . g:u_nqui
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
@@ -1463,7 +1465,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
-  let g:u_opt_re = g:u_nins                                  . g:u_sbuf
+  let g:u_opt_re = g:u_nins                       . g:u_hopt . g:u_sbuf
 
   " 各unite-source用のマッピング定義もここにまとめる
   " -> 空いているキーがわかりにくくなるのを避けるため
@@ -2128,11 +2130,13 @@ endif "}}}
 let g:currentFunc = ''
 if neobundle#tap('current-func-info.vim')
 
-  " 処理負荷が気になるのでUser LineChangedでcurrentFuncを更新
-  " autocmd MyAutoCmd User LineChanged
-  "       \   if &ft == 'c'
-  "       \ | try | let g:currentFunc = cfi#get_func_name() | endtry
-  "       \ | endif
+  " 処理負荷が気になるのでUser LineChanged, BufEnterでcurrentFuncを更新
+  autocmd MyAutoCmd User LineChanged
+        \   if &ft == 'c' || &ft == 'cpp'
+        \ | try | let g:currentFunc = cfi#get_func_name() | endtry
+        \ | endif
+  autocmd MyAutoCmd BufEnter *
+        \   try | let g:currentFunc = cfi#get_func_name() | endtry
 
   function! s:ClipCurrentTag(funcName)
     if strlen(a:funcName) == 0
@@ -2618,6 +2622,9 @@ if neobundle#tap('eskk.vim')
     " hankaku -> zenkaku
     call t.add_map('~',  '～')
 
+    " special
+    call t.add_map(',', ', ')
+
     call eskk#register_mode_table('hira', t)
   endfunction
 
@@ -2676,7 +2683,7 @@ if neobundle#tap('scratch.vim')
   xmap gS <Plug>(scratch-selection-clear)
 
   function! s:ScratchVimSettings()
-    nnoremap <buffer> <Esc> :<C-u>q<CR>
+    nnoremap <buffer> <Esc> <C-w>j
   endfunction
   autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
 
