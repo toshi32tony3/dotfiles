@@ -539,18 +539,18 @@ nnoremap <silent> <F9> :set foldenable!<CR>:set foldenable?<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
-if filereadable(g:save_winpos_file)
-  autocmd MyAutoCmd VimLeavePre * call s:save_window()
-  function! s:save_window()
+let g:SaveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
+if filereadable(g:SaveWinposFile)
+  autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
+  function! s:SaveWindow()
     let s:options = [
           \ 'set columns=' . &columns,
           \ 'set lines='   . &lines,
           \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
           \ ]
-    call writefile(s:options, g:save_winpos_file)
+    call writefile(s:options, g:SaveWinposFile)
   endfunction
-  execute 'source' g:save_winpos_file
+  execute 'source' g:SaveWinposFile
 endif
 
 "}}}
