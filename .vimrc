@@ -2683,7 +2683,7 @@ if neobundle#tap('scratch.vim')
   xmap gS <Plug>(scratch-selection-clear)
 
   function! s:ScratchVimSettings()
-    nnoremap <buffer> <Esc> :<C-u>q<CR>
+    nnoremap <buffer> <Esc> <C-w>j
   endfunction
   autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
 
