@@ -158,7 +158,8 @@ NeoBundleLazy 'cohama/agit.vim',
 " fugitive同様, Lazyできない
 NeoBundle 'idanarye/vim-merginal'
 
-NeoBundleLazy 'tyru/current-func-info.vim'
+" BufEnterでautoload関数を呼び出すようにしたので, Lazy不可
+NeoBundle 'tyru/current-func-info.vim'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
@@ -2128,11 +2129,13 @@ endif "}}}
 let g:currentFunc = ''
 if neobundle#tap('current-func-info.vim')
 
-  " 処理負荷が気になるのでUser LineChangedでcurrentFuncを更新
-  " autocmd MyAutoCmd User LineChanged
-  "       \   if &ft == 'c'
-  "       \ | try | let g:currentFunc = cfi#get_func_name() | endtry
-  "       \ | endif
+  " 処理負荷が気になるのでUser LineChanged, BufEnterでcurrentFuncを更新
+  autocmd MyAutoCmd User LineChanged
+        \   if &ft == 'c' || &ft == 'cpp'
+        \ | try | let g:currentFunc = cfi#get_func_name() | endtry
+        \ | endif
+  autocmd MyAutoCmd BufEnter *
+        \   try | let g:currentFunc = cfi#get_func_name() | endtry
 
   function! s:ClipCurrentTag(funcName)
     if strlen(a:funcName) == 0
