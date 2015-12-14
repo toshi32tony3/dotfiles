@@ -301,11 +301,15 @@ endif
 
 set viewdir=~/vimfiles/view
 
-" Windowsは_viminfo, Linuxは.viminfoとする
-set viminfo+=n~/_viminfo
+" Windowsは_viminfo, 他は.viminfoとする
+if has('win32') || has('win64')
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
+else
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
+endif
 
-" 100あれば十分すぎる
-set history=100
+" 50あれば十分すぎる
+set history=50
 
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
