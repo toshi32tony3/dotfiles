@@ -781,6 +781,9 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
 command! -nargs=0 DeleteMessage for n in range(200) | echomsg '' | endfor
 
+" :jumplistを空にする
+command! -nargs=0 DeleteJumpList for n in range(100) | mark ' | endfor
+
 "}}}
 "-----------------------------------------------------------------------------
 " tags, path {{{
