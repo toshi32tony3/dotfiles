@@ -1418,12 +1418,13 @@ if neobundle#tap('unite.vim')
   " -> 最初に馴染んだUIは早々変えられない
   " -> なんだかんだ非同期でやって貰う必要が無い気がする
   call unite#custom#profile('default', 'context', {
-        \   'start_insert'     : 1,
+        \   'no_empty'         : 0,
+        \   'no_quit'          : 0,
         \   'prompt'           : '> ',
         \   'prompt_visible'   : 'prompt-visible',
         \   'prompt_direction' : 'top',
-        \   'no_empty'         : 0,
         \   'split'            : 0,
+        \   'start_insert'     : 1,
         \   'sync'             : 1,
         \ })
 
@@ -1450,9 +1451,9 @@ if neobundle#tap('unite.vim')
   let g:u_opt_bo =                       g:u_hopt
   let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
   let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd = g:u_nins                       . g:u_hopt . g:u_sbuf
-  let g:u_opt_gg = g:u_nins                                  . g:u_sbuf
-  let g:u_opt_gr = g:u_nins                       . g:u_hopt . g:u_sbuf
+  let g:u_opt_gd = g:u_nins                       . g:u_hopt
+  let g:u_opt_gg = g:u_nins                       . g:u_hopt . g:u_sbuf
+  let g:u_opt_gr = g:u_nins                       . g:u_hopt . g:u_sbuf . g:u_nqui
   let g:u_opt_jj = ''
   let g:u_opt_jn = ''
   let g:u_opt_li = ''
@@ -1464,7 +1465,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_nu = g:u_nins
   let g:u_opt_ol =                                  g:u_vopt
   let g:u_opt_op = ''
-  let g:u_opt_re = g:u_nins                                  . g:u_sbuf
+  let g:u_opt_re = g:u_nins                       . g:u_hopt . g:u_sbuf
 
   " 各unite-source用のマッピング定義もここにまとめる
   " -> 空いているキーがわかりにくくなるのを避けるため
