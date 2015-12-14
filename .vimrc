@@ -779,7 +779,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " :messageで表示される履歴を削除
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! -nargs=0 MessageClear for n in range(200) | echomsg '' | endfor
+command! -nargs=0 DeleteMessage for n in range(200) | echomsg '' | endfor
 
 "}}}
 "-----------------------------------------------------------------------------
