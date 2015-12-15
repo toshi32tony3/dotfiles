@@ -718,7 +718,11 @@ function! s:JumpFuncC(flag)
   mark '
 
   if a:flag == 'b' " 上方向検索
-    execute "keepjumps normal! [["
+    " カーソルがある行の1列目の文字が { ならば [[ は不要
+    if getline('.')[0] != '{'
+      execute "keepjumps normal! [["
+    endif
+    " for match } }
     call search('(', 'b')
     execute "normal! b"
 
