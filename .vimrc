@@ -301,11 +301,15 @@ endif
 
 set viewdir=~/vimfiles/view
 
-" Windowsは_viminfo, Linuxは.viminfoとする
-set viminfo+=n~/_viminfo
+" Windowsは_viminfo, 他は.viminfoとする
+if has('win32') || has('win64')
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
+else
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
+endif
 
-" 100あれば十分すぎる
-set history=100
+" 50あれば十分すぎる
+set history=50
 
 " 編集中のファイルがVimの外部で変更された時、自動的に読み直す
 set autoread
@@ -535,18 +539,18 @@ nnoremap <silent> <F9> :set foldenable!<CR>:set foldenable?<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-let g:save_winpos_file = expand('~/vimfiles/winpos/.vimwinpos')
-if filereadable(g:save_winpos_file)
-  autocmd MyAutoCmd VimLeavePre * call s:save_window()
-  function! s:save_window()
+let g:SaveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
+if filereadable(g:SaveWinposFile)
+  autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
+  function! s:SaveWindow()
     let s:options = [
           \ 'set columns=' . &columns,
           \ 'set lines='   . &lines,
           \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
           \ ]
-    call writefile(s:options, g:save_winpos_file)
+    call writefile(s:options, g:SaveWinposFile)
   endfunction
-  execute 'source' g:save_winpos_file
+  execute 'source' g:SaveWinposFile
 endif
 
 "}}}
@@ -708,14 +712,37 @@ nnoremap gj ]c
 nnoremap gk [c
 
 " Cの関数名にジャンプ
-nnoremap <silent> [t :<C-u>execute "normal! m'"
-      \              <bar> execute "keepjumps normal! [["
-      \              <bar> call search('(','b')
-      \              <bar> execute "normal! bzz"<CR>
-nnoremap <silent> ]t :<C-u>execute "normal! m'"
-      \              <bar> execute "keepjumps normal! ]]"
-      \              <bar> call search('(','b')
-      \              <bar> execute "normal! bzz"<CR>
+function! s:JumpFuncC(flag)
+  " 現在位置をjumplistに追加
+  mark '
+
+  if a:flag == 'b' " 上方向検索
+    execute "keepjumps normal! [["
+    keepjumps call search('(', 'b')
+    execute "keepjumps normal! b"
+
+  else             " 下方向検索
+    let l:LastLine = line('.')
+    execute "keepjumps normal! ]]"
+    keepjumps call search('(', 'b')
+    execute "keepjumps normal! b"
+
+    " Cの関数名上から下方向検索するには, ]]を2回使う必要がある
+    if l:LastLine == line('.')
+      execute "keepjumps normal! ]]"
+      execute "keepjumps normal! ]]"
+      keepjumps call search('(', 'b')
+      execute "keepjumps normal! b"
+
+    endif
+  endif
+
+  " 現在位置をjumplistに追加
+  mark '
+endfunction
+command! -nargs=1 JumpFuncC call s:JumpFuncC(<f-args>)
+nnoremap <silent> [t :<C-u>JumpFuncC b<CR>
+nnoremap <silent> ]t :<C-u>JumpFuncC f<CR>
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
@@ -775,7 +802,10 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " :messageで表示される履歴を削除
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! -nargs=0 MessageClear for n in range(200) | echomsg '' | endfor
+command! -nargs=0 DeleteMessage for n in range(200) | echomsg '' | endfor
+
+" :jumplistを空にする
+command! -nargs=0 DeleteJumpList for n in range(100) | mark ' | endfor
 
 "}}}
 "-----------------------------------------------------------------------------
