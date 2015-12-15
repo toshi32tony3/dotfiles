@@ -158,8 +158,9 @@ NeoBundleLazy 'cohama/agit.vim',
 " fugitive同様, Lazyできない
 NeoBundle 'idanarye/vim-merginal'
 
-" BufEnterでautoload関数を呼び出すようにしたので, Lazy不可
-NeoBundle 'tyru/current-func-info.vim'
+" 本家
+" NeoBundle 'tyru/current-func-info.vim'
+NeoBundle 'toshi32tony3/current-func-info.vim'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
@@ -717,22 +718,26 @@ function! s:JumpFuncC(flag)
   mark '
 
   if a:flag == 'b' " 上方向検索
-    execute "keepjumps normal! [["
-    keepjumps call search('(', 'b')
-    execute "keepjumps normal! b"
+    " カーソルがある行の1列目の文字が { ならば [[ は不要
+    if getline('.')[0] != '{'
+      execute "keepjumps normal! [["
+    endif
+    " for match } }
+    call search('(', 'b')
+    execute "normal! b"
 
   else             " 下方向検索
     let l:LastLine = line('.')
     execute "keepjumps normal! ]]"
-    keepjumps call search('(', 'b')
-    execute "keepjumps normal! b"
+    call search('(', 'b')
+    execute "normal! b"
 
     " Cの関数名上から下方向検索するには, ]]を2回使う必要がある
     if l:LastLine == line('.')
       execute "keepjumps normal! ]]"
       execute "keepjumps normal! ]]"
-      keepjumps call search('(', 'b')
-      execute "keepjumps normal! b"
+      call search('(', 'b')
+      execute "normal! b"
 
     endif
   endif
