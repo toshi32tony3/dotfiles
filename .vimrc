@@ -2556,6 +2556,7 @@ if neobundle#tap('vim-startify')
   let g:startify_files_number = 2
   let g:startify_change_to_dir = 1
   let g:startify_session_dir = '~/vimfiles/session'
+  let g:startify_session_delete_buffers = 1
 
   " ブックマークの設定はローカル設定ファイルに記述する
   " see: ~/localfiles/local.rc.vim
