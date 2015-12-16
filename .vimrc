@@ -713,41 +713,75 @@ nnoremap gj ]c
 nnoremap gk [c
 
 " Cの関数名にジャンプ
-function! s:JumpFuncC(flag)
+
+" 前方検索 {{{
+function! s:JumpFuncCForward()
   " 現在位置をjumplistに追加
   mark '
 
-  if a:flag == 'b' " 上方向検索
-    " カーソルがある行の1列目の文字が { ならば [[ は不要
-    if getline('.')[0] != '{'
-      execute "keepjumps normal! [["
-    endif
-    " for match } }
-    call search('(', 'b')
-    execute "normal! b"
+  " Viewを保存
+  let l:savedView = winsaveview()
 
-  else             " 下方向検索
-    let l:LastLine = line('.')
+  let l:LastLine = line('.')
+  execute "keepjumps normal! ]]"
+  " 検索対象が居なければViewを戻す
+  if line('.') == line('$')
+    " Viewを復元
+    call winrestview(l:savedView)
+    return
+  endif
+  call search('(', 'b')
+  execute "normal! b"
+
+  " Cの関数名の上から下方向検索するには, ]]を2回使う必要がある
+  if l:LastLine == line('.')
     execute "keepjumps normal! ]]"
+    execute "keepjumps normal! ]]"
+    " 検索対象が居なければViewを戻す
+    if line('.') == line('$')
+      " Viewを復元
+      call winrestview(l:savedView)
+      return
+    endif
     call search('(', 'b')
     execute "normal! b"
 
-    " Cの関数名上から下方向検索するには, ]]を2回使う必要がある
-    if l:LastLine == line('.')
-      execute "keepjumps normal! ]]"
-      execute "keepjumps normal! ]]"
-      call search('(', 'b')
-      execute "normal! b"
-
-    endif
   endif
 
   " 現在位置をjumplistに追加
   mark '
-endfunction
-command! -nargs=1 JumpFuncC call s:JumpFuncC(<f-args>)
-nnoremap <silent> [t :<C-u>JumpFuncC b<CR>
-nnoremap <silent> ]t :<C-u>JumpFuncC f<CR>
+endfunction " }}}
+
+" 後方検索 {{{
+function! s:JumpFuncCBackward()
+  " 現在位置をjumplistに追加
+  mark '
+
+  " Viewを保存
+  let l:savedView = winsaveview()
+
+  " カーソルがある行の1列目の文字が { ならば [[ は不要
+  if getline('.')[0] != '{'
+    execute "keepjumps normal! [["
+  endif " for match } }
+
+  " 検索対象が居なければViewを戻す
+  if line('.') == 1
+    " Viewを復元
+    call winrestview(l:savedView)
+    return
+  endif
+
+  call search('(', 'b')
+  execute "normal! b"
+
+  " 現在位置をjumplistに追加
+  mark '
+endfunction " }}}
+command! -nargs=0 JumpFuncCForward call s:JumpFuncCForward()
+command! -nargs=0 JumpFuncCBackward call s:JumpFuncCBackward()
+nnoremap <silent> [t :<C-u>JumpFuncCBackward<CR>
+nnoremap <silent> ]t :<C-u>JumpFuncCForward<CR>
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
@@ -2522,6 +2556,7 @@ if neobundle#tap('vim-startify')
   let g:startify_files_number = 2
   let g:startify_change_to_dir = 1
   let g:startify_session_dir = '~/vimfiles/session'
+  let g:startify_session_delete_buffers = 1
 
   " ブックマークの設定はローカル設定ファイルに記述する
   " see: ~/localfiles/local.rc.vim
