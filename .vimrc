@@ -160,7 +160,7 @@ NeoBundle 'idanarye/vim-merginal'
 
 " 本家
 " NeoBundle 'tyru/current-func-info.vim'
-NeoBundle 'toshi32tony3/current-func-info.vim'
+" NeoBundle 'toshi32tony3/current-func-info.vim'
 
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
@@ -712,77 +712,6 @@ nnoremap k gk
 nnoremap gj ]c
 nnoremap gk [c
 
-" Cの関数名にジャンプ
-
-" 前方検索 {{{
-function! s:JumpFuncCForward()
-  " 現在位置をjumplistに追加
-  mark '
-
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  let l:LastLine = line('.')
-  execute "keepjumps normal! ]]"
-  " 検索対象が居なければViewを戻す
-  if line('.') == line('$')
-    " Viewを復元
-    call winrestview(l:savedView)
-    return
-  endif
-  call search('(', 'b')
-  execute "normal! b"
-
-  " Cの関数名の上から下方向検索するには, ]]を2回使う必要がある
-  if l:LastLine == line('.')
-    execute "keepjumps normal! ]]"
-    execute "keepjumps normal! ]]"
-    " 検索対象が居なければViewを戻す
-    if line('.') == line('$')
-      " Viewを復元
-      call winrestview(l:savedView)
-      return
-    endif
-    call search('(', 'b')
-    execute "normal! b"
-
-  endif
-
-  " 現在位置をjumplistに追加
-  mark '
-endfunction " }}}
-
-" 後方検索 {{{
-function! s:JumpFuncCBackward()
-  " 現在位置をjumplistに追加
-  mark '
-
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  " カーソルがある行の1列目の文字が { ならば [[ は不要
-  if getline('.')[0] != '{'
-    execute "keepjumps normal! [["
-  endif " for match } }
-
-  " 検索対象が居なければViewを戻す
-  if line('.') == 1
-    " Viewを復元
-    call winrestview(l:savedView)
-    return
-  endif
-
-  call search('(', 'b')
-  execute "normal! b"
-
-  " 現在位置をjumplistに追加
-  mark '
-endfunction " }}}
-command! -nargs=0 JumpFuncCForward call s:JumpFuncCForward()
-command! -nargs=0 JumpFuncCBackward call s:JumpFuncCBackward()
-nnoremap <silent> [t :<C-u>JumpFuncCBackward<CR>
-nnoremap <silent> ]t :<C-u>JumpFuncCForward<CR>
-
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
   nnoremap <buffer> <F1>  :<C-u>q<CR>
@@ -1296,6 +1225,131 @@ function! s:UpdateCurrentFold() "{{{
 endfunction "}}}
 command! -nargs=0 UpdateCurrentFold call s:UpdateCurrentFold()
 autocmd MyAutoCmd User LineChanged call s:UpdateCurrentFold()
+
+" Cの関数名にジャンプ
+function! s:JumpFuncCForward() "{{{
+  if &ft != 'c'
+    return
+  endif
+
+  " 現在位置をjumplistに追加
+  mark '
+
+  " Viewを保存
+  let l:savedView = winsaveview()
+
+  let l:LastLine = line('.')
+  execute "keepjumps normal! ]]"
+  " 検索対象が居なければViewを戻す
+  if line('.') == line('$')
+    " Viewを復元
+    call winrestview(l:savedView)
+    return
+  endif
+  call search('(', 'b')
+  execute "normal! b"
+
+  " Cの関数名の上から下方向検索するには, ]]を2回使う必要がある
+  if l:LastLine == line('.')
+    execute "keepjumps normal! ]]"
+    execute "keepjumps normal! ]]"
+    " 検索対象が居なければViewを戻す
+    if line('.') == line('$')
+      " Viewを復元
+      call winrestview(l:savedView)
+      return
+    endif
+    call search('(', 'b')
+    execute "normal! b"
+
+  endif
+
+  " 現在位置をjumplistに追加
+  mark '
+endfunction " }}}
+function! s:JumpFuncCBackward() "{{{
+  if &ft != 'c'
+    return
+  endif
+
+  " 現在位置をjumplistに追加
+  mark '
+
+  " Viewを保存
+  let l:savedView = winsaveview()
+
+  " カーソルがある行の1列目の文字が { ならば [[ は不要
+  if getline('.')[0] != '{'
+    execute "keepjumps normal! [["
+    " for match } }
+
+    " 検索対象が居なければViewを戻す
+    if line('.') == 1
+      " Viewを復元
+      call winrestview(l:savedView)
+      return
+    endif
+  endif
+
+  call search('(', 'b')
+  execute "normal! b"
+
+  " 現在位置をjumplistに追加
+  mark '
+endfunction " }}}
+command! -nargs=0 JumpFuncCForward call s:JumpFuncCForward()
+command! -nargs=0 JumpFuncCBackward call s:JumpFuncCBackward()
+nnoremap <silent> [f :<C-u>JumpFuncCBackward<CR>
+nnoremap <silent> ]f :<C-u>JumpFuncCForward<CR>
+
+" Cの関数名取得
+let g:currentFunc = ''
+function! s:GetFuncNameC() "{{{
+  if &ft != 'c'
+    return ''
+  endif
+
+  " Viewを保存
+  let l:savedView = winsaveview()
+
+  " カーソルがある行の1列目の文字が { ならば [[ は不要
+  if getline('.')[0] != '{' " for match } }
+
+    " { よりも先に前方にセクション末尾 } がある場合, 関数定義の間なので検索不要
+    execute "keepjumps normal! []"
+    let l:endBracketLine = line('.')
+    call winrestview(l:savedView)
+    execute "keepjumps normal! [["
+    let l:startBracketLine = line('.')
+    if l:startBracketLine < l:endBracketLine
+      call winrestview(l:savedView)
+      return ''
+    endif
+
+    " 検索対象が居なければViewを戻す
+    if line('.') == 1
+      " Viewを復元
+      call winrestview(l:savedView)
+      return ''
+    endif
+  endif
+
+  call search('(', 'b')
+  execute "normal! b"
+  let l:funcName = expand('<cword>')
+
+  " Viewを復元
+  call winrestview(l:savedView)
+
+  return l:funcName
+endfunction " }}}
+command! -nargs=0 GetFuncNameC let g:currentFunc = s:GetFuncNameC()
+autocmd MyAutoCmd User LineChanged
+      \   if &ft == 'c'
+      \ | try | let g:currentFunc = s:GetFuncNameC() | endtry
+      \ | endif
+autocmd MyAutoCmd BufEnter *
+      \   try | let g:currentFunc = s:GetFuncNameC() | endtry
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -2201,7 +2255,7 @@ if neobundle#tap('current-func-info.vim')
 
   " 処理負荷が気になるのでUser LineChanged, BufEnterでcurrentFuncを更新
   autocmd MyAutoCmd User LineChanged
-        \   if &ft == 'c' || &ft == 'cpp'
+        \   if &ft == 'c'
         \ | try | let g:currentFunc = cfi#get_func_name() | endtry
         \ | endif
   autocmd MyAutoCmd BufEnter *
