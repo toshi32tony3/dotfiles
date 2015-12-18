@@ -12,7 +12,7 @@ if &compatible
   set nocompatible
 endif
 
-" ftpluginは最後に読み込むため、一旦オフする
+" ftpluginは最後に読み込むため, 一旦オフする
 filetype plugin indent off
 
 "}}}
@@ -87,13 +87,13 @@ NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundleLazy 'mattn/benchvimrc-vim',
       \ { 'autoload' : { 'commands' : ['BenchVimrc'] } }
 
-" memolist.vimはmarkdown形式でメモを生成するので、markdownを使いやすくしてみる
+" memolist.vimはmarkdown形式でメモを生成するので, markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
 NeoBundleLazy 'glidenote/memolist.vim',
       \ { 'autoload' : { 'commands' : ['MemoNew'] } }
 NeoBundle 'rcmdnk/vim-markdown'
 
-" Previm便利だけど、IEではmermaidを使えないようなのでShibaメインになりそう
+" Previm便利だけど, IEではmermaidを使えないようなのでShibaメインになりそう
 " https://github.com/rhysd/Shiba
 NeoBundleLazy 'kannokanno/previm',
       \ { 'autoload' : { 'commands' : ['PrevimOpen'] } }
@@ -272,8 +272,8 @@ if has('vim_starting') && has('reltime')
         \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
 endif
 
-" ネットワーク上ファイルのバックアップ、スワップを作ると重くなるので、作らない
-" -> バックアップ、スワップの生成先をローカルに指定していたからかも？要調査
+" ネットワーク上ファイルのバックアップ, スワップを作ると重くなるので, 作らない
+" -> バックアップ, スワップの生成先をローカルに指定していたからかも？要調査
 set noswapfile
 set nobackup
 set nowritebackup
@@ -305,7 +305,7 @@ endif
 " 50あれば十分すぎる
 set history=50
 
-" 編集中のファイルがVimの外部で変更された時、自動的に読み直す
+" 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
 set autoread
 
 " メッセージ省略設定
@@ -406,9 +406,9 @@ inoremap ） )
 " u :     unloaded buffers in the buffer list
 " U :              buffers that are not in the buffer list
 " t : tag completion
-"     -> タグファイルが大きいと時間がかかるので、汎用補完からtを外す
+"     -> タグファイルが大きいと時間がかかるので, 汎用補完からtを外す
 " i : current and included files
-"     -> インクルードファイルが多いと時間がかかるので、汎用補完からiを外す
+"     -> インクルードファイルが多いと時間がかかるので, 汎用補完からiを外す
 " d : current and included files for defined name or macro
 set complete=.,w,b,u,U
 
@@ -557,7 +557,7 @@ nnoremap / /\v
 
 " 大文字小文字を区別しない。区別したい時は検索パターンのどこかに\Cを付ける
 set ignorecase " 検索時に大文字小文字を区別しない
-set smartcase  " 大文字小文字の両方が含まれている場合は、区別する
+set smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
 set wrapscan   " 検索時に最後まで行ったら最初に戻る
 set incsearch  " インクリメンタルサーチ
 set hlsearch   " 検索マッチテキストをハイライト
@@ -573,7 +573,7 @@ set hlsearch   " 検索マッチテキストをハイライト
 " \     let @/ = get(b:, 'vimrc_pattern', @/)
 " \   | let &l:hlsearch = get(b:, 'vimrc_hlsearch', &l:hlsearch)
 
-" " vimgrep/grep後にQuickfixを開く。ただし、候補が0件の場合、Quickfixを開かない
+" " vimgrep/grep後にQuickfixを開く。ただし, 候補が0件の場合, Quickfixを開かない
 " " 逆にわかりにくい気がしたのでコメントアウト
 " autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
 
@@ -586,11 +586,11 @@ if has('vim_starting')
   set encoding=utf-8
 
   " ファイル書き込み時の文字コード
-  " -> 空の場合、encodingで指定した文字コードが使用される
+  " -> 空の場合, encodingで指定した文字コードが使用される
   set fileencoding=
 
   " ファイル読み込み時の変換候補
-  " -> 左から順に判定するので、2byte文字が無いファイルだと最初の候補が選択される？
+  " -> 左から順に判定するので, 2byte文字が無いファイルだと最初の候補が選択される？
   "    utf-8以外を左側に持ってきた時にうまく判定できないことがあった。要検証。
   " -> よくわかってないけど, 香り屋版GVimのguessを使おう
   if has('kaoriya')
@@ -606,7 +606,7 @@ nnoremap <Leader>enc :<C-u>e ++encoding=
 " 改行コードを指定してファイルを開き直す
 nnoremap <Leader>ff  :<C-u>e ++fileformat=
 
-" タブ幅、シフト幅、タブ使用有無の設定
+" タブ幅, シフト幅, タブ使用有無の設定
 if has('vim_starting')
   set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
 endif
@@ -617,8 +617,8 @@ autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
 set infercase                   " 補完時に大文字小文字を区別しない
 set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
 set virtualedit=all             " テキストが存在しない場所でも動けるようにする
-set hidden                      " quit時はバッファを削除せず、隠す
-set confirm                     " 変更されたバッファがある時、どうするか確認する
+set hidden                      " quit時はバッファを削除せず, 隠す
+set confirm                     " 変更されたバッファがある時, どうするか確認する
 set switchbuf=useopen           " すでに開いてあるバッファがあればそっちを開く
 set showmatch                   " 対応する括弧などの入力時にハイライト表示する
 set matchtime=3                 " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
@@ -627,7 +627,7 @@ set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
 
 " j : 行連結時にコメントリーダーを削除
 " l : insertモードの自動改行を無効化
-" m : 整形時、255よりも大きいマルチバイト文字間でも改行する
+" m : 整形時, 255よりも大きいマルチバイト文字間でも改行する
 " q : gqでコメント行を整形
 autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmq
 
@@ -678,7 +678,7 @@ command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<f-args>)
 "-----------------------------------------------------------------------------
 " 操作の簡単化 {{{
 
-" キー入力タイムアウトはあると邪魔だし、待つ意味も無い気がする
+" キー入力タイムアウトはあると邪魔だし, 待つ意味も無い気がする
 set notimeout
 
 " 閉じる系の入力を簡易化
@@ -712,7 +712,7 @@ function! s:HelpSettings()
 endfunction
 autocmd MyAutoCmd FileType help call s:HelpSettings()
 
-" 最後のウィンドウがQuickfixウィンドウの場合、自動で閉じる
+" 最後のウィンドウがQuickfixウィンドウの場合, 自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 
@@ -731,7 +731,7 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 " " -> Gdiff時に不便なことがあったので手動でマークジャンプする
 " autocmd MyAutoCmd BufRead * silent normal! `"
 
-" 保存時にViewの状態を保存し、読み込み時にViewの状態を前回の状態に戻す
+" 保存時にViewの状態を保存し, 読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
 " -> プラグインの挙動とぶつかることもあるらしいので使わない
 " -> https://github.com/Shougo/vimproc.vim/issues/116
@@ -877,7 +877,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
       call s:SetIncludes()
     endif
 
-    " ソースコード切り替え後、バージョン名を出力
+    " ソースコード切り替え後, バージョン名を出力
     echo 'change source to: ' . $TARGET_VER
 
   endfunction
@@ -964,25 +964,25 @@ noremap  <A-Down>  <Nop>
 noremap  <A-Up>    <Nop>
 noremap  <A-Right> <Nop>
 
-" せっかくなので、カーソルキーでウィンドウ間を移動
+" せっかくなので, カーソルキーでウィンドウ間を移動
 nnoremap <Left>  <C-w>h
 nnoremap <Down>  <C-w>j
 nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
-" せっかくなので、Shift + カーソルキーでbprevious/bnext
+" せっかくなので, Shift + カーソルキーでbprevious/bnext
 nnoremap <S-Left>  :<C-u>bprevious<CR>
 nnoremap <S-Down>  :<C-u>bnext<CR>
 nnoremap <S-Up>    :<C-u>bprevious<CR>
 nnoremap <S-Right> :<C-u>bnext<CR>
 
-" せっかくなので、 Ctrl + カーソルキーでcprevious/cnext
+" せっかくなので,  Ctrl + カーソルキーでcprevious/cnext
 nnoremap <C-Left>  :<C-u>cprevious<CR>
 nnoremap <C-Down>  :<C-u>cnext<CR>
 nnoremap <C-Up>    :<C-u>cprevious<CR>
 nnoremap <C-Right> :<C-u>cnext<CR>
 
-" せっかくなので、  Alt + カーソルキーでtabprevious/tabnext
+" せっかくなので,   Alt + カーソルキーでtabprevious/tabnext
 nnoremap <A-Left>  :<C-u>tabprevious<CR>
 nnoremap <A-Down>  :<C-u>tabnext<CR>
 nnoremap <A-Up>    :<C-u>tabprevious<CR>
@@ -997,9 +997,9 @@ nnoremap <F4> <Esc>q/
 nnoremap q/   <Nop>
 nnoremap q?   <Nop>
 
-" <C-@>  : 直前に挿入したテキストをもう一度挿入し、ノーマルモードに戻る
+" <C-@>  : 直前に挿入したテキストをもう一度挿入し, ノーマルモードに戻る
 " <C-g>u : アンドゥ単位を区切る
-" -> 割りと暴発する&あまり用途が見当たらないので、<Esc>に置き替え
+" -> 割りと暴発する&あまり用途が見当たらないので, <Esc>に置き替え
 " inoremap <C-@> <C-g>u<C-@>
 inoremap <C-@> <Esc>
 noremap  <C-@> <Esc>
@@ -1026,7 +1026,7 @@ function! s:MyCounter() "{{{
 endfunction "}}}
 command! -nargs=0 MyCounter call s:MyCounter()
 
-" キーリピート時のCursorMoved autocmdを無効にする、行移動を検出する
+" キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
 let g:throttleTimeSpan = 100
 function! s:OnCursorMove() "{{{
@@ -1092,9 +1092,9 @@ function! s:GetFoldLevel() "{{{
   " 小細工
   " ------------------------------------------------------------
   " [z, ]zは'foldlevel'が1の時は動作しない。nofoldenableの時は'foldlevel'が
-  " 設定される機会がないので、foldlevelに大きめの値をセットして解決する
+  " 設定される機会がないので, foldlevelに大きめの値をセットして解決する
   " NOTE: 'foldlevel'は「ファイルを開いた時点でどこまで折り畳むか」を設定する
-  "       -> 勝手に変更しても問題無い、はず
+  "       -> 勝手に変更しても問題無い, はず
   if &foldenable == 'nofoldenable'
     setlocal foldlevel=10
   endif
@@ -1672,7 +1672,7 @@ if neobundle#tap('junkfile.vim')
 
 endif "}}}
 
-" シンボル、関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
+" シンボル, 関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
 if neobundle#tap('gtags.vim')
 
 endif "}}}
@@ -1741,7 +1741,7 @@ if neobundle#tap('vim-quickrun')
   " \       'cmdopt'  : '-std=gnu++0x'
   " \   },
 
-  " デフォルトの<Leader>rだと入力待ちになるので、別のキーでマッピングする
+  " デフォルトの<Leader>rだと入力待ちになるので, 別のキーでマッピングする
   let g:quickrun_no_default_key_mappings = 1
   nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
   xnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
@@ -1766,8 +1766,8 @@ if neobundle#tap('vim-fontzoom')
   nmap + <Plug>(fontzoom-larger)
   nmap - <Plug>(fontzoom-smaller)
 
-  " vim-fontzoomには、以下のデフォルトキーマッピングが設定されている
-  " -> しかし、Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
+  " vim-fontzoomには, 以下のデフォルトキーマッピングが設定されている
+  " -> しかし, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
   " -> https://github.com/vim-jp/issues/issues/73
   nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
   nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
@@ -1793,7 +1793,7 @@ endif "}}}
 
 " <cword>を強調(vim-brightest) {{{
 if neobundle#tap('vim-brightest')
-  " <cword>を含め、<cword>と同じ単語をアンダーラインで強調
+  " <cword>を含め, <cword>と同じ単語をアンダーラインで強調
   let g:brightest#highlight = {
         \   'group' : 'BrightestUnderline'
         \ }
@@ -1807,7 +1807,7 @@ endif "}}}
 
 " Vim上で自動構文チェック(vim-watchdogs) {{{
 if neobundle#tap('vim-watchdogs')
-  " Caution: 裏で実行した結果を反映しているのか、pause系の処理があると固まる
+  " Caution: 裏で実行した結果を反映しているのか, pause系の処理があると固まる
 
   let g:watchdogs_check_BufWritePost_enable = 1
   let g:watchdogs_check_BufWritePost_enables = {
@@ -1833,7 +1833,7 @@ if neobundle#tap('syntastic')
         \   'mode': 'passive'
         \ }
 
-  " エラーにジャンプ、警告は無視
+  " エラーにジャンプ, 警告は無視
   let g:syntastic_auto_jump = 3
 
 endif "}}}
@@ -1955,7 +1955,7 @@ if neobundle#tap('vim-textobj-function')
 
 endif "}}}
 
-" 連続で打鍵した時、指定した候補をループさせる(vim-smartchr) {{{
+" 連続で打鍵した時, 指定した候補をループさせる(vim-smartchr) {{{
 if neobundle#tap('vim-smartchr')
 
   " inoremap <expr>+     smartchr#one_of('+',     '++',           ' + ')
@@ -1967,11 +1967,11 @@ if neobundle#tap('vim-smartchr')
   " inoremap <expr>,     smartchr#one_of(',',     ', ')
   " inoremap <expr>?     smartchr#one_of('?',     ' ? ')
 
-  " 「->」は入力しづらいので、..で置換え
+  " 「->」は入力しづらいので, ..で置換え
   inoremap <expr> . smartchr#one_of('.', '->', '..')
 
   " " if文直後の(は自動で間に空白を入れる
-  " " -> 時々空白を入れたくない時があるので、とりあえずコメントアウト
+  " " -> 時々空白を入れたくない時があるので, とりあえずコメントアウト
   " inoremap <expr> ( search("\<\if\%#", 'bcn') ? ' (' : '('
 
   " ruby / eruby の時だけ設定
@@ -2010,7 +2010,7 @@ if neobundle#tap('incsearch.vim')
   " very magic
   let g:incsearch#magic = '\v'
 
-  " 検索後、カーソル移動すると自動でnohlsearchする
+  " 検索後, カーソル移動すると自動でnohlsearchする
   " -> 自動でnohlsearchするべきか非常に悩ましい
   " let g:incsearch#auto_nohlsearch = 1
 
@@ -2113,7 +2113,7 @@ if neobundle#tap('vim-anzu')
   " nmap n <Plug>(anzu-mode-n)
   " nmap N <Plug>(anzu-mode-N)
   "
-  " " 検索開始時にジャンプせず、その場でanzu-modeに移行する
+  " " 検索開始時にジャンプせず, その場でanzu-modeに移行する
   " nmap <expr>* ':<C-u>call anzu#mode#start('<C-R><C-W>', '', '', '')<CR>'
 
   " nmap * <Plug>(anzu-star-with-echo)N
@@ -2157,14 +2157,14 @@ if neobundle#tap('vim-signify')
 
 endif "}}}
 
-" VimからGitを使う(編集、コマンド実行、vim-fugitive) {{{
+" VimからGitを使う(編集, コマンド実行, vim-fugitive) {{{
 if neobundle#tap('vim-fugitive')
 
   autocmd MyAutoCmd FileType gitcommit setlocal nofoldenable
 
 endif "}}}
 
-" VimからGitを使う(コミットツリー表示、管理、agit.vim) {{{
+" VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
   function! s:AgitSettings()
@@ -2181,7 +2181,7 @@ if neobundle#tap('agit.vim')
 
 endif "}}}
 
-" VimからGitを使う(ブランチ管理、vim-merginal) {{{
+" VimからGitを使う(ブランチ管理, vim-merginal) {{{
 if neobundle#tap('vim-merginal')
 
 endif "}}}
@@ -2240,8 +2240,8 @@ if neobundle#tap('lightline.vim')
   function! MyFilename()
     " 以下の条件を満たすと処理負荷が急激に上がる。理由は不明
     " ・Vimのカレントディレクトリがネットワーク上
-    " ・ネットワーク上のファイルを開いており、ファイル名をフルパス(%:p)出力
-    " -> GVIMウィンドウ上部にフルパスが表示されているので、そちらを参照する
+    " ・ネットワーク上のファイルを開いており, ファイル名をフルパス(%:p)出力
+    " -> GVIMウィンドウ上部にフルパスが表示されているので, そちらを参照する
     if       neobundle#is_installed('unite.vim')    &&
           \  neobundle#is_installed('vimfiler.vim') &&
           \  neobundle#is_installed('vimshell.vim')
@@ -2411,7 +2411,7 @@ if neobundle#tap('clever-f.vim')
 
   let g:clever_f_smart_case = 1
 
-  " " fは進む、Fは戻るで固定する
+  " " fは進む, Fは戻るで固定する
   " " -> Vimの標準の挙動は0
   " let g:clever_f_fix_key_direction = 1
 
@@ -2440,7 +2440,7 @@ if neobundle#tap('vim-sneak')
   let g:sneak#s_next = 1     " clever-sな挙動にする
   let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
 
-  " " sは進む、Sは戻るで固定する
+  " " sは進む, Sは戻るで固定する
   " " -> Vimの標準の挙動は0
   " let g:sneak#absolute_dir = 1
 
@@ -2465,12 +2465,12 @@ endif "}}}
 " Vimのマーク機能を使いやすく(vim-signature) {{{
 if neobundle#tap('vim-signature')
 
-  " " お試しとして、グローバルマークだけ使うようにしてみる
-  " " -> viminfoに直接書き込まれるためか、消しても反映されないことが多々
+  " " お試しとして, グローバルマークだけ使うようにしてみる
+  " " -> viminfoに直接書き込まれるためか, 消しても反映されないことが多々
   " let g:SignatureIncludeMarks = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
   " _viminfoファイルからグローバルマークの削除を行う
-  " -> Unix系だと「~/.viminfo」、Windowsだと「~/_viminfo」を対象とする
+  " -> Unix系だと「~/.viminfo」, Windowsだと「~/_viminfo」を対象とする
   " -> Windowsでは_viminfoが書き込み禁止になり削除失敗するので無効化する
   let g:SignatureForceRemoveGlobal = 0
 
@@ -2617,7 +2617,7 @@ if neobundle#tap('eskk.vim')
   nmap <expr> <A-i> "I\<C-j>"
   nmap <expr> <A-a> "A\<C-j>"
 
-  " " oも使いたいが、<C-o>はjumplist戻るなので潰せない。Oは我慢
+  " " oも使いたいが, <C-o>はjumplist戻るなので潰せない。Oは我慢
   " nmap <expr> <C-o> "o\<C-j>"
   nmap <expr> <A-o> "o\<C-j>"
 
