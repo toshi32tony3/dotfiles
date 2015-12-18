@@ -1797,43 +1797,10 @@ endif "}}}
 
 " <cword>を強調(vim-brightest) {{{
 if neobundle#tap('vim-brightest')
-
-  " " <cword>のみに反映するハイライト
-  " let b:brightest#highlight_in_cursorline = {
-  "   \   'group' : 'ErrorMsg',
-  "   \ }
-
-  " " <cword>を含め、<cword>と同じ単語を文字色で強調したい場合
-  " let g:brightest#highlight = {
-  "   \   'group'    : 'ErrorMsg',
-  "   \   'priority' : -1,
-  "   \   'format'   : "\<%s\>",
-  "   \ }
-
-  " <cword>を含め、<cword>と同じ単語をアンダーラインで強調したい場合
+  " <cword>を含め、<cword>と同じ単語をアンダーラインで強調
   let g:brightest#highlight = {
         \   'group' : 'BrightestUnderline'
         \ }
-
-  " " <cword>を含め、<cword>と同じ単語を波線で強調したい場合
-  " let g:brightest#highlight = {
-  "   \   'group' : 'BrightestUndercurl'
-  "   \ }
-
-  " " ハイライトする単語のパターンを設定
-  " " デフォルト(空の文字列の場合)は<cword>が使用される
-  " " NOTE: <cword>は前方にある単語も検出する
-  " let g:brightest#pattern = '\k\+'
-
-  " " シンタックスがStatementの場合はハイライトしない
-  " " (e.g.) let, if, function
-  " let g:brightest#ignore_syntax_list = ['Statement']
-
-  " " brightestの背景をcursorlineに合わせる
-  " let g:brightest#highlight_in_cursorline = {
-  "       \   'group' : 'BrightestCursorLineBg'
-  "       \ }
-  " set cursorline
 
 endif "}}}
 
