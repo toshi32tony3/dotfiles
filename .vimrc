@@ -1876,7 +1876,7 @@ endif "}}}
 if neobundle#tap('vim-tomorrow-theme')
 
   " 現在のカーソル位置をわかりやすくする
-  autocmd MyAutoCmd ColorScheme * highlight Cursor\ guifg=White guibg=Red
+  autocmd MyAutoCmd ColorScheme * highlight Cursor guifg=White guibg=Red
 
   " 検索中にフォーカス位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
