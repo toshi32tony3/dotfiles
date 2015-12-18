@@ -1383,53 +1383,6 @@ let g:loaded_netrwPlugin = 1
 
 "}}}
 
-" スクリプト内関数を書き換える {{{
-" http://mattn.kaoriya.net/software/vim/20090826003359.htm
-" http://d.hatena.ne.jp/thinca/20090826/1251258056
-" http://mattn.kaoriya.net/software/vim/20111202085236.htm
-function! GetScriptID(filename)
-  let l:snlist = ''
-  redir => l:snlist
-  silent! scriptnames
-  redir END
-  let l:smap = {}
-  let l:mx = '^\s*\(\d\+\):\s*\(.*\)$'
-  for l:line in split(l:snlist, "\n")
-    let l:smap[tolower(expand(substitute(l:line, l:mx, '\2', '')))] =
-          \ substitute(l:line, l:mx, '\1', '')
-  endfor
-  return l:smap[tolower(a:filename)]
-endfunction
-
-function! GetFunc(filename, funcname)
-  let l:sid = GetScriptID(a:filename)
-  return function("<SNR>" . l:sid . "_" . a:funcname)
-endfunction
-
-function! HookFunc(funcA, funcB)
-  if type(a:funcA) == 2
-    let l:funcA = substitute(string(a:funcA), "^function('\\(.*\\)')$", '\1', '')
-  else
-    let l:funcA = a:funcA
-  endif
-  if type(a:funcB) == 2
-    let l:funcB = substitute(string(a:funcB), "^function('\\(.*\\)')$", '\1', '')
-  else
-    let l:funcB = a:funcB
-  endif
-
-  " " 置き換え前の関数定義を退避
-  " " -> 退避したところでアレなのでコメントアウト
-  " let l:oldfunc = ''
-  " redir => l:oldfunc
-  " silent! exec "function " . l:funcA
-  " redir END
-  " let g:hoge = l:oldfunc
-
-  " 関数定義を上書き
-  exec "function! " . l:funcA . "(...)\nreturn call('" . l:funcB . "', a:000)\nendfunction"
-endfunction "}}}
-
 " Vimでフルスクリーンモード(scrnmode.vim)@Kaoriya版付属プラグイン {{{
 if has('kaoriya')
 
@@ -1923,12 +1876,11 @@ endif "}}}
 if neobundle#tap('vim-tomorrow-theme')
 
   " 現在のカーソル位置をわかりやすくする
-  autocmd MyAutoCmd ColorScheme * highlight Cursor
-        \   gui=bold guifg=White guibg=Red
+  autocmd MyAutoCmd ColorScheme * highlight Cursor\ guifg=White guibg=Red
 
   " 検索中にフォーカス位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
-        \   term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
+        \ term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
 
   " IME ONしていることをわかりやすくする
   if has('multi_byte_ime') || has('xim')
@@ -2781,37 +2733,6 @@ endif "}}}
 
 " Vimでプレゼンテーション(vim-showtime) {{{
 if neobundle#tap('vim-showtime')
-
-  " s:hide_cursorを置き換えたい
-  function! s:hide_cursor()
-    highlight Cursor gui=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-  endfunction
-
-  " " Sourceされてもautoloadは実行時まで読み込まれないので、以下はできないはず…
-  " function! neobundle#hooks.on_post_source(bundle)
-  "   call HookFunc(GetFunc(expand('~/.vim/bundle/vim-showtime/autoload/showtime.vim'), 'hide_cursor'),
-  "         \       GetFunc(expand('~/.vimrc'), 'hide_cursor'))
-  " endfunction
-
-  " 初回実行時は必ず失敗するコマンドをsilentで実行してautoloadを読ませて置き換え
-  " -> イケてないけど動くしいいか...
-  let g:showtime_vim = expand('~/.vim/bundle/vim-showtime/autoload/showtime.vim')
-  if neobundle#tap('vim-brightest')
-    command! -nargs=0 -bar Showtime
-          \   silent! ShowtimeResume
-          \ | call HookFunc(GetFunc(g:showtime_vim    , 'hide_cursor'),
-          \                 GetFunc(expand('~/.vimrc'), 'hide_cursor'))
-          \ | BrightestDisable
-          \ | ShowtimeStart
-          \ | delcommand Showtime
-  else
-    command! -nargs=0 -bar Showtime
-          \   silent! ShowtimeResume
-          \ | call HookFunc(GetFunc(g:showtime_vim    , 'hide_cursor'),
-          \                 GetFunc(expand('~/.vimrc'), 'hide_cursor'))
-          \ | ShowtimeStart
-          \ | delcommand Showtime
-  endif
 
 endif "}}}
 
