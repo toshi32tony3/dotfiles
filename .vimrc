@@ -467,8 +467,8 @@ set display=lastline " 長いテキストを省略しない
 " 81行目に線を表示
 set colorcolumn=81
 
-set number           " 行番号を表示
-set relativenumber   " 行番号を相対表示
+set number         " 行番号を表示
+set relativenumber " 行番号を相対表示
 nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>:set relativenumber?<CR>
 
 " 不可視文字の可視化
@@ -613,16 +613,16 @@ autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
 
-set infercase                   " 補完時に大文字小文字を区別しない
-set nrformats=hex               " <C-a>や<C-x>の対象を10進数,16進数に絞る
-set virtualedit=all             " テキストが存在しない場所でも動けるようにする
-set hidden                      " quit時はバッファを削除せず, 隠す
-set confirm                     " 変更されたバッファがある時, どうするか確認する
-set switchbuf=useopen           " すでに開いてあるバッファがあればそっちを開く
-set showmatch                   " 対応する括弧などの入力時にハイライト表示する
-set matchtime=3                 " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
-set matchpairs+=<:>             " 対応括弧に'<'と'>'のペアを追加
-set backspace=indent,eol,start  " <BS>でなんでも消せるようにする
+set infercase                  " 補完時に大文字小文字を区別しない
+set nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
+set virtualedit=all            " テキストが存在しない場所でも動けるようにする
+set hidden                     " quit時はバッファを削除せず, 隠す
+set confirm                    " 変更されたバッファがある時, どうするか確認する
+set switchbuf=useopen          " すでに開いてあるバッファがあればそっちを開く
+set showmatch                  " 対応する括弧などの入力時にハイライト表示する
+set matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
+set matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
+set backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
 " j : 行連結時にコメントリーダーを削除
 " l : insertモードの自動改行を無効化
@@ -774,6 +774,7 @@ command! -nargs=0 DeleteJumpList for n in range(100) | mark ' | endfor
 " 新規タブでタグジャンプ
 function! s:TabTagJump(funcName)
   tablast | tab sp
+
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:funcName
 
@@ -1032,17 +1033,17 @@ function! s:OnCursorMove() "{{{
   " run on normal/visual mode only
   let l:m = mode()
   if m != 'n' && m != 'v'
-    let b:IsLineChanged = 0
-    let b:IsCursorMoved = 0
+    let b:isLineChanged = 0
+    let b:isCursorMoved = 0
     return
   endif
 
   " 初回のCursorMoved発火時の処理
-  if !exists('b:LastVisitedLine')
-    let b:IsCursorMoved = 0
-    let b:IsLineChanged = 0
-    let b:LastVisitedLine = line('.')
-    let b:LastCursorMoveTime = 0
+  if !exists('b:lastVisitedLine')
+    let b:isCursorMoved = 0
+    let b:isLineChanged = 0
+    let b:lastVisitedLine = line('.')
+    let b:lastCursorMoveTime = 0
   endif
 
   " ミリ秒単位の現在時刻を取得
@@ -1054,32 +1055,32 @@ function! s:OnCursorMove() "{{{
   let l:now = str2nr(join(l:ml, ''))
 
   " 前回のCursorMoved発火時からの経過時間を算出
-  let l:timespan = l:now - b:LastCursorMoveTime
+  let l:timespan = l:now - b:lastCursorMoveTime
 
-  " LastCursorMoveTimeを更新
-  let b:LastCursorMoveTime = l:now
+  " lastCursorMoveTimeを更新
+  let b:lastCursorMoveTime = l:now
 
   " 指定時間経過しているか否かで処理分岐
   if l:timespan <= g:throttleTimeSpan
-    let b:IsLineChanged = 0
-    let b:IsCursorMoved = 0
+    let b:isLineChanged = 0
+    let b:isCursorMoved = 0
     return
   endif
 
   " CursorMoved!!
-  let b:IsCursorMoved = 1
+  let b:isCursorMoved = 1
 
-  if b:LastVisitedLine != line('.')
+  if b:lastVisitedLine != line('.')
     " LineChanged!!
-    let b:IsLineChanged = 1
-    let b:LastVisitedLine = line('.')
+    let b:isLineChanged = 1
+    let b:lastVisitedLine = line('.')
 
     " NOTE: If no "User LineChanged" events,
     " Vim says "No matching autocommands".
     autocmd MyAutoCmd User LineChanged :
     doautocmd MyAutoCmd User LineChanged
   else
-    let b:IsLineChanged = 0
+    let b:isLineChanged = 0
   endif
 endfunction "}}}
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
@@ -1101,7 +1102,7 @@ function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " 前処理
   " ------------------------------------------------------------
-  let l:foldlevel = 0
+  let l:foldLevel = 0
   let l:currentLine = getline('.')
   let l:currentLineNumber = line('.')
   let l:lastLineNumber = l:currentLineNumber
@@ -1114,22 +1115,22 @@ function! s:GetFoldLevel() "{{{
   let &l:belloff = 'error'
 
   " ------------------------------------------------------------
-  " foldlevelをカウント
+  " foldLevelをカウント
   " ------------------------------------------------------------
   " 現在の行にfoldmarkerが含まれているかチェック
   let l:pattern = '\v\ \{\{\{$' " for match } } }
   if match(l:currentLine, l:pattern) >= 0
-    let l:foldlevel += 1
+    let l:foldLevel += 1
   endif
 
-  " [zを使ってカーソルが移動していればfoldlevelをインクリメント
+  " [zを使ってカーソルが移動していればfoldLevelをインクリメント
   while 1
     keepjumps normal! [z
     let l:currentLineNumber = line('.')
     if l:lastLineNumber == l:currentLineNumber
       break
     endif
-    let l:foldlevel += 1
+    let l:foldLevel += 1
     let l:lastLineNumber = l:currentLineNumber
   endwhile
 
@@ -1142,7 +1143,7 @@ function! s:GetFoldLevel() "{{{
   " Viewを復元
   call winrestview(l:savedView)
 
-  return l:foldlevel
+  return l:foldLevel
 endfunction "}}}
 
 " カーソル位置の親Fold名を取得
@@ -1153,8 +1154,8 @@ function! s:GetCurrentFold() "{{{
   " 前処理
   " ------------------------------------------------------------
   " foldlevel('.')はあてにならないことがあるので自作関数で求める
-  let l:foldlevel = s:GetFoldLevel()
-  if l:foldlevel <= 0
+  let l:foldLevel = s:GetFoldLevel()
+  if l:foldLevel <= 0
     return ''
   endif
 
@@ -1167,7 +1168,7 @@ function! s:GetCurrentFold() "{{{
   let &l:belloff = 'error'
 
   " 走査回数の設定
-  let l:searchCounter = l:foldlevel
+  let l:searchCounter = l:foldLevel
 
   " 変数初期化
   let l:foldList = []
@@ -1236,7 +1237,7 @@ function! s:JumpFuncCForward() "{{{
   " Viewを保存
   let l:savedView = winsaveview()
 
-  let l:LastLine = line('.')
+  let l:lastLine = line('.')
   execute "keepjumps normal! ]]"
   " 検索対象が居なければViewを戻す
   if line('.') == line('$')
@@ -1248,7 +1249,7 @@ function! s:JumpFuncCForward() "{{{
   execute "normal! b"
 
   " Cの関数名の上から下方向検索するには, ]]を2回使う必要がある
-  if l:LastLine == line('.')
+  if l:lastLine == line('.')
     execute "keepjumps normal! ]]"
     execute "keepjumps normal! ]]"
     " 検索対象が居なければViewを戻す
@@ -1318,8 +1319,7 @@ function! s:GetFuncNameC() "{{{
     let l:endBracketLine = line('.')
     call winrestview(l:savedView)
     execute "keepjumps normal! [["
-    let l:startBracketLine = line('.')
-    if l:startBracketLine < l:endBracketLine
+    if line('.') < l:endBracketLine
       call winrestview(l:savedView)
       return ''
     endif
