@@ -485,16 +485,16 @@ set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
 
 " 透明度をスイッチ
-let g:transparency_on = 0
+let g:hasTransparency = 0
 function! s:ToggleTransParency()
-  if g:transparency_on == 1
+  if g:hasTransparency == 1
     set transparency=255
     echo 'set transparency=255'
-    let g:transparency_on = 0
+    let g:hasTransparency = 0
   else
     set transparency=220
     echo 'set transparency=220'
-    let g:transparency_on = 1
+    let g:hasTransparency = 1
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
@@ -533,8 +533,8 @@ nnoremap <silent> <F9> :set foldenable!<CR>:set foldenable?<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-let g:SaveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
-if filereadable(g:SaveWinposFile)
+let g:saveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
+if filereadable(g:saveWinposFile)
   autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
   function! s:SaveWindow()
     let s:options = [
@@ -542,9 +542,9 @@ if filereadable(g:SaveWinposFile)
           \ 'set lines='   . &lines,
           \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
           \ ]
-    call writefile(s:options, g:SaveWinposFile)
+    call writefile(s:options, g:saveWinposFile)
   endfunction
-  execute 'source' g:SaveWinposFile
+  execute 'source' g:saveWinposFile
 endif
 
 "}}}
