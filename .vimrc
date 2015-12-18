@@ -1015,12 +1015,12 @@ noremap <C-Space> <Space>
 
 " カウンタ
 function! s:MyCounter() "{{{
-  if !exists('b:mycounter')
-    let b:mycounter = 0
+  if !exists('b:myCounter')
+    let b:myCounter = 0
   else
-    let b:mycounter += 1
+    let b:myCounter += 1
   endif
-  echomsg 'count: ' . b:mycounter
+  echomsg 'count: ' . b:myCounter
 
 endfunction "}}}
 command! -nargs=0 MyCounter call s:MyCounter()
