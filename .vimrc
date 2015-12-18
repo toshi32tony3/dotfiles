@@ -1341,11 +1341,9 @@ function! s:GetFuncNameC() "{{{
 endfunction " }}}
 command! -nargs=0 GetFuncNameC let g:currentFunc = s:GetFuncNameC()
 autocmd MyAutoCmd User LineChanged
-      \   if &ft == 'c'
-      \ | try | let g:currentFunc = s:GetFuncNameC() | endtry
-      \ | endif
+      \ if &ft == 'c' | let g:currentFunc = s:GetFuncNameC() | endif
 autocmd MyAutoCmd BufEnter *
-      \   try | let g:currentFunc = s:GetFuncNameC() | endtry
+      \                 let g:currentFunc = s:GetFuncNameC()
 
 function! s:ClipCurrentTag(funcName) "{{{
   if strlen(a:funcName) == 0
