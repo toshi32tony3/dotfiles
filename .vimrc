@@ -1963,21 +1963,8 @@ endif "}}}
 " 連続で打鍵した時, 指定した候補をループさせる(vim-smartchr) {{{
 if neobundle#tap('vim-smartchr')
 
-  " inoremap <expr>+     smartchr#one_of('+',     '++',           ' + ')
-  " inoremap <expr>-     smartchr#one_of('-',     '--',           ' - ')
-  " inoremap <expr>%     smartchr#one_of('%',     '%%',           ' % ')
-  " inoremap <expr>:     smartchr#one_of(':',     '::',           ' : ')
-  " inoremap <expr>&     smartchr#one_of('&',     ' && ',         ' & ')
-  " inoremap <expr><Bar> smartchr#one_of('<Bar>', ' <Bar><Bar> ', ' <Bar> ')
-  " inoremap <expr>,     smartchr#one_of(',',     ', ')
-  " inoremap <expr>?     smartchr#one_of('?',     ' ? ')
-
   " 「->」は入力しづらいので, ..で置換え
   inoremap <expr> . smartchr#one_of('.', '->', '..')
-
-  " " if文直後の(は自動で間に空白を入れる
-  " " -> 時々空白を入れたくない時があるので, とりあえずコメントアウト
-  " inoremap <expr> ( search("\<\if\%#", 'bcn') ? ' (' : '('
 
   " ruby / eruby の時だけ設定
   autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
