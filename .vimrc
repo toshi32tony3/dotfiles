@@ -1146,17 +1146,17 @@ function! s:GetFoldLevel() "{{{
   return l:foldlevel
 endfunction "}}}
 
-" カーソル位置の親Fold名を更新
+" カーソル位置の親Fold名を取得
 " NOTE: &ft == 'vim' only
 let g:currentFold = ''
-function! s:UpdateCurrentFold() "{{{
+function! s:GetCurrentFold() "{{{
   " ------------------------------------------------------------
   " 前処理
   " ------------------------------------------------------------
   " foldlevel('.')はあてにならないことがあるので自作関数で求める
   let l:foldlevel = s:GetFoldLevel()
   if l:foldlevel <= 0
-    return
+    return ''
   endif
 
   " View/カーソル位置を保存
@@ -1201,23 +1201,29 @@ function! s:UpdateCurrentFold() "{{{
     endif
     let l:lastLineNumber = l:currentLineNumber
     let l:searchCounter -= 1
+
   endwhile
 
   " ------------------------------------------------------------
   " 後処理
   " ------------------------------------------------------------
-  " Fold情報の生成, 結果の格納
-  let l:currentFold = join(l:foldList, " \u2B81 ")
-  let g:currentFold = l:currentFold
-
   " 退避していたbelloffを戻す
   let &l:belloff = l:belloff_tmp
 
   " Viewを復元
   call winrestview(l:savedView)
+
+  " ウィンドウ幅が十分あればfoldListを繋いで返す
+  if winwidth(0) > 120
+    return join(l:foldList, " \u2B81 ")
+  endif
+
+  return l:foldList[-1]
 endfunction "}}}
-command! -nargs=0 UpdateCurrentFold call s:UpdateCurrentFold()
-autocmd MyAutoCmd User LineChanged call s:UpdateCurrentFold()
+command! -nargs=0 GetCurrentFold let g:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd User LineChanged
+      \    if &ft == 'vim' | let g:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd BufEnter * let g:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
 function! s:JumpFuncCForward() "{{{
@@ -2321,9 +2327,9 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentFunc()
     if &ft == 'vim'
-      return winwidth(0) > 70 ? g:currentFold : ''
+      return winwidth(0) > 100 ? g:currentFold : ''
     else
-      return winwidth(0) > 70 ? g:currentFunc : ''
+      return winwidth(0) > 100 ? g:currentFunc : ''
     endif
   endfunction
 
