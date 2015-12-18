@@ -1012,10 +1012,10 @@ inoremap <C-@> <Esc>
 noremap  <C-@> <Esc>
 
 " 謎のマッピングを使えないようにする
-map <S-CR>    <CR>
-map <C-CR>    <CR>
-map <S-Space> <Space>
-map <C-Space> <Space>
+noremap <S-CR>    <CR>
+noremap <C-CR>    <CR>
+noremap <S-Space> <Space>
+noremap <C-Space> <Space>
 
 "}}}
 "-----------------------------------------------------------------------------
