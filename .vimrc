@@ -2017,11 +2017,10 @@ if neobundle#tap('incsearch.vim')
     endif
   endif
 
-  " 入力中に飛びたくないのでstayのみ使う
-  " map /  <Plug>(incsearch-forward)
-  " map ?  <Plug>(incsearch-backward)
-  noremap <silent> <expr> / incsearch#go({'command' : '/', 'is_stay' : 1})
-  noremap <silent> <expr> ? incsearch#go({'command' : '?', 'is_stay' : 1})
+  noremap <silent> <expr>  / incsearch#go({'command' : '/', 'is_stay' : 0})
+  noremap <silent> <expr>  ? incsearch#go({'command' : '?', 'is_stay' : 0})
+  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
 
   if neobundle#tap('vim-anzu')
     map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
@@ -2068,8 +2067,8 @@ endif "}}}
 if neobundle#tap('incsearch-fuzzy.vim')
 
   " 入力中に飛びたくないのでstayのみ使う
-  map g/ <Plug>(incsearch-fuzzy-stay)
-  map z/ <Plug>(incsearch-fuzzyspell-stay)
+  map  z/ <Plug>(incsearch-fuzzy-stay)
+  map gz/ <Plug>(incsearch-fuzzyspell-stay)
 
 endif "}}}
 
