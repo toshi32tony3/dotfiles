@@ -1955,7 +1955,7 @@ if neobundle#tap('vim-textobj-function')
   let g:textobj_function_no_default_key_mappings = 1
 
   if neobundle#tap('vim-operator-search')
-    nmap <Leader>f/ <Plug>(operator-search)<Plug>(textobj-function-i)
+    nmap <Leader>/ <Plug>(operator-search)<Plug>(textobj-function-i)
   endif
 
 endif "}}}
