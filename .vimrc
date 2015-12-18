@@ -484,16 +484,16 @@ set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
 
 " 透明度をスイッチ
-let g:hasTransparency = 0
+let g:transparency_on = 0
 function! s:ToggleTransParency()
-  if g:hasTransparency == 1
+  if g:transparency_on == 1
     set transparency=255
     echo 'set transparency=255'
-    let g:hasTransparency = 0
+    let g:transparency_on = 0
   else
     set transparency=220
     echo 'set transparency=220'
-    let g:hasTransparency = 1
+    let g:transparency_on = 1
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
