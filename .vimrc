@@ -1388,7 +1388,7 @@ let g:loaded_netrwPlugin = 1
 
 "}}}
 
-" Vimでフルスクリーンモード(scrnmode.vim)@Kaoriya版付属プラグイン {{{
+" Vimでフルスクリーンモード(scrnmode.vim) {{{
 if has('kaoriya')
 
   let g:fullscreen_on = 0
@@ -1407,7 +1407,7 @@ if has('kaoriya')
 
 endif "}}}
 
-" Vimで辞書を引く(dicwin-vim)@Kaoriya版付属プラグイン {{{
+" Vimで辞書を引く(dicwin-vim) {{{
 if neobundle#tap('dicwin-vim')
 
   let g:dicwin_no_default_mappings = 1
