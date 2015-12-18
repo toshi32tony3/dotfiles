@@ -1642,14 +1642,18 @@ if neobundle#tap('vimfiler.vim')
     nnoremap <buffer> #  <Nop>
     nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
+    " vimfilerとuniteで<Tab>の挙動を統一したい
+    nmap <buffer> <Tab>   <Plug>(vimfiler_choose_action)
+    nmap <buffer> <S-Tab> <Plug>(vimfiler_switch_to_another_vimfiler)
+
     if neobundle#tap('unite.vim')
       " Unite vimgrepを使う
       nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
-
-      " Disable yankround.vim
-      nnoremap <buffer> <C-n> <Nop>
-      nnoremap <buffer> <C-p> <Nop>
     endif
+
+    " Disable yankround.vim
+    nnoremap <buffer> <C-n> <Nop>
+    nnoremap <buffer> <C-p> <Nop>
 
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
