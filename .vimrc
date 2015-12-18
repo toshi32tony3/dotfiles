@@ -1779,7 +1779,7 @@ if neobundle#tap('vim-fontzoom')
 
 endif "}}}
 
-" vim力を測る(vim-scouter) {{{
+" Vim力を測る(vim-scouter) {{{
 if neobundle#tap('vim-scouter')
 
   nnoremap <leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
@@ -2495,7 +2495,7 @@ if neobundle#tap('vim-signature')
 
 endif "}}}
 
-" vimにスタート画面を用意(vim-startify) {{{
+" Vimにスタート画面を用意(vim-startify) {{{
 if neobundle#tap('vim-startify')
 
   let g:startify_files_number = 2
@@ -2569,7 +2569,7 @@ if neobundle#tap('vim-improved-diff')
 
 endif "}}}
 
-" vimでskkする(eskk.vim) {{{
+" Vimでskkする(eskk.vim) {{{
 if neobundle#tap('eskk.vim')
 
   if has('kaoriya')
