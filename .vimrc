@@ -158,10 +158,6 @@ NeoBundleLazy 'cohama/agit.vim',
 " fugitive同様, Lazyできない
 NeoBundle 'idanarye/vim-merginal'
 
-" 本家
-" NeoBundle 'tyru/current-func-info.vim'
-" NeoBundle 'toshi32tony3/current-func-info.vim'
-
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
@@ -1351,6 +1347,37 @@ autocmd MyAutoCmd User LineChanged
 autocmd MyAutoCmd BufEnter *
       \   try | let g:currentFunc = s:GetFuncNameC() | endtry
 
+function! s:ClipCurrentTag(funcName) "{{{
+  if strlen(a:funcName) == 0
+    echo 'There is no function nearby cursor.'
+    return
+  endif
+
+  " 選択範囲レジスタ(*)を使う
+  let @* = a:funcName
+  echo 'clipped: ' . a:funcName
+
+endfunction "}}}
+command! -nargs=0 ClipCurrentTag
+      \ let g:currentFunc = s:GetFuncNameC() |
+      \ call s:ClipCurrentTag(g:currentFunc)
+
+function! s:PrintCurrentTag(funcName) "{{{
+  if strlen(a:funcName) == 0
+    echo 'There is no function nearby cursor.'
+    return
+  endif
+
+  " 無名レジスタ(")を使う
+  let @" = a:funcName
+  normal! ""P
+  echo 'print current tag: ' . a:funcName
+
+endfunction "}}}
+command! -nargs=0 PrintCurrentTag
+      \ let g:currentFunc = s:GetFuncNameC() |
+      \ call s:PrintCurrentTag(g:currentFunc)
+
 "}}}
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
@@ -2246,57 +2273,6 @@ endif "}}}
 
 " VimからGitを使う(ブランチ管理、vim-merginal) {{{
 if neobundle#tap('vim-merginal')
-
-endif "}}}
-
-" カーソル位置の関数を取得(current-func-info.vim) {{{
-let g:currentFunc = ''
-if neobundle#tap('current-func-info.vim')
-
-  " 処理負荷が気になるのでUser LineChanged, BufEnterでcurrentFuncを更新
-  autocmd MyAutoCmd User LineChanged
-        \   if &ft == 'c'
-        \ | try | let g:currentFunc = cfi#get_func_name() | endtry
-        \ | endif
-  autocmd MyAutoCmd BufEnter *
-        \   try | let g:currentFunc = cfi#get_func_name() | endtry
-
-  function! s:ClipCurrentTag(funcName)
-    if strlen(a:funcName) == 0
-      echo 'There is no function nearby cursor.'
-      return
-    endif
-
-    " 選択範囲レジスタ(*)を使う
-    let @* = a:funcName
-    echo 'clipped: ' . a:funcName
-
-    " ついでにcurrentFuncを更新
-    if &ft == 'c'
-      try | let g:currentFunc = cfi#get_func_name() | endtry
-    endif
-  endfunction
-  command! -nargs=0 ClipCurrentTag
-        \ call s:ClipCurrentTag(cfi#get_func_name())
-
-  function! s:PrintCurrentTag(funcName)
-    if strlen(a:funcName) == 0
-      echo 'There is no function nearby cursor.'
-      return
-    endif
-
-    " 無名レジスタ(")を使う
-    let @" = a:funcName
-    normal! ""P
-    echo 'print current tag: ' . a:funcName
-
-    " ついでにcurrentFuncを更新
-    if &ft == 'c'
-      try | let g:currentFunc = cfi#get_func_name() | endtry
-    endif
-  endfunction
-  command! -nargs=0 PrintCurrentTag
-        \ call s:PrintCurrentTag(cfi#get_func_name())
 
 endif "}}}
 
