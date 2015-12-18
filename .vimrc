@@ -314,16 +314,16 @@ set shortmess=aoOotTWI
 set scrolloff=0
 
 " scrolloffをスイッチ
-let g:scrolloff_on = 0
+let g:scrolloffOn = 0
 function! s:ToggleScrollOffSet()
-  if g:scrolloff_on == 1
+  if g:scrolloffOn == 1
     setlocal scrolloff=0
     echo 'setlocal scrolloff=0'
-    let g:scrolloff_on = 0
+    let g:scrolloffOn = 0
   else
     setlocal scrolloff=100
     echo 'setlocal scrolloff=100'
-    let g:scrolloff_on = 1
+    let g:scrolloffOn = 1
   endif
 endfunction
 command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
@@ -484,16 +484,16 @@ set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
 
 " 透明度をスイッチ
-let g:transparency_on = 0
+let g:transparencyOn = 0
 function! s:ToggleTransParency()
-  if g:transparency_on == 1
+  if g:transparencyOn == 1
     set transparency=255
     echo 'set transparency=255'
-    let g:transparency_on = 0
+    let g:transparencyOn = 0
   else
     set transparency=220
     echo 'set transparency=220'
-    let g:transparency_on = 1
+    let g:transparencyOn = 1
   endif
 endfunction
 command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
@@ -566,11 +566,11 @@ set hlsearch   " 検索マッチテキストをハイライト
 " " http://d.hatena.ne.jp/tyru/20140129/localize_search_options
 " " Localize search options.
 " autocmd MyAutoCmd WinLeave *
-" \     let b:vimrc_pattern = @/
-" \   | let b:vimrc_hlsearch = &hlsearch
+" \     let b:vimrcPattern = @/
+" \   | let b:vimrcHlSearch = &hlsearch
 " autocmd MyAutoCmd WinEnter *
-" \     let @/ = get(b:, 'vimrc_pattern', @/)
-" \   | let &l:hlsearch = get(b:, 'vimrc_hlsearch', &l:hlsearch)
+" \     let @/ = get(b:, 'vimrcPattern', @/)
+" \   | let &l:hlsearch = get(b:, 'vimrcHlSearch', &l:hlsearch)
 
 " " vimgrep/grep後にQuickfixを開く。ただし, 候補が0件の場合, Quickfixを開かない
 " " 逆にわかりにくい気がしたのでコメントアウト
@@ -1110,7 +1110,7 @@ function! s:GetFoldLevel() "{{{
   let l:savedView = winsaveview()
 
   " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
-  let l:belloff_tmp = &l:belloff
+  let l:belloffTmp = &l:belloff
   let &l:belloff = 'error'
 
   " ------------------------------------------------------------
@@ -1137,7 +1137,7 @@ function! s:GetFoldLevel() "{{{
   " 後処理
   " ------------------------------------------------------------
   " 退避していたbelloffを戻す
-  let &l:belloff = l:belloff_tmp
+  let &l:belloff = l:belloffTmp
 
   " Viewを復元
   call winrestview(l:savedView)
@@ -1163,7 +1163,7 @@ function! s:GetCurrentFold() "{{{
   let l:cursorPosition = getcurpos()
 
   " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
-  let l:belloff_tmp = &l:belloff
+  let l:belloffTmp = &l:belloff
   let &l:belloff = 'error'
 
   " 走査回数の設定
@@ -1207,7 +1207,7 @@ function! s:GetCurrentFold() "{{{
   " 後処理
   " ------------------------------------------------------------
   " 退避していたbelloffを戻す
-  let &l:belloff = l:belloff_tmp
+  let &l:belloff = l:belloffTmp
 
   " Viewを復元
   call winrestview(l:savedView)
@@ -1390,14 +1390,14 @@ let g:loaded_netrwPlugin = 1
 " Vimでフルスクリーンモード(scrnmode.vim) {{{
 if has('kaoriya')
 
-  let g:fullscreen_on = 0
+  let g:fullscreenOn = 0
   function! s:ToggleScreenMode()
-    if g:fullscreen_on
+    if g:fullscreenOn
       execute 'ScreenMode 0'
-      let g:fullscreen_on = 0
+      let g:fullscreenOn = 0
     else
       execute 'ScreenMode 6'
-      let g:fullscreen_on = 1
+      let g:fullscreenOn = 1
     endif
   endfunction
   command! -nargs=0 ToggleScreenMode call s:ToggleScreenMode()
