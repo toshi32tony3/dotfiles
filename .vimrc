@@ -75,10 +75,9 @@ NeoBundleLazy 'thinca/vim-scouter',
 NeoBundleLazy 'thinca/vim-qfreplace',
       \ { 'autoload' : { 'commands' : ['Qfreplace'] } }
 
-" そこまで強調しなくても良い気がしてきた
-" NeoBundle 'pocke/vim-hier'
-
 NeoBundle 'osyo-manga/vim-brightest'
+
+" NeoBundle 'pocke/vim-hier'
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
 " NeoBundle 'scrooloose/syntastic'
@@ -1792,17 +1791,17 @@ if neobundle#tap('vim-qfreplace')
 
 endif "}}}
 
-" Quickfixに表示されている行を強調表示(vim-hier) {{{
-if neobundle#tap('vim-hier')
-
-endif "}}}
-
 " <cword>を強調(vim-brightest) {{{
 if neobundle#tap('vim-brightest')
   " <cword>を含め, <cword>と同じ単語をアンダーラインで強調
   let g:brightest#highlight = {
         \   'group' : 'BrightestUnderline'
         \ }
+
+endif "}}}
+
+" Quickfixに表示されている行を強調表示(vim-hier) {{{
+if neobundle#tap('vim-hier')
 
 endif "}}}
 
