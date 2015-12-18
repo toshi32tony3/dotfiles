@@ -212,9 +212,6 @@ NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim',
       \ { 'autoload' : { 'mappings' : ['<Plug>(eskk'] } }
 
-NeoBundleLazy 'tyru/restart.vim',
-      \ { 'autoload' : { 'commands' : ['Restart', 'RestartWithSession'] } }
-
 NeoBundleLazy 'thinca/vim-prettyprint',
       \ { 'autoload' : { 'commands' : ['PP'] } }
 
@@ -2738,16 +2735,6 @@ if neobundle#tap('eskk.vim')
     endfunction
     autocmd MyAutoCmd FileType skkdict call s:SKKDictionarySettings()
   endif
-
-endif "}}}
-
-" 元の状態を復元してVimを再起動(restart.vim) {{{
-if neobundle#tap('restart.vim')
-
-  command! -nargs=0 -bar RestartWithSession
-        \   let g:restart_sessionoptions =
-        \   'blank,curdir,folds,help,localoptions,tabpages'
-        \ | Restart
 
 endif "}}}
 
