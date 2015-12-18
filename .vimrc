@@ -1338,9 +1338,8 @@ function! s:GetFuncNameC() "{{{
 endfunction " }}}
 command! -nargs=0 GetFuncNameC let g:currentFunc = s:GetFuncNameC()
 autocmd MyAutoCmd User LineChanged
-      \ if &ft == 'c' | let g:currentFunc = s:GetFuncNameC() | endif
-autocmd MyAutoCmd BufEnter *
-      \                 let g:currentFunc = s:GetFuncNameC()
+      \      if &ft == 'c' | let g:currentFunc = s:GetFuncNameC() | endif
+autocmd MyAutoCmd BufEnter * let g:currentFunc = s:GetFuncNameC()
 
 function! s:ClipCurrentTag(funcName) "{{{
   if strlen(a:funcName) == 0
@@ -1853,7 +1852,7 @@ if neobundle#tap('vim-watchdogs')
         \   'ruby' : 1,
         \ }
 
-  if neobundle#tap('watchdogs.vim')
+  if neobundle#tap('vim-quickrun')
     " quickrun_configにwatchdogs.vimの設定を追加
     call watchdogs#setup(g:quickrun_config)
 
