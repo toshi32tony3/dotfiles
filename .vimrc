@@ -1290,8 +1290,8 @@ command! -nargs=0 MyCounter call s:MyCounter()
 let g:throttleTimeSpan = 100
 function! s:OnCursorMove() "{{{
   " run on normal/visual mode only
-  let l:m = mode()
-  if m != 'n' && m != 'v'
+  let l:currentMode = mode()
+  if l:currentMode != 'n' && l:currentMode != 'v'
     let b:isLineChanged = 0
     let b:isCursorMoved = 0
     return
