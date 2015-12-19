@@ -108,7 +108,7 @@ NeoBundleLazy 'deris/vim-visualinc',
       \ { 'autoload' : { 'mappings' : ['<Plug>(visualinc-'] } }
 
 NeoBundleLazy 'deris/vim-rengbang',
-      \ { 'autoload' : { 'mappings' : ['<Plug>(operator-rengbang)'] } }
+      \ { 'autoload' : { 'commands' : ['RengBang', 'RengBangConfirm'] } }
 
 NeoBundle 'tpope/vim-surround'
 
