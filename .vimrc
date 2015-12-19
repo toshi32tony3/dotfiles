@@ -2262,8 +2262,8 @@ if neobundle#tap('incsearch.vim')
   " very magic
   let g:incsearch#magic = '\v'
 
-  " 検索後, カーソル移動すると自動でnohlsearchする
-  " -> 自動でnohlsearchするべきか非常に悩ましい
+  " " 検索後, カーソル移動すると自動でnohlsearchする
+  " " -> 自動でnohlsearchするべきか非常に悩ましい
   " let g:incsearch#auto_nohlsearch = 1
 
   if has('kaoriya') && has('migemo')
@@ -2295,44 +2295,128 @@ if neobundle#tap('incsearch.vim')
   " g:incsearch#magic使用時の検索履歴問題の暫定対処
   " https://github.com/haya14busa/incsearch.vim/issues/22
   " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
+  " NOTE: star検索の対象になりそうなものをカバーしたつもりだが, 多分完全ではない
   function! s:ExplicitMagic() abort
     if g:incsearch#magic != '\v'
       return ''
     endif
 
-    let l:lastHistory = join(split(histget('/', -1), '\'), '')
+    let l:currentMode = mode()
+    if l:currentMode != 'n' && l:currentMode != 'no'
+      return ''
+    endif
+
+    let l:lastHistory = histget('/', -1)
+    if match(l:lastHistory, '^\\<.*\\>$') >= 0
+      let l:lastHistory = l:lastHistory[2 : (len(l:lastHistory) - 3)]
+      let l:lastHistory = '<' . l:lastHistory . '>'
+    endif
+
+    if match(l:lastHistory, '(') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '(', '\\(', 'g')
+    endif
+
+    if match(l:lastHistory, ')') >= 0
+      let l:lastHistory = substitute(l:lastHistory, ')', '\\)', 'g')
+    endif
+
+    if match(l:lastHistory, '|') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '|', '\\|', 'g')
+    endif
+
+    if match(l:lastHistory, '{') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '{', '\\{', 'g')
+    endif
+
+    if match(l:lastHistory, '}') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '}', '\\}', 'g')
+    endif
+
+    if match(l:lastHistory, '+') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '+', '\\+', 'g')
+    endif
+
+    if match(l:lastHistory, '=') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '=', '\\=', 'g')
+    endif
+
+    if match(l:lastHistory, '@') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '@', '\\@', 'g')
+    endif
+
+    if match(l:lastHistory, '?') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '?', '\\?', 'g')
+    endif
+
+    if match(l:lastHistory, '&') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '&', '\\&', 'g')
+    endif
+
+    if match(l:lastHistory, '%') >= 0
+      let l:lastHistory = substitute(l:lastHistory, '%', '\\%', 'g')
+    endif
+
+    if l:lastHistory == '<'
+      let l:lastHistory = substitute(l:lastHistory, '<', '\\<', 'g')
+    endif
+
+    if l:lastHistory == '<='
+      let l:lastHistory = substitute(l:lastHistory, '<=', '\\<\\=', 'g')
+    endif
+
+    if l:lastHistory == '<?'
+      let l:lastHistory = substitute(l:lastHistory, '<?', '\\<\\?', 'g')
+    endif
+
+    if l:lastHistory == '>'
+      let l:lastHistory = substitute(l:lastHistory, '>', '\\>', 'g')
+    endif
+
+    if l:lastHistory == '>='
+      let l:lastHistory = substitute(l:lastHistory, '>=', '\\>\\=', 'g')
+    endif
+
+    if l:lastHistory == '>?'
+      let l:lastHistory = substitute(l:lastHistory, '>?', '\\>\\?', 'g')
+    endif
+
+    if l:lastHistory == '<>'
+      let l:lastHistory = substitute(l:lastHistory, '<>', '\\<\\>', 'g')
+    endif
+
     call histdel('/', -1)
     call histadd('/', l:lastHistory)
 
     return ''
   endfunction
   noremap <expr> <Plug>(_ExplicitMagic) <SID>ExplicitMagic()
+  command -nargs=0 ExplicitMagic call s:ExplicitMagic()
 
   " アスタリスク検索の対象をクリップボードにコピー
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
 
-    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
+    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
   elseif neobundle#tap('vim-asterisk')
     nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
     omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
 
-    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)
+    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
   else
     nmap *          yiw<Plug>(incsearch-nohl-*)<Plug>(_ExplicitMagic)
     omap *     <Esc>yiw<Plug>(incsearch-nohl-*)<Plug>(_ExplicitMagic)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)<Plug>(_ExplicitMagic)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
 
-    nmap g*         yiw<Plug>(incsearch-nohl-g*)<Plug>(_ExplicitMagic)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)<Plug>(_ExplicitMagic)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)<Plug>(_ExplicitMagic)
+    nmap g*         yiw<Plug>(incsearch-nohl-g*)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
   endif
 
 endif "}}}
