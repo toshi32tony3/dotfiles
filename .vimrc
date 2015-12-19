@@ -69,7 +69,7 @@ NeoBundleLazy 'thinca/vim-quickrun',
 NeoBundleLazy 'thinca/vim-ambicmd'
 NeoBundleLazy 'thinca/vim-fontzoom',
       \ { 'autoload' : { 'mappings' : ['<Plug>(fontzoom-'],
-      \                  'commands' : ['Fontzoom', 'Fontzoom!'] } }
+      \                  'commands' : ['Fontzoom'] } }
 NeoBundleLazy 'thinca/vim-scouter',
       \ { 'autoload' : { 'commands' : ['Scouter'] } }
 NeoBundleLazy 'thinca/vim-qfreplace',
