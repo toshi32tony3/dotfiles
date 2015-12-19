@@ -1584,10 +1584,10 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>jn ':<C-u>Unite junkfile/new'     . g:u_opt_jn . '<CR>'
   nnoremap <expr> <Leader>jj ':<C-u>Unite junkfile'         . g:u_opt_jj . '<CR>'
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
+  nnoremap <expr> <Leader>mf ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memofiles/*'
         \                                                   . g:u_opt_mg . '<CR>'
   nnoremap <expr> <Leader>mk ':<C-u>Unite mark'             . g:u_opt_mk . '<CR>'
-  nnoremap <expr> <Leader>ml ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
   nnoremap <expr> <Leader>nl ':<C-u>Unite neobundle/lazy'   . g:u_opt_nl . '<CR>'
   nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu
@@ -1877,6 +1877,7 @@ if neobundle#tap('memolist.vim')
     let g:memolist_template_dir_path = '~/configs/template'
   endif
 
+  nnoremap <Leader>ml :<C-u>MemoList<CR>
   nnoremap <Leader>mn :<C-u>MemoNew<CR>
 
 endif "}}}
