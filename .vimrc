@@ -698,11 +698,15 @@ nnoremap <C-g> 1<C-g>
 
 " j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
+xnoremap j gj
 nnoremap k gk
+xnoremap k gk
 
 " gj/gkで次の差分hunkへ移動
 nnoremap gj ]c
+xnoremap gj ]c
 nnoremap gk [c
+xnoremap gk [c
 
 " <Esc>でヘルプを閉じる
 function! s:HelpSettings()
