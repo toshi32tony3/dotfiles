@@ -1997,12 +1997,12 @@ if neobundle#tap('vim-quickrun')
 
   " " clangを使う時の設定はこんな感じ？
   " \   'cpp' : {
-  " \     'type' : 'cpp/clang3_4'
+  " \     'type' : 'cpp/clang3_4',
   " \   },
   " \   'cpp/clang3_4' : {
   " \       'command' : 'clang++',
   " \       'exec'    : '%c %o %s -o %s:p:r',
-  " \       'cmdopt'  : '-std=gnu++0x'
+  " \       'cmdopt'  : '-std=gnu++0x',
   " \   },
 
   " デフォルトの<Leader>rだと入力待ちになるので, 別のキーでマッピングする
