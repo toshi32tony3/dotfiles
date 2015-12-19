@@ -228,11 +228,6 @@ NeoBundle 'thinca/vim-template'
 NeoBundleLazy 'vim-jp/vimdoc-ja'
 set helplang=ja
 
-if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
-  NeoBundleLazy 'severin-lemaignan/vim-minimap',
-        \ { 'autoload' : { 'commands' : ['Minimap'] } }
-endif
-
 call neobundle#end()
 
 " ファイルタイプの自動検出をONにする
@@ -2712,17 +2707,6 @@ if neobundle#tap('vim-template')
     %s/{{_date_}}/\=strftime('%Y-%m-%d %H:%M')/g
   endfunction
 
-endif "}}}
-
-" Vimでミニマップ(vim-minimap) {{{
-if has('python') && filereadable(expand($VIM . '/_curses.pyd'))
-  if neobundle#tap('vim-minimap')
-    map <Leader>mm :<C-u>Minimap<CR>
-
-    function! neobundle#hooks.on_post_source(bundle)
-      set virtualedit=onemore
-    endfunction
-  endif
 endif "}}}
 
 "}}}
