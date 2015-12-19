@@ -2857,13 +2857,14 @@ if neobundle#tap('vim-signature')
   " これだけあれば十分
   " mm       : ToggleMarkAtLine
   " m<Space> : PurgeMarks
-  nmap mm m.
-  nnoremap <silent> m? :<C-u>SignatureListMarks<CR>
+  nmap     mm m.
+  nnoremap m? <Nop>
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
     delcommand SignatureToggleSigns
     delcommand SignatureRefresh
+    delcommand SignatureListMarks
     delcommand SignatureListMarkers
 
   endfunction
