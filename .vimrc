@@ -2292,35 +2292,49 @@ if neobundle#tap('incsearch.vim')
 
   endif
 
+  " g:incsearch#magic使用時の検索履歴問題の暫定対処
+  " https://github.com/haya14busa/incsearch.vim/issues/22
+  " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
+  function! s:ExplicitMagic() abort
+    if g:incsearch#magic != '\v'
+      return ''
+    endif
+
+    let l:lastHistory = join(split(histget('/', -1), '\'), '')
+    call histdel('/', -1)
+    call histadd('/', l:lastHistory)
+
+    return ''
+  endfunction
+  noremap <expr> <Plug>(_ExplicitMagic) <SID>ExplicitMagic()
+
   " アスタリスク検索の対象をクリップボードにコピー
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
-    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
+    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
 
-    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-
+    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
   elseif neobundle#tap('vim-asterisk')
-    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
+    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
+    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
 
-    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-
+    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(_ExplicitMagic)
   else
-    nmap *          yiw<Plug>(incsearch-nohl-*)
-    omap *     <Esc>yiw<Plug>(incsearch-nohl-*)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
+    nmap *          yiw<Plug>(incsearch-nohl-*)<Plug>(_ExplicitMagic)
+    omap *     <Esc>yiw<Plug>(incsearch-nohl-*)<Plug>(_ExplicitMagic)
+    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)<Plug>(_ExplicitMagic)
 
-    nmap g*         yiw<Plug>(incsearch-nohl-g*)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
-
+    nmap g*         yiw<Plug>(incsearch-nohl-g*)<Plug>(_ExplicitMagic)
+    omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)<Plug>(_ExplicitMagic)
+    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)<Plug>(_ExplicitMagic)
   endif
+
 endif "}}}
 
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
