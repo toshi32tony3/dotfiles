@@ -827,7 +827,7 @@ set hlsearch   " 検索マッチテキストをハイライト
 " \   | let &l:hlsearch = get(b:, 'vimrcHlSearch', &l:hlsearch)
 
 " " vimgrep/grep後にQuickfixを開く。ただし, 候補が0件の場合, Quickfixを開かない
-" " 逆にわかりにくい気がしたのでコメントアウト
+" " -> 逆にわかりにくい気がしたのでコメントアウト
 " autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
 
 "}}}
