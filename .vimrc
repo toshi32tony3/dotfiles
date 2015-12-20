@@ -2394,8 +2394,8 @@ if neobundle#tap('incsearch.vim')
 
   " アスタリスク検索の対象をクリップボードにコピー
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
-    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
-    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)<Plug>(anzu-update-search-status-with-echo)
+    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
+    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
     xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
 
     nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
