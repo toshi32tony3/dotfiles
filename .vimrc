@@ -536,7 +536,7 @@ set nowritebackup
 " yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
 " no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
 " auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
-set backupcopy=auto
+set backupcopy=yes
 
 " Vim生成物の生成先ディレクトリ指定
 set dir=~/vimfiles/swap
