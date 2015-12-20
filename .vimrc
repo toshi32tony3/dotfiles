@@ -573,13 +573,12 @@ let g:scrolloffOn = 0
 function! s:ToggleScrollOffSet()
   if g:scrolloffOn == 1
     setlocal scrolloff=0
-    echo 'setlocal scrolloff=0'
     let g:scrolloffOn = 0
   else
     setlocal scrolloff=100
-    echo 'setlocal scrolloff=100'
     let g:scrolloffOn = 1
   endif
+  echo 'setlocal scrolloff=' . &scrolloff
 endfunction
 command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
 nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
