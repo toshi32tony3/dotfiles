@@ -2223,8 +2223,8 @@ endif "}}}
 " 連続で打鍵した時, 指定した候補をループさせる(vim-smartchr) {{{
 if neobundle#tap('vim-smartchr')
 
-  " 「->」は入力しづらいので, ..で置換え
-  inoremap <expr> . smartchr#one_of('.', '->', '..')
+  " " 「->」は入力しづらいので, ..で置換え
+  " inoremap <expr> . smartchr#one_of('.', '->', '..')
 
   " ruby / eruby の時だけ設定
   autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
