@@ -791,13 +791,13 @@ if filereadable(g:saveWinposFile)
   autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
   function! s:SaveWindow()
     let s:options = [
-          \ 'set columns=' . &columns,
-          \ 'set lines='   . &lines,
-          \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
+          \   'set columns=' . &columns,
+          \   'set lines='   . &lines,
+          \   'winpos ' . getwinposx() . ' ' . getwinposy(),
           \ ]
     call writefile(s:options, g:saveWinposFile)
   endfunction
-  execute 'source' g:saveWinposFile
+  execute 'source ' g:saveWinposFile
 endif
 
 "}}}
