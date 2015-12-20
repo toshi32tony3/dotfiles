@@ -783,7 +783,7 @@ endif
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " 折りたたみ機能をON/OFF
-nnoremap <silent> <F9> :set foldenable!<CR>:set foldenable?<CR>
+nnoremap <silent> <F9> :<C-u>set foldenable!<CR>:set foldenable?<CR>
 
 " Hack #120: gVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
