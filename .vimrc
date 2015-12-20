@@ -809,8 +809,7 @@ endif
 " -> incsearch.vimでvery magic指定して上書き
 nnoremap / /\v
 
-" 大文字小文字を区別しない。区別したい時は検索パターンのどこかに\Cを付ける
-set ignorecase " 検索時に大文字小文字を区別しない
+set ignorecase " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
 set smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
 set wrapscan   " 検索時に最後まで行ったら最初に戻る
 set incsearch  " インクリメンタルサーチ
