@@ -1,26 +1,132 @@
-" vimrc for 香り屋版GVim
-" TODO: 使わないコマンドを洗い出して:delcommandをぶちかます
-" TODO: vim-watchdogsを使えるように設定する
+" vimrc for GVim by Kaoriya
+set encoding=utf-8
+scriptencoding utf-8
 
 "-----------------------------------------------------------------------------
-" 初期設定 {{{
+" 基本設定 {{{
 
-" 実は必要のないset nocompatible
-" http://rbtnn.hateblo.jp/entry/2014/11/30/174749
-if &compatible
-  " Vi互換モードをオフ(Vimの拡張機能を有効化)
-  set nocompatible
+" 左手で<Leader>を入力したい
+let g:mapleader = '#'
+
+" #検索が誤って発動しないようにする
+nnoremap #  <Nop>
+
+" ##で入力待ちを解除する
+nnoremap ## <Nop>
+
+" vimrc内全体で使うaugroupを定義
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
+" Echo startuptime on starting Vim
+if has('vim_starting') && has('reltime')
+  let g:startuptime = reltime()
+  autocmd MyAutoCmd VimEnter *
+        \   let g:startuptime = reltime(g:startuptime)
+        \ | redraw
+        \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
 endif
 
-" ftpluginは最後に読み込むため, 一旦オフする
-filetype plugin indent off
+" " ファイル書き込み時の文字コード。空の場合, encodingの値が使用される
+" " -> vimrcで設定するものではないが, 説明を残したいのでコメントアウト
+" set fileencoding=
+
+" ファイル読み込み時の変換候補
+" -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
+"    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
+" -> とりあえず香り屋版GVimのguessを使おう
+if has('kaoriya')
+  set fileencodings=guess
+else
+  set fileencodings=utf-8,cp932,euc-jp
+endif
+
+" 文字コードを指定してファイルを開き直す
+nnoremap <Leader>enc :<C-u>e ++encoding=
+
+" 改行コードを指定してファイルを開き直す
+nnoremap <Leader>ff  :<C-u>e ++fileformat=
+
+" バックアップ, スワップファイルの設定
+" -> ネットワーク上ファイルの編集時に重くなる？ので作らない
+" -> 生成先をローカルに指定していたからかも。要検証
+set noswapfile
+set nobackup
+set nowritebackup
+
+" ファイルの書き込みをしてバックアップが作られるときの設定
+" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
+" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
+" auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
+set backupcopy=yes
+
+" Vim生成物の生成先ディレクトリ指定
+set dir=~/vimfiles/swap
+set backupdir=~/vimfiles/backup
+
+if has('persistent_undo')
+  set undodir=~/vimfiles/undo
+  set undofile
+endif
+
+set viewdir=~/vimfiles/view
+
+" Windowsは_viminfo, 他は.viminfoとする
+if has('win32') || has('win64')
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
+else
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
+endif
+
+" 50あれば十分すぎる
+set history=50
+
+" 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
+set autoread
+
+" メッセージ省略設定
+set shortmess=aoOotTWI
+
+" カーソル上下に表示する最小の行数
+" -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
+set scrolloff=0
+let g:scrolloffOn = 0
+function! s:ToggleScrollOffSet()
+  if g:scrolloffOn == 1
+    setlocal scrolloff=0
+    let g:scrolloffOn = 0
+  else
+    setlocal scrolloff=100
+    let g:scrolloffOn = 1
+  endif
+  echo 'setlocal scrolloff=' . &scrolloff
+endfunction
+command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
+nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
+
+" vimdiffは基本縦分割とする
+set diffopt+=vertical
+
+" makeしたらcopen
+autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 "}}}
 "-----------------------------------------------------------------------------
 " Plugin List {{{
 
-" Neo Bundleでプラグインを管理する
+" ftpluginは最後に読み込むため, 一旦オフする
+filetype plugin indent off
+
+" 実は必要のないset nocompatible
+" http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if has('vim_starting')
+  if &compatible
+    " Vi互換モードをオフ(Vimの拡張機能を有効化)
+    set nocompatible
+  endif
+
+  " Neo Bundleでプラグインを管理する
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
@@ -499,181 +605,12 @@ syntax enable
 " vimrcに書いてあるプラグインがインストールされているかチェックする
 NeoBundleCheck
 
-"}}}
-"-----------------------------------------------------------------------------
-" 基本設定 {{{
-
-" 左手で<Leader>を入力したい
-let g:mapleader = '#'
-
-" #検索が誤って発動しないようにする
-nnoremap #  <Nop>
-
-" ##で入力待ちを解除する
-nnoremap ## <Nop>
-
-" vimrc内全体で使うaugroupを定義
-augroup MyAutoCmd
-  autocmd!
-augroup END
-
-" Echo startuptime on starting Vim
-if has('vim_starting') && has('reltime')
-  let g:startuptime = reltime()
-  autocmd MyAutoCmd VimEnter *
-        \   let g:startuptime = reltime(g:startuptime)
-        \ | redraw
-        \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
-endif
-
-" ネットワーク上ファイルのバックアップ, スワップを作ると重くなるので, 作らない
-" -> バックアップ, スワップの生成先をローカルに指定していたからかも？要検証
-set noswapfile
-set nobackup
-set nowritebackup
-
-" ファイルの書き込みをしてバックアップが作られるときの設定
-" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
-" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
-" auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
-set backupcopy=yes
-
-" Vim生成物の生成先ディレクトリ指定
-set dir=~/vimfiles/swap
-set backupdir=~/vimfiles/backup
-
-if has('persistent_undo')
-  set undodir=~/vimfiles/undo
-  set undofile
-endif
-
-set viewdir=~/vimfiles/view
-
-" Windowsは_viminfo, 他は.viminfoとする
-if has('win32') || has('win64')
-  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
-else
-  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
-endif
-
-" 50あれば十分すぎる
-set history=50
-
-" 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
-set autoread
-
-" メッセージ省略設定
-set shortmess=aoOotTWI
-
-" カーソル上下に表示する最小の行数(大きい値にして必ず再描画させる)
-set scrolloff=0
-
-" scrolloffをスイッチ
-let g:scrolloffOn = 0
-function! s:ToggleScrollOffSet()
-  if g:scrolloffOn == 1
-    setlocal scrolloff=0
-    let g:scrolloffOn = 0
-  else
-    setlocal scrolloff=100
-    let g:scrolloffOn = 1
-  endif
-  echo 'setlocal scrolloff=' . &scrolloff
-endfunction
-command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
-nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
-
-" VimDiffは基本縦分割とする
-set diffopt+=vertical
-
-" makeしたらcopen
-autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
-
 " Load local settings
 if filereadable(expand('~/localfiles/local.rc.vim'))
   source ~/localfiles/local.rc.vim
 elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
   source ~/localfiles/template/local.rc.vim
 endif
-
-"}}}
-"-----------------------------------------------------------------------------
-" 入力 {{{
-
-set wildmenu
-set wildmode=full
-
-" <C-p>や<C-n>でもコマンド履歴のフィルタリングを有効にする
-cnoremap <C-p> <Up>
-cnoremap <C-n> <Down>
-
-" タイムスタンプの挿入
-function! s:PutTimeStamp()
-  let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""P
-endfunction
-command! -nargs=0 PutTimeStamp call s:PutTimeStamp()
-
-" 区切り線＋タイムスタンプの挿入
-function! s:PutMemoFormat()
-  let @" = '='
-  normal! 080""Po
-  let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""P
-  let @" = '{'
-  normal! $l3""p
-  let @" = '}'
-  normal! o
-  normal! 03""P
-  normal! ko
-endfunction
-command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
-
-" 全角数字を半角数字に変更(eskk.vimを使っている時は意味がない設定)
-inoremap ０ 0
-inoremap １ 1
-inoremap ２ 2
-inoremap ３ 3
-inoremap ４ 4
-inoremap ５ 5
-inoremap ６ 6
-inoremap ７ 7
-inoremap ８ 8
-inoremap ９ 9
-
-" 全角記号を半角記号に変更(eskk.vimを使っている時は意味がない設定)
-inoremap ＃ #
-inoremap ＄ $
-inoremap ％ %
-inoremap ． .
-inoremap ， ,
-inoremap ￥ \
-inoremap （ (
-inoremap ） )
-
-" 汎用補完設定
-" Default: complete=.,w,b,u,t,i
-" . :      current buffer
-" w :              buffers in other windows
-" b : other loaded buffers in the buffer list
-" u :     unloaded buffers in the buffer list
-" U :              buffers that are not in the buffer list
-" t : tag completion
-"     -> タグファイルが大きいと時間がかかるので, 汎用補完からtを外す
-" i : current and included files
-"     -> インクルードファイルが多いと時間がかかるので, 汎用補完からiを外す
-" d : current and included files for defined name or macro
-set complete=.,w,b,u,U
-
-set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
-set pumheight=10        " 補完候補は一度に10個まで表示
-
-" チルダをoperatorのように使う
-set tildeop
-
-" 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
-nnoremap & <silent> :<C-u>&&<CR>
-xnoremap & <silent> :<C-u>&&<CR>
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -802,7 +739,7 @@ endif
 
 "}}}
 "-----------------------------------------------------------------------------
-" 文字列検索 {{{
+" 検索 {{{
 
 " very magic
 " -> incsearch.vimでvery magic指定して上書き
@@ -833,31 +770,6 @@ set hlsearch   " 検索マッチテキストをハイライト
 "-----------------------------------------------------------------------------
 " 編集 {{{
 
-if has('vim_starting')
-  " Vim内部で使う文字コード
-  set encoding=utf-8
-
-  " ファイル書き込み時の文字コード
-  " -> 空の場合, encodingで指定した文字コードが使用される
-  set fileencoding=
-
-  " ファイル読み込み時の変換候補
-  " -> 左から順に判定するので, 2byte文字が無いファイルだと最初の候補が選択される？
-  "    utf-8以外を左側に持ってきた時にうまく判定できないことがあった。要検証。
-  " -> よくわかってないけど, 香り屋版GVimのguessを使おう
-  if has('kaoriya')
-    set fileencodings=guess
-  else
-    set fileencodings=utf-8,cp932,euc-jp
-  endif
-endif
-
-" 文字コードを指定してファイルを開き直す
-nnoremap <Leader>enc :<C-u>e ++encoding=
-
-" 改行コードを指定してファイルを開き直す
-nnoremap <Leader>ff  :<C-u>e ++fileformat=
-
 " タブ幅, シフト幅, タブ使用有無の設定
 if has('vim_starting')
   set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
@@ -866,7 +778,6 @@ autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
 
-set infercase                  " 補完時に大文字小文字を区別しない
 set nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
 set virtualedit=all            " テキストが存在しない場所でも動けるようにする
 set hidden                     " quit時はバッファを削除せず, 隠す
@@ -876,6 +787,53 @@ set showmatch                  " 対応する括弧などの入力時にハイ�
 set matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
 set matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
 set backspace=indent,eol,start " <BS>でなんでも消せるようにする
+
+" 汎用補完設定
+" Default: complete=.,w,b,u,t,i
+" . :      current buffer
+" w :              buffers in other windows
+" b : other loaded buffers in the buffer list
+" u :     unloaded buffers in the buffer list
+" U :              buffers that are not in the buffer list
+" t : tag completion
+"     -> タグファイルが大きいと時間がかかるので, 汎用補完からtを外す
+" i : current and included files
+"     -> インクルードファイルが多いと時間がかかるので, 汎用補完からiを外す
+" d : current and included files for defined name or macro
+set complete=.,w,b,u,U
+set infercase           " 補完時に大文字小文字を区別しない
+set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
+set pumheight=10        " 補完候補は一度に10個まで表示
+
+" コマンドライン補完設定
+set wildmenu
+set wildmode=full
+
+" <C-p>や<C-n>でもコマンド履歴のフィルタリングを有効にする
+cnoremap <C-p> <Up>
+cnoremap <C-n> <Down>
+
+" 全角数字を半角数字に変更(eskk.vimを使っている時は意味がない設定)
+inoremap ０ 0
+inoremap １ 1
+inoremap ２ 2
+inoremap ３ 3
+inoremap ４ 4
+inoremap ５ 5
+inoremap ６ 6
+inoremap ７ 7
+inoremap ８ 8
+inoremap ９ 9
+
+" 全角記号を半角記号に変更(eskk.vimを使っている時は意味がない設定)
+inoremap ＃ #
+inoremap ＄ $
+inoremap ％ %
+inoremap ． .
+inoremap ， ,
+inoremap ￥ \
+inoremap （ (
+inoremap ） )
 
 " j : 行連結時にコメントリーダーを削除
 " l : insertモードの自動改行を無効化
@@ -899,10 +857,17 @@ autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
 " Dは実質d$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
 
+" チルダをoperatorのように使う
+set tildeop
+
+" 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
+nnoremap & <silent> :<C-u>&&<CR>
+xnoremap & <silent> :<C-u>&&<CR>
+
 " クリップボードをデフォルトのレジスタとする(GVimではこの設定でOK)
 set clipboard=unnamed
 
-" 指定のデータをレジスタに登録する
+" 現在開いているファイルのパスなどをレジスタやクリップボードへ登録する
 " https://gist.github.com/pinzolo/8168337
 function! s:Clip(data)
   let @* = a:data
@@ -1170,9 +1135,25 @@ endif
 nnoremap q     <Nop>
 nnoremap <S-q> q
 
+" F3 command history
+nnoremap <F3> <Esc>q:
+nnoremap q:   <Nop>
+
+" F4 search history
+nnoremap <F4> <Esc>q/
+nnoremap q/   <Nop>
+nnoremap q?   <Nop>
+
 " 「保存して閉じる」「保存せず閉じる」を無効にする
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
+
+" <C-@>  : 直前に挿入したテキストをもう一度挿入し, ノーマルモードに戻る
+" <C-g>u : アンドゥ単位を区切る
+" -> 割りと暴発する＆あまり用途が見当たらないので, <Esc>に置き替え
+" inoremap <C-@> <C-g>u<C-@>
+inoremap <C-@> <Esc>
+noremap  <C-@> <Esc>
 
 " よくわからないけどGVimが終了されて困るので防ぐ
 nnoremap q<Space>   <Nop>
@@ -1180,6 +1161,12 @@ nnoremap <C-w><C-q> <Nop>
 
 " よくわからないけど矩形Visualモードになるので潰す
 nnoremap <C-q> <Nop>
+
+" 謎のマッピングを使えないようにする
+noremap <S-CR>    <CR>
+noremap <C-CR>    <CR>
+noremap <S-Space> <Space>
+noremap <C-Space> <Space>
 
 " マウス中央ボタンは使わない
 noremap  <MiddleMouse> <Nop>
@@ -1245,28 +1232,6 @@ nnoremap <A-Down>  :<C-u>tabnext<CR>
 nnoremap <A-Up>    :<C-u>tabprevious<CR>
 nnoremap <A-Right> :<C-u>tabnext<CR>
 
-" F3 command history
-nnoremap <F3> <Esc>q:
-nnoremap q:   <Nop>
-
-" F4 search history
-nnoremap <F4> <Esc>q/
-nnoremap q/   <Nop>
-nnoremap q?   <Nop>
-
-" <C-@>  : 直前に挿入したテキストをもう一度挿入し, ノーマルモードに戻る
-" <C-g>u : アンドゥ単位を区切る
-" -> 割りと暴発する&あまり用途が見当たらないので, <Esc>に置き替え
-" inoremap <C-@> <C-g>u<C-@>
-inoremap <C-@> <Esc>
-noremap  <C-@> <Esc>
-
-" 謎のマッピングを使えないようにする
-noremap <S-CR>    <CR>
-noremap <C-CR>    <CR>
-noremap <S-Space> <Space>
-noremap <C-Space> <Space>
-
 "}}}
 "-----------------------------------------------------------------------------
 " Vim scripts {{{
@@ -1282,6 +1247,28 @@ function! s:MyCounter() "{{{
 
 endfunction "}}}
 command! -nargs=0 MyCounter call s:MyCounter()
+
+" タイムスタンプの挿入
+function! s:PutTimeStamp() "{{{
+  let @" = strftime('%Y/%m/%d(%a) %H:%M')
+  normal! ""P
+endfunction "}}}
+command! -nargs=0 PutTimeStamp call s:PutTimeStamp()
+
+" 区切り線＋タイムスタンプの挿入
+function! s:PutMemoFormat() "{{{
+  let @" = '='
+  normal! 080""Po
+  let @" = strftime('%Y/%m/%d(%a) %H:%M')
+  normal! ""P
+  let @" = '{'
+  normal! $l3""p
+  let @" = '}'
+  normal! o
+  normal! 03""P
+  normal! ko
+endfunction "}}}
+command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
