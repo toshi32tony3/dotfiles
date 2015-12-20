@@ -5,7 +5,7 @@
 "-----------------------------------------------------------------------------
 " 初期設定 {{{
 
-" 実は不要なnocompatible
+" 実は必要のないset nocompatible
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if &compatible
   " Vi互換モードをオフ(Vimの拡張機能を有効化)
@@ -517,7 +517,7 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-" Echo startup time on start
+" Echo startuptime on starting Vim
 if has('vim_starting') && has('reltime')
   let g:startuptime = reltime()
   autocmd MyAutoCmd VimEnter *
@@ -527,14 +527,14 @@ if has('vim_starting') && has('reltime')
 endif
 
 " ネットワーク上ファイルのバックアップ, スワップを作ると重くなるので, 作らない
-" -> バックアップ, スワップの生成先をローカルに指定していたからかも？要調査
+" -> バックアップ, スワップの生成先をローカルに指定していたからかも？要検証
 set noswapfile
 set nobackup
 set nowritebackup
 
 " ファイルの書き込みをしてバックアップが作られるときの設定
-" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに上書き
-" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに上書き
+" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
+" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
 " auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
 set backupcopy=auto
 
