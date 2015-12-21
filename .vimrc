@@ -2577,9 +2577,9 @@ if neobundle#tap('lightline.vim')
   " \   'gita-branch'  : 'MyGitaBranch',
 
   function! MyModified()
-    return &ft =~ 'help\|vimfiler\'   ? ''          :
-          \               &modified   ? "\<Space>+" :
-          \               &modifiable ? ''          : "\<Space>-"
+    return &ft =~ 'help\|vimfiler\' ? ''          :
+          \             &modified   ? "\<Space>+" :
+          \             &modifiable ? ''          : "\<Space>-"
   endfunction
 
   function! MyReadonly()
