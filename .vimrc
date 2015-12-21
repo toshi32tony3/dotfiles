@@ -1466,7 +1466,7 @@ function! s:GetCurrentFold() "{{{
 endfunction "}}}
 command! -nargs=0 GetCurrentFold let g:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd User LineChanged
-      \    if &ft == 'vim' | let g:currentFold = s:GetCurrentFold()
+      \    if &ft == 'vim' | let g:currentFold = s:GetCurrentFold() | endif
 autocmd MyAutoCmd BufEnter * let g:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
