@@ -1464,7 +1464,6 @@ function! s:GetCurrentFold() "{{{
 
   return l:foldList[-1]
 endfunction "}}}
-command! -nargs=0 GetCurrentFold let g:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd User LineChanged
       \    if &ft == 'vim' | let g:currentFold = s:GetCurrentFold() | endif
 autocmd MyAutoCmd BufEnter * let g:currentFold = s:GetCurrentFold()
@@ -1540,8 +1539,6 @@ function! s:JumpFuncCBackward() "{{{
   " 現在位置をjumplistに追加
   mark '
 endfunction " }}}
-command! -nargs=0 JumpFuncCForward call s:JumpFuncCForward()
-command! -nargs=0 JumpFuncCBackward call s:JumpFuncCBackward()
 nnoremap <silent> [f :<C-u>JumpFuncCBackward<CR>
 nnoremap <silent> ]f :<C-u>JumpFuncCForward<CR>
 
@@ -1585,7 +1582,6 @@ function! s:GetFuncNameC() "{{{
 
   return l:funcName
 endfunction " }}}
-command! -nargs=0 GetFuncNameC let g:currentFunc = s:GetFuncNameC()
 autocmd MyAutoCmd User LineChanged
       \      if &ft == 'c' | let g:currentFunc = s:GetFuncNameC() | endif
 autocmd MyAutoCmd BufEnter * let g:currentFunc = s:GetFuncNameC()
