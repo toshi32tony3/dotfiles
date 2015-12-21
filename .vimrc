@@ -1544,7 +1544,7 @@ nnoremap <silent> ]f :<C-u>JumpFuncCForward<CR>
 
 " Cの関数名取得
 let g:currentFunc = ''
-function! s:GetFuncNameC() "{{{
+function! s:GetCurrentFuncC() "{{{
   if &ft != 'c'
     return ''
   endif
@@ -1583,10 +1583,10 @@ function! s:GetFuncNameC() "{{{
   return l:funcName
 endfunction " }}}
 autocmd MyAutoCmd User LineChanged
-      \      if &ft == 'c' | let g:currentFunc = s:GetFuncNameC() | endif
-autocmd MyAutoCmd BufEnter * let g:currentFunc = s:GetFuncNameC()
+      \      if &ft == 'c' | let g:currentFunc = s:GetCurrentFuncC() | endif
+autocmd MyAutoCmd BufEnter * let g:currentFunc = s:GetCurrentFuncC()
 
-function! s:ClipCurrentTag(funcName) "{{{
+function! s:ClipCurrentFuncC(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
@@ -1597,11 +1597,11 @@ function! s:ClipCurrentTag(funcName) "{{{
   echo 'clipped: ' . a:funcName
 
 endfunction "}}}
-command! -nargs=0 ClipCurrentTag
-      \ let g:currentFunc = s:GetFuncNameC() |
-      \ call s:ClipCurrentTag(g:currentFunc)
+command! -nargs=0 ClipCurrentFuncC
+      \ let g:currentFunc = s:GetCurrentFuncC() |
+      \ call s:ClipCurrentFuncC(g:currentFunc)
 
-function! s:PrintCurrentTag(funcName) "{{{
+function! s:PrintCurrentFuncC(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
@@ -1613,9 +1613,9 @@ function! s:PrintCurrentTag(funcName) "{{{
   echo 'print current tag: ' . a:funcName
 
 endfunction "}}}
-command! -nargs=0 PrintCurrentTag
-      \ let g:currentFunc = s:GetFuncNameC() |
-      \ call s:PrintCurrentTag(g:currentFunc)
+command! -nargs=0 PrintCurrentFuncC
+      \ let g:currentFunc = s:GetCurrentFuncC() |
+      \ call s:PrintCurrentFuncC(g:currentFunc)
 
 "}}}
 "-----------------------------------------------------------------------------
