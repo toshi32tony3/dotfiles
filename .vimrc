@@ -1539,6 +1539,8 @@ function! s:JumpFuncCBackward() "{{{
   " 現在位置をjumplistに追加
   mark '
 endfunction " }}}
+command! -nargs=0 JumpFuncCForward  call s:JumpFuncCForward()
+command! -nargs=0 JumpFuncCBackward call s:JumpFuncCBackward()
 nnoremap <silent> [f :<C-u>JumpFuncCBackward<CR>
 nnoremap <silent> ]f :<C-u>JumpFuncCForward<CR>
 
