@@ -396,13 +396,13 @@ NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
       \     ],
       \   },
       \ }
-NeoBundleLazy 'haya14busa/incsearch-migemo.vim', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(incsearch-migemo',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'haya14busa/incsearch-migemo.vim', {
+"       \   'autoload' : {
+"       \     'mappings' : [
+"       \       '<Plug>(incsearch-migemo',
+"       \     ],
+"       \   },
+"       \ }
 
 NeoBundleLazy 'osyo-manga/vim-anzu', {
       \   'autoload' : {
