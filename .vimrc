@@ -2841,7 +2841,6 @@ if neobundle#tap('vim-signature')
   " mm       : ToggleMarkAtLine
   " m<Space> : PurgeMarks
   nmap     mm m.
-  nnoremap m? <Nop>
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
