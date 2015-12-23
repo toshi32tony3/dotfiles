@@ -1429,7 +1429,9 @@ function! s:GetCurrentFold() "{{{
     keepjumps normal! [z
     let l:currentLine = getline('.')
     let l:currentLineNumber = line('.')
-    let l:pattern = '\v^(\"\ )'
+
+    " 行頭からのコメントか, 末尾のコメントかで切り出す位置を変える
+    let l:pattern = '\v^("\ )'
     let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
     let l:sufIndex = strlen(l:currentLine)
           \        - ((match(l:currentLine, l:pattern) == -1) ? 6 : 5)
