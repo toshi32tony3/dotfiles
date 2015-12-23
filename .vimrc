@@ -396,13 +396,13 @@ NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
       \     ],
       \   },
       \ }
-NeoBundleLazy 'haya14busa/incsearch-migemo.vim', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(incsearch-migemo',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'haya14busa/incsearch-migemo.vim', {
+"       \   'autoload' : {
+"       \     'mappings' : [
+"       \       '<Plug>(incsearch-migemo',
+"       \     ],
+"       \   },
+"       \ }
 
 NeoBundleLazy 'osyo-manga/vim-anzu', {
       \   'autoload' : {
@@ -1429,7 +1429,9 @@ function! s:GetCurrentFold() "{{{
     keepjumps normal! [z
     let l:currentLine = getline('.')
     let l:currentLineNumber = line('.')
-    let l:pattern = '\v^(\"\ )'
+
+    " 行頭からのコメントか, 末尾のコメントかで切り出す位置を変える
+    let l:pattern = '\v^("\ )'
     let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
     let l:sufIndex = strlen(l:currentLine)
           \        - ((match(l:currentLine, l:pattern) == -1) ? 6 : 5)
@@ -2407,9 +2409,10 @@ endif "}}}
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
 if neobundle#tap('incsearch-fuzzy.vim')
 
-  " 入力中に飛びたくないのでstayのみ使う
-  map  z/ <Plug>(incsearch-fuzzy-stay)
-  map gz/ <Plug>(incsearch-fuzzyspell-stay)
+  map  z/ <Plug>(incsearch-fuzzy-/)
+  map  z? <Plug>(incsearch-fuzzy-?)
+  map gz/ <Plug>(incsearch-fuzzyspell-/)
+  map gz? <Plug>(incsearch-fuzzyspell-?)
 
 endif "}}}
 
@@ -2841,7 +2844,6 @@ if neobundle#tap('vim-signature')
   " mm       : ToggleMarkAtLine
   " m<Space> : PurgeMarks
   nmap     mm m.
-  nnoremap m? <Nop>
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
@@ -3084,4 +3086,8 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
+" TODO List
+
+" # vimrc記述順をもっとスマートにできないか？
+" # vim-shot-fでsmartcaseな対応ができないか？
 
