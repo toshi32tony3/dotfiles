@@ -2409,9 +2409,10 @@ endif "}}}
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
 if neobundle#tap('incsearch-fuzzy.vim')
 
-  " 入力中に飛びたくないのでstayのみ使う
-  map  z/ <Plug>(incsearch-fuzzy-stay)
-  map gz/ <Plug>(incsearch-fuzzyspell-stay)
+  map  z/ <Plug>(incsearch-fuzzy-/)
+  map  z? <Plug>(incsearch-fuzzy-?)
+  map gz/ <Plug>(incsearch-fuzzyspell-/)
+  map gz? <Plug>(incsearch-fuzzyspell-?)
 
 endif "}}}
 
