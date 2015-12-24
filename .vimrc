@@ -527,9 +527,6 @@ endif
 "-----------------------------------------------------------------------------
 " 表示 {{{
 
-" 2行くらいがちょうど良い
-set cmdheight=2
-
 if has('gui_running')
   " Ricty for Powerline
   set guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
@@ -554,6 +551,10 @@ if has('gui_running')
 
 endif
 
+set showcmd          " 入力中のキーを画面右下に表示
+set cmdheight=2      " コマンド行は2行がちょうど良い
+set showtabline=2    " 常にタブ行を表示する
+set laststatus=2     " 常にステータス行を表示する
 set wrap             " 長いテキストを折り返す
 set display=lastline " 長いテキストを省略しない
 set colorcolumn=81   " 81列目に線を表示
@@ -566,12 +567,6 @@ set list
 
 " 不可視文字の設定(UTF-8特有の文字は使わない方が良い)
 set listchars=tab:>-,trail:-,eol:\
-
-" 入力中のキーを画面右下に表示
-set showcmd
-
-set showtabline=2 " 常にタブ行を表示する
-set laststatus=2  " 常にステータス行を表示する
 
 if has('kaoriya')
 
@@ -593,7 +588,7 @@ if has('kaoriya')
 
 endif
 
-" 日本語をスペルチェックから除外
+" 日本語はスペルチェックから除外
 set spelllang+=cjk
 
 " 折り畳み機能の設定
@@ -653,9 +648,11 @@ set wrapscan   " 検索時に最後まで行ったら最初に戻る
 set incsearch  " インクリメンタルサーチ
 set hlsearch   " マッチしたテキストをハイライト
 
-" " vimgrep/grep結果が0件の場合, Quickfixを開かない
-" " -> 逆にわかりにくい気がしたのでコメントアウト
-" autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
+" vimgrep/grep結果が0件の場合, Quickfixを開かない
+autocmd MyAutoCmd QuickfixCmdPost *grep
+      \   if len(getqflist()) == 0 | echomsg 'There is no match.'
+      \ | else                     | copen
+      \ | endif
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -830,7 +827,7 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 " autocmd MyAutoCmd BufReadPost  ?* loadview
 
 " 新規タブ生成
-nnoremap ,tt :<C-u>tabnew<CR>
+nnoremap ,t :<C-u>tabnew<CR>
 
 " 新規タブでgf
 nnoremap <Leader>gf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
@@ -1090,7 +1087,7 @@ nnoremap <C-Down>  :<C-u>cnext<CR>
 nnoremap <C-Up>    :<C-u>cprevious<CR>
 nnoremap <C-Right> :<C-u>cnext<CR>
 
-" せっかくなので,   Alt + カーソルキーでprevious/next
+" せっかくなので,   Alt + カーソルキーで previous/next
 nnoremap <A-Left>  :<C-u>previous<CR>
 nnoremap <A-Down>  :<C-u>next<CR>
 nnoremap <A-Up>    :<C-u>previous<CR>
@@ -1730,7 +1727,7 @@ if neobundle#tap('vimfiler.vim')
   let g:vimfiler_safe_mode_by_default = 0
 
   " カレントディレクトリを開く
-  nnoremap gc :<C-u>VimFilerCurrentDir<CR>
+  nnoremap ,c :<C-u>VimFilerCurrentDir<CR>
 
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
@@ -1739,7 +1736,7 @@ if neobundle#tap('vimfiler.vim')
     nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
     " カレントディレクトリを開く
-    nnoremap <buffer> gc :<C-u>VimFilerCurrentDir<CR>
+    nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
 
     if neobundle#tap('unite.vim')
       " Unite vimgrepを使う
@@ -1931,7 +1928,9 @@ endif "}}}
 if neobundle#tap('vim-markdown')
 
   " " markdownのfold機能を無効にする
+  " " -> むしろ有効活用したい
   " let g:vim_markdown_folding_disabled = 1
+  autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
 
