@@ -70,8 +70,6 @@ if has('persistent_undo')
   set undofile
 endif
 
-set viewdir=~/vimfiles/view
-
 " Windowsは_viminfo, 他は.viminfoとする
 if has('win32') || has('win64')
   set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
@@ -543,39 +541,27 @@ if has('gui_running')
     set ambiwidth=auto
   endif
 
-  set mouse=a      " マウス機能有効
-  set nomousefocus " マウスの移動でフォーカスを自動的に切替えない
-  set mousehide    " 入力時にマウスポインタを隠す
-
   " M : メニュー・ツールバー領域を削除する
   " c : ポップアップダイアログを使用しない
   set guioptions=Mc
 
+  " カーソルを点滅させない
+  set guicursor=a:blinkon0
+
+  set mouse=a      " マウス機能有効
+  set nomousefocus " マウスの移動でフォーカスを自動的に切替えない
+  set mousehide    " 入力時にマウスポインタを隠す
+
 endif
 
-" カーソルを点滅させない
-set guicursor=a:blinkon0
-
-" 入力モードに応じてカーソルの形を変える
-" -> Cygwin環境で必要だった気がするので取っておく
-if has('vim_starting')
-  let &t_ti .= "\e[1 q"
-  let &t_SI .= "\e[5 q"
-  let &t_EI .= "\e[1 q"
-  let &t_te .= "\e[0 q"
-endif
-
-set wrap             " 長いテキストの折り返し
+set wrap             " 長いテキストを折り返す
 set display=lastline " 長いテキストを省略しない
-
-" 81行目に線を表示
-set colorcolumn=81
-
-set number         " 行番号を表示
-set relativenumber " 行番号を相対表示
+set colorcolumn=81   " 81列目に線を表示
+set number           " 行番号を表示
+set relativenumber   " 行番号を相対表示
 nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>:set relativenumber?<CR>
 
-" 不可視文字の可視化
+" 不可視文字を可視化
 set list
 
 " 不可視文字の設定(UTF-8特有の文字は使わない方が良い)
@@ -587,26 +573,30 @@ set showcmd
 set showtabline=2 " 常にタブ行を表示する
 set laststatus=2  " 常にステータス行を表示する
 
-" 透明度をスイッチ
-let g:transparencyOn = 0
-function! s:ToggleTransParency()
-  if g:transparencyOn == 1
-    set transparency=255
-    echo 'set transparency=255'
-    let g:transparencyOn = 0
-  else
-    set transparency=220
-    echo 'set transparency=220'
-    let g:transparencyOn = 1
-  endif
-endfunction
-command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
-nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
+if has('kaoriya')
 
-" スペルチェックから日本語を除外
+  " 透明度をスイッチ
+  let g:transparencyOn = 0
+  function! s:ToggleTransParency()
+    if g:transparencyOn == 1
+      set transparency=255
+      echo 'set transparency=255'
+      let g:transparencyOn = 0
+    else
+      set transparency=220
+      echo 'set transparency=220'
+      let g:transparencyOn = 1
+    endif
+  endfunction
+  command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
+  nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
+
+endif
+
+" 日本語をスペルチェックから除外
 set spelllang+=cjk
 
-" fold(折り畳み)機能の設定
+" 折り畳み機能の設定
 set foldcolumn=1
 set foldnestmax=1
 set fillchars=vert:\|
@@ -655,27 +645,15 @@ endif
 " 検索 {{{
 
 " very magic
-" -> incsearch.vimでvery magic指定して上書き
 nnoremap / /\v
 
 set ignorecase " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
 set smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
 set wrapscan   " 検索時に最後まで行ったら最初に戻る
 set incsearch  " インクリメンタルサーチ
-set hlsearch   " 検索マッチテキストをハイライト
+set hlsearch   " マッチしたテキストをハイライト
 
-" " 検索状態をバッファ毎に保持する
-" " -> 便利な時もあるがバッファ間で共通の方が都合の良いケースが多い
-" " http://d.hatena.ne.jp/tyru/20140129/localize_search_options
-" " Localize search options.
-" autocmd MyAutoCmd WinLeave *
-" \     let b:vimrcPattern = @/
-" \   | let b:vimrcHlSearch = &hlsearch
-" autocmd MyAutoCmd WinEnter *
-" \     let @/ = get(b:, 'vimrcPattern', @/)
-" \   | let &l:hlsearch = get(b:, 'vimrcHlSearch', &l:hlsearch)
-
-" " vimgrep/grep後にQuickfixを開く。ただし, 候補が0件の場合, Quickfixを開かない
+" " vimgrep/grep結果が0件の場合, Quickfixを開かない
 " " -> 逆にわかりにくい気がしたのでコメントアウト
 " autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
 
@@ -709,10 +687,10 @@ set backspace=indent,eol,start " <BS>でなんでも消せるようにする
 " u :     unloaded buffers in the buffer list
 " U :              buffers that are not in the buffer list
 " t : tag completion
-"     -> タグファイルが大きいと時間がかかるので, 汎用補完からtを外す
+"     -> タグファイルが大きいと時間がかかるので汎用補完に含めない
 " i : current and included files
-"     -> インクルードファイルが多いと時間がかかるので, 汎用補完からiを外す
 " d : current and included files for defined name or macro
+"     -> インクルードファイルが多いと時間がかかるので汎用補完に含めない
 set complete=.,w,b,u,U
 set infercase           " 補完時に大文字小文字を区別しない
 set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
@@ -726,35 +704,13 @@ set wildmode=full
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
-" 全角数字を半角数字に変更(eskk.vimを使っている時は意味がない設定)
-inoremap ０ 0
-inoremap １ 1
-inoremap ２ 2
-inoremap ３ 3
-inoremap ４ 4
-inoremap ５ 5
-inoremap ６ 6
-inoremap ７ 7
-inoremap ８ 8
-inoremap ９ 9
-
-" 全角記号を半角記号に変更(eskk.vimを使っている時は意味がない設定)
-inoremap ＃ #
-inoremap ＄ $
-inoremap ％ %
-inoremap ． .
-inoremap ， ,
-inoremap ￥ \
-inoremap （ (
-inoremap ） )
-
 " j : 行連結時にコメントリーダーを削除
 " l : insertモードの自動改行を無効化
 " m : 整形時, 255よりも大きいマルチバイト文字間でも改行する
 " q : gqでコメント行を整形
 autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmq
 
-" gqで使うtextwidthの設定
+" gqで使うtextwidthを設定
 autocmd MyAutoCmd BufEnter * setlocal textwidth=80
 
 " autoindentをオフ
@@ -767,7 +723,7 @@ autocmd MyAutoCmd BufEnter * setlocal indk-=0#
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
 
-" Dは実質d$なのにYはyyと同じというのは納得がいかない
+" Dはd$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
 
 " チルダをoperatorのように使う
@@ -869,6 +825,7 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
 " -> プラグインの挙動とぶつかることもあるらしいので使わない
 " -> https://github.com/Shougo/vimproc.vim/issues/116
+" set viewdir=~/vimfiles/view
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
 
@@ -900,7 +857,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 command! -nargs=0 DeleteMessage  for s:n in range(200) | echomsg '' | endfor
 
 " :jumplistを空にする
-command! -nargs=0 DeleteJumpList for s:n in range(100) | mark '     | endfor
+command! -nargs=0 DeleteJumpList for s:n in range(200) | mark '     | endfor
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -915,7 +872,7 @@ function! s:TabTagJump(funcName)
 
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
   " execute 'tjump' a:funcName
-  redraw
+
 endfunction
 command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
 nnoremap <Leader>} :<C-u>TabTagJump <C-r><C-w><CR>
@@ -1042,7 +999,7 @@ endif
 
 "}}}
 "-----------------------------------------------------------------------------
-" 誤爆防止関係 {{{
+" 誤爆防止 {{{
 
 " レジスタ機能のキーを<S-q>にする(Exモードは使わないので潰す)
 nnoremap q     <Nop>
@@ -1074,12 +1031,6 @@ nnoremap <C-w><C-q> <Nop>
 
 " よくわからないけど矩形Visualモードになるので潰す
 nnoremap <C-q> <Nop>
-
-" 謎のマッピングを使えないようにする
-noremap <S-CR>    <CR>
-noremap <C-CR>    <CR>
-noremap <S-Space> <Space>
-noremap <C-Space> <Space>
 
 " マウス中央ボタンは使わない
 noremap  <MiddleMouse> <Nop>
@@ -1139,11 +1090,11 @@ nnoremap <C-Down>  :<C-u>cnext<CR>
 nnoremap <C-Up>    :<C-u>cprevious<CR>
 nnoremap <C-Right> :<C-u>cnext<CR>
 
-" せっかくなので,   Alt + カーソルキーでtabprevious/tabnext
-nnoremap <A-Left>  :<C-u>tabprevious<CR>
-nnoremap <A-Down>  :<C-u>tabnext<CR>
-nnoremap <A-Up>    :<C-u>tabprevious<CR>
-nnoremap <A-Right> :<C-u>tabnext<CR>
+" せっかくなので,   Alt + カーソルキーでprevious/next
+nnoremap <A-Left>  :<C-u>previous<CR>
+nnoremap <A-Down>  :<C-u>next<CR>
+nnoremap <A-Up>    :<C-u>previous<CR>
+nnoremap <A-Right> :<C-u>next<CR>
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -1157,7 +1108,6 @@ function! s:MyCounter() "{{{
     let b:myCounter += 1
   endif
   echomsg 'count: ' . b:myCounter
-
 endfunction "}}}
 command! -nargs=0 MyCounter call s:MyCounter()
 
@@ -1563,7 +1513,7 @@ if has('kaoriya')
 
 endif "}}}
 
-" Vimで辞書を引く(dicwin-vim) {{{
+" Vimで英和辞書を引く(dicwin-vim) {{{
 if neobundle#tap('dicwin-vim')
 
   let g:dicwin_no_default_mappings = 1
@@ -1674,16 +1624,14 @@ if neobundle#tap('unite.vim')
 
   " unite.vimのデフォルトコンテキストを設定する
   " http://d.hatena.ne.jp/osyo-manga/20140627
-  " -> 最初に馴染んだUIは早々変えられない
-  " -> なんだかんだ非同期でやって貰う必要が無い気がする
+  " -> なんだかんだ非同期で処理させる必要は無い気がする
   call unite#custom#profile('default', 'context', {
         \   'no_empty'         : 0,
         \   'no_quit'          : 0,
         \   'prompt'           : '> ',
-        \   'prompt_visible'   : 'prompt-visible',
         \   'prompt_direction' : 'top',
         \   'split'            : 0,
-        \   'start_insert'     : 1,
+        \   'start_insert'     : 0,
         \   'sync'             : 1,
         \ })
 
@@ -1691,43 +1639,37 @@ if neobundle#tap('unite.vim')
   call unite#custom#source('line',    'max_candidates', 0)
   call unite#custom#source('vimgrep', 'max_candidates', 0)
 
-  " /************************************************************************/
-  " /* オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う */
-  " /************************************************************************/
+  " オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う
   let g:u_ninp = ' -input='
   let g:u_nqui = ' -no-quit'
   let g:u_prev = ' -auto-preview'
-  let g:u_sync = ' -sync'
-  let g:u_fbuf = ' -buffer-name=files'
+  let g:u_nsyn = ' -no-sync'
   let g:u_sbuf = ' -buffer-name=search-buffer'
-  let g:u_tabo = ' -default-action=tabopen'
-  let g:u_nins = ' -no-start-insert -prompt-visible'
+  let g:u_sins = ' -start-insert'
   let g:u_hopt = ' -split -horizontal -winheight=20'
   let g:u_vopt = ' -split -vertical -winwidth=90'
 
-  " 各 unite source に応じた変数を定義して使う
-  let g:u_opt_bu = g:u_nins                       . g:u_hopt
-  let g:u_opt_bo =                       g:u_hopt
-  let g:u_opt_fi =                       g:u_fbuf . g:u_ninp
-  let g:u_opt_fm =                                  g:u_fbuf
-  let g:u_opt_gd = g:u_nins                       . g:u_hopt
-  let g:u_opt_gg = g:u_nins                       . g:u_hopt . g:u_sbuf
-  let g:u_opt_gr = g:u_nins                       . g:u_hopt . g:u_sbuf . g:u_nqui
-  let g:u_opt_jj = ''
-  let g:u_opt_jn = ''
-  let g:u_opt_li = ''
-  let g:u_opt_mg = g:u_nins                                  . g:u_sbuf
-  let g:u_opt_mk = g:u_nins                       . g:u_hopt
-  let g:u_opt_ml = ''
-  let g:u_opt_mp = ''
-  let g:u_opt_nl = ''
-  let g:u_opt_nu = g:u_nins
-  let g:u_opt_ol =                                  g:u_vopt
-  let g:u_opt_op = ''
-  let g:u_opt_re = g:u_nins                       . g:u_hopt . g:u_sbuf
+  " unite_sourcesに応じたオプション変数を定義して使う
+  let g:u_opt_bu =            g:u_hopt
+  let g:u_opt_bo =            g:u_hopt
+  let g:u_opt_fi = g:u_sins . g:u_hopt
+  let g:u_opt_fm =            g:u_hopt
+  let g:u_opt_gd =            g:u_hopt
+  let g:u_opt_gg =            g:u_hopt . g:u_sbuf
+  let g:u_opt_gr =            g:u_hopt . g:u_sbuf . g:u_nqui
+  let g:u_opt_jj = g:u_sins . g:u_hopt
+  let g:u_opt_jn = g:u_sins
+  let g:u_opt_li = g:u_sins
+  let g:u_opt_mf = g:u_sins . g:u_hopt
+  let g:u_opt_mg =            g:u_hopt . g:u_sbuf
+  let g:u_opt_mk =            g:u_hopt
+  let g:u_opt_mp = g:u_sins
+  let g:u_opt_nl = g:u_sins
+  let g:u_opt_nu = g:u_sins
+  let g:u_opt_ol =            g:u_vopt
+  let g:u_opt_op = g:u_sins
+  let g:u_opt_re =            g:u_hopt . g:u_sbuf
 
-  " 各unite-source用のマッピング定義もここにまとめる
-  " -> 空いているキーがわかりにくくなるのを避けるため
   nnoremap <expr> <Leader>bu ':<C-u>Unite buffer'           . g:u_opt_bu . '<CR>'
   nnoremap <expr> <Leader>bo ':<C-u>Unite bookmark'         . g:u_opt_bo . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>Unite file'             . g:u_opt_fi . '<CR>'
@@ -1741,7 +1683,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>jn ':<C-u>Unite junkfile/new'     . g:u_opt_jn . '<CR>'
   nnoremap <expr> <Leader>jj ':<C-u>Unite junkfile'         . g:u_opt_jj . '<CR>'
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
-  nnoremap <expr> <Leader>mf ':<C-u>Unite file:~/memofiles' . g:u_opt_ml . '<CR>'
+  nnoremap <expr> <Leader>mf ':<C-u>Unite file:~/memofiles' . g:u_opt_mf . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memofiles/*'
         \                                                   . g:u_opt_mg . '<CR>'
   nnoremap <expr> <Leader>mk ':<C-u>Unite mark'             . g:u_opt_mk . '<CR>'
@@ -1777,9 +1719,6 @@ if neobundle#tap('vimshell')
   " http://blog.supermomonga.com/articles/vim/vimshell-dynamicprompt.html
   let g:vimshell_prompt_expr = 'getcwd() . " > "'
   let g:vimshell_prompt_pattern = '^\f\+ > '
-
-  " 開いているファイルのパスでVimShellを開く
-  nnoremap <expr> <Leader>vs ':<C-u>VimShellTab<Space>' . expand('%:h') . '<CR>'
 
 endif "}}}
 
@@ -1898,7 +1837,7 @@ if neobundle#tap('vim-quickrun')
   " \       'cmdopt'  : '-std=gnu++0x',
   " \   },
 
-  " デフォルトの<Leader>rだと入力待ちになるので, 別のキーでマッピングする
+  " デフォルトの<Leader>rだと入力待ちになるので, 別のキーをマッピング
   let g:quickrun_no_default_key_mappings = 1
   nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
   xnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
@@ -2083,7 +2022,7 @@ if neobundle#tap('vim-quickhl')
 
   " " QuickhlManualResetも一緒にやってしまうと間違えて消すのが若干怖い
   " " -> ambicmdのおかげで :qmr<Space> で呼び出せるのでコメントアウト
-  " nmap <silent> <Esc> :<C-u>nohlsearch<CR>:<C-u>QuickhlManualReset<CR>
+  " nmap <silent> <Esc> :<C-u>nohlsearch<CR>:QuickhlManualReset<CR>
 
 endif "}}}
 
@@ -2221,7 +2160,7 @@ if neobundle#tap('incsearch.vim')
     return ''
   endfunction
   noremap <expr> <Plug>(_ExplicitMagic) <SID>ExplicitMagic()
-  command -nargs=0 ExplicitMagic call s:ExplicitMagic()
+  command! -nargs=0 ExplicitMagic call s:ExplicitMagic()
 
   " アスタリスク検索の対象をクリップボードにコピー
   if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
@@ -2368,11 +2307,6 @@ if neobundle#tap('vim-tomorrow-theme')
   " 検索中にフォーカス位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
         \ term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
-
-  " IME ONしていることをわかりやすくする
-  if has('multi_byte_ime') || has('xim')
-    autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
-  endif
 
   colorscheme Tomorrow-Night
 
@@ -2673,9 +2607,9 @@ if neobundle#tap('vim-startify')
   "   \ ]
 
   let g:startify_list_order = [
-        \   [ 'My bookmarks:' ],        'bookmarks',
-        \   [ 'My sessions:' ],         'sessions',
-        \   [ 'Recently used files:' ], 'files',
+        \   ['My bookmarks:'       ], 'bookmarks',
+        \   ['My sessions:'        ], 'sessions',
+        \   ['Recently used files:'], 'files',
         \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
@@ -2683,20 +2617,13 @@ if neobundle#tap('vim-startify')
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
     delcommand StartifyDebug
-
-    " :Restartすると何故かGVimがエラー終了するPCがあるので...
-    " delcommand SLoad
-    " delcommand SSave
-    " delcommand SDelete
-
-    " SCloseは期待する動作ではないので消す
     delcommand SClose
 
   endfunction
 
 endif "}}}
 
-" %で対応するキーワードを増やす(matchit) {{{
+" 対応するキーワードを増やす(matchit) {{{
 if neobundle#tap('matchit')
 
 endif "}}}
@@ -2804,7 +2731,6 @@ if neobundle#tap('eskk.vim')
     call t.add_map('z:', ': ')
     call t.add_map('z,', ', ')
     call t.add_map('z.', '.')
-    call t.add_map('..', '->')
 
     call eskk#register_mode_table('hira', t)
   endfunction
@@ -2872,4 +2798,5 @@ endif "}}}
 "}}}
 "-----------------------------------------------------------------------------
 " MEMO: Plugin Listをvimrc先頭に持ってきたらVimの起動が早くなった。何故？
+" -> startuptimeを最初に持ってこないと正確に測れないだけっぽい
 
