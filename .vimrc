@@ -3,116 +3,6 @@ set encoding=utf-8
 scriptencoding utf-8
 
 "-----------------------------------------------------------------------------
-" 基本設定 {{{
-
-" 左手で<Leader>を入力したい
-let g:mapleader = '#'
-
-" #検索が誤って発動しないようにする
-nnoremap #  <Nop>
-
-" ##で入力待ちを解除する
-nnoremap ## <Nop>
-
-" vimrc内全体で使うaugroupを定義
-augroup MyAutoCmd
-  autocmd!
-augroup END
-
-" Echo startuptime on starting Vim
-if has('vim_starting') && has('reltime')
-  let g:startuptime = reltime()
-  autocmd MyAutoCmd VimEnter *
-        \   let g:startuptime = reltime(g:startuptime)
-        \ | redraw
-        \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
-endif
-
-" " ファイル書き込み時の文字コード。空の場合, encodingの値が使用される
-" " -> vimrcで設定するものではないが, 説明を残したいのでコメントアウト
-" set fileencoding=
-
-" ファイル読み込み時の変換候補
-" -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
-"    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
-" -> とりあえず香り屋版GVimのguessを使おう
-if has('kaoriya')
-  set fileencodings=guess
-else
-  set fileencodings=utf-8,cp932,euc-jp
-endif
-
-" 文字コードを指定してファイルを開き直す
-nnoremap <Leader>enc :<C-u>e ++encoding=
-
-" 改行コードを指定してファイルを開き直す
-nnoremap <Leader>ff  :<C-u>e ++fileformat=
-
-" バックアップ, スワップファイルの設定
-" -> ネットワーク上ファイルの編集時に重くなる？ので作らない
-" -> 生成先をローカルに指定していたからかも。要検証
-set noswapfile
-set nobackup
-set nowritebackup
-
-" ファイルの書き込みをしてバックアップが作られるときの設定
-" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
-" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
-" auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
-set backupcopy=yes
-
-" Vim生成物の生成先ディレクトリ指定
-set dir=~/vimfiles/swap
-set backupdir=~/vimfiles/backup
-
-if has('persistent_undo')
-  set undodir=~/vimfiles/undo
-  set undofile
-endif
-
-set viewdir=~/vimfiles/view
-
-" Windowsは_viminfo, 他は.viminfoとする
-if has('win32') || has('win64')
-  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
-else
-  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
-endif
-
-" 50あれば十分すぎる
-set history=50
-
-" 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
-set autoread
-
-" メッセージ省略設定
-set shortmess=aoOotTWI
-
-" カーソル上下に表示する最小の行数
-" -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
-set scrolloff=0
-let g:scrolloffOn = 0
-function! s:ToggleScrollOffSet()
-  if g:scrolloffOn == 1
-    setlocal scrolloff=0
-    let g:scrolloffOn = 0
-  else
-    setlocal scrolloff=100
-    let g:scrolloffOn = 1
-  endif
-  echo 'setlocal scrolloff=' . &scrolloff
-endfunction
-command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
-nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
-
-" vimdiffは基本縦分割とする
-set diffopt+=vertical
-
-" makeしたらcopen
-autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
-
-"}}}
-"-----------------------------------------------------------------------------
 " Plugin List {{{
 
 " ftpluginは最後に読み込むため, 一旦オフする
@@ -177,24 +67,6 @@ NeoBundleLazy 'Shougo/junkfile.vim', {
       \     ],
       \   },
       \ }
-NeoBundleLazy 'vim-scripts/gtags.vim', {
-      \   'autoload' : {
-      \     'command' : [
-      \       'Gtags',
-      \     ],
-      \   },
-      \ }
-NeoBundleLazy 'hewes/unite-gtags', {
-      \   'depends'  : [
-      \     'Shougo/unite.vim'
-      \   ],
-      \   'autoload' : {
-      \     'unite_sources' : [
-      \       'gtags/ref',
-      \       'gtags/def',
-      \     ],
-      \   },
-      \ }
 NeoBundleLazy 'tacroe/unite-mark', {
       \   'depends'  : [
       \     'Shougo/unite.vim',
@@ -215,8 +87,26 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \     ],
       \   },
       \ }
+NeoBundleLazy 'hewes/unite-gtags', {
+      \   'depends'  : [
+      \     'Shougo/unite.vim'
+      \   ],
+      \   'autoload' : {
+      \     'unite_sources' : [
+      \       'gtags/ref',
+      \       'gtags/def',
+      \     ],
+      \   },
+      \ }
+NeoBundleLazy 'vim-scripts/gtags.vim', {
+      \   'autoload' : {
+      \     'command' : [
+      \       'Gtags',
+      \     ],
+      \   },
+      \ }
 
-NeoBundle 'thinca/vim-singleton'
+" NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun', {
       \   'autoload' : {
       \     'commands' : [
@@ -235,13 +125,13 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
       \     ],
       \   },
       \ }
-NeoBundleLazy 'thinca/vim-scouter', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Scouter',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'thinca/vim-scouter', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'Scouter',
+"       \     ],
+"       \   },
+"       \ }
 NeoBundleLazy 'thinca/vim-qfreplace', {
       \   'autoload' : {
       \     'commands' : [
@@ -258,13 +148,13 @@ NeoBundle 'osyo-manga/vim-brightest'
 " NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
-NeoBundleLazy 'mattn/benchvimrc-vim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'BenchVimrc',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'mattn/benchvimrc-vim', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'BenchVimrc',
+"       \     ],
+"       \   },
+"       \ }
 
 " memolist.vimはmarkdown形式でメモを生成するので, markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
@@ -287,15 +177,15 @@ NeoBundleLazy 'kannokanno/previm', {
       \   },
       \ }
 
-" リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
-NeoBundleLazy 'kurocode25/mdforvim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'MdPreview',
-      \       'MdConvert',
-      \     ],
-      \   },
-      \ }
+" " リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
+" NeoBundleLazy 'kurocode25/mdforvim', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'MdPreview',
+"       \       'MdConvert',
+"       \     ],
+"       \   },
+"       \ }
 
 NeoBundleLazy 'tyru/open-browser.vim', {
       \   'autoload' : {
@@ -305,22 +195,22 @@ NeoBundleLazy 'tyru/open-browser.vim', {
       \   },
       \ }
 
-NeoBundleLazy 'deris/vim-visualinc', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(visualinc-',
-      \     ],
-      \   },
-      \ }
-
-NeoBundleLazy 'deris/vim-rengbang', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'RengBang',
-      \       'RengBangConfirm',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'deris/vim-visualinc', {
+"       \   'autoload' : {
+"       \     'mappings' : [
+"       \       '<Plug>(visualinc-',
+"       \     ],
+"       \   },
+"       \ }
+"
+" NeoBundleLazy 'deris/vim-rengbang', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'RengBang',
+"       \       'RengBangConfirm',
+"       \     ],
+"       \   },
+"       \ }
 
 NeoBundle 'tpope/vim-surround'
 
@@ -358,7 +248,7 @@ NeoBundleLazy 'kana/vim-textobj-function', {
       \   },
       \ }
 
-NeoBundleLazy 'kana/vim-smartchr'
+" NeoBundleLazy 'kana/vim-smartchr'
 NeoBundleLazy 'tyru/capture.vim', {
       \   'autoload' : {
       \     'commands' : [
@@ -562,13 +452,13 @@ NeoBundleLazy 'tyru/eskk.vim', {
       \   },
       \ }
 
-NeoBundleLazy 'thinca/vim-prettyprint', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'PP',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'thinca/vim-prettyprint', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'PP',
+"       \     ],
+"       \   },
+"       \ }
 
 NeoBundleLazy 'mtth/scratch.vim', {
       \   'autoload' : {
@@ -578,16 +468,16 @@ NeoBundleLazy 'mtth/scratch.vim', {
       \   },
       \ }
 
-NeoBundleLazy 'thinca/vim-showtime', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Showtime',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'thinca/vim-showtime', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'Showtime',
+"       \     ],
+"       \   },
+"       \ }
 
-" 使い方は大体わかったけれど, 今のところ使えてない
-NeoBundle 'thinca/vim-template'
+" " 使い方は大体わかったけれど, 今のところ使えてない
+" NeoBundle 'thinca/vim-template'
 
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
@@ -611,6 +501,116 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
   source ~/localfiles/template/local.rc.vim
 endif
+
+"}}}
+"-----------------------------------------------------------------------------
+" 基本設定 {{{
+
+" 左手で<Leader>を入力したい
+let g:mapleader = '#'
+
+" #検索が誤って発動しないようにする
+nnoremap #  <Nop>
+
+" ##で入力待ちを解除する
+nnoremap ## <Nop>
+
+" vimrc内全体で使うaugroupを定義
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
+" Echo startuptime on starting Vim
+if has('vim_starting') && has('reltime')
+  let g:startuptime = reltime()
+  autocmd MyAutoCmd VimEnter *
+        \   let g:startuptime = reltime(g:startuptime)
+        \ | redraw
+        \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
+endif
+
+" " ファイル書き込み時の文字コード。空の場合, encodingの値が使用される
+" " -> vimrcで設定するものではないが, 説明を残したいのでコメントアウト
+" set fileencoding=
+
+" ファイル読み込み時の変換候補
+" -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
+"    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
+" -> とりあえず香り屋版GVimのguessを使おう
+if has('kaoriya')
+  set fileencodings=guess
+else
+  set fileencodings=utf-8,cp932,euc-jp
+endif
+
+" 文字コードを指定してファイルを開き直す
+nnoremap <Leader>enc :<C-u>e ++encoding=
+
+" 改行コードを指定してファイルを開き直す
+nnoremap <Leader>ff  :<C-u>e ++fileformat=
+
+" バックアップ, スワップファイルの設定
+" -> ネットワーク上ファイルの編集時に重くなる？ので作らない
+" -> 生成先をローカルに指定していたからかも。要検証
+set noswapfile
+set nobackup
+set nowritebackup
+
+" ファイルの書き込みをしてバックアップが作られるときの設定
+" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
+" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
+" auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
+set backupcopy=yes
+
+" Vim生成物の生成先ディレクトリ指定
+set dir=~/vimfiles/swap
+set backupdir=~/vimfiles/backup
+
+if has('persistent_undo')
+  set undodir=~/vimfiles/undo
+  set undofile
+endif
+
+set viewdir=~/vimfiles/view
+
+" Windowsは_viminfo, 他は.viminfoとする
+if has('win32') || has('win64')
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
+else
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
+endif
+
+" 50あれば十分すぎる
+set history=50
+
+" 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
+set autoread
+
+" メッセージ省略設定
+set shortmess=aoOotTWI
+
+" カーソル上下に表示する最小の行数
+" -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
+set scrolloff=0
+let g:scrolloffOn = 0
+function! s:ToggleScrollOffSet()
+  if g:scrolloffOn == 1
+    setlocal scrolloff=0
+    let g:scrolloffOn = 0
+  else
+    setlocal scrolloff=100
+    let g:scrolloffOn = 1
+  endif
+  echo 'setlocal scrolloff=' . &scrolloff
+endfunction
+command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
+nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
+
+" vimdiffは基本縦分割とする
+set diffopt+=vertical
+
+" makeしたらcopen
+autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -1921,16 +1921,6 @@ if neobundle#tap('junkfile.vim')
 
 endif "}}}
 
-" シンボル, 関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
-if neobundle#tap('gtags.vim')
-
-endif "}}}
-
-" for unite-gtags {{{
-if neobundle#tap('unite-gtags')
-
-endif "}}}
-
 " for unite-mark {{{
 if neobundle#tap('unite-mark')
 
@@ -1942,6 +1932,16 @@ endif "}}}
 
 " for unite-outline {{{
 if neobundle#tap('unite-outline')
+
+endif "}}}
+
+" for unite-gtags {{{
+if neobundle#tap('unite-gtags')
+
+endif "}}}
+
+" シンボル, 関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
+if neobundle#tap('gtags.vim')
 
 endif "}}}
 
@@ -3086,8 +3086,5 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
-" TODO List
-
-" # vimrc記述順をもっとスマートにできないか？
-" # vim-shot-fでsmartcaseな対応ができないか？
+" MEMO: Plugin Listをvimrc先頭に持ってきたらVimの起動が早くなった。何故？
 
