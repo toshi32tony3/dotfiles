@@ -2740,7 +2740,7 @@ if neobundle#tap('eskk.vim')
     function! s:SortSKKDictionary()
       let l:savedView = winsaveview()
       execute "keepjumps normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
-      execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>\<Esc>"
+      execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>"
       call winrestview(l:savedView)
       echo 'ソートしました!!'
     endfunction
