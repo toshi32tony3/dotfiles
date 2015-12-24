@@ -945,7 +945,7 @@ endfunction
 command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 
 " " 開いたファイルと同じ場所へ移動する
-" " -> startify/vimfiler/:CDでcdするので以下の設定は使用しない
+" " -> startify/:CDでcdするので以下の設定は使用しない
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " " 最後のカーソル位置を記憶していたらジャンプ
@@ -1874,29 +1874,24 @@ endif "}}}
 if neobundle#tap('vimfiler.vim')
 
   let g:vimfiler_as_default_explorer = 1
-  let g:vimfiler_enable_auto_cd = 1
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
 
-  " タブで開く時は自分で指定することにした
-  " let g:vimfiler_edit_action = 'tabopen'
-
-  " 開いているファイルのパスでVimFilerを開く
-  nnoremap <expr> <Leader>vf ':<C-u>VimFilerTab<Space>' . expand('%:h') . '<CR>'
+  " カレントディレクトリを開く
+  nnoremap gc :<C-u>VimFilerCurrentDir<CR>
 
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
-    " #を<Leader>としているのでsimilarは##にする
+    " #を<Leader>としているので, similarは##にする
     nnoremap <buffer> #  <Nop>
     nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
-    " vimfilerとuniteで<Tab>の挙動を統一したい
-    nmap <buffer> <Tab>   <Plug>(vimfiler_choose_action)
-    nmap <buffer> <S-Tab> <Plug>(vimfiler_switch_to_another_vimfiler)
+    " カレントディレクトリを開く
+    nnoremap <buffer> gc :<C-u>VimFilerCurrentDir<CR>
 
     if neobundle#tap('unite.vim')
       " Unite vimgrepを使う
-      nnoremap <buffer><expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
+      nnoremap <buffer> <expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
     endif
 
     " Disable yankround.vim
