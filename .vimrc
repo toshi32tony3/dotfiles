@@ -125,13 +125,13 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
       \     ],
       \   },
       \ }
-NeoBundleLazy 'thinca/vim-scouter', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Scouter',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'thinca/vim-scouter', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'Scouter',
+"       \     ],
+"       \   },
+"       \ }
 NeoBundleLazy 'thinca/vim-qfreplace', {
       \   'autoload' : {
       \     'commands' : [
@@ -148,13 +148,13 @@ NeoBundle 'osyo-manga/vim-brightest'
 " NeoBundle 'scrooloose/syntastic'
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
-NeoBundleLazy 'mattn/benchvimrc-vim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'BenchVimrc',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'mattn/benchvimrc-vim', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'BenchVimrc',
+"       \     ],
+"       \   },
+"       \ }
 
 " memolist.vimはmarkdown形式でメモを生成するので, markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
@@ -177,15 +177,15 @@ NeoBundleLazy 'kannokanno/previm', {
       \   },
       \ }
 
-" リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
-NeoBundleLazy 'kurocode25/mdforvim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'MdPreview',
-      \       'MdConvert',
-      \     ],
-      \   },
-      \ }
+" " リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
+" NeoBundleLazy 'kurocode25/mdforvim', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'MdPreview',
+"       \       'MdConvert',
+"       \     ],
+"       \   },
+"       \ }
 
 NeoBundleLazy 'tyru/open-browser.vim', {
       \   'autoload' : {
@@ -195,22 +195,22 @@ NeoBundleLazy 'tyru/open-browser.vim', {
       \   },
       \ }
 
-NeoBundleLazy 'deris/vim-visualinc', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(visualinc-',
-      \     ],
-      \   },
-      \ }
-
-NeoBundleLazy 'deris/vim-rengbang', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'RengBang',
-      \       'RengBangConfirm',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'deris/vim-visualinc', {
+"       \   'autoload' : {
+"       \     'mappings' : [
+"       \       '<Plug>(visualinc-',
+"       \     ],
+"       \   },
+"       \ }
+"
+" NeoBundleLazy 'deris/vim-rengbang', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'RengBang',
+"       \       'RengBangConfirm',
+"       \     ],
+"       \   },
+"       \ }
 
 NeoBundle 'tpope/vim-surround'
 
@@ -248,7 +248,7 @@ NeoBundleLazy 'kana/vim-textobj-function', {
       \   },
       \ }
 
-NeoBundleLazy 'kana/vim-smartchr'
+" NeoBundleLazy 'kana/vim-smartchr'
 NeoBundleLazy 'tyru/capture.vim', {
       \   'autoload' : {
       \     'commands' : [
@@ -452,13 +452,13 @@ NeoBundleLazy 'tyru/eskk.vim', {
       \   },
       \ }
 
-NeoBundleLazy 'thinca/vim-prettyprint', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'PP',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'thinca/vim-prettyprint', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'PP',
+"       \     ],
+"       \   },
+"       \ }
 
 NeoBundleLazy 'mtth/scratch.vim', {
       \   'autoload' : {
@@ -468,16 +468,16 @@ NeoBundleLazy 'mtth/scratch.vim', {
       \   },
       \ }
 
-NeoBundleLazy 'thinca/vim-showtime', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Showtime',
-      \     ],
-      \   },
-      \ }
+" NeoBundleLazy 'thinca/vim-showtime', {
+"       \   'autoload' : {
+"       \     'commands' : [
+"       \       'Showtime',
+"       \     ],
+"       \   },
+"       \ }
 
-" 使い方は大体わかったけれど, 今のところ使えてない
-NeoBundle 'thinca/vim-template'
+" " 使い方は大体わかったけれど, 今のところ使えてない
+" NeoBundle 'thinca/vim-template'
 
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
