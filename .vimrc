@@ -150,7 +150,6 @@ NeoBundle 'toshi32tony3/dicwin-vim'
 
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet.vim'
-" neosnippet-snippetsはfork版を使う
 NeoBundle 'toshi32tony3/neosnippet-snippets'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimshell'
@@ -235,13 +234,6 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
       \     ],
       \   },
       \ }
-" NeoBundleLazy 'thinca/vim-scouter', {
-"       \   'autoload' : {
-"       \     'commands' : [
-"       \       'Scouter',
-"       \     ],
-"       \   },
-"       \ }
 NeoBundleLazy 'thinca/vim-qfreplace', {
       \   'autoload' : {
       \     'commands' : [
@@ -257,17 +249,9 @@ NeoBundle 'osyo-manga/vim-brightest'
 " NeoBundle 'osyo-manga/vim-watchdogs'
 " NeoBundle 'scrooloose/syntastic'
 
-NeoBundle 'chriskempson/vim-tomorrow-theme'
-" NeoBundleLazy 'mattn/benchvimrc-vim', {
-"       \   'autoload' : {
-"       \     'commands' : [
-"       \       'BenchVimrc',
-"       \     ],
-"       \   },
-"       \ }
-
 " memolist.vimはmarkdown形式でメモを生成するので, markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
+NeoBundle 'rcmdnk/vim-markdown'
 NeoBundleLazy 'glidenote/memolist.vim', {
       \   'autoload' : {
       \     'commands' : [
@@ -275,7 +259,6 @@ NeoBundleLazy 'glidenote/memolist.vim', {
       \     ],
       \   },
       \ }
-NeoBundle 'rcmdnk/vim-markdown'
 
 " Previm便利だけど, IEではmermaidを使えないようなのでShibaメインになりそう
 " https://github.com/rhysd/Shiba
@@ -304,23 +287,6 @@ NeoBundleLazy 'tyru/open-browser.vim', {
       \     ],
       \   },
       \ }
-
-" NeoBundleLazy 'deris/vim-visualinc', {
-"       \   'autoload' : {
-"       \     'mappings' : [
-"       \       '<Plug>(visualinc-',
-"       \     ],
-"       \   },
-"       \ }
-"
-" NeoBundleLazy 'deris/vim-rengbang', {
-"       \   'autoload' : {
-"       \     'commands' : [
-"       \       'RengBang',
-"       \       'RengBangConfirm',
-"       \     ],
-"       \   },
-"       \ }
 
 NeoBundle 'tpope/vim-surround'
 
@@ -358,7 +324,6 @@ NeoBundleLazy 'kana/vim-textobj-function', {
       \   },
       \ }
 
-" NeoBundleLazy 'kana/vim-smartchr'
 NeoBundleLazy 'tyru/capture.vim', {
       \   'autoload' : {
       \     'commands' : [
@@ -396,13 +361,6 @@ NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
       \     ],
       \   },
       \ }
-" NeoBundleLazy 'haya14busa/incsearch-migemo.vim', {
-"       \   'autoload' : {
-"       \     'mappings' : [
-"       \       '<Plug>(incsearch-migemo',
-"       \     ],
-"       \   },
-"       \ }
 
 NeoBundleLazy 'osyo-manga/vim-anzu', {
       \   'autoload' : {
@@ -445,17 +403,9 @@ NeoBundleLazy 'cohama/agit.vim', {
 " fugitive同様, Lazyできない
 NeoBundle 'idanarye/vim-merginal'
 
+NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
-
-" " Cygwin Vimでは使う
-" NeoBundleLazy 'kana/vim-fakeclip', {
-"       \   'autoload' : {
-"       \     'mappings' : [
-"       \       '<Plug>(fakeclip-',
-"       \     ],
-"       \   },
-"       \ }
 
 NeoBundleLazy 'LeafCage/yankround.vim', {
       \   'autoload' : {
@@ -484,14 +434,8 @@ NeoBundleLazy 'vim-scripts/BufOnly.vim', {
       \   },
       \ }
 
-" " 本家
-" NeoBundleLazy 'deris/vim-shot-f', {
-"       \   'autoload' : {
-"       \     'mappings' : [
-"       \       '<Plug>(shot-f-',
-"       \     ],
-"       \   },
-"       \ }
+" 本家
+" NeoBundle 'deris/vim-shot-f'
 NeoBundleLazy 'toshi32tony3/vim-shot-f', {
       \   'autoload' : {
       \     'mappings' : [
@@ -499,21 +443,6 @@ NeoBundleLazy 'toshi32tony3/vim-shot-f', {
       \     ],
       \   },
       \ }
-" " incsearch.vimの高機能な検索を多用したい
-" NeoBundleLazy 'rhysd/clever-f.vim', {
-"       \   'autoload' : {
-"       \     'mappings' : [
-"       \       '<Plug>(clever-',
-"       \     ],
-"       \   },
-"       \ }
-" NeoBundleLazy 'justinmk/vim-sneak', {
-"       \   'autoload' : {
-"       \     'mappings' : [
-"       \       '<Plug>Sneak_',
-"       \     ],
-"       \   },
-"       \ }
 
 NeoBundleLazy 'tyru/caw.vim', {
       \   'autoload' : {
@@ -562,14 +491,6 @@ NeoBundleLazy 'tyru/eskk.vim', {
       \   },
       \ }
 
-" NeoBundleLazy 'thinca/vim-prettyprint', {
-"       \   'autoload' : {
-"       \     'commands' : [
-"       \       'PP',
-"       \     ],
-"       \   },
-"       \ }
-
 NeoBundleLazy 'mtth/scratch.vim', {
       \   'autoload' : {
       \     'mappings' : [
@@ -577,14 +498,6 @@ NeoBundleLazy 'mtth/scratch.vim', {
       \     ],
       \   },
       \ }
-
-" NeoBundleLazy 'thinca/vim-showtime', {
-"       \   'autoload' : {
-"       \     'commands' : [
-"       \       'Showtime',
-"       \     ],
-"       \   },
-"       \ }
 
 " " 使い方は大体わかったけれど, 今のところ使えてない
 " NeoBundle 'thinca/vim-template'
@@ -2018,13 +1931,6 @@ if neobundle#tap('vim-fontzoom')
 
 endif "}}}
 
-" Vim力を測る(vim-scouter) {{{
-if neobundle#tap('vim-scouter')
-
-  nnoremap <leader>sc :<C-u>Scouter ~\dotfiles\.vimrc<CR>
-
-endif "}}}
-
 " Quickfixから置換(vim-qfreplace) {{{
 if neobundle#tap('vim-qfreplace')
 
@@ -2082,22 +1988,11 @@ if neobundle#tap('syntastic')
 
 endif "}}}
 
-" My favorite colorscheme(vim-tomorrow-theme) {{{
-if neobundle#tap('vim-tomorrow-theme')
+" markdownを使いやすくする(vim-markdown) {{{
+if neobundle#tap('vim-markdown')
 
-  " 現在のカーソル位置をわかりやすくする
-  autocmd MyAutoCmd ColorScheme * highlight Cursor guifg=White guibg=Red
-
-  " 検索中にフォーカス位置をわかりやすくする
-  autocmd MyAutoCmd ColorScheme * highlight IncSearch
-        \ term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
-
-  " IME ONしていることをわかりやすくする
-  if has('multi_byte_ime') || has('xim')
-    autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
-  endif
-
-  colorscheme Tomorrow-Night
+  " " markdownのfold機能を無効にする
+  " let g:vim_markdown_folding_disabled = 1
 
 endif "}}}
 
@@ -2121,23 +2016,10 @@ if neobundle#tap('memolist.vim')
 
 endif "}}}
 
-" markdownを使いやすくする(vim-markdown) {{{
-if neobundle#tap('vim-markdown')
-
-  " markdownのfold機能を無効にする
-  let g:vim_markdown_folding_disabled = 1
-
-endif "}}}
-
 " ファイルをブラウザで開く(previm) {{{
 if neobundle#tap('previm')
 
   let g:previm_enable_realtime = 1
-
-endif "}}}
-
-" markdownをブラウザでプレビュー(mdforvim) {{{
-if neobundle#tap('mdforvim')
 
 endif "}}}
 
@@ -2146,22 +2028,6 @@ if neobundle#tap('open-browser.vim')
 
   nmap <Leader>L <Plug>(openbrowser-smart-search)
   xmap <Leader>L <Plug>(openbrowser-smart-search)
-
-endif "}}}
-
-" Visualモードでインクリメント/デクリメント(vim-visualinc) {{{
-if neobundle#tap('vim-visualinc')
-
-  " for Lazy
-  xmap <C-a> <Plug>(visualinc-increment)
-  xmap <C-x> <Plug>(visualinc-decrement)
-
-endif "}}}
-
-" 連番入力補助(vim-rengbang) {{{
-if neobundle#tap('vim-rengbang')
-
-  let g:rengbang_default_start = 1
 
 endif "}}}
 
@@ -2197,21 +2063,6 @@ if neobundle#tap('vim-textobj-function')
   if neobundle#tap('vim-operator-search')
     nmap <Leader>/ <Plug>(operator-search)<Plug>(textobj-function-i)
   endif
-
-endif "}}}
-
-" 連続で打鍵した時, 指定した候補をループさせる(vim-smartchr) {{{
-if neobundle#tap('vim-smartchr')
-
-  " " 「->」は入力しづらいので, ..で置換え
-  " inoremap <expr> . smartchr#one_of('.', '->', '..')
-
-  " ruby / eruby の時だけ設定
-  autocmd MyAutoCmd FileType ruby,eruby call s:RubySettings()
-  function! s:RubySettings()
-    inoremap <buffer> <expr> { smartchr#one_of('{', '#{', '{{')
-    " for match }} } } }
-  endfunction
 
 endif "}}}
 
@@ -2411,14 +2262,6 @@ if neobundle#tap('incsearch-fuzzy.vim')
 
 endif "}}}
 
-" incsearch.vimをパワーアップ(incsearch-migemo.vim) {{{
-if neobundle#tap('incsearch-migemo.vim')
-
-  " 入力中に飛びたくないのでstayのみ使う
-  map m/ <Plug>(incsearch-migemo-stay)
-
-endif "}}}
-
 " asterisk検索をパワーアップ(vim-asterisk) {{{
 
 if neobundle#tap('vim-asterisk')
@@ -2513,6 +2356,25 @@ endif "}}}
 
 " VimからGitを使う(ブランチ管理, vim-merginal) {{{
 if neobundle#tap('vim-merginal')
+
+endif "}}}
+
+" My favorite colorscheme(vim-tomorrow-theme) {{{
+if neobundle#tap('vim-tomorrow-theme')
+
+  " 現在のカーソル位置をわかりやすくする
+  autocmd MyAutoCmd ColorScheme * highlight Cursor guifg=White guibg=Red
+
+  " 検索中にフォーカス位置をわかりやすくする
+  autocmd MyAutoCmd ColorScheme * highlight IncSearch
+        \ term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
+
+  " IME ONしていることをわかりやすくする
+  if has('multi_byte_ime') || has('xim')
+    autocmd MyAutoCmd ColorScheme * highlight CursorIM guibg=Purple guifg=NONE
+  endif
+
+  colorscheme Tomorrow-Night
 
 endif "}}}
 
@@ -2698,14 +2560,6 @@ if neobundle#tap('lightline.vim')
 
 endif "}}}
 
-" Cygwin Vimでクリップボード連携(vim-fakeclip) {{{
-if neobundle#tap('vim-fakeclip')
-
-  xmap <Leader>y <Plug>(fakeclip-y)
-  nmap <Leader>p <Plug>(fakeclip-p)
-
-endif "}}}
-
 " pからの<C-n>,<C-p>でクリップボード履歴をぐるぐる(yankround.vim) {{{
 if neobundle#tap('yankround.vim')
 
@@ -2764,54 +2618,6 @@ if neobundle#tap('vim-shot-f')
   omap F <Plug>(shot-f-F)
   omap t <Plug>(shot-f-t)
   omap T <Plug>(shot-f-T)
-
-endif "}}}
-
-" f検索を便利に(clever-f.vim) {{{
-if neobundle#tap('clever-f.vim')
-
-  let g:clever_f_smart_case = 1
-
-  " " fは進む, Fは戻るで固定する
-  " " -> Vimの標準の挙動は0
-  " let g:clever_f_fix_key_direction = 1
-
-  " let g:clever_f_chars_match_any_signs = ';'
-
-  " for Lazy
-  let g:clever_f_not_overwrites_standard_mappings = 1
-  nmap f <Plug>(clever-f-f)
-  xmap f <Plug>(clever-f-f)
-  omap f <Plug>(clever-f-f)
-  nmap F <Plug>(clever-f-F)
-  xmap F <Plug>(clever-f-F)
-  omap F <Plug>(clever-f-F)
-  nmap t <Plug>(clever-f-t)
-  xmap t <Plug>(clever-f-t)
-  omap t <Plug>(clever-f-t)
-  nmap T <Plug>(clever-f-T)
-  xmap T <Plug>(clever-f-T)
-  omap T <Plug>(clever-f-T)
-
-endif "}}}
-
-" f検索の2文字版(vim-sneak) {{{
-if neobundle#tap('vim-sneak')
-
-  let g:sneak#s_next = 1     " clever-sな挙動にする
-  let g:sneak#use_ic_scs = 1 " ignorecaseやらsmartcaseの設定を反映する
-
-  " " sは進む, Sは戻るで固定する
-  " " -> Vimの標準の挙動は0
-  " let g:sneak#absolute_dir = 1
-
-  " s-sneak
-  nmap s <Plug>Sneak_s
-  nmap S <Plug>Sneak_S
-  xmap s <Plug>Sneak_s
-  xmap S <Plug>Sneak_S
-  omap s <Plug>Sneak_s
-  omap S <Plug>Sneak_S
 
 endif "}}}
 
@@ -3021,17 +2827,6 @@ if neobundle#tap('eskk.vim')
 
 endif "}}}
 
-" VimScript変数の中身を整形して出力(vim-prettyprint) {{{
-if neobundle#tap('vim-prettyprint')
-
-  function! neobundle#hooks.on_post_source(bundle)
-    " 使わないコマンドを削除する
-    delcommand PrettyPrint
-
-  endfunction
-
-endif "}}}
-
 " スクラッチバッファ(scratch.vim) {{{
 if neobundle#tap('scratch.vim')
 
@@ -3059,11 +2854,6 @@ if neobundle#tap('scratch.vim')
     delcommand ScratchSelection
 
   endfunction
-
-endif "}}}
-
-" Vimでプレゼンテーション(vim-showtime) {{{
-if neobundle#tap('vim-showtime')
 
 endif "}}}
 
