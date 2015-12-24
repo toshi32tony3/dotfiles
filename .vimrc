@@ -106,7 +106,7 @@ NeoBundleLazy 'vim-scripts/gtags.vim', {
       \   },
       \ }
 
-NeoBundle 'thinca/vim-singleton'
+" NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun', {
       \   'autoload' : {
       \     'commands' : [
