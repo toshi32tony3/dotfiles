@@ -3,6 +3,116 @@ set encoding=utf-8
 scriptencoding utf-8
 
 "-----------------------------------------------------------------------------
+" 基本設定 {{{
+
+" 左手で<Leader>を入力したい
+let g:mapleader = '#'
+
+" #検索が誤って発動しないようにする
+nnoremap #  <Nop>
+
+" ##で入力待ちを解除する
+nnoremap ## <Nop>
+
+" vimrc内全体で使うaugroupを定義
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
+" Echo startuptime on starting Vim
+if has('vim_starting') && has('reltime')
+  let g:startuptime = reltime()
+  autocmd MyAutoCmd VimEnter *
+        \   let g:startuptime = reltime(g:startuptime)
+        \ | redraw
+        \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
+endif
+
+" ファイル書き込み時の文字コード。空の場合, encodingの値が使用される
+" -> vimrcで設定するものではない
+" set fileencoding=
+
+" ファイル読み込み時の変換候補
+" -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
+"    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
+" -> とりあえず香り屋版GVimのguessを使おう
+if has('kaoriya')
+  set fileencodings=guess
+else
+  set fileencodings=utf-8,cp932,euc-jp
+endif
+
+" 文字コードを指定してファイルを開き直す
+nnoremap <Leader>enc :<C-u>e ++encoding=
+
+" 改行コードを指定してファイルを開き直す
+nnoremap <Leader>ff  :<C-u>e ++fileformat=
+
+" バックアップ, スワップファイルの設定
+" -> ネットワーク上ファイルの編集時に重くなる？ので作らない
+" -> 生成先をローカルに指定していたからかも。要検証
+set noswapfile
+set nobackup
+set nowritebackup
+
+" ファイルの書き込みをしてバックアップが作られるときの設定
+" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
+" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
+" auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
+set backupcopy=yes
+
+" Vim生成物の生成先ディレクトリ指定
+set dir=~/vimfiles/swap
+set backupdir=~/vimfiles/backup
+
+if has('persistent_undo')
+  set undodir=~/vimfiles/undo
+  set undofile
+endif
+
+set viewdir=~/vimfiles/view
+
+" Windowsは_viminfo, 他は.viminfoとする
+if has('win32') || has('win64')
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
+else
+  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
+endif
+
+" 50あれば十分すぎる
+set history=50
+
+" 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
+set autoread
+
+" メッセージ省略設定
+set shortmess=aoOotTWI
+
+" カーソル上下に表示する最小の行数
+" -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
+set scrolloff=0
+let g:scrolloffOn = 0
+function! s:ToggleScrollOffSet()
+  if g:scrolloffOn == 1
+    setlocal scrolloff=0
+    let g:scrolloffOn = 0
+  else
+    setlocal scrolloff=100
+    let g:scrolloffOn = 1
+  endif
+  echo 'setlocal scrolloff=' . &scrolloff
+endfunction
+command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
+nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
+
+" vimdiffは基本縦分割とする
+set diffopt+=vertical
+
+" makeしたらcopen
+autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
+
+"}}}
+"-----------------------------------------------------------------------------
 " Plugin List {{{
 
 " ftpluginは最後に読み込むため, 一旦オフする
@@ -501,116 +611,6 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
   source ~/localfiles/template/local.rc.vim
 endif
-
-"}}}
-"-----------------------------------------------------------------------------
-" 基本設定 {{{
-
-" 左手で<Leader>を入力したい
-let g:mapleader = '#'
-
-" #検索が誤って発動しないようにする
-nnoremap #  <Nop>
-
-" ##で入力待ちを解除する
-nnoremap ## <Nop>
-
-" vimrc内全体で使うaugroupを定義
-augroup MyAutoCmd
-  autocmd!
-augroup END
-
-" Echo startuptime on starting Vim
-if has('vim_starting') && has('reltime')
-  let g:startuptime = reltime()
-  autocmd MyAutoCmd VimEnter *
-        \   let g:startuptime = reltime(g:startuptime)
-        \ | redraw
-        \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
-endif
-
-" " ファイル書き込み時の文字コード。空の場合, encodingの値が使用される
-" " -> vimrcで設定するものではないが, 説明を残したいのでコメントアウト
-" set fileencoding=
-
-" ファイル読み込み時の変換候補
-" -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
-"    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
-" -> とりあえず香り屋版GVimのguessを使おう
-if has('kaoriya')
-  set fileencodings=guess
-else
-  set fileencodings=utf-8,cp932,euc-jp
-endif
-
-" 文字コードを指定してファイルを開き直す
-nnoremap <Leader>enc :<C-u>e ++encoding=
-
-" 改行コードを指定してファイルを開き直す
-nnoremap <Leader>ff  :<C-u>e ++fileformat=
-
-" バックアップ, スワップファイルの設定
-" -> ネットワーク上ファイルの編集時に重くなる？ので作らない
-" -> 生成先をローカルに指定していたからかも。要検証
-set noswapfile
-set nobackup
-set nowritebackup
-
-" ファイルの書き込みをしてバックアップが作られるときの設定
-" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
-" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
-" auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
-set backupcopy=yes
-
-" Vim生成物の生成先ディレクトリ指定
-set dir=~/vimfiles/swap
-set backupdir=~/vimfiles/backup
-
-if has('persistent_undo')
-  set undodir=~/vimfiles/undo
-  set undofile
-endif
-
-set viewdir=~/vimfiles/view
-
-" Windowsは_viminfo, 他は.viminfoとする
-if has('win32') || has('win64')
-  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
-else
-  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
-endif
-
-" 50あれば十分すぎる
-set history=50
-
-" 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
-set autoread
-
-" メッセージ省略設定
-set shortmess=aoOotTWI
-
-" カーソル上下に表示する最小の行数
-" -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
-set scrolloff=0
-let g:scrolloffOn = 0
-function! s:ToggleScrollOffSet()
-  if g:scrolloffOn == 1
-    setlocal scrolloff=0
-    let g:scrolloffOn = 0
-  else
-    setlocal scrolloff=100
-    let g:scrolloffOn = 1
-  endif
-  echo 'setlocal scrolloff=' . &scrolloff
-endfunction
-command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
-nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
-
-" vimdiffは基本縦分割とする
-set diffopt+=vertical
-
-" makeしたらcopen
-autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 "}}}
 "-----------------------------------------------------------------------------
