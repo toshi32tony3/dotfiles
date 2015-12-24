@@ -1619,8 +1619,9 @@ if neobundle#tap('unite.vim')
   " unite.vimのデフォルトコンテキストを設定する
   " http://d.hatena.ne.jp/osyo-manga/20140627
   " -> なんだかんだ非同期で処理させる必要は無い気がする
+  " -> emptyの時にメッセージ通知を出せるか調べる
   call unite#custom#profile('default', 'context', {
-        \   'no_empty'         : 0,
+        \   'no_empty'         : 1,
         \   'no_quit'          : 0,
         \   'prompt'           : '> ',
         \   'prompt_direction' : 'top',
