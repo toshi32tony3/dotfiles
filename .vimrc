@@ -67,24 +67,6 @@ NeoBundleLazy 'Shougo/junkfile.vim', {
       \     ],
       \   },
       \ }
-NeoBundleLazy 'vim-scripts/gtags.vim', {
-      \   'autoload' : {
-      \     'command' : [
-      \       'Gtags',
-      \     ],
-      \   },
-      \ }
-NeoBundleLazy 'hewes/unite-gtags', {
-      \   'depends'  : [
-      \     'Shougo/unite.vim'
-      \   ],
-      \   'autoload' : {
-      \     'unite_sources' : [
-      \       'gtags/ref',
-      \       'gtags/def',
-      \     ],
-      \   },
-      \ }
 NeoBundleLazy 'tacroe/unite-mark', {
       \   'depends'  : [
       \     'Shougo/unite.vim',
@@ -102,6 +84,24 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \   'autoload' : {
       \     'unite_sources' : [
       \       'outline',
+      \     ],
+      \   },
+      \ }
+NeoBundleLazy 'hewes/unite-gtags', {
+      \   'depends'  : [
+      \     'Shougo/unite.vim'
+      \   ],
+      \   'autoload' : {
+      \     'unite_sources' : [
+      \       'gtags/ref',
+      \       'gtags/def',
+      \     ],
+      \   },
+      \ }
+NeoBundleLazy 'vim-scripts/gtags.vim', {
+      \   'autoload' : {
+      \     'command' : [
+      \       'Gtags',
       \     ],
       \   },
       \ }
@@ -1921,16 +1921,6 @@ if neobundle#tap('junkfile.vim')
 
 endif "}}}
 
-" シンボル, 関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
-if neobundle#tap('gtags.vim')
-
-endif "}}}
-
-" for unite-gtags {{{
-if neobundle#tap('unite-gtags')
-
-endif "}}}
-
 " for unite-mark {{{
 if neobundle#tap('unite-mark')
 
@@ -1942,6 +1932,16 @@ endif "}}}
 
 " for unite-outline {{{
 if neobundle#tap('unite-outline')
+
+endif "}}}
+
+" for unite-gtags {{{
+if neobundle#tap('unite-gtags')
+
+endif "}}}
+
+" シンボル, 関数の参照位置検索(GNU GLOBAL, gtags.vim) {{{
+if neobundle#tap('gtags.vim')
 
 endif "}}}
 
