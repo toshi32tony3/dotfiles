@@ -558,8 +558,11 @@ set laststatus=2     " 常にステータス行を表示する
 set wrap             " 長いテキストを折り返す
 set display=lastline " 長いテキストを省略しない
 set colorcolumn=81   " 81列目に線を表示
-set number           " 行番号を表示
-set relativenumber   " 行番号を相対表示
+
+if has('vim_starting')
+  set number           " 行番号を表示
+  set relativenumber   " 行番号を相対表示
+endif
 nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>:set relativenumber?<CR>
 
 " 不可視文字を可視化
