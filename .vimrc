@@ -86,6 +86,10 @@ set autoread
 " メッセージ省略設定
 set shortmess=aoOotTWI
 
+" ノーマルモードで<Esc>するマッピングがあってもbellを鳴らさない
+" -> 本当は鳴らしたいが, search-offsetを使った時に鳴るのが気になるので...
+set belloff=esc
+
 " カーソル上下に表示する最小の行数
 " -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
 set scrolloff=0
@@ -2072,9 +2076,10 @@ if neobundle#tap('vim-asterisk')
     endif
 
     let l:lastHistory = histget('/', -1)
-    if match(l:lastHistory, '^\\<.*\\>$') >= 0
-      let l:lastHistory = l:lastHistory[2 : (len(l:lastHistory) - 3)]
-      let l:lastHistory = '<' . l:lastHistory . '>'
+    let l:matchEndIndex = matchend(l:lastHistory, '^\\<.*\\>')
+    if l:matchEndIndex >= 0
+      let l:lastHistory = '<' . l:lastHistory[2 : (l:matchEndIndex - 3)] . '>'
+            \                 . l:lastHistory[l:matchEndIndex : ]
     endif
 
     if match(l:lastHistory, '(') >= 0
@@ -2097,7 +2102,8 @@ if neobundle#tap('vim-asterisk')
       let l:lastHistory = substitute(l:lastHistory, '}', '\\}', 'g')
     endif
 
-    if match(l:lastHistory, '+') >= 0
+    if      (match(l:lastHistory, '+'          ) >=  0) &&
+          \ (match(l:lastHistory, '\v/(b|e|s)+') == -1)
       let l:lastHistory = substitute(l:lastHistory, '+', '\\+', 'g')
     endif
 
