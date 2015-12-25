@@ -2246,7 +2246,7 @@ if neobundle#tap('agit.vim')
     nnoremap <buffer> <C-p> <Nop>
 
   endfunction
-  autocmd MyAutoCmd FileType agit call s:AgitSettings()
+  autocmd MyAutoCmd FileType agit          call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
 
 endif "}}}
