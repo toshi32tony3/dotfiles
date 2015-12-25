@@ -2050,6 +2050,9 @@ endif "}}}
 " asterisk検索をパワーアップ(vim-asterisk) {{{
 if neobundle#tap('vim-asterisk')
 
+  " 検索開始時のカーソル位置を保持する
+  let g:asterisk#keeppos = 1
+
   " g:incsearch#magic使用時の検索履歴問題の暫定対処
   " https://github.com/haya14busa/incsearch.vim/issues/22
   " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
