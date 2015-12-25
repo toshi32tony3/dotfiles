@@ -609,7 +609,7 @@ if has('vim_starting')
   set foldlevel=0
 endif
 
-" fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てるといい感じ
+" fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てる
 nnoremap zh zc
 nnoremap zl zo
 
