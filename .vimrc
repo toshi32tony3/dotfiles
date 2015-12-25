@@ -734,7 +734,7 @@ set tildeop
 nnoremap & <silent> :<C-u>&&<CR>
 xnoremap & <silent> :<C-u>&&<CR>
 
-" クリップボードをデフォルトのレジスタとする(GVimではこの設定でOK)
+" クリップボードレジスタを使う
 set clipboard=unnamed
 
 " 現在開いているファイルのパスなどをレジスタやクリップボードへ登録する
