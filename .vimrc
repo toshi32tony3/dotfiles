@@ -753,9 +753,6 @@ command! -nargs=0 ClipFile call s:Clip(expand('%:t'))
 " 現在開いているファイルのディレクトリパスをレジスタへ
 command! -nargs=0 ClipDir  call s:Clip(expand('%:p:h'))
 
-" <cword>をレジスタへ
-command! -nargs=0 ClipCword call s:Clip(expand('<cword>'))
-
 " コマンドの出力結果をクリップボードに格納
 function! s:ClipCmdOutput(cmd)
   redir @*>
@@ -2163,22 +2160,28 @@ if neobundle#tap('vim-asterisk')
   noremap <expr> <Plug>(_ExplicitMagic) <SID>ExplicitMagic()
   command! -nargs=0 ExplicitMagic call s:ExplicitMagic()
 
+  function! s:SilentClip(data) "{{{
+    let @* = a:data
+    return ''
+  endfunction "}}}
+  noremap <expr> <Plug>(_ClipCword) <SID>SilentClip(expand('<cword>'))
+
   if neobundle#tap('incsearch.vim') && neobundle#tap('vim-anzu')
-    nmap *       :<C-u>ClipCword<CR><Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
-    omap *  <Esc>:<C-u>ClipCword<CR><Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
-    xmap *               <Esc>gvyvgv<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    nmap *       <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
+    omap *  <Esc><Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
+    xmap *              <Esc>gvyvgv<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
 
-    nmap g*      :<C-u>ClipCword<CR><Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    omap g* <Esc>:<C-u>ClipCword<CR><Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    xmap g*              <Esc>gvyvgv<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    nmap g*      <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    omap g* <Esc><Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    xmap g*             <Esc>gvyvgv<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
   else
-    nmap *       :<C-u>ClipCword<CR><Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
-    omap *  <Esc>:<C-u>ClipCword<CR><Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
-    xmap *               <Esc>gvyvgv<Plug>(asterisk-z*)
+    nmap *       <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
+    omap *  <Esc><Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
+    xmap *              <Esc>gvyvgv<Plug>(asterisk-z*)
 
-    nmap g*      :<C-u>ClipCword<CR><Plug>(asterisk-gz*)
-    omap g* <Esc>:<C-u>ClipCword<CR><Plug>(asterisk-gz*)
-    xmap g*              <Esc>gvyvgv<Plug>(asterisk-gz*)
+    nmap g*      <Plug>(_ClipCword)<Plug>(asterisk-gz*)
+    omap g* <Esc><Plug>(_ClipCword)<Plug>(asterisk-gz*)
+    xmap g*             <Esc>gvyvgv<Plug>(asterisk-gz*)
   endif
 
 endif "}}}
