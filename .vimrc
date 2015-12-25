@@ -527,9 +527,6 @@ endif
 "-----------------------------------------------------------------------------
 " 表示 {{{
 
-" 2行くらいがちょうど良い
-set cmdheight=2
-
 if has('gui_running')
   " Ricty for Powerline
   set guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
@@ -554,11 +551,18 @@ if has('gui_running')
 
 endif
 
+set showcmd          " 入力中のキーを画面右下に表示
+set cmdheight=2      " コマンド行は2行がちょうど良い
+set showtabline=2    " 常にタブ行を表示する
+set laststatus=2     " 常にステータス行を表示する
 set wrap             " 長いテキストを折り返す
 set display=lastline " 長いテキストを省略しない
 set colorcolumn=81   " 81列目に線を表示
-set number           " 行番号を表示
-set relativenumber   " 行番号を相対表示
+
+if has('vim_starting')
+  set number           " 行番号を表示
+  set relativenumber   " 行番号を相対表示
+endif
 nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>:set relativenumber?<CR>
 
 " 不可視文字を可視化
@@ -566,12 +570,6 @@ set list
 
 " 不可視文字の設定(UTF-8特有の文字は使わない方が良い)
 set listchars=tab:>-,trail:-,eol:\
-
-" 入力中のキーを画面右下に表示
-set showcmd
-
-set showtabline=2 " 常にタブ行を表示する
-set laststatus=2  " 常にステータス行を表示する
 
 if has('kaoriya')
 
@@ -593,7 +591,7 @@ if has('kaoriya')
 
 endif
 
-" 日本語をスペルチェックから除外
+" 日本語はスペルチェックから除外
 set spelllang+=cjk
 
 " 折り畳み機能の設定
@@ -653,9 +651,8 @@ set wrapscan   " 検索時に最後まで行ったら最初に戻る
 set incsearch  " インクリメンタルサーチ
 set hlsearch   " マッチしたテキストをハイライト
 
-" " vimgrep/grep結果が0件の場合, Quickfixを開かない
-" " -> 逆にわかりにくい気がしたのでコメントアウト
-" autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
+" vimgrep/grep結果が0件の場合, Quickfixを開かない
+autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -830,7 +827,7 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 " autocmd MyAutoCmd BufReadPost  ?* loadview
 
 " 新規タブ生成
-nnoremap ,tt :<C-u>tabnew<CR>
+nnoremap ,t :<C-u>tabnew<CR>
 
 " 新規タブでgf
 nnoremap <Leader>gf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
@@ -1090,7 +1087,7 @@ nnoremap <C-Down>  :<C-u>cnext<CR>
 nnoremap <C-Up>    :<C-u>cprevious<CR>
 nnoremap <C-Right> :<C-u>cnext<CR>
 
-" せっかくなので,   Alt + カーソルキーでprevious/next
+" せっかくなので,   Alt + カーソルキーで previous/next
 nnoremap <A-Left>  :<C-u>previous<CR>
 nnoremap <A-Down>  :<C-u>next<CR>
 nnoremap <A-Up>    :<C-u>previous<CR>
@@ -1625,8 +1622,9 @@ if neobundle#tap('unite.vim')
   " unite.vimのデフォルトコンテキストを設定する
   " http://d.hatena.ne.jp/osyo-manga/20140627
   " -> なんだかんだ非同期で処理させる必要は無い気がする
+  " -> emptyの時にメッセージ通知を出せるか調べる
   call unite#custom#profile('default', 'context', {
-        \   'no_empty'         : 0,
+        \   'no_empty'         : 1,
         \   'no_quit'          : 0,
         \   'prompt'           : '> ',
         \   'prompt_direction' : 'top',
@@ -1726,11 +1724,12 @@ endif "}}}
 if neobundle#tap('vimfiler.vim')
 
   let g:vimfiler_as_default_explorer = 1
+  let g:vimfiler_enable_auto_cd = 1
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
 
   " カレントディレクトリを開く
-  nnoremap gc :<C-u>VimFilerCurrentDir<CR>
+  nnoremap ,c :<C-u>VimFilerCurrentDir<CR>
 
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
@@ -1739,7 +1738,7 @@ if neobundle#tap('vimfiler.vim')
     nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
 
     " カレントディレクトリを開く
-    nnoremap <buffer> gc :<C-u>VimFilerCurrentDir<CR>
+    nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
 
     if neobundle#tap('unite.vim')
       " Unite vimgrepを使う
@@ -1931,7 +1930,9 @@ endif "}}}
 if neobundle#tap('vim-markdown')
 
   " " markdownのfold機能を無効にする
+  " " -> むしろ有効活用したい
   " let g:vim_markdown_folding_disabled = 1
+  autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
 
@@ -1973,15 +1974,6 @@ endif "}}}
 " 囲む / 囲まなくする / 別の何かで囲む(vim-surround) {{{
 if neobundle#tap('vim-surround')
 
-  " " (例) sw' /* 次の単語を''で囲む */
-  " nmap s <Plug>Ysurround
-  "
-  " " (例) S'  /* カーソル行以降を''で囲む */
-  " nmap S <Plug>Ysurround$
-  "
-  " " (例) ss' /* 行を''で囲む */
-  " nmap ss <Plug>Yssurround
-
 endif "}}}
 
 " 置き換えオペレータ(vim-operator-replace) {{{
@@ -2020,10 +2012,6 @@ if neobundle#tap('vim-quickhl')
 
   map <A-h> <Plug>(operator-quickhl-manual-this-motion)
 
-  " " QuickhlManualResetも一緒にやってしまうと間違えて消すのが若干怖い
-  " " -> ambicmdのおかげで :qmr<Space> で呼び出せるのでコメントアウト
-  " nmap <silent> <Esc> :<C-u>nohlsearch<CR>:QuickhlManualReset<CR>
-
 endif "}}}
 
 " incsearchをパワーアップ(incsearch.vim) {{{
@@ -2031,10 +2019,6 @@ if neobundle#tap('incsearch.vim')
 
   " very magic
   let g:incsearch#magic = '\v'
-
-  " " 検索後, カーソル移動すると自動でnohlsearchする
-  " " -> 自動でnohlsearchするべきか非常に悩ましい
-  " let g:incsearch#auto_nohlsearch = 1
 
   if has('kaoriya') && has('migemo')
     if !neobundle#is_installed('incsearch-migemo.vim')
@@ -2052,21 +2036,29 @@ if neobundle#tap('incsearch.vim')
   noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
   noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
 
-  if neobundle#tap('vim-anzu')
-    map n  <Plug>(incsearch-nohl)<Plug>(anzu-n-with-echo)
-    map N  <Plug>(incsearch-nohl)<Plug>(anzu-N-with-echo)
+endif "}}}
 
-  else
-    map n  <Plug>(incsearch-nohl-n)
-    map N  <Plug>(incsearch-nohl-N)
+" incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
+if neobundle#tap('incsearch-fuzzy.vim')
 
-  endif
+  map  z/ <Plug>(incsearch-fuzzy-/)
+  map  z? <Plug>(incsearch-fuzzy-?)
+  map gz/ <Plug>(incsearch-fuzzyspell-/)
+  map gz? <Plug>(incsearch-fuzzyspell-?)
+
+endif "}}}
+
+" asterisk検索をパワーアップ(vim-asterisk) {{{
+if neobundle#tap('vim-asterisk')
+
+  " 検索開始時のカーソル位置を保持する
+  let g:asterisk#keeppos = 1
 
   " g:incsearch#magic使用時の検索履歴問題の暫定対処
   " https://github.com/haya14busa/incsearch.vim/issues/22
   " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
   " NOTE: star検索の対象になりそうなものをカバーしたつもりだが, 多分完全ではない
-  function! s:ExplicitMagic() abort
+  function! s:ExplicitMagic() abort "{{{
     if g:incsearch#magic != '\v'
       return ''
     endif
@@ -2158,62 +2150,27 @@ if neobundle#tap('incsearch.vim')
     call histadd('/', l:lastHistory)
 
     return ''
-  endfunction
+  endfunction "}}}
   noremap <expr> <Plug>(_ExplicitMagic) <SID>ExplicitMagic()
   command! -nargs=0 ExplicitMagic call s:ExplicitMagic()
 
   " アスタリスク検索の対象をクリップボードにコピー
-  if neobundle#tap('vim-asterisk') && neobundle#tap('vim-anzu')
-    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
-    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+  if neobundle#tap('incsearch.vim') && neobundle#tap('vim-anzu')
+    nmap *          yiw<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
+    omap *     <Esc>yiw<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
+    xmap *  <Esc>gvyvgv<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
 
-    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-  elseif neobundle#tap('vim-asterisk')
-    nmap *          yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
-    omap *     <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-z*)
-
-    nmap g*         yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl0)<Plug>(asterisk-gz*)
+    nmap g*         yiw<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    omap g*    <Esc>yiw<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    xmap g* <Esc>gvyvgv<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
   else
-    nmap *          yiw<Plug>(incsearch-nohl-*)<Plug>(_ExplicitMagic)
-    omap *     <Esc>yiw<Plug>(incsearch-nohl-*)<Plug>(_ExplicitMagic)
-    xmap *  <Esc>gvyvgv<Plug>(incsearch-nohl-*)
-
-    nmap g*         yiw<Plug>(incsearch-nohl-g*)
-    omap g*    <Esc>yiw<Plug>(incsearch-nohl-g*)
-    xmap g* <Esc>gvyvgv<Plug>(incsearch-nohl-g*)
-  endif
-
-endif "}}}
-
-" incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
-if neobundle#tap('incsearch-fuzzy.vim')
-
-  map  z/ <Plug>(incsearch-fuzzy-/)
-  map  z? <Plug>(incsearch-fuzzy-?)
-  map gz/ <Plug>(incsearch-fuzzyspell-/)
-  map gz? <Plug>(incsearch-fuzzyspell-?)
-
-endif "}}}
-
-" asterisk検索をパワーアップ(vim-asterisk) {{{
-
-if neobundle#tap('vim-asterisk')
-
-  if !neobundle#tap('incsearch.vim')
-    nmap *          yiw<Plug>(asterisk-z*)
-    omap *     <Esc>yiw<Plug>(asterisk-z*)
+    nmap *          yiw<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
+    omap *     <Esc>yiw<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
     xmap *  <Esc>gvyvgv<Plug>(asterisk-z*)
 
     nmap g*         yiw<Plug>(asterisk-gz*)
     omap g*    <Esc>yiw<Plug>(asterisk-gz*)
     xmap g* <Esc>gvyvgv<Plug>(asterisk-gz*)
-
   endif
 
 endif "}}}
@@ -2230,12 +2187,9 @@ if neobundle#tap('vim-anzu')
 
   " nmap * <Plug>(anzu-star-with-echo)N
 
-  if !neobundle#tap('incsearch.vim')
-    " コマンド結果出力画面にecho
-    nmap n <Plug>(anzu-n-with-echo)
-    nmap N <Plug>(anzu-N-with-echo)
-
-  endif
+  " コマンド結果出力画面にecho
+  nmap n <Plug>(anzu-n-with-echo)
+  nmap N <Plug>(anzu-N-with-echo)
 
 endif "}}}
 
