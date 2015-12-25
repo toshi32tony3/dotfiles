@@ -2154,6 +2154,7 @@ if neobundle#tap('vim-asterisk')
   noremap <expr> <Plug>(_ExplicitMagic) <SID>ExplicitMagic()
   command! -nargs=0 ExplicitMagic call s:ExplicitMagic()
 
+  " star-search対象をクリップボードに入れる
   function! s:SilentClip(data) "{{{
     let @* = a:data
     return ''
