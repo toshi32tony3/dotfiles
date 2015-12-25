@@ -2062,7 +2062,7 @@ if neobundle#tap('vim-asterisk')
   " https://github.com/haya14busa/incsearch.vim/issues/22
   " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
   " NOTE: star検索の対象になりそうなものをカバーしたつもりだが, 多分完全ではない
-  function! s:ExplicitMagic() abort "{{{
+  function! s:ExplicitMagic() "{{{
     if g:incsearch#magic != '\v'
       return ''
     endif
