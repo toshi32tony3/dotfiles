@@ -92,8 +92,8 @@ set belloff=esc
 
 " カーソル上下に表示する最小の行数
 " -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
-set scrolloff=0
-let g:scrolloffOn = 0
+set scrolloff=100
+let g:scrolloffOn = 1
 function! s:ToggleScrollOffSet()
   if g:scrolloffOn == 1
     setlocal scrolloff=0
