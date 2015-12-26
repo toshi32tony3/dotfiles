@@ -1194,7 +1194,7 @@ endfunction "}}}
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 
 " foldlevel('.')はnofoldenableの時に必ず0を返すので, foldlevelを自分で数える
-" NOTE: 1行, 1foldまでとする
+" NOTE: 1行, 1Foldまでとする
 function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " 小細工
@@ -1284,31 +1284,38 @@ function! s:GetCurrentFold() "{{{
   let l:lastLineNumber = -1
 
   " ------------------------------------------------------------
-  " カーソル位置の親Fold名を取得
+  " カーソル位置のfoldListを取得
   " ------------------------------------------------------------
   while 1
     if l:searchCounter <= 0
       break
     endif
-    keepjumps normal! [z
-    let l:currentLine = getline('.')
-    let l:currentLineNumber = line('.')
 
-    " 行頭からのコメントか, 末尾のコメントかで切り出す位置を変える
-    let l:pattern = '\v^("\ )'
-    let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
-    let l:sufIndex = strlen(l:currentLine)
-          \        - ((match(l:currentLine, l:pattern) == -1) ? 6 : 5)
-    if l:lastLineNumber != l:currentLineNumber
-      call insert(l:foldList, l:currentLine[l:preIndex : l:sufIndex], 0)
-    else
+    " 1段階親のところへ移動
+    keepjumps normal! [z
+    let l:currentLine       = getline('.')
+    let l:currentLineNumber =    line('.')
+
+    " 移動していなければ, 移動前のカーソル行が子Fold開始位置だったということ
+    if l:lastLineNumber == l:currentLineNumber
+      " カーソルを戻して子Fold行を取得
       call setpos('.', l:cursorPosition)
       let l:currentLine = getline('.')
-      let l:preIndex = ((match(l:currentLine, l:pattern) == -1) ? 0 : 2)
-      let l:sufIndex = strlen(l:currentLine)
-            \        - ((match(l:currentLine, l:pattern) == -1) ? 6 : 5)
-      call add(l:foldList, l:currentLine[l:preIndex : l:sufIndex])
     endif
+
+    " コメント行か, 末尾コメントか判別してFold名を切り出す
+    let l:startIndex = match   (l:currentLine, '\w'      )
+    let l:endIndex   = matchend(l:currentLine, '\v^("\ )')
+    let l:preIndex   = ((l:endIndex == -1) ? l:startIndex : l:endIndex)
+    let l:sufIndex   = (strlen(l:currentLine) - ((l:endIndex == -1) ? 6 : 5))
+    if l:lastLineNumber == l:currentLineNumber
+      " 子Foldをリストに追加
+      call    add(l:foldList, l:currentLine[l:preIndex : l:sufIndex]   )
+    else
+      " 親Foldをリストに追加
+      call insert(l:foldList, l:currentLine[l:preIndex : l:sufIndex], 0)
+    endif
+
     let l:lastLineNumber = l:currentLineNumber
     let l:searchCounter -= 1
 
@@ -2067,10 +2074,10 @@ if neobundle#tap('vim-asterisk')
     endif
 
     let l:lastHistory = histget('/', -1)
-    let l:matchEndIndex = matchend(l:lastHistory, '^\\<.*\\>')
-    if l:matchEndIndex >= 0
-      let l:lastHistory = '<' . l:lastHistory[2 : (l:matchEndIndex - 3)] . '>'
-            \                 . l:lastHistory[l:matchEndIndex : ]
+    let l:endIndex = matchend(l:lastHistory, '^\\<.*\\>')
+    if l:endIndex >= 0
+      let l:lastHistory = '<' . l:lastHistory[2 : (l:endIndex - 3)] . '>'
+            \                 . l:lastHistory[l:endIndex : ]
     endif
 
     if match(l:lastHistory, '(') >= 0
