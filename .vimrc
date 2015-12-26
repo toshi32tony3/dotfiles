@@ -2253,7 +2253,7 @@ if neobundle#tap('lightline.vim')
   let g:lightline.active = {
         \   'left'  : [
         \     ['mode'],
-        \     ['fugitive', 'filename', 'currentfunc'],
+        \     ['skk-mode', 'fugitive', 'filename', 'currentfunc'],
         \   ],
         \   'right' : [
         \     ['lineinfo'],
@@ -2262,7 +2262,6 @@ if neobundle#tap('lightline.vim')
         \   ],
         \ }
 
-        "\     ['skk-mode', 'fugitive', 'filename', 'currentfunc'],
   " for using git properly
   " \           ['skk-mode', 'gita-branch', 'filename', 'currenttag'],
 
@@ -2274,11 +2273,11 @@ if neobundle#tap('lightline.vim')
         \   'filetype'     : 'MyFiletype',
         \   'fileencoding' : 'MyFileencoding',
         \   'mode'         : 'MyMode',
+        \   'skk-mode'     : 'MySKKMode',
         \   'fugitive'     : 'MyFugitive',
         \   'currentfunc'  : 'MyCurrentFunc',
         \ }
 
-        "\   'skk-mode'     : 'MySKKMode',
   " for using git properly
   " \   'gita-branch'  : 'MyGitaBranch',
 
@@ -2322,7 +2321,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    if !neobundle#tap('eskk.vim') || !neobundle#tap('neocomplete.vim')
+    if !neobundle#is_sourced('eskk.vim') || !neobundle#tap('neocomplete.vim')
       return ''
     endif
 
@@ -2555,8 +2554,8 @@ endif "}}}
 " Vimでskkする(eskk.vim) {{{
 if neobundle#tap('eskk.vim')
 
-  if has('kaoriya')
-    autocmd MyAutoCmd VimEnter * set imdisable
+  if has('vim_starting') && has('kaoriya')
+    set imdisable
   endif
 
   if neobundle#tap('skk.vim')
