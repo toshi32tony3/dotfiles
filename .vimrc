@@ -153,7 +153,6 @@ NeoBundle 'toshi32tony3/dicwin-vim'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet.vim'
 NeoBundle 'toshi32tony3/neosnippet-snippets'
-" NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
 NeoBundle 'Shougo/unite.vim'
@@ -1596,19 +1595,6 @@ if neobundle#tap('neosnippet.vim')
   if neobundle#tap('unite.vim')
     imap <C-s> <Plug>(neosnippet_start_unite_snippet)
   endif
-
-endif "}}}
-
-" Vim上で動くシェル(vimshell) {{{
-if neobundle#tap('vimshell')
-
-  let g:vimshell_enable_start_insert = 0
-  let g:vimshell_force_overwrite_statusline = 0
-
-  " 動的プロンプトの設定
-  " http://blog.supermomonga.com/articles/vim/vimshell-dynamicprompt.html
-  let g:vimshell_prompt_expr = 'getcwd() . " > "'
-  let g:vimshell_prompt_pattern = '^\f\+ > '
 
 endif "}}}
 
