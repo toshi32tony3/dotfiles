@@ -1905,7 +1905,15 @@ endif "}}}
 " 関数内検索(vim-textobj-function with vim-operator-search) {{{
 if neobundle#tap('vim-textobj-function')
 
-  let g:textobj_function_no_default_key_mappings = 1
+  " for Lazy
+  nmap af <Plug>(textobj-function-a)
+  xmap af <Plug>(textobj-function-a)
+  nmap if <Plug>(textobj-function-i)
+  xmap if <Plug>(textobj-function-i)
+  nmap aF <Plug>(textobj-function-A)
+  xmap aF <Plug>(textobj-function-A)
+  nmap iF <Plug>(textobj-function-I)
+  xmap iF <Plug>(textobj-function-I)
 
   if neobundle#tap('vim-operator-search')
     nmap <Leader>/ <Plug>(operator-search)<Plug>(textobj-function-i)
