@@ -2351,24 +2351,12 @@ if neobundle#tap('lightline.vim')
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており, ファイル名をフルパス(%:p)出力
     " -> GVIMウィンドウ上部にフルパスが表示されているので, そちらを参照する
-    if       neobundle#is_installed('unite.vim')    &&
-          \  neobundle#is_installed('vimfiler.vim') &&
-          \  neobundle#is_installed('vimshell.vim')
-      return (&ft == 'unite'       ? unite#get_status_string()    :
-            \ &ft == 'vimfiler'    ? vimfiler#get_status_string() :
-            \ &ft == 'vimshell'    ? vimshell#get_status_string() :
-            \  '' != expand('%:t') ? expand('%:t')                : '[No Name]') .
-            \ ('' != MyReadonly()  ? MyReadonly()                 : ''         ) .
-            \ ('' != MyModified()  ? MyModified()                 : ''         )
-    else
-      return (&ft == 'unite'       ? ''            :
-            \ &ft == 'vimfiler'    ? ''            :
-            \ &ft == 'vimshell'    ? ''            :
-            \  '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-            \ ('' != MyReadonly()  ? MyReadonly()  : ''         ) .
-            \ ('' != MyModified()  ? MyModified()  : ''         )
-    endif
-    return ''
+    return (&ft == 'unite'       ? ''            :
+          \ &ft == 'vimfiler'    ? ''            :
+          \ &ft == 'vimshell'    ? ''            :
+          \  '' != expand('%:t') ? expand('%:t') : '[No Name]') .
+          \ ('' != MyReadonly()  ? MyReadonly()  : ''         ) .
+          \ ('' != MyModified()  ? MyModified()  : ''         )
   endfunction
 
   function! MyFileformat()
@@ -2388,44 +2376,45 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    if neobundle#is_installed('eskk.vim')
-      let l:CurrentMode = eskk#statusline()
-
-      " 初回の処理
-      if !exists('b:LastMode')
-        " モードを覚えておく
-        let b:LastMode = l:CurrentMode
-        NeoCompleteLock
-      endif
-
-      " モード変更時の処理
-      if l:CurrentMode != b:LastMode
-        " normal -> skk
-        if b:LastMode == ''
-          " 必要ならunlock
-          if neocomplete#get_current_neocomplete().lock == 0
-            let b:IsAlreadyUnlocked = 1
-          else
-            NeoCompleteUnlock
-          endif
-
-          " skk -> normal
-        else
-          " 必要ならlock
-          if exists('b:IsAlreadyUnlocked')
-            unlet b:IsAlreadyUnlocked
-          else
-            NeoCompleteLock
-          endif
-
-        endif
-        " 直前のモード情報を更新
-        let b:LastMode = l:CurrentMode
-      endif
-
-      return winwidth(0) > 30 ? l:CurrentMode : ''
+    if !neobundle#tap('eskk.vim') || !neobundle#tap('neocomplete.vim')
+      return ''
     endif
-    return ''
+
+    let l:CurrentMode = eskk#statusline()
+
+    " 初回の処理
+    if !exists('b:LastMode')
+      " モードを覚えておく
+      let b:LastMode = l:CurrentMode
+      NeoCompleteLock
+    endif
+
+    " モード変更時の処理
+    if l:CurrentMode != b:LastMode
+      " normal -> skk
+      if b:LastMode == ''
+        " 必要ならunlock
+        if neocomplete#get_current_neocomplete().lock == 0
+          let b:IsAlreadyUnlocked = 1
+        else
+          NeoCompleteUnlock
+        endif
+
+        " skk -> normal
+      else
+        " 必要ならlock
+        if exists('b:IsAlreadyUnlocked')
+          unlet b:IsAlreadyUnlocked
+        else
+          NeoCompleteLock
+        endif
+
+      endif
+      " 直前のモード情報を更新
+      let b:LastMode = l:CurrentMode
+    endif
+
+    return winwidth(0) > 30 ? l:CurrentMode : ''
   endfunction
 
   function! MyCurrentFunc()
@@ -2437,23 +2426,18 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyFugitive()
-    if &ft != 'vimfiler' && neobundle#is_installed('vim-fugitive')
-      try
-        let l:_ = fugitive#head()
-        return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
-      endtry
+    if !neobundle#tap('vim-fugitive') || &ft == 'vimfiler'
+      return ''
     endif
-    return ''
+    let l:_ = fugitive#head()
+    return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
   endfunction
 
   function! MyGitaBranch()
-    if &ft != 'vimfiler' && neobundle#is_installed('vim-gita')
-      try
-        let l:_ = gita#statusline#preset('branch_fancy')
-        return winwidth(0) > 30 ? (strlen(l:_) ? l:_ : '') : ''
-      endtry
+    if !neobundle#tap('vim-gita') || &ft == 'vimfiler'
+      return ''
     endif
-    return ''
+    return winwidth(0) > 30 ? gita#statusline#preset('branch_fancy') : ''
   endfunction
 
 endif "}}}
