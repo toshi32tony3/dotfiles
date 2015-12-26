@@ -2601,12 +2601,9 @@ if neobundle#tap('eskk.vim')
   nmap <A-o> o<Plug>(eskk:toggle)
 
   " もっともっとすぐにskkしたい
-  nmap <A-c> C<Plug>(eskk:toggle)
-
-  if !neobundle#tap('vim-sneak')
-    nmap <C-s> s<Plug>(eskk:toggle)
-    nmap <A-s> S<Plug>(eskk:toggle)
-  endif
+  nmap <A-c>  C<Plug>(eskk:toggle)
+  nmap <C-s> cl<Plug>(eskk:toggle)
+  nmap <A-s> ^C<Plug>(eskk:toggle)
 
   autocmd MyAutoCmd User eskk-initialize-pre call s:eskk_initial_pre()
   function! s:eskk_initial_pre()
