@@ -501,9 +501,6 @@ NeoBundleLazy 'mtth/scratch.vim', {
       \   },
       \ }
 
-" " 使い方は大体わかったけれど, 今のところ使えてない
-" NeoBundle 'thinca/vim-template'
-
 " 日本語ヘルプを卒業したい
 " -> なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
@@ -2745,18 +2742,6 @@ if neobundle#tap('scratch.vim')
     delcommand ScratchInsert
     delcommand ScratchSelection
 
-  endfunction
-
-endif "}}}
-
-" 空ファイルを開く時にテンプレートを使う(vim-template) {{{
-if neobundle#tap('vim-template')
-
-  let g:template_basedir = '~/configs'
-
-  autocmd User plugin-template-loaded call s:template_keywords()
-  function! s:template_keywords()
-    %s/{{_date_}}/\=strftime('%Y-%m-%d %H:%M')/g
   endfunction
 
 endif "}}}
