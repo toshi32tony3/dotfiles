@@ -412,6 +412,11 @@ NeoBundleLazy 'toshi32tony3/vim-shot-f', {
       \     '<Plug>(shot-f-',
       \   ],
       \ }
+NeoBundleLazy 'justinmk/vim-sneak', {
+      \   'on_map' : [
+      \     '<Plug>Sneak_',
+      \   ],
+      \ }
 
 NeoBundleLazy 'tyru/caw.vim', {
       \   'on_map' : [
@@ -2410,6 +2415,25 @@ if neobundle#tap('vim-shot-f')
   omap F <Plug>(shot-f-F)
   omap t <Plug>(shot-f-t)
   omap T <Plug>(shot-f-T)
+
+endif "}}}
+
+" f検索の2文字版(vim-sneak) {{{
+if neobundle#tap('vim-sneak')
+
+  " clever-s
+  let g:sneak#s_next = 1
+
+  " smartcase
+  let g:sneak#use_ic_scs = 1
+
+  " for Lazy
+  nmap s <Plug>Sneak_s
+  nmap S <Plug>Sneak_S
+  xmap s <Plug>Sneak_s
+  xmap S <Plug>Sneak_S
+  omap s <Plug>Sneak_s
+  omap S <Plug>Sneak_S
 
 endif "}}}
 
