@@ -246,7 +246,6 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
 " NeoBundle 'pocke/vim-hier'
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
-" NeoBundle 'scrooloose/syntastic'
 
 " memolist.vimはmarkdown形式でメモを生成するので, markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
@@ -895,21 +894,10 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
   endfunction
 
-  function! s:SetIncludes()
-    let g:syntastic_c_include_dirs = []
-    for l:item in g:c_include_dirs
-      call add(g:syntastic_c_include_dirs, $TARGET_DIR. '\' . l:item)
-    endfor
-  endfunction
-
   call s:SetSrcDir()
   call s:SetTags()
   call s:SetPathList()
   call s:SetCDPathList()
-
-  if neobundle#tap('syntastic')
-    call s:SetIncludes()
-  endif
 
   " ソースコードをスイッチ
   function! s:SwitchSource()
@@ -922,10 +910,6 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
-
-    if neobundle#tap('syntastic')
-      call s:SetIncludes()
-    endif
 
     " ソースコード切り替え後, バージョン名を出力
     echo 'change source to: ' . $TARGET_VER
@@ -1851,21 +1835,6 @@ if neobundle#tap('vim-watchdogs')
     call watchdogs#setup(g:quickrun_config)
 
   endif
-
-endif "}}}
-
-" Vim上で自動構文チェック(syntastic) {{{
-if neobundle#tap('syntastic')
-  " Caution: syntasticは非同期チェックできない
-
-  " 必ず手動チェックとする
-  let g:syntastic_check_on_wq = 0
-  let g:syntastic_mode_map = {
-        \   'mode': 'passive'
-        \ }
-
-  " エラーにジャンプ, 警告は無視
-  let g:syntastic_auto_jump = 3
 
 endif "}}}
 
