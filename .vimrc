@@ -265,6 +265,7 @@ NeoBundle 'rcmdnk/vim-markdown'
 NeoBundleLazy 'glidenote/memolist.vim', {
       \   'autoload' : {
       \     'commands' : [
+      \       'MemoList',
       \       'MemoNew',
       \     ],
       \   },
