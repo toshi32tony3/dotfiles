@@ -2584,25 +2584,26 @@ if neobundle#tap('eskk.vim')
 
   " すぐにskkしたい
   " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
-  " nmap <expr> <C-i> "i\<C-j>"
-  nmap <expr> <C-j> "i\<C-j>"
+  " nmap <C-i> i<Plug>(eskk:toggle)
+  " nmap <C-j> i<Plug>(eskk:toggle)
+  nmap <C-j> i<Plug>(eskk:toggle)
 
   " インクリメントは潰せない
-  " nmap <expr> <C-a> "a\<C-j>"
-  nmap <expr> <A-j> "a\<C-j>"
+  " nmap <C-a> a<Plug>(eskk:toggle)
+  nmap <A-j> a<Plug>(eskk:toggle)
 
   " もっとすぐにskkしたい
-  nmap <expr> <A-i> "I\<C-j>"
-  nmap <expr> <A-a> "A\<C-j>"
+  nmap <A-i> I<Plug>(eskk:toggle)
+  nmap <A-a> A<Plug>(eskk:toggle)
 
-  " " oも使いたいが, <C-o>はjumplist戻るなので潰せない。Oは我慢
-  " nmap <expr> <C-o> "o\<C-j>"
-  nmap <expr> <A-o> "o\<C-j>"
+  " <C-o>はjumplist戻るなので潰せない。Oは我慢
+  " nmap <C-o> o<Plug>(eskk:toggle)
+  nmap <A-o> o<Plug>(eskk:toggle)
 
   " もっともっとすぐにskkしたい
-  nmap <expr> <C-s> "s\<C-j>"
-  nmap <expr> <A-c> "C\<C-j>"
-  nmap <expr> <A-s> "S\<C-j>"
+  nmap <C-s> s<Plug>(eskk:toggle)
+  nmap <A-c> C<Plug>(eskk:toggle)
+  nmap <A-s> S<Plug>(eskk:toggle)
 
   autocmd MyAutoCmd User eskk-initialize-pre call s:eskk_initial_pre()
   function! s:eskk_initial_pre()
