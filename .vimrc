@@ -153,10 +153,10 @@ NeoBundle 'toshi32tony3/dicwin-vim'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet.vim'
 NeoBundle 'toshi32tony3/neosnippet-snippets'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimshell'
+" NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vimfiler.vim'
 
+NeoBundle 'Shougo/unite.vim'
 NeoBundleLazy 'Shougo/neomru.vim', {
       \   'depends'  : [
       \     'Shougo/unite.vim',
@@ -1599,6 +1599,53 @@ if neobundle#tap('neosnippet.vim')
 
 endif "}}}
 
+" Vim上で動くシェル(vimshell) {{{
+if neobundle#tap('vimshell')
+
+  let g:vimshell_enable_start_insert = 0
+  let g:vimshell_force_overwrite_statusline = 0
+
+  " 動的プロンプトの設定
+  " http://blog.supermomonga.com/articles/vim/vimshell-dynamicprompt.html
+  let g:vimshell_prompt_expr = 'getcwd() . " > "'
+  let g:vimshell_prompt_pattern = '^\f\+ > '
+
+endif "}}}
+
+" Vim上で動くファイラ(vimfiler.vim) {{{
+if neobundle#tap('vimfiler.vim')
+
+  let g:vimfiler_as_default_explorer = 1
+  let g:vimfiler_enable_auto_cd = 1
+  let g:vimfiler_force_overwrite_statusline = 0
+  let g:vimfiler_safe_mode_by_default = 0
+
+  " カレントディレクトリを開く
+  nnoremap ,c :<C-u>VimFilerCurrentDir<CR>
+
+  " vimfilerのマッピングを一部変更
+  function! s:VimfilerSettings()
+    " #を<Leader>としているので, similarは##にする
+    nnoremap <buffer> #  <Nop>
+    nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
+
+    " カレントディレクトリを開く
+    nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
+
+    if neobundle#tap('unite.vim')
+      " Unite vimgrepを使う
+      nnoremap <buffer> <expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
+    endif
+
+    " Disable yankround.vim
+    nnoremap <buffer> <C-n> <Nop>
+    nnoremap <buffer> <C-p> <Nop>
+
+  endfunction
+  autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
+
+endif "}}}
+
 " 検索やリスト表示の拡張(unite.vim) {{{
 if neobundle#tap('unite.vim')
 
@@ -1705,53 +1752,6 @@ if neobundle#tap('unite.vim')
     nnoremap <buffer> <C-p> <Nop>
   endfunction
   autocmd MyAutoCmd FileType unite call s:UniteSettings()
-
-endif "}}}
-
-" Vim上で動くシェル(vimshell) {{{
-if neobundle#tap('vimshell')
-
-  let g:vimshell_enable_start_insert = 0
-  let g:vimshell_force_overwrite_statusline = 0
-
-  " 動的プロンプトの設定
-  " http://blog.supermomonga.com/articles/vim/vimshell-dynamicprompt.html
-  let g:vimshell_prompt_expr = 'getcwd() . " > "'
-  let g:vimshell_prompt_pattern = '^\f\+ > '
-
-endif "}}}
-
-" Vim上で動くファイラ(vimfiler.vim) {{{
-if neobundle#tap('vimfiler.vim')
-
-  let g:vimfiler_as_default_explorer = 1
-  let g:vimfiler_enable_auto_cd = 1
-  let g:vimfiler_force_overwrite_statusline = 0
-  let g:vimfiler_safe_mode_by_default = 0
-
-  " カレントディレクトリを開く
-  nnoremap ,c :<C-u>VimFilerCurrentDir<CR>
-
-  " vimfilerのマッピングを一部変更
-  function! s:VimfilerSettings()
-    " #を<Leader>としているので, similarは##にする
-    nnoremap <buffer> #  <Nop>
-    nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
-
-    " カレントディレクトリを開く
-    nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
-
-    if neobundle#tap('unite.vim')
-      " Unite vimgrepを使う
-      nnoremap <buffer> <expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
-    endif
-
-    " Disable yankround.vim
-    nnoremap <buffer> <C-n> <Nop>
-    nnoremap <buffer> <C-p> <Nop>
-
-  endfunction
-  autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
 endif "}}}
 
