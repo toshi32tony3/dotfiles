@@ -20,6 +20,8 @@ augroup MyAutoCmd
 augroup END
 
 " Echo startuptime on starting Vim
+" -> あくまで目安なので注意。実際は「表示値+0.5secくらい」になるようだ
+" -> gvim --startuptime startuptime.txt startuptime.txt
 if has('vim_starting') && has('reltime')
   let g:startuptime = reltime()
   autocmd MyAutoCmd VimEnter *
@@ -2667,6 +2669,4 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
-" MEMO: Plugin Listをvimrc先頭に持ってきたらVimの起動が早くなった。何故？
-" -> startuptimeを最初に持ってこないと正確に測れないだけっぽい
 
