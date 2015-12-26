@@ -2286,7 +2286,11 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    let l:CurrentMode = eskk#statusline()
+    if neobundle#tap('eskk.vim')
+      let l:CurrentMode = eskk#statusline()
+    else
+      let l:CurrentMode = ''
+    endif
 
     " 初回の処理
     if !exists('b:LastMode')
