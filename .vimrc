@@ -448,9 +448,6 @@ NeoBundle 'lambdalisue/vim-improve-diff'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
       \   'on_i' : 1,
-      \   'on_map' : [
-      \     '<Plug>(eskk',
-      \   ],
       \ }
 
 NeoBundleLazy 'mtth/scratch.vim', {
