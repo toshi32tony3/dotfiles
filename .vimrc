@@ -2290,10 +2290,6 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    if !neobundle#is_sourced('eskk.vim') || !neobundle#tap('neocomplete.vim')
-      return ''
-    endif
-
     let l:CurrentMode = eskk#statusline()
 
     " 初回の処理
