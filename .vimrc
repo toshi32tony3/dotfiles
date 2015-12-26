@@ -396,13 +396,18 @@ NeoBundleLazy 'mhinz/vim-signify', {
       \   },
       \ }
 
-NeoBundle 'tpope/vim-fugitive'
-NeoBundleLazy 'lambdalisue/vim-gita', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Gita',
-      \     ],
-      \   },
+NeoBundle 'tpope/vim-fugitive', {
+      \   'augroup'  : [
+      \     'fugitive',
+      \   ]
+      \ }
+NeoBundle 'idanarye/vim-merginal', {
+      \   'depends'  : [
+      \     'tpope/vim-fugitive',
+      \   ],
+      \   'augroup'  : [
+      \     'merginal'
+      \   ],
       \ }
 NeoBundleLazy 'cohama/agit.vim', {
       \   'autoload' : {
@@ -411,8 +416,13 @@ NeoBundleLazy 'cohama/agit.vim', {
       \     ],
       \   },
       \ }
-" fugitive同様, Lazyできない
-NeoBundle 'idanarye/vim-merginal'
+NeoBundleLazy 'lambdalisue/vim-gita', {
+      \   'autoload' : {
+      \     'commands' : [
+      \       'Gita',
+      \     ],
+      \   },
+      \ }
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
 NeoBundle 'itchyny/lightline.vim'
@@ -2230,6 +2240,11 @@ if neobundle#tap('vim-fugitive')
 
 endif "}}}
 
+" VimからGitを使う(ブランチ管理, vim-merginal) {{{
+if neobundle#tap('vim-merginal')
+
+endif "}}}
+
 " VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
@@ -2247,8 +2262,8 @@ if neobundle#tap('agit.vim')
 
 endif "}}}
 
-" VimからGitを使う(ブランチ管理, vim-merginal) {{{
-if neobundle#tap('vim-merginal')
+" VimからGitを使う(編集, コマンド実行, vim-gita) {{{
+if neobundle#tap('vim-gita')
 
 endif "}}}
 
