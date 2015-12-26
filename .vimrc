@@ -2013,7 +2013,8 @@ endif "}}}
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  map <A-h> <Plug>(operator-quickhl-manual-this-motion)
+  map <A-h>      <Plug>(operator-quickhl-manual-this-motion)
+  map <A-h><A-h> <Plug>(quickhl-manual-this)
 
 endif "}}}
 
