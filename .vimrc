@@ -148,110 +148,99 @@ NeoBundle 'Shougo/vimproc.vim', {
 
 " 本家
 " NeoBundle 'koron/dicwin-vim'
-NeoBundle 'toshi32tony3/dicwin-vim'
+NeoBundleLazy 'toshi32tony3/dicwin-vim', {
+      \   'on_i' : 1,
+      \   'on_map' : [
+      \     '<Plug>(dicwin-',
+      \   ],
+      \ }
 
-NeoBundle 'Shougo/neocomplete.vim'
-NeoBundle 'Shougo/neosnippet.vim'
-NeoBundle 'toshi32tony3/neosnippet-snippets'
+NeoBundleLazy 'Shougo/neocomplete.vim', {
+      \   'on_i' : 1,
+      \ }
+NeoBundleLazy 'Shougo/neosnippet.vim', {
+      \   'on_i' : 1,
+      \ }
+NeoBundleLazy 'toshi32tony3/neosnippet-snippets', {
+      \   'on_i' : 1,
+      \ }
 NeoBundle 'Shougo/vimfiler.vim', {
-      \   'depends'  : [
+      \   'depends' : [
       \     'Shougo/unite.vim',
       \   ],
       \ }
 
 NeoBundleLazy 'Shougo/unite.vim', {
-      \   'autoload' : {
-      \     'command' : [
-      \       'Unite',
-      \     ],
-      \   },
+      \   'on_cmd' : 'Unite',
       \ }
 NeoBundleLazy 'Shougo/neomru.vim', {
       \   'depends'  : [
       \     'Shougo/unite.vim',
       \   ],
-      \   'autoload' : {
-      \     'unite_sources' : [
-      \       'file_mru',
-      \     ],
-      \   },
+      \   'on_unite' : [
+      \     'file_mru',
+      \   ],
       \ }
 NeoBundleLazy 'Shougo/junkfile.vim', {
       \   'depends'  : [
       \     'Shougo/unite.vim',
       \   ],
-      \   'autoload' : {
-      \     'unite_sources' : [
-      \       'junkfile',
-      \       'junkfile/new',
-      \     ],
-      \   },
+      \   'on_unite' : [
+      \     'junkfile',
+      \     'junkfile/new'
+      \   ],
       \ }
 NeoBundleLazy 'tacroe/unite-mark', {
       \   'depends'  : [
       \     'Shougo/unite.vim',
       \   ],
-      \   'autoload' : {
-      \     'unite_sources' : [
-      \       'mark',
-      \     ],
-      \   },
+      \   'on_unite' : [
+      \     'mark',
+      \   ]
       \ }
 NeoBundleLazy 'Shougo/unite-outline', {
       \   'depends'  : [
       \     'Shougo/unite.vim',
       \   ],
-      \   'autoload' : {
-      \     'unite_sources' : [
-      \       'outline',
-      \     ],
-      \   },
+      \   'on_unite' : [
+      \     'outline',
+      \   ],
       \ }
 NeoBundleLazy 'hewes/unite-gtags', {
       \   'depends'  : [
       \     'Shougo/unite.vim'
       \   ],
-      \   'autoload' : {
-      \     'unite_sources' : [
-      \       'gtags/ref',
-      \       'gtags/def',
-      \     ],
-      \   },
+      \   'on_unite' : [
+      \     'gtags/ref',
+      \     'gtags/def',
+      \   ],
       \ }
 
 NeoBundleLazy 'vim-scripts/gtags.vim', {
-      \   'autoload' : {
-      \     'command' : [
-      \       'Gtags',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'Gtags',
+      \   ],
       \ }
 
 " NeoBundle 'thinca/vim-singleton'
 NeoBundleLazy 'thinca/vim-quickrun', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'QuickRun',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'QuickRun',
+      \   ],
       \ }
 NeoBundleLazy 'thinca/vim-ambicmd'
 NeoBundleLazy 'thinca/vim-fontzoom', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(fontzoom-',
-      \     ],
-      \     'commands' : [
-      \       'Fontzoom',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(fontzoom-',
+      \   ],
+      \   'on_cmd' : [
+      \     'Fontzoom',
+      \   ],
       \ }
 NeoBundleLazy 'thinca/vim-qfreplace', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Qfreplace',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'Qfreplace',
+      \   ],
       \ }
 
 " NeoBundle 'pocke/vim-hier'
@@ -263,40 +252,32 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
 NeoBundle 'rcmdnk/vim-markdown'
 NeoBundleLazy 'glidenote/memolist.vim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'MemoList',
-      \       'MemoNew',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'MemoList',
+      \     'MemoNew',
+      \   ],
       \ }
 
 " Previm便利だけど, IEではmermaidを使えないようなのでShibaメインになりそう
 " https://github.com/rhysd/Shiba
 NeoBundleLazy 'kannokanno/previm', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'PrevimOpen',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'PrevimOpen',
+      \   ],
       \ }
 
 " " リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
 " NeoBundleLazy 'kurocode25/mdforvim', {
-"       \   'autoload' : {
-"       \     'commands' : [
-"       \       'MdPreview',
-"       \       'MdConvert',
-"       \     ],
-"       \   },
+"       \   'on_cmd' : [
+"       \     'MdPreview',
+"       \     'MdConvert',
+"       \   ],
 "       \ }
 
 NeoBundleLazy 'tyru/open-browser.vim', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(openbrowser-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(openbrowser-',
+      \   ],
       \ }
 
 NeoBundle 'tpope/vim-surround'
@@ -308,92 +289,72 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends'  : [
       \     'kana/vim-operator-user',
       \   ],
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(operator-replace)',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(operator-replace)',
+      \   ],
       \ }
 NeoBundleLazy 'osyo-manga/vim-operator-search', {
       \   'depends'  : [
       \     'kana/vim-operator-user',
       \   ],
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(operator-search)',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(operator-search)',
+      \   ],
       \ }
 NeoBundleLazy 'kana/vim-textobj-function', {
       \   'depends'  : [
       \     'kana/vim-textobj-user',
       \   ],
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(textobj-function-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(textobj-function-',
+      \   ],
       \ }
 
 NeoBundleLazy 'tyru/capture.vim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Capture',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'Capture',
+      \   ],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'depends'  : [
       \     'kana/vim-operator-user',
       \   ],
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(operator-quickhl-',
-      \       '<Plug>(quickhl-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(operator-quickhl-',
+      \     '<Plug>(quickhl-',
+      \   ],
       \ }
 
 NeoBundleLazy 'haya14busa/incsearch.vim', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(incsearch-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(incsearch-',
+      \   ],
       \ }
 NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
       \   'depends'  : [
       \     'haya14busa/incsearch.vim',
       \   ],
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(incsearch-fuzzy',
-      \       '<Plug>(incsearch-fuzzyspell',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(incsearch-fuzzy',
+      \     '<Plug>(incsearch-fuzzyspell',
+      \   ],
       \ }
 
 NeoBundleLazy 'osyo-manga/vim-anzu', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(anzu-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(anzu-',
+      \   ],
       \ }
 NeoBundleLazy 'haya14busa/vim-asterisk', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(asterisk-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(asterisk-',
+      \   ],
       \ }
 
 NeoBundleLazy 'mhinz/vim-signify', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'SignifyStart',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'SignifyStart',
+      \   ],
       \ }
 
 NeoBundle 'tpope/vim-fugitive', {
@@ -406,22 +367,18 @@ NeoBundle 'idanarye/vim-merginal', {
       \     'tpope/vim-fugitive',
       \   ],
       \   'augroup'  : [
-      \     'merginal'
+      \     'merginal',
       \   ],
       \ }
 NeoBundleLazy 'cohama/agit.vim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Agit',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'Agit',
+      \   ],
       \ }
 NeoBundleLazy 'lambdalisue/vim-gita', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'Gita',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'Gita',
+      \   ],
       \ }
 
 NeoBundle 'chriskempson/vim-tomorrow-theme'
@@ -429,18 +386,14 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
 NeoBundleLazy 'LeafCage/yankround.vim', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(yankround-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(yankround-',
+      \   ],
       \ }
 NeoBundleLazy 'junegunn/vim-easy-align', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'EasyAlign',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'EasyAlign',
+      \   ],
       \ }
 
 " 本家
@@ -448,29 +401,23 @@ NeoBundleLazy 'junegunn/vim-easy-align', {
 NeoBundle 'toshi32tony3/vim-trailing-whitespace'
 
 NeoBundleLazy 'vim-scripts/BufOnly.vim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'BufOnly',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'BufOnly',
+      \   ],
       \ }
 
 " 本家
 " NeoBundle 'deris/vim-shot-f'
 NeoBundleLazy 'toshi32tony3/vim-shot-f', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(shot-f-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(shot-f-',
+      \   ],
       \ }
 
 NeoBundleLazy 'tyru/caw.vim', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(caw',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(caw',
+      \   ],
       \ }
 NeoBundle 'kshenoy/vim-signature'
 
@@ -479,11 +426,9 @@ NeoBundle 'mhinz/vim-startify'
 NeoBundle 'tmhedberg/matchit'
 
 NeoBundleLazy 'basyura/J6uil.vim', {
-      \   'autoload' : {
-      \     'commands' : [
-      \       'J6uil',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'J6uil',
+      \   ],
       \ }
 
 NeoBundleLazy 'basyura/twibill.vim'
@@ -492,12 +437,10 @@ NeoBundleLazy 'basyura/TweetVim', {
       \     'basyura/twibill.vim',
       \     'tyru/open-browser.vim',
       \   ],
-      \   'autoload' : {
-      \     'commands' : [
-      \       'TweetVimHomeTimeline',
-      \       'TweetVimSearch',
-      \     ],
-      \   },
+      \   'on_cmd' : [
+      \     'TweetVimHomeTimeline',
+      \     'TweetVimSearch',
+      \   ],
       \ }
 
 NeoBundle 'lambdalisue/vim-unified-diff'
@@ -505,19 +448,16 @@ NeoBundle 'lambdalisue/vim-improve-diff'
 
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(eskk',
-      \     ],
-      \   },
+      \   'on_i' : 1,
+      \   'on_map' : [
+      \     '<Plug>(eskk',
+      \   ],
       \ }
 
 NeoBundleLazy 'mtth/scratch.vim', {
-      \   'autoload' : {
-      \     'mappings' : [
-      \       '<Plug>(scratch-',
-      \     ],
-      \   },
+      \   'on_map' : [
+      \     '<Plug>(scratch-',
+      \   ],
       \ }
 
 " 日本語ヘルプを卒業したい
@@ -1570,10 +1510,10 @@ if neobundle#tap('neocomplete.vim')
   endif
 
   if neobundle#tap('neosnippet.vim')
-    " use for neosnippet and eskk.vim only
+    " use for neosnippet and eskk only
     let g:neocomplete#sources._ = ['neosnippet']
   else
-    " use for eskk.vim only
+    " use for eskk only
     let g:neocomplete#sources._ = []
   endif
 
@@ -2313,7 +2253,7 @@ if neobundle#tap('lightline.vim')
   let g:lightline.active = {
         \   'left'  : [
         \     ['mode'],
-        \     ['skk-mode', 'fugitive', 'filename', 'currentfunc'],
+        \     ['fugitive', 'filename', 'currentfunc'],
         \   ],
         \   'right' : [
         \     ['lineinfo'],
@@ -2322,6 +2262,7 @@ if neobundle#tap('lightline.vim')
         \   ],
         \ }
 
+        "\     ['skk-mode', 'fugitive', 'filename', 'currentfunc'],
   " for using git properly
   " \           ['skk-mode', 'gita-branch', 'filename', 'currenttag'],
 
@@ -2333,11 +2274,11 @@ if neobundle#tap('lightline.vim')
         \   'filetype'     : 'MyFiletype',
         \   'fileencoding' : 'MyFileencoding',
         \   'mode'         : 'MyMode',
-        \   'skk-mode'     : 'MySKKMode',
         \   'fugitive'     : 'MyFugitive',
         \   'currentfunc'  : 'MyCurrentFunc',
         \ }
 
+        "\   'skk-mode'     : 'MySKKMode',
   " for using git properly
   " \   'gita-branch'  : 'MyGitaBranch',
 
