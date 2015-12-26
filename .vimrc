@@ -244,8 +244,6 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
       \   },
       \ }
 
-" NeoBundle 'osyo-manga/vim-brightest'
-
 " NeoBundle 'pocke/vim-hier'
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
@@ -1874,15 +1872,6 @@ endif "}}}
 
 " Quickfixから置換(vim-qfreplace) {{{
 if neobundle#tap('vim-qfreplace')
-
-endif "}}}
-
-" <cword>を強調(vim-brightest) {{{
-if neobundle#tap('vim-brightest')
-  " <cword>を含め, <cword>と同じ単語をアンダーラインで強調
-  let g:brightest#highlight = {
-        \   'group' : 'BrightestUnderline'
-        \ }
 
 endif "}}}
 
