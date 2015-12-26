@@ -153,9 +153,19 @@ NeoBundle 'toshi32tony3/dicwin-vim'
 NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'Shougo/neosnippet.vim'
 NeoBundle 'toshi32tony3/neosnippet-snippets'
-NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'Shougo/vimfiler.vim', {
+      \   'depends'  : [
+      \     'Shougo/unite.vim',
+      \   ],
+      \ }
 
-NeoBundle 'Shougo/unite.vim'
+NeoBundleLazy 'Shougo/unite.vim', {
+      \   'autoload' : {
+      \     'command' : [
+      \       'Unite',
+      \     ],
+      \   },
+      \ }
 NeoBundleLazy 'Shougo/neomru.vim', {
       \   'depends'  : [
       \     'Shougo/unite.vim',
@@ -208,6 +218,7 @@ NeoBundleLazy 'hewes/unite-gtags', {
       \     ],
       \   },
       \ }
+
 NeoBundleLazy 'vim-scripts/gtags.vim', {
       \   'autoload' : {
       \     'command' : [
@@ -1653,24 +1664,6 @@ if neobundle#tap('unite.vim')
     let g:unite_source_grep_encoding = 'utf-8'
   endif
 
-  " unite.vimのデフォルトコンテキストを設定する
-  " http://d.hatena.ne.jp/osyo-manga/20140627
-  " -> なんだかんだ非同期で処理させる必要は無い気がする
-  " -> emptyの時にメッセージ通知を出せるか調べる
-  call unite#custom#profile('default', 'context', {
-        \   'no_empty'         : 1,
-        \   'no_quit'          : 0,
-        \   'prompt'           : '> ',
-        \   'prompt_direction' : 'top',
-        \   'split'            : 0,
-        \   'start_insert'     : 0,
-        \   'sync'             : 1,
-        \ })
-
-  " Unite line/vimgrepの結果候補数を制限しない
-  call unite#custom#source('line',    'max_candidates', 0)
-  call unite#custom#source('vimgrep', 'max_candidates', 0)
-
   " オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う
   let g:u_ninp = ' -input='
   let g:u_nqui = ' -no-quit'
@@ -1726,18 +1719,39 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>op ':<C-u>Unite output'           . g:u_opt_op . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>UniteResume'            . g:u_opt_re . '<CR>'
 
-  call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
-  call unite#custom_default_action('directory_mru',             'vimfiler')
+  function! neobundle#hooks.on_post_source(bundle)
+    " unite.vimのデフォルトコンテキストを設定する
+    " http://d.hatena.ne.jp/osyo-manga/20140627
+    " -> なんだかんだ非同期で処理させる必要は無い気がする
+    " -> emptyの時にメッセージ通知を出せるか調べる
+    call unite#custom#profile('default', 'context', {
+          \   'no_empty'         : 1,
+          \   'no_quit'          : 0,
+          \   'prompt'           : '> ',
+          \   'prompt_direction' : 'top',
+          \   'split'            : 0,
+          \   'start_insert'     : 0,
+          \   'sync'             : 1,
+          \ })
 
-  function! s:UniteSettings()
-    imap <buffer> <Esc> <Plug>(unite_insert_leave)
-    nmap <buffer> <Esc> <Plug>(unite_exit)
+    " Unite line/vimgrepの結果候補数を制限しない
+    call unite#custom#source('line',    'max_candidates', 0)
+    call unite#custom#source('vimgrep', 'max_candidates', 0)
 
-    " Disable yankround.vim
-    nnoremap <buffer> <C-n> <Nop>
-    nnoremap <buffer> <C-p> <Nop>
+    " ディレクトリが選択されたらvimfilerで開く
+    call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
+    call unite#custom_default_action('directory_mru',             'vimfiler')
+
+    function! s:UniteSettings()
+      imap <buffer> <Esc> <Plug>(unite_insert_leave)
+      nmap <buffer> <Esc> <Plug>(unite_exit)
+
+      " Disable yankround.vim
+      nnoremap <buffer> <C-n> <Nop>
+      nnoremap <buffer> <C-p> <Nop>
+    endfunction
+    autocmd MyAutoCmd FileType unite call s:UniteSettings()
   endfunction
-  autocmd MyAutoCmd FileType unite call s:UniteSettings()
 
 endif "}}}
 
