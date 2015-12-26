@@ -244,7 +244,7 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
       \   },
       \ }
 
-NeoBundle 'osyo-manga/vim-brightest'
+" NeoBundle 'osyo-manga/vim-brightest'
 
 " NeoBundle 'pocke/vim-hier'
 " NeoBundle 'osyo-manga/shabadou.vim'
@@ -339,8 +339,8 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \   ],
       \   'autoload' : {
       \     'mappings' : [
-      \       '<Plug>(quickhl-',
       \       '<Plug>(operator-quickhl-',
+      \       '<Plug>(quickhl-',
       \     ],
       \   },
       \ }
