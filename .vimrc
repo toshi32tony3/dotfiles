@@ -2264,7 +2264,6 @@ if neobundle#tap('lightline.vim')
     " -> GVIMウィンドウ上部にフルパスが表示されているので, そちらを参照する
     return (&ft == 'unite'       ? ''            :
           \ &ft == 'vimfiler'    ? ''            :
-          \ &ft == 'vimshell'    ? ''            :
           \  '' != expand('%:t') ? expand('%:t') : '[No Name]') .
           \ ('' != MyReadonly()  ? MyReadonly()  : ''         ) .
           \ ('' != MyModified()  ? MyModified()  : ''         )
