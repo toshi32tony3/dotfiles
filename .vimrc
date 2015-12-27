@@ -255,14 +255,12 @@ NeoBundleLazy 'kana/vim-textobj-user'
 NeoBundleLazy 'kana/vim-textobj-function', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [
-      \     'ox',
       \     'if', 'af', 'iF', 'aF',
       \   ],
       \ }
 NeoBundleLazy 'sgur/vim-textobj-parameter', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [
-      \     'ox',
       \     'i,', 'a,',
       \   ],
       \ }
