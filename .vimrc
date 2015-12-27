@@ -582,10 +582,6 @@ autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
 " Dはd$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
 
-" " チルダをoperatorのように使う
-" " -> 1キーで大小反転できた方が便利かも
-" set tildeop
-
 " 直前の置換を繰り返す際に最初のフラグ指定を継続して反映する
 nnoremap & <silent> :<C-u>&&<CR>
 xnoremap & <silent> :<C-u>&&<CR>
