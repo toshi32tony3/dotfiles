@@ -1778,15 +1778,15 @@ if neobundle#tap('vim-quickrun')
         \   },
         \ }
 
-  " " clangを使う時の設定はこんな感じ？
-  " \   'cpp' : {
-  " \     'type' : 'cpp/clang3_4',
-  " \   },
-  " \   'cpp/clang3_4' : {
-  " \       'command' : 'clang++',
-  " \       'exec'    : '%c %o %s -o %s:p:r',
-  " \       'cmdopt'  : '-std=gnu++0x',
-  " \   },
+  "       " clangを使う時の設定はこんな感じ？
+  "       \   'cpp' : {
+  "       \     'type' : 'cpp/clang3_4',
+  "       \   },
+  "       \   'cpp/clang3_4' : {
+  "       \       'command' : 'clang++',
+  "       \       'exec'    : '%c %o %s -o %s:p:r',
+  "       \       'cmdopt'  : '-std=gnu++0x',
+  "       \   },
 
   " デフォルトの<Leader>rだと入力待ちになるので, 別のキーをマッピング
   let g:quickrun_no_default_key_mappings = 1
@@ -2016,7 +2016,7 @@ if neobundle#tap('vim-asterisk')
   " https://github.com/haya14busa/incsearch.vim/issues/22
   " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
   " NOTE: star検索の対象になりそうなものをカバーしたつもりだが, 多分完全ではない
-  function! s:ExplicitMagic() "{{{
+  function! s:ModSearchHistory() "{{{
     if g:incsearch#magic != '\v'
       return ''
     endif
@@ -2111,8 +2111,8 @@ if neobundle#tap('vim-asterisk')
 
     return ''
   endfunction "}}}
-  noremap <expr> <Plug>(_ExplicitMagic) <SID>ExplicitMagic()
-  command! -nargs=0 ExplicitMagic call s:ExplicitMagic()
+  noremap <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
+  command! -nargs=0 ModSearchHistory call s:ModSearchHistory()
 
   " star-search対象をクリップボードに入れる
   function! s:SilentClip(data) "{{{
@@ -2122,16 +2122,16 @@ if neobundle#tap('vim-asterisk')
   noremap <expr> <Plug>(_ClipCword) <SID>SilentClip(expand('<cword>'))
 
   if neobundle#tap('incsearch.vim') && neobundle#tap('vim-anzu')
-    nmap *       <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
-    omap *  <Esc><Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ExplicitMagic)
+    nmap *       <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
+    omap *  <Esc><Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
     xmap *              <Esc>gvyvgv<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
 
     nmap g*      <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     omap g* <Esc><Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     xmap g*             <Esc>gvyvgv<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
   else
-    nmap *       <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
-    omap *  <Esc><Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ExplicitMagic)
+    nmap *       <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
+    omap *  <Esc><Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
     xmap *              <Esc>gvyvgv<Plug>(asterisk-z*)
 
     nmap g*      <Plug>(_ClipCword)<Plug>(asterisk-gz*)
@@ -2229,7 +2229,7 @@ if neobundle#tap('vim-tomorrow-theme')
 
   " 検索中にフォーカス位置をわかりやすくする
   autocmd MyAutoCmd ColorScheme * highlight IncSearch
-        \ term=reverse cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
+        \ term=NONE cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
 
   colorscheme Tomorrow-Night
 
@@ -2404,6 +2404,7 @@ endif "}}}
 if neobundle#tap('yankround.vim')
 
   let g:yankround_dir = '~/.cache/yankround'
+  let g:yankround_use_region_hl = 1
   let g:yankround_region_hl_groupname = 'ErrorMsg'
 
   nmap p     <Plug>(yankround-p)
