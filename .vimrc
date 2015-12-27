@@ -179,10 +179,7 @@ NeoBundleLazy 'Shougo/neomru.vim', {
       \ }
 NeoBundleLazy 'Shougo/junkfile.vim', {
       \   'depends'  : 'Shougo/unite.vim',
-      \   'on_unite' : [
-      \     'junkfile',
-      \     'junkfile/new',
-      \   ],
+      \   'on_unite' : ['junkfile', 'junkfile/new'],
       \ }
 NeoBundleLazy 'tacroe/unite-mark', {
       \   'depends'  : 'Shougo/unite.vim',
@@ -194,10 +191,7 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \ }
 NeoBundleLazy 'hewes/unite-gtags', {
       \   'depends'  : 'Shougo/unite.vim',
-      \   'on_unite' : [
-      \     'gtags/ref',
-      \     'gtags/def',
-      \   ],
+      \   'on_unite' : ['gtags/ref', 'gtags/def'],
       \ }
 
 NeoBundleLazy 'vim-scripts/gtags.vim', {
@@ -210,7 +204,7 @@ NeoBundleLazy 'thinca/vim-quickrun', {
       \ }
 NeoBundleLazy 'thinca/vim-ambicmd'
 NeoBundleLazy 'thinca/vim-fontzoom', {
-      \   'on_map' : '<Plug>(fontzoom-',
+      \   'on_map' : '<Plug>',
       \   'on_cmd' : 'Fontzoom',
       \ }
 NeoBundleLazy 'thinca/vim-qfreplace', {
@@ -225,10 +219,7 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
 NeoBundle 'rcmdnk/vim-markdown'
 NeoBundleLazy 'glidenote/memolist.vim', {
-      \   'on_cmd' : [
-      \     'MemoList',
-      \     'MemoNew',
-      \   ],
+      \   'on_cmd' : ['MemoList', 'MemoNew'],
       \ }
 
 " Previm便利だけど, IEではmermaidを使えないようなのでShibaメインになりそう
@@ -239,10 +230,7 @@ NeoBundleLazy 'kannokanno/previm', {
 
 " " リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
 " NeoBundleLazy 'kurocode25/mdforvim', {
-"       \   'on_cmd' : [
-"       \     'MdPreview',
-"       \     'MdConvert',
-"       \   ],
+"       \   'on_cmd' : ['MdPreview', 'MdConvert'],
 "       \ }
 
 NeoBundleLazy 'tyru/open-browser.vim', {
@@ -254,32 +242,25 @@ NeoBundle 'tpope/vim-surround'
 NeoBundleLazy 'kana/vim-textobj-user'
 NeoBundleLazy 'kana/vim-textobj-function', {
       \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [
-      \     'if', 'af', 'iF', 'aF',
-      \   ],
+      \   'on_map'  : ['if', 'af', 'iF', 'aF'],
       \ }
 NeoBundleLazy 'sgur/vim-textobj-parameter', {
       \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [
-      \     'i,', 'a,',
-      \   ],
+      \   'on_map'  : ['i,', 'a,'],
       \ }
 
 NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : '<Plug>(operator-replace)',
+      \   'on_map'  : '<Plug>',
       \ }
 NeoBundleLazy 'osyo-manga/vim-operator-search', {
       \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : '<Plug>(operator-search)',
+      \   'on_map'  : '<Plug>',
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : [
-      \     '<Plug>(operator-quickhl-',
-      \     '<Plug>(quickhl-',
-      \   ],
+      \   'on_map'  : ['<Plug>(operator-quickhl-', '<Plug>(quickhl-'],
       \ }
 
 NeoBundleLazy 'tyru/capture.vim', {
@@ -287,21 +268,18 @@ NeoBundleLazy 'tyru/capture.vim', {
       \ }
 
 NeoBundleLazy 'haya14busa/incsearch.vim', {
-      \   'on_map' : '<Plug>(incsearch-',
+      \   'on_map' : '<Plug>',
       \ }
 NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
       \   'depends' : 'haya14busa/incsearch.vim',
-      \   'on_map'  : [
-      \     '<Plug>(incsearch-fuzzy',
-      \     '<Plug>(incsearch-fuzzyspell',
-      \   ],
+      \   'on_map'  : '<Plug>',
       \ }
 
 NeoBundleLazy 'osyo-manga/vim-anzu', {
-      \   'on_map' : '<Plug>(anzu-',
+      \   'on_map' : '<Plug>',
       \ }
 NeoBundleLazy 'haya14busa/vim-asterisk', {
-      \   'on_map' : '<Plug>(asterisk-',
+      \   'on_map' : '<Plug>',
       \ }
 
 NeoBundleLazy 'mhinz/vim-signify', {
@@ -327,7 +305,7 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 
 NeoBundleLazy 'LeafCage/yankround.vim', {
-      \   'on_map' : '<Plug>(yankround-',
+      \   'on_map' : '<Plug>',
       \ }
 NeoBundleLazy 'junegunn/vim-easy-align', {
       \   'on_cmd' : 'EasyAlign',
@@ -344,14 +322,14 @@ NeoBundleLazy 'vim-scripts/BufOnly.vim', {
 " 本家
 " NeoBundle 'deris/vim-shot-f'
 NeoBundleLazy 'toshi32tony3/vim-shot-f', {
-      \   'on_map' : '<Plug>(shot-f-',
+      \   'on_map' : '<Plug>',
       \ }
 NeoBundleLazy 'justinmk/vim-sneak', {
       \   'on_map' : '<Plug>Sneak_',
       \ }
 
 NeoBundleLazy 'tyru/caw.vim', {
-      \   'on_map' : '<Plug>(caw',
+      \   'on_map' : '<Plug>',
       \ }
 NeoBundle 'kshenoy/vim-signature'
 
@@ -365,14 +343,8 @@ NeoBundleLazy 'basyura/J6uil.vim', {
 
 NeoBundleLazy 'basyura/twibill.vim'
 NeoBundleLazy 'basyura/TweetVim', {
-      \   'depends' : [
-      \     'basyura/twibill.vim',
-      \     'tyru/open-browser.vim',
-      \   ],
-      \   'on_cmd'  : [
-      \     'TweetVimHomeTimeline',
-      \     'TweetVimSearch',
-      \   ],
+      \   'depends' : ['basyura/twibill.vim',  'tyru/open-browser.vim'],
+      \   'on_cmd'  : ['TweetVimHomeTimeline', 'TweetVimSearch'],
       \ }
 
 NeoBundle 'lambdalisue/vim-unified-diff'
@@ -384,7 +356,7 @@ NeoBundleLazy 'tyru/eskk.vim', {
       \ }
 
 NeoBundleLazy 'mtth/scratch.vim', {
-      \   'on_map' : '<Plug>(scratch-',
+      \   'on_map' : '<Plug>',
       \ }
 
 " 日本語ヘルプを卒業したい
@@ -1841,7 +1813,7 @@ if neobundle#tap('vim-operator-search')
 
   " 関数内検索
   if neobundle#tap('vim-textobj-function')
-    nmap <Leader>/ <Plug>(operator-search)<Plug>(textobj-function-i)
+    nmap <Leader>/ <Plug>(operator-search)if
   endif
 
 endif "}}}
