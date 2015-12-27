@@ -166,10 +166,14 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets', {
       \   'on_i' : 1,
       \ }
-NeoBundle 'Shougo/vimfiler.vim', {
+NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : [
       \     'Shougo/unite.vim',
       \   ],
+      \   'on_cmd'  : [
+      \     'VimFilerCurrentDir',
+      \   ],
+      \   'explorer' : 1,
       \ }
 
 NeoBundleLazy 'Shougo/unite.vim', {
@@ -283,23 +287,23 @@ NeoBundleLazy 'tyru/open-browser.vim', {
 
 NeoBundle 'tpope/vim-surround'
 
-NeoBundleLazy 'kana/vim-textobj-user'
-NeoBundleLazy 'kana/vim-textobj-function', {
+NeoBundle 'kana/vim-textobj-user'
+NeoBundle 'kana/vim-textobj-function', {
       \   'depends'  : [
       \     'kana/vim-textobj-user',
       \   ],
-      \   'on_map' : [
-      \     '<Plug>(textobj-function-',
-      \   ],
       \ }
-NeoBundleLazy 'sgur/vim-textobj-parameter', {
+      " \   'on_map' : [
+      " \     '<Plug>(textobj-function-',
+      " \   ],
+NeoBundle 'sgur/vim-textobj-parameter', {
       \   'depends'  : [
       \     'kana/vim-textobj-user',
       \   ],
-      \   'on_map' : [
-      \     '<Plug>(textobj-parameter-',
-      \   ],
       \ }
+      " \   'on_map' : [
+      " \     '<Plug>(textobj-parameter-',
+      " \   ],
 
 NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-operator-replace', {
@@ -1903,28 +1907,30 @@ endif "}}}
 " 関数を選択するテキストオブジェクト(vim-textobj-function) {{{
 if neobundle#tap('vim-textobj-function')
 
-  " for Lazy
-  let g:textobj_function_no_default_key_mappings = 1
-  nmap af <Plug>(textobj-function-a)
-  xmap af <Plug>(textobj-function-a)
-  nmap if <Plug>(textobj-function-i)
-  xmap if <Plug>(textobj-function-i)
-  nmap aF <Plug>(textobj-function-A)
-  xmap aF <Plug>(textobj-function-A)
-  nmap iF <Plug>(textobj-function-I)
-  xmap iF <Plug>(textobj-function-I)
+  " " for Lazy
+  " " Lazyのさせ方がわからない
+  " let g:textobj_function_no_default_key_mappings = 1
+  " nmap af <Plug>(textobj-function-a)
+  " xmap af <Plug>(textobj-function-a)
+  " nmap if <Plug>(textobj-function-i)
+  " xmap if <Plug>(textobj-function-i)
+  " nmap aF <Plug>(textobj-function-A)
+  " xmap aF <Plug>(textobj-function-A)
+  " nmap iF <Plug>(textobj-function-I)
+  " xmap iF <Plug>(textobj-function-I)
 
 endif "}}}
 
 " パラメータを選択するテキストオブジェクト(vim-textobj-parameter) {{{
 if neobundle#tap('vim-textobj-parameter')
 
-  " for Lazy
-  let g:textobj_parameter_no_default_key_mappings = 1
-  nmap a, <Plug>(textobj-parameter-a)
-  xmap a, <Plug>(textobj-parameter-a)
-  nmap i, <Plug>(textobj-parameter-i)
-  xmap i, <Plug>(textobj-parameter-i)
+  " " for Lazy
+  " " Lazyのさせ方がわからない
+  " let g:textobj_parameter_no_default_key_mappings = 1
+  " nmap a, <Plug>(textobj-parameter-a)
+  " xmap a, <Plug>(textobj-parameter-a)
+  " nmap i, <Plug>(textobj-parameter-i)
+  " xmap i, <Plug>(textobj-parameter-i)
 
 endif "}}}
 
