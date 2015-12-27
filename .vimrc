@@ -2473,8 +2473,8 @@ if neobundle#tap('vim-unified-diff')
 
 endif "}}}
 
-" vimdiffをパワーアップする(vim-improved-diff) {{{
-if neobundle#tap('vim-improved-diff')
+" vimdiffをパワーアップする(vim-improve-diff) {{{
+if neobundle#tap('vim-improve-diff')
 
 endif "}}}
 
