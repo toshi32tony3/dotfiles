@@ -283,9 +283,25 @@ NeoBundleLazy 'tyru/open-browser.vim', {
 
 NeoBundle 'tpope/vim-surround'
 
-NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-textobj-user'
+NeoBundleLazy 'kana/vim-textobj-function', {
+      \   'depends'  : [
+      \     'kana/vim-textobj-user',
+      \   ],
+      \   'on_map' : [
+      \     '<Plug>(textobj-function-',
+      \   ],
+      \ }
+NeoBundleLazy 'sgur/vim-textobj-parameter', {
+      \   'depends'  : [
+      \     'kana/vim-textobj-user',
+      \   ],
+      \   'on_map' : [
+      \     '<Plug>(textobj-parameter-',
+      \   ],
+      \ }
 
+NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends'  : [
       \     'kana/vim-operator-user',
@@ -302,20 +318,6 @@ NeoBundleLazy 'osyo-manga/vim-operator-search', {
       \     '<Plug>(operator-search)',
       \   ],
       \ }
-NeoBundleLazy 'kana/vim-textobj-function', {
-      \   'depends'  : [
-      \     'kana/vim-textobj-user',
-      \   ],
-      \   'on_map' : [
-      \     '<Plug>(textobj-function-',
-      \   ],
-      \ }
-
-NeoBundleLazy 'tyru/capture.vim', {
-      \   'on_cmd' : [
-      \     'Capture',
-      \   ],
-      \ }
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'depends'  : [
       \     'kana/vim-operator-user',
@@ -323,6 +325,12 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map' : [
       \     '<Plug>(operator-quickhl-',
       \     '<Plug>(quickhl-',
+      \   ],
+      \ }
+
+NeoBundleLazy 'tyru/capture.vim', {
+      \   'on_cmd' : [
+      \     'Capture',
       \   ],
       \ }
 
@@ -1892,6 +1900,34 @@ if neobundle#tap('vim-surround')
 
 endif "}}}
 
+" 関数を選択するテキストオブジェクト(vim-textobj-function) {{{
+if neobundle#tap('vim-textobj-function')
+
+  " for Lazy
+  let g:textobj_function_no_default_key_mappings = 1
+  nmap af <Plug>(textobj-function-a)
+  xmap af <Plug>(textobj-function-a)
+  nmap if <Plug>(textobj-function-i)
+  xmap if <Plug>(textobj-function-i)
+  nmap aF <Plug>(textobj-function-A)
+  xmap aF <Plug>(textobj-function-A)
+  nmap iF <Plug>(textobj-function-I)
+  xmap iF <Plug>(textobj-function-I)
+
+endif "}}}
+
+" パラメータを選択するテキストオブジェクト(vim-textobj-parameter) {{{
+if neobundle#tap('vim-textobj-parameter')
+
+  " for Lazy
+  let g:textobj_parameter_no_default_key_mappings = 1
+  nmap a, <Plug>(textobj-parameter-a)
+  xmap a, <Plug>(textobj-parameter-a)
+  nmap i, <Plug>(textobj-parameter-i)
+  xmap i, <Plug>(textobj-parameter-i)
+
+endif "}}}
+
 " 置き換えオペレータ(vim-operator-replace) {{{
 if neobundle#tap('vim-operator-replace')
 
@@ -1902,22 +1938,21 @@ if neobundle#tap('vim-operator-replace')
 
 endif "}}}
 
-" 関数内検索(vim-textobj-function with vim-operator-search) {{{
-if neobundle#tap('vim-textobj-function')
+" 検索オペレータ(vim-operator-search) {{{
+if neobundle#tap('vim-operator-search')
 
-  " for Lazy
-  nmap af <Plug>(textobj-function-a)
-  xmap af <Plug>(textobj-function-a)
-  nmap if <Plug>(textobj-function-i)
-  xmap if <Plug>(textobj-function-i)
-  nmap aF <Plug>(textobj-function-A)
-  xmap aF <Plug>(textobj-function-A)
-  nmap iF <Plug>(textobj-function-I)
-  xmap iF <Plug>(textobj-function-I)
-
-  if neobundle#tap('vim-operator-search')
+  " 関数内検索
+  if neobundle#tap('vim-textobj-function')
     nmap <Leader>/ <Plug>(operator-search)<Plug>(textobj-function-i)
   endif
+
+endif "}}}
+
+" 自由にテキストハイライト(vim-quickhl) {{{
+if neobundle#tap('vim-quickhl')
+
+  map <A-h>      <Plug>(operator-quickhl-manual-this-motion)
+  map <A-h><A-h> <Plug>(quickhl-manual-this)
 
 endif "}}}
 
@@ -1928,14 +1963,6 @@ if neobundle#tap('capture.vim')
 
   nnoremap <Leader>who :<C-u>Capture echo expand('%:p')<CR>
   nnoremap <Leader>sn  :<C-u>Capture scriptnames<CR>
-
-endif "}}}
-
-" 自由にテキストハイライト(vim-quickhl) {{{
-if neobundle#tap('vim-quickhl')
-
-  map <A-h>      <Plug>(operator-quickhl-manual-this-motion)
-  map <A-h><A-h> <Plug>(quickhl-manual-this)
 
 endif "}}}
 
