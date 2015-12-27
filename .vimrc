@@ -2264,8 +2264,8 @@ endif "}}}
 if neobundle#tap('yankround.vim')
 
   let g:yankround_dir = '~/.cache/yankround'
-  " let g:yankround_use_region_hl = 1
-  " let g:yankround_region_hl_groupname = 'ErrorMsg'
+  let g:yankround_use_region_hl = 1
+  let g:yankround_region_hl_groupname = 'Search'
 
   nmap p     <Plug>(yankround-p)
   xmap p     <Plug>(yankround-p)
