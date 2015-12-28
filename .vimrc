@@ -109,6 +109,9 @@ endfunction
 command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
 nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
 
+" 日本語はスペルチェックから除外
+set spelllang=en,cjk
+
 " vimdiff用オプション
 " filler   : 埋め合わせ行を表示する
 " vertical : 縦分割する
@@ -451,9 +454,6 @@ if has('kaoriya')
   nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 
 endif
-
-" 日本語はスペルチェックから除外
-set spelllang=en,cjk
 
 " 折り畳み機能の設定
 set foldcolumn=1
