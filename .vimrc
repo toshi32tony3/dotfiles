@@ -683,8 +683,8 @@ command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
 
-" 新規タブ生成
-nnoremap ,t :<C-u>tabnew<CR>
+" タブ複製
+nnoremap ,t :<C-u>tab split<CR>
 
 " 新規タブでgf
 nnoremap <Leader>gf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
@@ -719,7 +719,7 @@ command! -nargs=0 DeleteJumpList for s:n in range(200) | mark '     | endfor
 
 " 新規タブでタグジャンプ
 function! s:TabTagJump(funcName)
-  tablast | tab sp
+  tablast | tab split
 
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag' a:funcName
