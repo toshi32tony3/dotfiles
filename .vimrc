@@ -2032,8 +2032,8 @@ if neobundle#tap('vim-signify')
         \ | delcommand SignifyStart
 
   function! neobundle#hooks.on_post_source(bundle)
-    nmap c] <Plug>(signify-next-hunk)zz
-    nmap c[ <Plug>(signify-prev-hunk)zz
+    nmap ]c <Plug>(signify-next-hunk)zz
+    nmap [c <Plug>(signify-prev-hunk)zz
 
     " 使わないコマンドを削除する
     delcommand SignifyDebug
