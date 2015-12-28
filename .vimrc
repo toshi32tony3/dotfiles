@@ -648,12 +648,6 @@ xnoremap j gj
 nnoremap k gk
 xnoremap k gk
 
-" gj/gkで次の差分hunkへ移動
-nnoremap gj ]c
-xnoremap gj ]c
-nnoremap gk [c
-xnoremap gk [c
-
 function! s:HelpSettings()
   " <F1>でヘルプを閉じる
   nnoremap <buffer> <F1>  :<C-u>q<CR>
@@ -2039,9 +2033,8 @@ if neobundle#tap('vim-signify')
         \ | delcommand SignifyStart
 
   function! neobundle#hooks.on_post_source(bundle)
-    nmap gj <Plug>(signify-next-hunk)zz
-    nmap gk <Plug>(signify-prev-hunk)zz
-    nmap gh <Plug>(signify-toggle-highlight)
+    nmap c] <Plug>(signify-next-hunk)zz
+    nmap c[ <Plug>(signify-prev-hunk)zz
 
     " 使わないコマンドを削除する
     delcommand SignifyDebug
