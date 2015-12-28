@@ -1180,7 +1180,7 @@ autocmd MyAutoCmd User LineChanged
 autocmd MyAutoCmd BufEnter * let g:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
-function! s:JumpFuncCForward() "{{{
+function! s:JumpFuncNameCForward() "{{{
   if &ft != 'c'
     return
   endif
@@ -1220,7 +1220,7 @@ function! s:JumpFuncCForward() "{{{
   " 現在位置をjumplistに追加
   mark '
 endfunction " }}}
-function! s:JumpFuncCBackward() "{{{
+function! s:JumpFuncNameCBackward() "{{{
   if &ft != 'c'
     return
   endif
@@ -1250,10 +1250,10 @@ function! s:JumpFuncCBackward() "{{{
   " 現在位置をjumplistに追加
   mark '
 endfunction " }}}
-command! -nargs=0 JumpFuncCForward  call s:JumpFuncCForward()
-command! -nargs=0 JumpFuncCBackward call s:JumpFuncCBackward()
-nnoremap <silent> [f :<C-u>JumpFuncCBackward<CR>
-nnoremap <silent> ]f :<C-u>JumpFuncCForward<CR>
+command! -nargs=0 JumpFuncNameCForward  call s:JumpFuncNameCForward()
+command! -nargs=0 JumpFuncNameCBackward call s:JumpFuncNameCBackward()
+nnoremap <silent> ]f :<C-u>JumpFuncNameCForward<CR>
+nnoremap <silent> [f :<C-u>JumpFuncNameCBackward<CR>
 
 " Cの関数名取得
 let g:currentFunc = ''
@@ -1299,7 +1299,7 @@ autocmd MyAutoCmd User LineChanged
       \      if &ft == 'c' | let g:currentFunc = s:GetCurrentFuncC() | endif
 autocmd MyAutoCmd BufEnter * let g:currentFunc = s:GetCurrentFuncC()
 
-function! s:ClipCurrentFuncC(funcName) "{{{
+function! s:ClipCurrentFuncName(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
@@ -1310,11 +1310,11 @@ function! s:ClipCurrentFuncC(funcName) "{{{
   echo 'clipped: ' . a:funcName
 
 endfunction "}}}
-command! -nargs=0 ClipCurrentFuncC
+command! -nargs=0 ClipCurrentFuncName
       \ let g:currentFunc = s:GetCurrentFuncC() |
-      \ call s:ClipCurrentFuncC(g:currentFunc)
+      \ call s:ClipCurrentFuncName(g:currentFunc)
 
-function! s:PrintCurrentFuncC(funcName) "{{{
+function! s:PrintCurrentFuncName(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
@@ -1323,12 +1323,12 @@ function! s:PrintCurrentFuncC(funcName) "{{{
   " 無名レジスタ(")を使う
   let @" = a:funcName
   normal! ""P
-  echo 'print current tag: ' . a:funcName
+  echo 'printed: ' . a:funcName
 
 endfunction "}}}
-command! -nargs=0 PrintCurrentFuncC
+command! -nargs=0 PrintCurrentFuncName
       \ let g:currentFunc = s:GetCurrentFuncC() |
-      \ call s:PrintCurrentFuncC(g:currentFunc)
+      \ call s:PrintCurrentFuncName(g:currentFunc)
 
 "}}}
 "-----------------------------------------------------------------------------
