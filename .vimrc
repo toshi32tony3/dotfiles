@@ -79,6 +79,13 @@ else
   set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
 endif
 
+" 日本語はスペルチェックから除外
+set spelllang=en,cjk
+
+" デフォルトではスペルチェックしない
+set nospell
+set spellfile=~/dotfiles/en.utf-8.add
+
 " 50あれば十分すぎる
 set history=50
 
@@ -108,9 +115,6 @@ function! s:ToggleScrollOffSet()
 endfunction
 command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
 nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
-
-" 日本語はスペルチェックから除外
-set spelllang=en,cjk
 
 " vimdiff用オプション
 " filler   : 埋め合わせ行を表示する
@@ -483,7 +487,7 @@ autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 " 折りたたみ機能をON/OFF
 nnoremap <silent> <F9> :<C-u>set foldenable!<CR>:set foldenable?<CR>
 
-" Hack #120: gVim でウィンドウの位置とサイズを記憶する
+" Hack #120: GVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
 let g:saveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
 if filereadable(g:saveWinposFile)
