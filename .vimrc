@@ -720,7 +720,7 @@ command! -nargs=0 DeleteJumpList for s:n in range(200) | mark '     | endfor
 " tags, path {{{
 
 " 新規タブでタグジャンプ
-function! s:TabTagJump(funcName)
+function! s:TagTag(funcName)
   tablast | tab split
 
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
@@ -730,8 +730,8 @@ function! s:TabTagJump(funcName)
   " execute 'tjump' a:funcName
 
 endfunction
-command! -nargs=1 -complete=tag TabTagJump call s:TabTagJump(<f-args>)
-nnoremap <Leader>} :<C-u>TabTagJump <C-r><C-w><CR>
+command! -nargs=1 -complete=tag TagTag call s:TagTag(<f-args>)
+nnoremap <Leader>} :<C-u>TagTag <C-r><C-w><CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/local.rc.vim
