@@ -1349,7 +1349,6 @@ if has('kaoriya')
   endfunction
   command! -nargs=0 ToggleScreenMode call s:ToggleScreenMode()
   nnoremap <F11> :<C-u>ToggleScreenMode<CR>
-  xnoremap <F11> :<C-u>ToggleScreenMode<CR>
 
 endif "}}}
 
