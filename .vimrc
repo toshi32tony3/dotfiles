@@ -109,8 +109,10 @@ endfunction
 command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
 nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
 
-" vimdiffは基本縦分割とする
-set diffopt+=vertical
+" vimdiff用オプション
+" filler   : 埋め合わせ行を表示する
+" vertical : 縦分割する
+set diffopt=filler,vertical
 
 " makeしたらcopen
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
@@ -451,7 +453,7 @@ if has('kaoriya')
 endif
 
 " 日本語はスペルチェックから除外
-set spelllang+=cjk
+set spelllang=en,cjk
 
 " 折り畳み機能の設定
 set foldcolumn=1
@@ -532,7 +534,7 @@ set confirm                    " 変更されたバッファがある時, どう
 set switchbuf=useopen          " すでに開いてあるバッファがあればそっちを開く
 set showmatch                  " 対応する括弧などの入力時にハイライト表示する
 set matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
-set matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
+set matchpairs=(:),{:},[:],<:> " 対応括弧に'<'と'>'のペアを追加
 set backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
 " 汎用補完設定
