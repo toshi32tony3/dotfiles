@@ -219,7 +219,7 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
 NeoBundle 'rcmdnk/vim-markdown'
 NeoBundleLazy 'glidenote/memolist.vim', {
-      \   'on_cmd' : ['MemoList', 'MemoNew'],
+      \   'on_cmd' : ['MemoNew'],
       \ }
 
 " Previm便利だけど, IEではmermaidを使えないようなのでShibaメインになりそう
@@ -1760,7 +1760,7 @@ if neobundle#tap('memolist.vim')
     let g:memolist_template_dir_path = '~/configs/template'
   endif
 
-  nnoremap <Leader>ml :<C-u>MemoList<CR>
+  nnoremap <Leader>ml :<C-u>edit ~/memofiles<CR>
   nnoremap <Leader>mn :<C-u>MemoNew<CR>
 
 endif "}}}
