@@ -648,10 +648,11 @@ xnoremap gj ]c
 nnoremap gk [c
 xnoremap gk [c
 
-" <Esc>でヘルプを閉じる
 function! s:HelpSettings()
+  " <F1>でヘルプを閉じる
   nnoremap <buffer> <F1>  :<C-u>q<CR>
-  nnoremap <buffer> <Esc> :<C-u>q<CR>
+  " <Esc>でヘルプから抜ける
+  nnoremap <buffer> <Esc> <C-w>j
 endfunction
 autocmd MyAutoCmd FileType help call s:HelpSettings()
 
