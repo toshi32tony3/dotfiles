@@ -451,7 +451,7 @@ if has('kaoriya')
 endif
 
 " 日本語はスペルチェックから除外
-set spelllang+=cjk
+set spelllang=en,cjk
 
 " 折り畳み機能の設定
 set foldcolumn=1
