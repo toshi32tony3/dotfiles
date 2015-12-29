@@ -2343,8 +2343,8 @@ endif "}}}
 " コメントアウト/コメントアウト解除を簡単に(caw.vim) {{{
 if neobundle#tap('caw.vim')
 
-  nmap <Leader>c <Plug>(caw:i:toggle)
-  xmap <Leader>c <Plug>(caw:i:toggle)
+  nmap co <Plug>(caw:i:toggle)
+  xmap co <Plug>(caw:i:toggle)
 
 endif "}}}
 
