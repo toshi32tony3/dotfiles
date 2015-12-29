@@ -250,13 +250,15 @@ NeoBundleLazy 'tyru/open-browser.vim', {
 NeoBundle 'tpope/vim-surround'
 
 NeoBundleLazy 'kana/vim-textobj-user'
+
+" on_mapのmodeが認識されていない。バグ？
 NeoBundleLazy 'kana/vim-textobj-function', {
       \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : ['if', 'af', 'iF', 'aF'],
+      \   'on_map'  : ['xo', 'if', 'af', 'iF', 'aF'],
       \ }
 NeoBundleLazy 'sgur/vim-textobj-parameter', {
       \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : ['i,', 'a,'],
+      \   'on_map'  : ['xo', 'i,', 'a,'],
       \ }
 
 NeoBundleLazy 'kana/vim-operator-user'
