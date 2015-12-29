@@ -231,10 +231,11 @@ NeoBundleLazy 'glidenote/memolist.vim', {
       \   'on_cmd' : ['MemoNew'],
       \ }
 
-" Previm便利だけど, IEではmermaidを使えないようなのでShibaメインになりそう
-" https://github.com/rhysd/Shiba
-NeoBundleLazy 'kannokanno/previm', {
-      \   'on_cmd' : 'PrevimOpen',
+" 本家
+" NeoBundle 'kannokanno/previm'
+NeoBundleLazy 'beckorz/previm', {
+      \   'depends' : 'tyru/open-browser.vim',
+      \   'on_cmd'  : 'PrevimOpen',
       \ }
 
 " " リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
@@ -1766,7 +1767,7 @@ endif "}}}
 
 " ファイルをブラウザで開く(previm) {{{
 if neobundle#tap('previm')
-
+  let g:previm_open_cmd = "C:/Program\\ Files/Internet\\ Explorer/iexplore.exe"
   let g:previm_enable_realtime = 1
 
 endif "}}}
