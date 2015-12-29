@@ -160,8 +160,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 " 本家
 " NeoBundle 'koron/dicwin-vim'
 NeoBundleLazy 'toshi32tony3/dicwin-vim', {
-      \   'on_i'   : 1,
-      \   'on_map' : '<Plug>',
+      \   'on_map' : [['ni', '<Plug>']],
       \ }
 
 NeoBundleLazy 'Shougo/neocomplete.vim', {
@@ -362,7 +361,7 @@ NeoBundle 'lambdalisue/vim-improve-diff'
 
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
-      \   'on_i' : 1,
+      \   'on_map' : [['ni', '<Plug>']]
       \ }
 
 NeoBundleLazy 'mtth/scratch.vim', {
