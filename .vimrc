@@ -1426,6 +1426,11 @@ if neobundle#tap('neocomplete.vim')
   inoremap <expr> <C-g> neocomplete#undo_completion()
   inoremap <expr> <C-l> neocomplete#complete_common_string()
 
+  function! neobundle#hooks.on_post_source(bundle)
+    " Lockされた状態からスタートしたい
+    NeoCompleteLock
+  endfunction
+
 endif "}}}
 
 " コードスニペットによる入力補助(neosnippet.vim) {{{
@@ -2193,43 +2198,43 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    if neobundle#tap('eskk.vim')
-      let l:CurrentMode = eskk#statusline()
-    else
-      let l:CurrentMode = ''
+    if !neobundle#is_sourced('eskk.vim') || !neobundle#is_sourced('neocomplete.vim')
+      return ''
     endif
+    let l:CurrentMode = eskk#statusline()
 
     " 初回の処理
     if !exists('b:LastMode')
-      " モードを覚えておく
-      let b:LastMode = l:CurrentMode
-      NeoCompleteLock
+      let b:LastMode = ''
     endif
 
-    " モード変更時の処理
-    if l:CurrentMode != b:LastMode
-      " normal -> skk
-      if b:LastMode == ''
-        " 必要ならunlock
-        if neocomplete#get_current_neocomplete().lock == 0
-          let b:IsAlreadyUnlocked = 1
-        else
-          NeoCompleteUnlock
-        endif
+    " モードが変更されていなければ何もしない
+    if l:CurrentMode == b:LastMode
+      return winwidth(0) > 30 ? l:CurrentMode : ''
+    endif
 
-        " skk -> normal
+    " normal -> skk
+    if b:LastMode == ''
+      " 必要ならunlock
+      if neocomplete#get_current_neocomplete().lock == 1
+        NeoCompleteUnlock
       else
-        " 必要ならlock
-        if exists('b:IsAlreadyUnlocked')
-          unlet b:IsAlreadyUnlocked
-        else
-          NeoCompleteLock
-        endif
-
+        let b:IsAlreadyUnlocked = 1
       endif
-      " 直前のモード情報を更新
-      let b:LastMode = l:CurrentMode
+
+    " skk -> normal
+    else
+      " 必要ならlock
+      if !exists('b:IsAlreadyUnlocked')
+        NeoCompleteLock
+      else
+        unlet b:IsAlreadyUnlocked
+      endif
+
     endif
+
+    " 直前のモード情報を更新
+    let b:LastMode = l:CurrentMode
 
     return winwidth(0) > 30 ? l:CurrentMode : ''
   endfunction
