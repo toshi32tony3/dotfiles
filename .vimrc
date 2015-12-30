@@ -6,13 +6,7 @@ scriptencoding utf-8
 " 基本設定 {{{
 
 " 左手で<Leader>を入力したい
-let g:mapleader = '#'
-
-" #検索が誤って発動しないようにする
-nnoremap #  <Nop>
-
-" ##で入力待ちを解除する
-nnoremap ## <Nop>
+let g:mapleader = "\<S-Space>"
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
@@ -1468,10 +1462,6 @@ if neobundle#tap('vimfiler.vim')
 
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
-    " #を<Leader>としているので, similarは##にする
-    nnoremap <buffer> #  <Nop>
-    nmap     <buffer> ## <Plug>(vimfiler_mark_similar_lines)
-
     " カレントディレクトリを開く
     nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
 
