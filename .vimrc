@@ -1492,7 +1492,7 @@ endif "}}}
 " 検索やリスト表示の拡張(unite.vim) {{{
 if neobundle#tap('unite.vim')
 
-  let g:unite_force_overwrite_statusline = 0
+  let g:unite_force_overwrite_statusline = 1
   let g:unite_split_rule = 'botright'
   let g:unite_source_history_yank_enable = 1
   let g:unite_enable_ignore_case = 1
@@ -1580,8 +1580,9 @@ if neobundle#tap('unite.vim')
           \   'sync'             : 1,
           \ })
 
-    " Unite line/vimgrepの結果候補数を制限しない
+    " Unite line/grep/vimgrepの結果候補数を制限しない
     call unite#custom#source('line',    'max_candidates', 0)
+    call unite#custom#source('grep',    'max_candidates', 0)
     call unite#custom#source('vimgrep', 'max_candidates', 0)
 
     " ディレクトリが選択されたらvimfilerで開く
