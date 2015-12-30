@@ -1586,6 +1586,7 @@ if neobundle#tap('unite.vim')
       " Disable yankround.vim
       nnoremap <buffer> <C-n> <Nop>
       nnoremap <buffer> <C-p> <Nop>
+
     endfunction
     autocmd MyAutoCmd FileType unite call s:UniteSettings()
   endfunction
