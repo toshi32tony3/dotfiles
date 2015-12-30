@@ -517,7 +517,8 @@ set incsearch  " インクリメンタルサーチ
 set hlsearch   " マッチしたテキストをハイライト
 
 " vimgrep/grep結果が0件の場合, Quickfixを開かない
-autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
+autocmd MyAutoCmd QuickfixCmdPost vimgrep,grep
+      \ if len(getqflist()) != 0 | copen | endif
 
 if has('kaoriya') && has('migemo')
   " 逆方向migemo検索g?を有効化
