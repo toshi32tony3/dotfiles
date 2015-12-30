@@ -1970,28 +1970,49 @@ if neobundle#tap('vim-asterisk')
   command! -nargs=0 ModSearchHistory call s:ModSearchHistory()
 
   " star-search対象をクリップボードに入れる
-  function! s:SilentClip(data) "{{{
-    let @* = a:data
+  function! s:ClipCword(data) "{{{
+    if     mode(1) == 'n'
+      let @* = a:data
+      return ''
+    elseif mode(1) == 'no'
+      let @* = a:data
+      return "\<Esc>"
+    elseif mode(1) == 'v' || mode(1) == 'V' || mode(1) == ''
+      return "\<Esc>gvygv"
+    endif
+    echomsg 'You can use ClipCword() on following modes : n/no/v/V/CTRL-V'
     return ''
   endfunction "}}}
-  noremap <expr> <Plug>(_ClipCword) <SID>SilentClip(expand('<cword>'))
+  noremap <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
   if neobundle#tap('incsearch.vim') && neobundle#tap('vim-anzu')
-    nmap *       <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
-    omap *  <Esc><Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
-    xmap *              <Esc>gvyvgv<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
+    omap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
+    xmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
+    omap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
+    xmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
 
-    nmap g*      <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    omap g* <Esc><Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    xmap g*             <Esc>gvyvgv<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    omap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    xmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+    omap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+    xmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
   else
-    nmap *       <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
-    omap *  <Esc><Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
-    xmap *              <Esc>gvyvgv<Plug>(asterisk-z*)
+    nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
+    omap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
+    xmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)
+    nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
+    omap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
+    xmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)
 
-    nmap g*      <Plug>(_ClipCword)<Plug>(asterisk-gz*)
-    omap g* <Esc><Plug>(_ClipCword)<Plug>(asterisk-gz*)
-    xmap g*             <Esc>gvyvgv<Plug>(asterisk-gz*)
+    nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
+    omap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
+    xmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
+    nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
+    omap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
+    xmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
   endif
 
 endif "}}}
