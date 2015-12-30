@@ -1574,6 +1574,7 @@ if neobundle#tap('unite.vim')
           \   'no_empty'         : 1,
           \   'no_quit'          : 0,
           \   'prompt'           : '> ',
+          \   'prompt_focus'     : 1,
           \   'prompt_direction' : 'top',
           \   'split'            : 0,
           \   'start_insert'     : 0,
