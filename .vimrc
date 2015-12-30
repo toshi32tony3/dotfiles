@@ -510,8 +510,8 @@ set wrapscan   " 検索時に最後まで行ったら最初に戻る
 set incsearch  " インクリメンタルサーチ
 set hlsearch   " マッチしたテキストをハイライト
 
-" vimgrep/grep結果が0件の場合, Quickfixを開かない
-autocmd MyAutoCmd QuickfixCmdPost vimgrep,grep
+" grep/vimgrep結果が0件の場合, Quickfixを開かない
+autocmd MyAutoCmd QuickfixCmdPost grep,vimgrep
       \ if len(getqflist()) != 0 | copen | endif
 
 if has('kaoriya') && has('migemo')
