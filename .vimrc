@@ -519,6 +519,15 @@ set hlsearch   " マッチしたテキストをハイライト
 " vimgrep/grep結果が0件の場合, Quickfixを開かない
 autocmd MyAutoCmd QuickfixCmdPost *grep if len(getqflist()) != 0 | copen | endif
 
+if has('kaoriya') && has('migemo')
+  " 逆方向migemo検索g?を有効化
+  set migemo
+
+  " kaoriya版のmigemo searchを再マッピング
+  noremap m/ g/
+  noremap m? g?
+endif
+
 "}}}
 "-----------------------------------------------------------------------------
 " 編集 {{{
@@ -1843,20 +1852,9 @@ if neobundle#tap('incsearch.vim')
   " very magic
   let g:incsearch#magic = '\v'
 
-  if has('kaoriya') && has('migemo')
-    if !neobundle#is_installed('incsearch-migemo.vim')
-      " 逆方向migemo検索g?を有効化
-      set migemo
-
-      " kaoriya版のmigemo searchを再マッピング
-      noremap m/ g/
-      noremap m? g?
-    endif
-  endif
-
-  noremap <silent> <expr>  / incsearch#go({'command' : '/', 'is_stay' : 0})
-  noremap <silent> <expr>  ? incsearch#go({'command' : '?', 'is_stay' : 0})
-  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  map <silent> /  <Plug>(incsearch-forward)
+  map <silent> ?  <Plug>(incsearch-backward)
+  map <silent> g/ <Plug>(incsearch-stay)
   noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
 
 endif "}}}
