@@ -1536,7 +1536,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_mk =            g:u_hopt
   let g:u_opt_mp = g:u_sins
   let g:u_opt_nl = g:u_sins
-  let g:u_opt_nu = g:u_nsyn
+  let g:u_opt_nu = ''
   let g:u_opt_ol =            g:u_vopt
   let g:u_opt_op = g:u_sins
   let g:u_opt_re =            g:u_hopt . g:u_sbuf
