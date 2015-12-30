@@ -7,6 +7,8 @@ scriptencoding utf-8
 
 " 左手で<Leader>を入力したい
 let g:mapleader = "\<S-Space>"
+nnoremap <S-Space>          <Nop>
+nnoremap <S-Space><S-Space> <Nop>
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
@@ -1470,9 +1472,9 @@ if neobundle#tap('vimfiler.vim')
       nnoremap <buffer> <expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
     endif
 
-    " Disable yankround.vim
-    nnoremap <buffer> <C-n> <Nop>
-    nnoremap <buffer> <C-p> <Nop>
+    " <Leader>がデフォルトマッピングで使用されていた場合の対策
+    nnoremap <buffer> <Leader>         <Nop>
+    nnoremap <buffer> <Leader><Leader> <Nop>
 
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
@@ -1583,9 +1585,9 @@ if neobundle#tap('unite.vim')
       imap <buffer> <Esc> <Plug>(unite_insert_leave)
       nmap <buffer> <Esc> <Plug>(unite_exit)
 
-      " Disable yankround.vim
-      nnoremap <buffer> <C-n> <Nop>
-      nnoremap <buffer> <C-p> <Nop>
+      " <Leader>がデフォルトマッピングで使用されていた場合の対策
+      nnoremap <buffer> <Leader>         <Nop>
+      nnoremap <buffer> <Leader><Leader> <Nop>
 
     endfunction
     autocmd MyAutoCmd FileType unite call s:UniteSettings()
@@ -2082,9 +2084,9 @@ if neobundle#tap('agit.vim')
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
     nmap <buffer> Rv <Plug>(agit-git-revert)
 
-    " Disable yankround.vim
-    nnoremap <buffer> <C-n> <Nop>
-    nnoremap <buffer> <C-p> <Nop>
+    " <Leader>がデフォルトマッピングで使用されていた場合の対策
+    nnoremap <buffer> <Leader>         <Nop>
+    nnoremap <buffer> <Leader><Leader> <Nop>
 
   endfunction
   autocmd MyAutoCmd FileType agit          call s:AgitSettings()
