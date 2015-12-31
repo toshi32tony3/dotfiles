@@ -1038,6 +1038,8 @@ function! s:OnCursorMove() "{{{
 endfunction "}}}
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 
+" 引数に渡した行のFold名を取得
+" NOTE: 対応ファイルタイプ : vim/markdown
 function! s:GetFoldName(line) "{{{
   if     &ft == 'vim'
     " コメント行か, 末尾コメントか判別してFold名を切り出す
@@ -1054,6 +1056,7 @@ endfunction "}}}
 
 " foldlevel('.')はnofoldenableの時に必ず0を返すので, foldlevelを自分で数える
 " NOTE: 1行, 1Foldまでとする
+" NOTE: 対応ファイルタイプ : vim/markdown
 function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " 小細工
