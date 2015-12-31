@@ -1038,7 +1038,7 @@ function! s:OnCursorMove() "{{{
 endfunction "}}}
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 
-function! GetFoldName(line) "{{{
+function! s:GetFoldName(line) "{{{
   if     &ft == 'vim'
     " コメント行か, 末尾コメントか判別してFold名を切り出す
     let l:startIndex = match   (a:line, '\w')
@@ -1170,13 +1170,13 @@ function! s:GetCurrentFold() "{{{
       let l:currentLine = &ft == 'markdown' && (match(getline('.'), '^#') == -1)
             \           ? getline((line('.') - 1))
             \           : getline('.')
-      call add(l:foldList, GetFoldName(l:currentLine))
+      call add(l:foldList, s:GetFoldName(l:currentLine))
     else
       let l:currentLine = &ft == 'markdown'
             \           ? getline((line('.') - 1))
             \           : getline('.')
       " 親Foldをリストに追加
-      call insert(l:foldList, GetFoldName(l:currentLine), 0)
+      call insert(l:foldList, s:GetFoldName(l:currentLine), 0)
     endif
 
     let l:lastLineNumber = l:currentLineNumber
