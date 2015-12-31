@@ -984,7 +984,7 @@ command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
-let g:throttleTimeSpan = 100
+let g:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
   " run on normal/visual mode only
   let     l:currentMode  = mode(1)
