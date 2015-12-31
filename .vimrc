@@ -805,7 +805,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
   " ソースコードをスイッチ
   function! s:SwitchSource()
     let g:indexOfSrc += 1
-    if g:indexOfSrc >= g:numberOfSrc
+    if  g:indexOfSrc >= g:numberOfSrc
       let g:indexOfSrc = 0
     endif
 
@@ -983,8 +983,9 @@ command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
 let g:throttleTimeSpan = 100
 function! s:OnCursorMove() "{{{
   " run on normal/visual mode only
-  let l:currentMode = mode()
-  if l:currentMode != 'n' && l:currentMode != 'v'
+  let     l:currentMode  = mode(1)
+  if      l:currentMode != 'n' && l:currentMode != 'no' &&
+        \ l:currentMode != 'v' && l:currentMode != 'V' && l:currentMode != ''
     let b:isLineChanged = 0
     let b:isCursorMoved = 0
     return
@@ -1107,7 +1108,7 @@ function! s:GetCurrentFold() "{{{
   " ------------------------------------------------------------
   " foldlevel('.')はあてにならないことがあるので自作関数で求める
   let l:foldLevel = s:GetFoldLevel()
-  if l:foldLevel <= 0
+  if  l:foldLevel <= 0
     return ''
   endif
 
@@ -1879,14 +1880,13 @@ if neobundle#tap('vim-asterisk')
       return ''
     endif
 
-    let l:currentMode = mode()
-    if l:currentMode != 'n' && l:currentMode != 'no'
+    if mode() != 'n'
       return ''
     endif
 
     let l:lastHistory = histget('/', -1)
     let l:endIndex = matchend(l:lastHistory, '^\\<.*\\>')
-    if l:endIndex >= 0
+    if  l:endIndex >= 0
       let l:lastHistory = '<' . l:lastHistory[2 : (l:endIndex - 3)] . '>'
             \                 . l:lastHistory[l:endIndex : ]
     endif
@@ -1936,31 +1936,31 @@ if neobundle#tap('vim-asterisk')
       let l:lastHistory = substitute(l:lastHistory, '%', '\\%', 'g')
     endif
 
-    if l:lastHistory == '<'
+    if    l:lastHistory == '<'
       let l:lastHistory = substitute(l:lastHistory, '<', '\\<', 'g')
     endif
 
-    if l:lastHistory == '<='
+    if    l:lastHistory == '<='
       let l:lastHistory = substitute(l:lastHistory, '<=', '\\<\\=', 'g')
     endif
 
-    if l:lastHistory == '<?'
+    if    l:lastHistory == '<?'
       let l:lastHistory = substitute(l:lastHistory, '<?', '\\<\\?', 'g')
     endif
 
-    if l:lastHistory == '>'
+    if    l:lastHistory == '>'
       let l:lastHistory = substitute(l:lastHistory, '>', '\\>', 'g')
     endif
 
-    if l:lastHistory == '>='
+    if    l:lastHistory == '>='
       let l:lastHistory = substitute(l:lastHistory, '>=', '\\>\\=', 'g')
     endif
 
-    if l:lastHistory == '>?'
+    if    l:lastHistory == '>?'
       let l:lastHistory = substitute(l:lastHistory, '>?', '\\>\\?', 'g')
     endif
 
-    if l:lastHistory == '<>'
+    if    l:lastHistory == '<>'
       let l:lastHistory = substitute(l:lastHistory, '<>', '\\<\\>', 'g')
     endif
 
@@ -1974,13 +1974,14 @@ if neobundle#tap('vim-asterisk')
 
   " star-search対象をクリップボードに入れる
   function! s:ClipCword(data) "{{{
-    if     mode(1) == 'n'
+    let    l:currentMode  = mode(1)
+    if     l:currentMode == 'n'
       let @* = a:data
       return ''
-    elseif mode(1) == 'no'
+    elseif l:currentMode == 'no'
       let @* = a:data
       return "\<Esc>"
-    elseif mode(1) == 'v' || mode(1) == 'V' || mode(1) == ''
+    elseif l:currentMode == 'v' || l:currentMode == 'V' || l:currentMode == ''
       return "\<Esc>gvygv"
     endif
     echomsg 'You can use ClipCword() on following modes : n/no/v/V/CTRL-V'
@@ -2227,18 +2228,16 @@ if neobundle#tap('lightline.vim')
       return winwidth(0) > 30 ? l:CurrentMode : ''
     endif
 
-    " normal -> skk
     if b:LastMode == ''
-      " 必要ならunlock
+      " normal -> skk : 必要ならunlock
       if neocomplete#get_current_neocomplete().lock == 1
         NeoCompleteUnlock
       else
         let b:IsAlreadyUnlocked = 1
       endif
 
-    " skk -> normal
     else
-      " 必要ならlock
+      " skk -> normal : 必要ならlock
       if !exists('b:IsAlreadyUnlocked')
         NeoCompleteLock
       else
