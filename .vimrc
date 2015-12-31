@@ -1797,7 +1797,7 @@ endif "}}}
 
 " ファイルをブラウザで開く(previm) {{{
 if neobundle#tap('previm')
-  let g:previm_open_cmd = "C:/Program\\ Files/Internet\\ Explorer/iexplore.exe"
+
   let g:previm_enable_realtime = 1
 
 endif "}}}
