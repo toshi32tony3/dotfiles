@@ -1038,6 +1038,20 @@ function! s:OnCursorMove() "{{{
 endfunction "}}}
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 
+function! GetFoldName(line) "{{{
+  if     &ft == 'vim'
+    " コメント行か, 末尾コメントか判別してFold名を切り出す
+    let l:startIndex = match   (a:line, '\w')
+    let l:endIndex   = matchend(a:line, '\v^("\ )')
+    let l:preIndex   = ((l:endIndex == -1) ? l:startIndex : l:endIndex)
+    let l:sufIndex   = (strlen(a:line) - ((l:endIndex == -1) ? 6 : 5))
+    return a:line[l:preIndex : l:sufIndex]
+  elseif &ft == 'markdown'
+    return split(a:line, "\<Space>")[1]
+  endif
+  return ''
+endfunction "}}}
+
 " foldlevel('.')はnofoldenableの時に必ず0を返すので, foldlevelを自分で数える
 " NOTE: 1行, 1Foldまでとする
 function! s:GetFoldLevel() "{{{
@@ -1056,7 +1070,6 @@ function! s:GetFoldLevel() "{{{
   " 前処理
   " ------------------------------------------------------------
   let l:foldLevel = 0
-  let l:currentLine = getline('.')
   let l:currentLineNumber = line('.')
   let l:lastLineNumber = l:currentLineNumber
 
@@ -1070,11 +1083,17 @@ function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " foldLevelをカウント
   " ------------------------------------------------------------
-  " 現在の行にfoldmarkerが含まれているかチェック
-  let l:pattern = '\v\ \{\{\{$' " for match } } }
-  if match(l:currentLine, l:pattern) >= 0
-    let l:foldLevel += 1
+  if &ft == 'markdown'
+    let l:pattern = '^#'
+
+    " markdownの場合, (現在の行 - 1)にfoldmarkerが含まれていれば, foldLevel+=1
+    let l:foldLevel += (match(getline((line('.') - 1)), l:pattern) >= 0) ? 1 : 0
+  else
+    let l:pattern = '\v\{\{\{$' " for match } } }
   endif
+
+  " 現在の行にfoldmarkerが含まれていれば, foldLevel+=1
+  let l:foldLevel += (match(getline('.'), l:pattern) >= 0) ? 1 : 0
 
   " [zを使ってカーソルが移動していればfoldLevelをインクリメント
   while 1
@@ -1098,11 +1117,16 @@ function! s:GetFoldLevel() "{{{
 
   return l:foldLevel
 endfunction "}}}
+command! -nargs=0 EchoFoldLevel echo s:GetFoldLevel()
 
 " カーソル位置の親Fold名を取得
-" NOTE: &ft == 'vim' only
+" NOTE: 対応ファイルタイプ : vim/markdown
 let g:currentFold = ''
 function! s:GetCurrentFold() "{{{
+  if &ft != 'vim' && &ft != 'markdown'
+    return ''
+  endif
+
   " ------------------------------------------------------------
   " 前処理
   " ------------------------------------------------------------
@@ -1125,8 +1149,7 @@ function! s:GetCurrentFold() "{{{
 
   " 変数初期化
   let l:foldList = []
-  let l:currentFold = ''
-  let l:lastLineNumber = -1
+  let l:lastLineNumber = line('.')
 
   " ------------------------------------------------------------
   " カーソル位置のfoldListを取得
@@ -1138,27 +1161,22 @@ function! s:GetCurrentFold() "{{{
 
     " 1段階親のところへ移動
     keepjumps normal! [z
-    let l:currentLine       = getline('.')
-    let l:currentLineNumber =    line('.')
+    let l:currentLineNumber = line('.')
 
     " 移動していなければ, 移動前のカーソル行が子Fold開始位置だったということ
     if l:lastLineNumber == l:currentLineNumber
-      " カーソルを戻して子Fold行を取得
+      " カーソルを戻して子Foldをリストに追加
       call setpos('.', l:cursorPosition)
-      let l:currentLine = getline('.')
-    endif
-
-    " コメント行か, 末尾コメントか判別してFold名を切り出す
-    let l:startIndex = match   (l:currentLine, '\w'      )
-    let l:endIndex   = matchend(l:currentLine, '\v^("\ )')
-    let l:preIndex   = ((l:endIndex == -1) ? l:startIndex : l:endIndex)
-    let l:sufIndex   = (strlen(l:currentLine) - ((l:endIndex == -1) ? 6 : 5))
-    if l:lastLineNumber == l:currentLineNumber
-      " 子Foldをリストに追加
-      call    add(l:foldList, l:currentLine[l:preIndex : l:sufIndex]   )
+      let l:currentLine = &ft == 'markdown' && (match(getline('.'), '^#') == -1)
+            \           ? getline((line('.') - 1))
+            \           : getline('.')
+      call add(l:foldList, GetFoldName(l:currentLine))
     else
+      let l:currentLine = &ft == 'markdown'
+            \           ? getline((line('.') - 1))
+            \           : getline('.')
       " 親Foldをリストに追加
-      call insert(l:foldList, l:currentLine[l:preIndex : l:sufIndex], 0)
+      call insert(l:foldList, GetFoldName(l:currentLine), 0)
     endif
 
     let l:lastLineNumber = l:currentLineNumber
@@ -1182,9 +1200,9 @@ function! s:GetCurrentFold() "{{{
 
   return l:foldList[-1]
 endfunction "}}}
-autocmd MyAutoCmd User LineChanged
-      \    if &ft == 'vim' | let g:currentFold = s:GetCurrentFold() | endif
-autocmd MyAutoCmd BufEnter * let g:currentFold = s:GetCurrentFold()
+command! -nargs=0 EchoCurrentFold echo s:GetCurrentFold()
+autocmd MyAutoCmd User LineChanged let g:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd BufEnter *       let g:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
 function! s:JumpFuncNameCForward() "{{{
@@ -2253,7 +2271,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyCurrentFunc()
-    if &ft == 'vim'
+    if &ft == 'vim' || &ft == 'markdown'
       return winwidth(0) > 100 ? g:currentFold : ''
     else
       return winwidth(0) > 100 ? g:currentFunc : ''
