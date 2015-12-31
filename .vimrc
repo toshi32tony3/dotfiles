@@ -219,9 +219,15 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
 
+NeoBundleLazy 'tyru/open-browser.vim', {
+      \   'on_map' : '<Plug>(openbrowser-',
+      \ }
+
 " memolist.vimはmarkdown形式でメモを生成するので, markdownを使いやすくしてみる
 " http://rcmdnk.github.io/blog/2013/11/17/computer-vim/#plasticboyvim-markdown
-NeoBundle 'rcmdnk/vim-markdown'
+NeoBundleLazy 'rcmdnk/vim-markdown', {
+      \   'on_ft' : 'markdown',
+      \ }
 NeoBundleLazy 'glidenote/memolist.vim', {
       \   'on_cmd' : ['MemoNew'],
       \ }
@@ -230,17 +236,13 @@ NeoBundleLazy 'glidenote/memolist.vim', {
 " NeoBundle 'kannokanno/previm'
 NeoBundleLazy 'beckorz/previm', {
       \   'depends' : 'tyru/open-browser.vim',
-      \   'on_cmd'  : 'PrevimOpen',
+      \   'on_ft'   : 'markdown',
       \ }
 
 " " リアルタイムプレビューが非常に早いのが特徴。発展途上感はある
 " NeoBundleLazy 'kurocode25/mdforvim', {
 "       \   'on_cmd' : ['MdPreview', 'MdConvert'],
 "       \ }
-
-NeoBundleLazy 'tyru/open-browser.vim', {
-      \   'on_map' : '<Plug>(openbrowser-',
-      \ }
 
 NeoBundle 'tpope/vim-surround'
 
@@ -1765,6 +1767,14 @@ if neobundle#tap('vim-watchdogs')
 
 endif "}}}
 
+" Vimからブラウザを開く(open-browser) {{{
+if neobundle#tap('open-browser.vim')
+
+  nmap <Leader>L <Plug>(openbrowser-smart-search)
+  xmap <Leader>L <Plug>(openbrowser-smart-search)
+
+endif "}}}
+
 " markdownを使いやすくする(vim-markdown) {{{
 if neobundle#tap('vim-markdown')
 
@@ -1799,14 +1809,6 @@ endif "}}}
 if neobundle#tap('previm')
 
   let g:previm_enable_realtime = 1
-
-endif "}}}
-
-" Vimからブラウザを開く(open-browser) {{{
-if neobundle#tap('open-browser.vim')
-
-  nmap <Leader>L <Plug>(openbrowser-smart-search)
-  xmap <Leader>L <Plug>(openbrowser-smart-search)
 
 endif "}}}
 
