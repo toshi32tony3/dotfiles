@@ -111,7 +111,7 @@ function! s:ToggleScrollOffSet() "{{{
   endif
   echo 'setlocal scrolloff=' . &scrolloff
 endfunction "}}}
-command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
+command! ToggleScrollOffSet call s:ToggleScrollOffSet()
 nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
 
 " vimdiff用オプション
@@ -454,7 +454,7 @@ if has('kaoriya')
       let g:transparencyOn = 1
     endif
   endfunction "}}}
-  command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
+  command! ToggleTransParency call s:ToggleTransParency()
   nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 
 endif
@@ -613,13 +613,13 @@ function! s:Clip(data) "{{{
 endfunction "}}}
 
 " 現在開いているファイルのパスをレジスタへ
-command! -nargs=0 ClipPath call s:Clip(expand('%:p'))
+command! ClipPath call s:Clip(expand('%:p'))
 
 " 現在開いているファイルのファイル名をレジスタへ
-command! -nargs=0 ClipFile call s:Clip(expand('%:t'))
+command! ClipFile call s:Clip(expand('%:t'))
 
 " 現在開いているファイルのディレクトリパスをレジスタへ
-command! -nargs=0 ClipDir  call s:Clip(expand('%:p:h'))
+command! ClipDir  call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果をクリップボードに格納
 function! s:ClipCmdOutput(cmd) "{{{
@@ -675,7 +675,7 @@ function! s:ChangeDir(dir) "{{{
   lcd %:p:h
   echo 'change directory to: ' . a:dir
 endfunction "}}}
-command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
+command! CD call s:ChangeDir(expand('%:p:h'))
 
 " " 開いたファイルと同じ場所へ移動する
 " " -> startify/:CDでcdするので以下の設定は使用しない
@@ -718,10 +718,10 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " :messageで表示される履歴を削除
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! -nargs=0 DeleteMessage  for s:n in range(200) | echomsg '' | endfor
+command! DeleteMessage  for s:n in range(200) | echomsg '' | endfor
 
 " :jumplistを空にする
-command! -nargs=0 DeleteJumpList for s:n in range(200) | mark '     | endfor
+command! DeleteJumpList for s:n in range(200) | mark '     | endfor
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -822,7 +822,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     echo 'change source to: ' . $TARGET_VER
 
   endfunction "}}}
-  command! -nargs=0 SwitchSource call s:SwitchSource()
+  command! SwitchSource call s:SwitchSource()
   nnoremap ,s :<C-u>SwitchSource<CR>
 
   " ctagsをアップデート
@@ -842,7 +842,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
       call system(l:updateCommand)
     endfor
   endfunction "}}}
-  command! -nargs=0 UpdateCtags call s:UpdateCtags()
+  command! UpdateCtags call s:UpdateCtags()
 
 endif
 
@@ -958,14 +958,14 @@ function! s:MyCounter() "{{{
   endif
   echomsg 'count: ' . b:myCounter
 endfunction "}}}
-command! -nargs=0 MyCounter call s:MyCounter()
+command! MyCounter call s:MyCounter()
 
 " タイムスタンプの挿入
 function! s:PutTimeStamp() "{{{
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
   normal! ""P
 endfunction "}}}
-command! -nargs=0 PutTimeStamp call s:PutTimeStamp()
+command! PutTimeStamp call s:PutTimeStamp()
 
 " 区切り線＋タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
@@ -980,7 +980,7 @@ function! s:PutMemoFormat() "{{{
   normal! 03""P
   normal! ko
 endfunction "}}}
-command! -nargs=0 PutMemoFormat call s:PutMemoFormat()
+command! PutMemoFormat call s:PutMemoFormat()
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
@@ -1124,7 +1124,7 @@ function! s:GetFoldLevel() "{{{
 
   return l:foldLevel
 endfunction "}}}
-command! -nargs=0 EchoFoldLevel echo s:GetFoldLevel()
+command! EchoFoldLevel echo s:GetFoldLevel()
 
 " カーソル位置の親Fold名を取得
 " NOTE: 対応ファイルタイプ : vim/markdown
@@ -1207,7 +1207,7 @@ function! s:GetCurrentFold() "{{{
 
   return l:foldList[-1]
 endfunction "}}}
-command! -nargs=0 EchoCurrentFold echo s:GetCurrentFold()
+command! EchoCurrentFold echo s:GetCurrentFold()
 autocmd MyAutoCmd User LineChanged let g:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd BufEnter *       let g:currentFold = s:GetCurrentFold()
 
@@ -1282,8 +1282,8 @@ function! s:JumpFuncNameCBackward() "{{{
   " 現在位置をjumplistに追加
   mark '
 endfunction " }}}
-command! -nargs=0 JumpFuncNameCForward  call s:JumpFuncNameCForward()
-command! -nargs=0 JumpFuncNameCBackward call s:JumpFuncNameCBackward()
+command! JumpFuncNameCForward  call s:JumpFuncNameCForward()
+command! JumpFuncNameCBackward call s:JumpFuncNameCBackward()
 nnoremap <silent> ]f :<C-u>JumpFuncNameCForward<CR>
 nnoremap <silent> [f :<C-u>JumpFuncNameCBackward<CR>
 
@@ -1342,7 +1342,7 @@ function! s:ClipCurrentFuncName(funcName) "{{{
   echo 'clipped: ' . a:funcName
 
 endfunction "}}}
-command! -nargs=0 ClipCurrentFuncName
+command! ClipCurrentFuncName
       \ let g:currentFunc = s:GetCurrentFuncC() |
       \ call s:ClipCurrentFuncName(g:currentFunc)
 
@@ -1358,7 +1358,7 @@ function! s:PrintCurrentFuncName(funcName) "{{{
   echo 'printed: ' . a:funcName
 
 endfunction "}}}
-command! -nargs=0 PrintCurrentFuncName
+command! PrintCurrentFuncName
       \ let g:currentFunc = s:GetCurrentFuncC() |
       \ call s:PrintCurrentFuncName(g:currentFunc)
 
@@ -1379,7 +1379,7 @@ if has('kaoriya')
       let g:fullscreenOn = 1
     endif
   endfunction "}}}
-  command! -nargs=0 ToggleScreenMode call s:ToggleScreenMode()
+  command! ToggleScreenMode call s:ToggleScreenMode()
   nnoremap <F11> :<C-u>ToggleScreenMode<CR>
 
 endif "}}}
@@ -1995,7 +1995,7 @@ if neobundle#tap('vim-asterisk')
     return ''
   endfunction "}}}
   noremap <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
-  command! -nargs=0 ModSearchHistory call s:ModSearchHistory()
+  command! ModSearchHistory call s:ModSearchHistory()
 
   " star-search対象をクリップボードに入れる
   function! s:ClipCword(data) "{{{
@@ -2071,7 +2071,7 @@ if neobundle#tap('vim-signify')
   let g:signify_update_on_focusgained = 1
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
-  command! -nargs=0 -bar SignifyStart
+  command! -bar SignifyStart
         \ | SignifyToggle
         \ | SignifyToggle
         \ | delcommand SignifyStart
@@ -2575,7 +2575,7 @@ if neobundle#tap('eskk.vim')
     endfunction "}}}
 
     function! s:SKKDictionarySettings() "{{{
-      command! -nargs=0 -buffer SortSKKDictionary call s:SortSKKDictionary()
+      command! -buffer SortSKKDictionary call s:SortSKKDictionary()
     endfunction "}}}
     autocmd MyAutoCmd FileType skkdict call s:SKKDictionarySettings()
   endif
