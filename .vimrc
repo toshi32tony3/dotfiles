@@ -1,9 +1,11 @@
 " vimrc for GVim by Kaoriya
-set encoding=utf-8
-scriptencoding utf-8
 
 "-----------------------------------------------------------------------------
-" 基本設定 {{{
+" Basic {{{
+
+" Do first!
+set encoding=utf-8
+scriptencoding utf-8
 
 " 左手で<Leader>を入力したい
 let g:mapleader = "\<S-Space>"
@@ -15,8 +17,8 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-" Echo startuptime on starting Vim
-" -> あくまで目安なので注意。実際は「表示値+0.5secくらい」になるようだ
+" Vim起動時間を計測
+" -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒強程度)になる
 " -> gvim --startuptime startuptime.txt startuptime.txt
 if has('vim_starting') && has('reltime')
   let g:startuptime = reltime()
@@ -391,7 +393,7 @@ endif
 
 "}}}
 "-----------------------------------------------------------------------------
-" 表示 {{{
+" View {{{
 
 if has('gui_running')
   " Ricty for Powerline
@@ -503,7 +505,7 @@ endif
 
 "}}}
 "-----------------------------------------------------------------------------
-" 検索 {{{
+" Search {{{
 
 " very magic
 nnoremap / /\v
@@ -529,7 +531,7 @@ endif
 
 "}}}
 "-----------------------------------------------------------------------------
-" 編集 {{{
+" Edit {{{
 
 " タブ幅, シフト幅, タブ使用有無の設定
 if has('vim_starting')
@@ -629,7 +631,7 @@ command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<f-args>)
 
 "}}}
 "-----------------------------------------------------------------------------
-" 操作の簡単化 {{{
+" Simplify operation {{{
 
 " キー入力タイムアウトはあると邪魔だし, 待つ意味も無い気がする
 set notimeout
@@ -846,7 +848,7 @@ endif
 
 "}}}
 "-----------------------------------------------------------------------------
-" 誤爆防止 {{{
+" Prevent erroneous input {{{
 
 " レジスタ機能のキーを<S-q>にする(Exモードは使わないので潰す)
 nnoremap q     <Nop>
@@ -945,7 +947,7 @@ nnoremap <A-Right> :<C-u>next<CR>
 
 "}}}
 "-----------------------------------------------------------------------------
-" Vim scripts {{{
+" Scripts {{{
 
 " カウンタ
 function! s:MyCounter() "{{{
