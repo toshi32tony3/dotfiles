@@ -99,7 +99,7 @@ set belloff=esc
 " -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
 set scrolloff=100
 let g:scrolloffOn = 1
-function! s:ToggleScrollOffSet()
+function! s:ToggleScrollOffSet() "{{{
   if g:scrolloffOn == 1
     setlocal scrolloff=0
     let g:scrolloffOn = 0
@@ -108,7 +108,7 @@ function! s:ToggleScrollOffSet()
     let g:scrolloffOn = 1
   endif
   echo 'setlocal scrolloff=' . &scrolloff
-endfunction
+endfunction "}}}
 command! -nargs=0 ToggleScrollOffSet call s:ToggleScrollOffSet()
 nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
 
@@ -439,7 +439,7 @@ if has('kaoriya')
 
   " 透明度をスイッチ
   let g:transparencyOn = 0
-  function! s:ToggleTransParency()
+  function! s:ToggleTransParency() "{{{
     if g:transparencyOn == 1
       set transparency=255
       echo 'set transparency=255'
@@ -449,7 +449,7 @@ if has('kaoriya')
       echo 'set transparency=220'
       let g:transparencyOn = 1
     endif
-  endfunction
+  endfunction "}}}
   command! -nargs=0 ToggleTransParency call s:ToggleTransParency()
   nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
 
@@ -488,14 +488,14 @@ nnoremap <silent> <F9> :<C-u>set foldenable!<CR>:set foldenable?<CR>
 let g:saveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
 if filereadable(g:saveWinposFile)
   autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
-  function! s:SaveWindow()
+  function! s:SaveWindow() "{{{
     let s:options = [
           \   'set columns=' . &columns,
           \   'set lines='   . &lines,
           \   'winpos ' . getwinposx() . ' ' . getwinposy(),
           \ ]
     call writefile(s:options, g:saveWinposFile)
-  endfunction
+  endfunction "}}}
   execute 'source ' g:saveWinposFile
 endif
 
@@ -603,10 +603,10 @@ set clipboard=unnamed
 
 " 現在開いているファイルのパスなどをレジスタやクリップボードへ登録する
 " https://gist.github.com/pinzolo/8168337
-function! s:Clip(data)
+function! s:Clip(data) "{{{
   let @* = a:data
   echo 'clipped: ' . a:data
-endfunction
+endfunction "}}}
 
 " 現在開いているファイルのパスをレジスタへ
 command! -nargs=0 ClipPath call s:Clip(expand('%:p'))
@@ -618,11 +618,11 @@ command! -nargs=0 ClipFile call s:Clip(expand('%:t'))
 command! -nargs=0 ClipDir  call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果をクリップボードに格納
-function! s:ClipCmdOutput(cmd)
+function! s:ClipCmdOutput(cmd) "{{{
   redir @*>
   silent execute a:cmd
   redir END
-endfunction
+endfunction "}}}
 command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<f-args>)
 
 "}}}
@@ -654,12 +654,12 @@ xnoremap j gj
 nnoremap k gk
 xnoremap k gk
 
-function! s:HelpSettings()
+function! s:HelpSettings() "{{{
   " <F1>でヘルプを閉じる
   nnoremap <buffer> <F1>  :<C-u>q<CR>
   " <Esc>でヘルプから抜ける
   nnoremap <buffer> <Esc> <C-w>j
-endfunction
+endfunction "}}}
 autocmd MyAutoCmd FileType help call s:HelpSettings()
 
 " 最後のウィンドウがQuickfixウィンドウの場合, 自動で閉じる
@@ -667,10 +667,10 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
 
 " 現在開いているファイルのディレクトリに移動
-function! s:ChangeDir(dir)
+function! s:ChangeDir(dir) "{{{
   lcd %:p:h
   echo 'change directory to: ' . a:dir
-endfunction
+endfunction "}}}
 command! -nargs=0 CD call s:ChangeDir(expand('%:p:h'))
 
 " " 開いたファイルと同じ場所へ移動する
@@ -699,7 +699,7 @@ nnoremap <Leader>gf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<C
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
 " 引数が2つ以上 : 引数指定ファイル同士の比較
 " http://koturn.hatenablog.com/entry/2013/08/10/034242
-function! s:TabDiff(...)
+function! s:TabDiff(...) "{{{
   if a:0 == 1
     tabedit %:p
     execute 'rightbelow vertical diffsplit ' . a:1
@@ -709,7 +709,7 @@ function! s:TabDiff(...)
       execute 'rightbelow vertical diffsplit ' . l:file
     endfor
   endif
-endfunction
+endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " :messageで表示される履歴を削除
@@ -724,7 +724,7 @@ command! -nargs=0 DeleteJumpList for s:n in range(200) | mark '     | endfor
 " tags, path {{{
 
 " 新規タブでタグジャンプ
-function! s:JumpTagTab(funcName)
+function! s:JumpTagTab(funcName) "{{{
   tablast | tab split
 
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
@@ -733,7 +733,7 @@ function! s:JumpTagTab(funcName)
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
   " execute 'tjump' a:funcName
 
-endfunction
+endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
 nnoremap <Leader>} :<C-u>JumpTagTab <C-r><C-w><CR>
 
@@ -741,14 +741,14 @@ nnoremap <Leader>} :<C-u>JumpTagTab <C-r><C-w><CR>
 " see: ~/localfiles/local.rc.vim
 if filereadable(expand('~/localfiles/local.rc.vim'))
 
-  function! s:SetSrcDir()
+  function! s:SetSrcDir() "{{{
     let g:numberOfSrc = len(g:src_ver_list)
     let $TARGET_VER = g:src_ver_list[g:indexOfSrc]
     let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
     let $CTAGS_DIR = $TARGET_DIR . '\.tags'
-  endfunction
+  endfunction "}}}
 
-  function! s:SetTags()
+  function! s:SetTags() "{{{
     set tags=
 
     for l:item in g:target_dir_ctags_list
@@ -759,9 +759,9 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     " GTAGSROOTの登録
     " -> GNU Globalのタグはプロジェクトルートで生成する
     let $GTAGSROOT = $TARGET_DIR
-  endfunction
+  endfunction "}}}
 
-  function! s:SetPathList()
+  function! s:SetPathList() "{{{
     set path=
 
     " 起点なしのpath登録
@@ -775,9 +775,9 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
       let $SET_PATH = $TARGET_DIR . '\' . l:item
       set path+=$SET_PATH
     endfor
-  endfunction
+  endfunction "}}}
 
-  function! s:SetCDPathList()
+  function! s:SetCDPathList() "{{{
     set cdpath=
 
     " 起点なしのcdpath登録
@@ -795,7 +795,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
       let $SET_CDPATH = $TARGET_DIR . '\' . l:item
       set cdpath+=$SET_CDPATH
     endfor
-  endfunction
+  endfunction "}}}
 
   call s:SetSrcDir()
   call s:SetTags()
@@ -803,7 +803,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
   call s:SetCDPathList()
 
   " ソースコードをスイッチ
-  function! s:SwitchSource()
+  function! s:SwitchSource() "{{{
     let g:indexOfSrc += 1
     if  g:indexOfSrc >= g:numberOfSrc
       let g:indexOfSrc = 0
@@ -817,12 +817,12 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     " ソースコード切り替え後, バージョン名を出力
     echo 'change source to: ' . $TARGET_VER
 
-  endfunction
+  endfunction "}}}
   command! -nargs=0 SwitchSource call s:SwitchSource()
   nnoremap ,s :<C-u>SwitchSource<CR>
 
   " ctagsをアップデート
-  function! s:UpdateCtags()
+  function! s:UpdateCtags() "{{{
     if !isdirectory($CTAGS_DIR)
       call system('mkdir ' . $CTAGS_DIR)
     endif
@@ -837,7 +837,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
             \ $TARGET_DIR . '\' . l:item
       call system(l:updateCommand)
     endfor
-  endfunction
+  endfunction "}}}
   command! -nargs=0 UpdateCtags call s:UpdateCtags()
 
 endif
@@ -1366,7 +1366,7 @@ command! -nargs=0 PrintCurrentFuncName
 if has('kaoriya')
 
   let g:fullscreenOn = 0
-  function! s:ToggleScreenMode()
+  function! s:ToggleScreenMode() "{{{
     if g:fullscreenOn
       execute 'ScreenMode 0'
       let g:fullscreenOn = 0
@@ -1374,7 +1374,7 @@ if has('kaoriya')
       execute 'ScreenMode 6'
       let g:fullscreenOn = 1
     endif
-  endfunction
+  endfunction "}}}
   command! -nargs=0 ToggleScreenMode call s:ToggleScreenMode()
   nnoremap <F11> :<C-u>ToggleScreenMode<CR>
 
@@ -1392,9 +1392,9 @@ if neobundle#tap('dicwin-vim')
 
   if filereadable(expand('~/vimfiles/dict/gene.txt'))
     autocmd MyAutoCmd BufRead gene.txt setlocal filetype=dicwin
-    function! s:DicwinSettings()
+    function! s:DicwinSettings() "{{{
       nnoremap <buffer> <Esc> :<C-u>q<CR>
-    endfunction
+    endfunction "}}}
     autocmd MyAutoCmd FileType dicwin call s:DicwinSettings()
   endif
 
@@ -1485,7 +1485,7 @@ if neobundle#tap('vimfiler.vim')
   nnoremap ,c :<C-u>VimFilerCurrentDir<CR>
 
   " vimfilerのマッピングを一部変更
-  function! s:VimfilerSettings()
+  function! s:VimfilerSettings() "{{{
     " カレントディレクトリを開く
     nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
 
@@ -1498,7 +1498,7 @@ if neobundle#tap('vimfiler.vim')
     nnoremap <buffer> <Leader>         <Nop>
     nnoremap <buffer> <Leader><Leader> <Nop>
 
-  endfunction
+  endfunction "}}}
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
 endif "}}}
@@ -1603,7 +1603,7 @@ if neobundle#tap('unite.vim')
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory_mru',             'vimfiler')
 
-    function! s:UniteSettings()
+    function! s:UniteSettings() "{{{
       imap <buffer> <Esc> <Plug>(unite_insert_leave)
       nmap <buffer> <Esc> <Plug>(unite_exit)
 
@@ -1611,7 +1611,7 @@ if neobundle#tap('unite.vim')
       nnoremap <buffer> <Leader>         <Nop>
       nnoremap <buffer> <Leader><Leader> <Nop>
 
-    endfunction
+    endfunction "}}}
     autocmd MyAutoCmd FileType unite call s:UniteSettings()
   endfunction
 
@@ -2102,7 +2102,7 @@ endif "}}}
 " VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
-  function! s:AgitSettings()
+  function! s:AgitSettings() "{{{
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
     nmap <buffer> Rv <Plug>(agit-git-revert)
 
@@ -2110,7 +2110,7 @@ if neobundle#tap('agit.vim')
     nnoremap <buffer> <Leader>         <Nop>
     nnoremap <buffer> <Leader><Leader> <Nop>
 
-  endfunction
+  endfunction "}}}
   autocmd MyAutoCmd FileType agit          call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
 
@@ -2464,10 +2464,10 @@ if neobundle#tap('TweetVim')
 
   let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
 
-  function! s:TweetVimSettings()
+  function! s:TweetVimSettings() "{{{
     nnoremap <buffer> <C-CR>     :<C-u>TweetVimSay<CR>
     nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
-  endfunction
+  endfunction "}}}
   autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
 
 endif "}}}
@@ -2546,7 +2546,7 @@ if neobundle#tap('eskk.vim')
   nmap <A-s> ^C<Plug>(eskk:toggle)
 
   autocmd MyAutoCmd User eskk-initialize-pre call s:eskk_initial_pre()
-  function! s:eskk_initial_pre()
+  function! s:eskk_initial_pre() "{{{
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
     " hankaku -> zenkaku
     call t.add_map('~',  '～')
@@ -2558,21 +2558,21 @@ if neobundle#tap('eskk.vim')
     call t.add_map('z.', '.')
 
     call eskk#register_mode_table('hira', t)
-  endfunction
+  endfunction "}}}
 
   " skk-jisyoをソートしたい
   if filereadable(expand('~/dotfiles/.skk-jisyo'))
-    function! s:SortSKKDictionary()
+    function! s:SortSKKDictionary() "{{{
       let l:savedView = winsaveview()
       execute "keepjumps normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
       execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>"
       call winrestview(l:savedView)
       echo 'ソートしました!!'
-    endfunction
+    endfunction "}}}
 
-    function! s:SKKDictionarySettings()
+    function! s:SKKDictionarySettings() "{{{
       command! -nargs=0 -buffer SortSKKDictionary call s:SortSKKDictionary()
-    endfunction
+    endfunction "}}}
     autocmd MyAutoCmd FileType skkdict call s:SKKDictionarySettings()
   endif
 
@@ -2593,9 +2593,9 @@ if neobundle#tap('scratch.vim')
   xmap gs <Plug>(scratch-selection-reuse)
   xmap gS <Plug>(scratch-selection-clear)
 
-  function! s:ScratchVimSettings()
+  function! s:ScratchVimSettings() "{{{
     nnoremap <buffer> <Esc> <C-w>j
-  endfunction
+  endfunction "}}}
   autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
 
   function! neobundle#hooks.on_post_source(bundle)
