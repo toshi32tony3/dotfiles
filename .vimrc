@@ -2197,19 +2197,19 @@ if neobundle#tap('lightline.vim')
         \ }
 
   " for using git properly
-  " \   'gita-branch'  : 'MyGitaBranch',
+  "       \   'gita-branch'  : 'MyGitaBranch',
 
-  function! MyModified()
+  function! MyModified() "{{{
     return &ft =~ 'help\|vimfiler\' ? ''          :
           \             &modified   ? "\<Space>+" :
           \             &modifiable ? ''          : "\<Space>-"
-  endfunction
+  endfunction "}}}
 
-  function! MyReadonly()
+  function! MyReadonly() "{{{
     return &ft !~? 'help\|vimfiler\' && &readonly ? "\<Space>\u2B64" : ''
-  endfunction
+  endfunction "}}}
 
-  function! MyFilename()
+  function! MyFilename() "{{{
     " 以下の条件を満たすと処理負荷が急激に上がる。理由は不明
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており, ファイル名をフルパス(%:p)出力
@@ -2219,25 +2219,25 @@ if neobundle#tap('lightline.vim')
           \  '' != expand('%:t') ? expand('%:t') : '[No Name]') .
           \ ('' != MyReadonly()  ? MyReadonly()  : ''         ) .
           \ ('' != MyModified()  ? MyModified()  : ''         )
-  endfunction
+  endfunction "}}}
 
-  function! MyFileformat()
+  function! MyFileformat() "{{{
     return winwidth(0) > 70 ? &fileformat : ''
-  endfunction
+  endfunction "}}}
 
-  function! MyFiletype()
+  function! MyFiletype() "{{{
     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
-  endfunction
+  endfunction "}}}
 
-  function! MyFileencoding()
+  function! MyFileencoding() "{{{
     return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
-  endfunction
+  endfunction "}}}
 
-  function! MyMode()
+  function! MyMode() "{{{
     return winwidth(0) > 30 ? lightline#mode() : ''
-  endfunction
+  endfunction "}}}
 
-  function! MySKKMode()
+  function! MySKKMode() "{{{
     if !neobundle#is_sourced('eskk.vim') || !neobundle#is_sourced('neocomplete.vim')
       return ''
     endif
@@ -2275,30 +2275,30 @@ if neobundle#tap('lightline.vim')
     let b:LastMode = l:CurrentMode
 
     return winwidth(0) > 30 ? l:CurrentMode : ''
-  endfunction
+  endfunction "}}}
 
-  function! MyCurrentFunc()
+  function! MyCurrentFunc() "{{{
     if &ft == 'vim' || &ft == 'markdown'
       return winwidth(0) > 100 ? g:currentFold : ''
     else
       return winwidth(0) > 100 ? g:currentFunc : ''
     endif
-  endfunction
+  endfunction "}}}
 
-  function! MyFugitive()
+  function! MyFugitive() "{{{
     if !neobundle#tap('vim-fugitive') || &ft == 'vimfiler'
       return ''
     endif
     let l:_ = fugitive#head()
     return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
-  endfunction
+  endfunction "}}}
 
-  function! MyGitaBranch()
+  function! MyGitaBranch() "{{{
     if !neobundle#tap('vim-gita') || &ft == 'vimfiler'
       return ''
     endif
     return winwidth(0) > 30 ? gita#statusline#preset('branch_fancy') : ''
-  endfunction
+  endfunction "}}}
 
 endif "}}}
 
