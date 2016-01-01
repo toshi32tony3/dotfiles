@@ -1275,12 +1275,13 @@ function! s:JumpFuncNameCForward() "{{{
 
   let l:lastLine = line('.')
   execute "keepjumps normal! ]]"
-  " 検索対象が居なければViewを戻す
+
+  " 検索対象が居なければViewを戻して処理終了
   if line('.') == line('$')
-    " Viewを復元
     call winrestview(l:savedView)
     return
   endif
+
   call search('(', 'b')
   execute "normal! b"
 
@@ -1288,9 +1289,9 @@ function! s:JumpFuncNameCForward() "{{{
   if l:lastLine == line('.')
     execute "keepjumps normal! ]]"
     execute "keepjumps normal! ]]"
-    " 検索対象が居なければViewを戻す
+
+    " 検索対象が居なければViewを戻して処理終了
     if line('.') == line('$')
-      " Viewを復元
       call winrestview(l:savedView)
       return
     endif
@@ -1318,9 +1319,8 @@ function! s:JumpFuncNameCBackward() "{{{
     execute "keepjumps normal! [["
     " for match } }
 
-    " 検索対象が居なければViewを戻す
+    " 検索対象が居なければViewを戻して処理終了
     if line('.') == 1
-      " Viewを復元
       call winrestview(l:savedView)
       return
     endif
@@ -1360,9 +1360,8 @@ function! s:GetCurrentFuncC() "{{{
       return ''
     endif
 
-    " 検索対象が居なければViewを戻す
+    " 検索対象が居なければViewを戻して処理終了
     if line('.') == 1
-      " Viewを復元
       call winrestview(l:savedView)
       return ''
     endif
