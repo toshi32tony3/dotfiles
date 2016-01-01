@@ -484,7 +484,9 @@ cnoremap <C-n> <Down>
 " l : insertモードの自動改行を無効化
 " m : 整形時, 255よりも大きいマルチバイト文字間でも改行する
 " q : gqでコメント行を整形
-autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmq
+" B : 行連結時に, マルチバイト文字の前後に空白を挿入しない
+" M : 行連結時に, マルチバイト文字同士の間に空白を挿入しない
+autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmqBM
 
 " gqで使うtextwidthを設定
 autocmd MyAutoCmd BufEnter * setlocal textwidth=80
