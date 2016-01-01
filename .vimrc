@@ -1217,7 +1217,8 @@ function! s:GetCurrentFold() "{{{
     if l:lastLineNumber == l:currentLineNumber
       " カーソルを戻して子Foldをリストに追加
       call setpos('.', l:cursorPosition)
-      let l:currentLine = &ft == 'markdown' && (match(getline('.'), '^#') == -1)
+      let l:currentLine = (&ft == 'markdown') &&
+            \             (match(getline('.'), '^#') == -1)
             \           ? getline((line('.') - 1))
             \           : getline('.')
       let l:foldName = s:GetFoldName(l:currentLine)
@@ -1225,7 +1226,7 @@ function! s:GetCurrentFold() "{{{
         call add(l:foldList, l:foldName)
       endif
     else
-      let l:currentLine = &ft == 'markdown'
+      let l:currentLine = (&ft == 'markdown')
             \           ? getline((line('.') - 1))
             \           : getline('.')
       " 親Foldをリストに追加
