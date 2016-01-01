@@ -684,7 +684,7 @@ set notimeout
 nnoremap ,r :<C-u>source $MYVIMRC<CR>
 
 " フォーカスがあたっているウィンドウ以外閉じる
-nnoremap ,o  :<C-u>only<CR>
+nnoremap ,o :<C-u>only<CR>
 
 " 閉じる系の入力を簡易化
 nnoremap <C-q><C-q> :<C-u>bdelete<CR>
