@@ -93,9 +93,10 @@ set autoread
 " メッセージ省略設定
 set shortmess=aoOotTWI
 
-" " ノーマルモードで<Esc>するマッピングがあってもbellを鳴らさない
-" " -> 本当は鳴らしたいが, search-offsetを使った時に鳴るのが気になるので...
-" set belloff=esc
+" ノーマルモードで<Esc>するマッピングがあってもbellを鳴らさない
+" -> 本当は鳴らすべきだが, search-offsetを使った時に鳴るのが気になるので...
+" -> https://github.com/haya14busa/incsearch.vim/issues/105
+set belloff=esc
 
 " カーソル上下に表示する最小の行数
 " -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
@@ -1888,8 +1889,8 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  " " very magic
-  " let g:incsearch#magic = '\v'
+  " very magic
+  let g:incsearch#magic = '\v'
 
   map <silent> /  <Plug>(incsearch-forward)
   map <silent> ?  <Plug>(incsearch-backward)
