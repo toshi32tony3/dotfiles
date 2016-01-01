@@ -517,12 +517,12 @@ command! ClipFile call s:Clip(expand('%:t'))
 command! ClipDir  call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果をクリップボードに格納
-function! s:ClipCmdOutput(cmd) "{{{
+function! s:ClipCommandOutput(cmd) "{{{
   redir @*>
   silent execute a:cmd
   redir END
 endfunction "}}}
-command! -nargs=1 -complete=command ClipCmdOutput call s:ClipCmdOutput(<f-args>)
+command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<f-args>)
 
 "}}}
 "-----------------------------------------------------------------------------
