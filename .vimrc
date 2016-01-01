@@ -1097,7 +1097,8 @@ function! s:GetFoldName(line) "{{{
     let l:sufIndex   = (strlen(a:line) - ((l:endIndex == -1) ? 6 : 5))
     return a:line[l:preIndex : l:sufIndex]
   elseif &ft == 'markdown'
-    return split(a:line, "\<Space>")[1]
+    let l:foldName = split(a:line, "\<Space>")
+    return empty(l:foldName) ? '' : join(l:foldName[1:], "\<Space>")
   endif
   return ''
 endfunction "}}}
@@ -1221,13 +1222,19 @@ function! s:GetCurrentFold() "{{{
       let l:currentLine = &ft == 'markdown' && (match(getline('.'), '^#') == -1)
             \           ? getline((line('.') - 1))
             \           : getline('.')
-      call add(l:foldList, s:GetFoldName(l:currentLine))
+      let l:foldName = s:GetFoldName(l:currentLine)
+      if  l:foldName != ''
+        call add(l:foldList, l:foldName)
+      endif
     else
       let l:currentLine = &ft == 'markdown'
             \           ? getline((line('.') - 1))
             \           : getline('.')
       " 親Foldをリストに追加
-      call insert(l:foldList, s:GetFoldName(l:currentLine), 0)
+      let l:foldName = s:GetFoldName(l:currentLine)
+      if  l:foldName != ''
+        call insert(l:foldList, l:foldName, 0)
+      endif
     endif
 
     let l:lastLineNumber = l:currentLineNumber
