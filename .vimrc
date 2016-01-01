@@ -249,14 +249,6 @@ NeoBundle 'tmhedberg/matchit'
 
 "}}}
 "-------------------------------------------------------------------
-" history {{{
-
-NeoBundleLazy 'LeafCage/yankround.vim', {
-      \   'on_map' : '<Plug>',
-      \ }
-
-"}}}
-"-------------------------------------------------------------------
 " text-objects {{{
 
 NeoBundleLazy 'kana/vim-textobj-user'
@@ -2161,24 +2153,6 @@ endif "}}}
 
 " 対応するキーワードを増やす(matchit) {{{
 if neobundle#tap('matchit')
-
-endif "}}}
-
-" pからの<C-n>,<C-p>でクリップボード履歴をぐるぐる(yankround.vim) {{{
-if neobundle#tap('yankround.vim')
-
-  let g:yankround_dir = '~/.cache/yankround'
-  let g:yankround_use_region_hl = 1
-  let g:yankround_region_hl_groupname = 'Search'
-
-  nmap p     <Plug>(yankround-p)
-  xmap p     <Plug>(yankround-p)
-  nmap P     <Plug>(yankround-P)
-  nmap gp    <Plug>(yankround-gp)
-  xmap gp    <Plug>(yankround-gp)
-  nmap gP    <Plug>(yankround-gP)
-  nmap <C-n> <Plug>(yankround-next)
-  nmap <C-p> <Plug>(yankround-prev)
 
 endif "}}}
 
