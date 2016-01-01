@@ -220,11 +220,29 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 "-------------------------------------------------------------------
 " move {{{
 
-NeoBundleLazy 'haya14busa/incsearch.vim', {
+" 本家 : 'haya14busa/incsearch.vim'
+NeoBundleLazy 'toshi32tony3/incsearch.vim', {
       \   'on_map' : '<Plug>',
       \ }
-NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
-      \   'depends' : 'haya14busa/incsearch.vim',
+" 本家 : 'haya14busa/incsearch-fuzzy.vim'
+NeoBundleLazy 'toshi32tony3/incsearch-fuzzy.vim', {
+      \   'depends' : 'toshi32tony3/incsearch.vim',
+      \   'on_map'  : '<Plug>',
+      \ }
+" 本家 : 'haya14busa/incsearch-migemo.vim'
+NeoBundleLazy 'toshi32tony3/incsearch-migemo.vim', {
+      \   'depends' : 'toshi32tony3/incsearch.vim',
+      \   'on_map'  : '<Plug>',
+      \ }
+NeoBundleLazy 'easymotion/vim-easymotion', {
+      \   'on_map'  : '<Plug>',
+      \ }
+" 本家 : 'haya14busa/incsearch-easymotion.vim'
+NeoBundleLazy 'toshi32tony3/incsearch-easymotion.vim', {
+      \   'depends' : [
+      \     'toshi32tony3/incsearch.vim',
+      \     'easymotion/vim-easymotion',
+      \   ],
       \   'on_map'  : '<Plug>',
       \ }
 
@@ -1887,20 +1905,49 @@ if neobundle#tap('incsearch.vim')
   " very magic
   let g:incsearch#magic = '\v'
 
-  map <silent> /  <Plug>(incsearch-forward)
-  map <silent> ?  <Plug>(incsearch-backward)
-  map <silent> g/ <Plug>(incsearch-stay)
-  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
+  map /  <Plug>(incsearch-/)
+  map ?  <Plug>(incsearch-?)
+  map g/ <Plug>(incsearch-stay-/)
+  map g? <Plug>(incsearch-stay-?)
 
 endif "}}}
 
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
 if neobundle#tap('incsearch-fuzzy.vim')
 
-  map  z/ <Plug>(incsearch-fuzzy-/)
-  map  z? <Plug>(incsearch-fuzzy-?)
-  map gz/ <Plug>(incsearch-fuzzyspell-/)
-  map gz? <Plug>(incsearch-fuzzyspell-?)
+  " " fuzzy
+  " map  z/ <Plug>(incsearch-fuzzy-/)
+  " map  z? <Plug>(incsearch-fuzzy-?)
+  " map gz/ <Plug>(incsearch-fuzzy-stay-/)
+  " map gz? <Plug>(incsearch-fuzzy-stay-?)
+
+  " " fuzzyspell
+  " map  z/ <Plug>(incsearch-fuzzyspell-/)
+  " map  z? <Plug>(incsearch-fuzzyspell-?)
+  " map gz/ <Plug>(incsearch-fuzzyspell-stay-/)
+  " map gz? <Plug>(incsearch-fuzzyspell-stay-?)
+
+endif "}}}
+
+" incsearch.vimをパワーアップ(incsearch-migemo.vim) {{{
+if neobundle#tap('incsearch-migemo.vim')
+
+  " " migemo
+  " map  z/ <Plug>(incsearch-migemo-/)
+  " map  z? <Plug>(incsearch-migemo-?)
+  " map gz/ <Plug>(incsearch-migemo-stay-/)
+  " map gz? <Plug>(incsearch-migemo-stay-?)
+
+endif "}}}
+
+" incsearch.vimをパワーアップ(incsearch-easymotion.vim) {{{
+if neobundle#tap('incsearch-easymotion.vim')
+
+  " " easymotion
+  " map  z/ <Plug>(incsearch-easymotion-/)
+  " map  z? <Plug>(incsearch-easymotion-?)
+  " map gz/ <Plug>(incsearch-easymotion-stay-/)
+  " map gz? <Plug>(incsearch-easymotion-stay-?)
 
 endif "}}}
 
