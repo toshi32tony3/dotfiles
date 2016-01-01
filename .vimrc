@@ -989,9 +989,8 @@ nnoremap <A-Right> :<C-u>next<CR>
 function! s:MyCounter() "{{{
   if !exists('b:myCounter')
     let b:myCounter = 0
-  else
-    let b:myCounter += 1
   endif
+  let b:myCounter += 1
   echomsg 'count: ' . b:myCounter
 endfunction "}}}
 command! MyCounter call s:MyCounter()
