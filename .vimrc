@@ -125,9 +125,6 @@ nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
 " vertical : 縦分割する
 set diffopt=filler,vertical
 
-" makeしたらcopen
-autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
-
 "}}}
 "-----------------------------------------------------------------------------
 " Plugin List {{{
@@ -689,6 +686,9 @@ nnoremap ,o :<C-u>only<CR>
 " 閉じる系の入力を簡易化
 nnoremap <C-q><C-q> :<C-u>bdelete<CR>
 nnoremap <C-w><C-w> :<C-u>close<CR>
+
+" make後, 自動でQuickfixウィンドウを開く
+autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウがQuickfixウィンドウの場合, 自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
