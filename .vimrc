@@ -268,10 +268,6 @@ NeoBundleLazy 'sgur/vim-textobj-parameter', {
 
 NeoBundleLazy 'kana/vim-operator-user'
 
-" NeoBundleLazy 'rhysd/vim-operator-surround', {
-"       \   'depends' : 'kana/vim-operator-user',
-"       \   'on_map'  : '<Plug>',
-"       \ }
 NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : '<Plug>',
