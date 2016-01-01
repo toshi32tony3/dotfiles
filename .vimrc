@@ -387,7 +387,7 @@ NeoBundleLazy 'rcmdnk/vim-markdown', {
       \   'on_ft' : 'markdown',
       \ }
 NeoBundleLazy 'glidenote/memolist.vim', {
-      \   'on_cmd' : ['MemoNew'],
+      \   'on_cmd' : 'MemoNew',
       \ }
 
 "}}}
