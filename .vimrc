@@ -17,6 +17,11 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
+" SID取得関数を定義
+function! s:SID()
+  return matchstr(expand('<sfile>'), '<SNR>\d_')
+endfunction
+
 " Vim起動時間を計測
 " -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒強程度)になる
 " -> gvim --startuptime startuptime.txt startuptime.txt
@@ -284,12 +289,12 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : ['<Plug>(operator-quickhl-', '<Plug>(quickhl-'],
       \ }
-
-" operatorではないのだけれども分類しづらい
-NeoBundle 'tpope/vim-surround'
 NeoBundleLazy 'tyru/caw.vim', {
-      \   'on_map' : '<Plug>',
+      \   'depends' : 'kana/vim-operator-user',
+      \   'on_map'  : '<Plug>(operator-caw)',
       \ }
+
+NeoBundle 'tpope/vim-surround'
 
 "}}}
 "-------------------------------------------------------------------
@@ -2194,16 +2199,31 @@ if neobundle#tap('vim-quickhl')
 
 endif "}}}
 
-" 囲む / 囲まなくする / 別の何かで囲む(vim-surround) {{{
-if neobundle#tap('vim-surround')
+" コメントアウト/コメントアウト解除(caw.vim) {{{
+if neobundle#tap('caw.vim')
+
+  let g:caw_no_default_keymappings = 1
+
+  " caw.vimをオペレータとして使う
+  function! s:operator_caw_comment_toggle(motion)
+    if a:motion ==# 'char'
+      execute 'normal' "`[v`]\<Plug>(caw:wrap:toggle)"
+    else
+      execute "normal" "`[V`]\<Plug>(caw:i:toggle)"
+    endif
+  endfunction
+  function! neobundle#hooks.on_source(bundle)
+    call operator#user#define('caw', s:SID() . 'operator_caw_comment_toggle')
+  endfunction
+
+  nmap co <Plug>(operator-caw)
+  omap co <Plug>(operator-caw)
+  xmap co <Plug>(operator-caw)
 
 endif "}}}
 
-" コメントアウト/コメントアウト解除を簡単に(caw.vim) {{{
-if neobundle#tap('caw.vim')
-
-  nmap co <Plug>(caw:i:toggle)
-  xmap co <Plug>(caw:i:toggle)
+" 囲む / 囲まなくする / 別の何かで囲む(vim-surround) {{{
+if neobundle#tap('vim-surround')
 
 endif "}}}
 
