@@ -1031,7 +1031,7 @@ function! s:OnCursorMove() "{{{
   " run on normal/visual mode only
   let     l:currentMode  = mode(1)
   if      l:currentMode != 'n' && l:currentMode != 'no' &&
-        \ l:currentMode != 'v' && l:currentMode != 'V' && l:currentMode != ''
+        \ l:currentMode != 'v' && l:currentMode != 'V'  && l:currentMode != ''
     let b:isLineChanged = 0
     let b:isCursorMoved = 0
     return
