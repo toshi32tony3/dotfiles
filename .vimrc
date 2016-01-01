@@ -2093,14 +2093,14 @@ if neobundle#tap('vim-shot-f')
   nmap F <Plug>(shot-f-F)
   nmap t <Plug>(shot-f-t)
   nmap T <Plug>(shot-f-T)
-  xmap f <Plug>(shot-f-f)
-  xmap F <Plug>(shot-f-F)
-  xmap t <Plug>(shot-f-t)
-  xmap T <Plug>(shot-f-T)
   omap f <Plug>(shot-f-f)
   omap F <Plug>(shot-f-F)
   omap t <Plug>(shot-f-t)
   omap T <Plug>(shot-f-T)
+  xmap f <Plug>(shot-f-f)
+  xmap F <Plug>(shot-f-F)
+  xmap t <Plug>(shot-f-t)
+  xmap T <Plug>(shot-f-T)
 
 endif "}}}
 
@@ -2116,10 +2116,10 @@ if neobundle#tap('vim-sneak')
   " for Lazy
   nmap s <Plug>Sneak_s
   nmap S <Plug>Sneak_S
-  xmap s <Plug>Sneak_s
-  xmap S <Plug>Sneak_S
   omap s <Plug>Sneak_s
   omap S <Plug>Sneak_S
+  xmap s <Plug>Sneak_s
+  xmap S <Plug>Sneak_S
 
 endif "}}}
 
