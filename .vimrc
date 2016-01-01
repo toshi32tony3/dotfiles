@@ -768,10 +768,10 @@ function! s:JumpTagTab(funcName) "{{{
   tablast | tab split
 
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
-  execute 'tag' a:funcName
+  execute 'tag ' . a:funcName
 
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
-  " execute 'tjump' a:funcName
+  " execute 'tjump ' . a:funcName
 
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
