@@ -2201,11 +2201,12 @@ if neobundle#tap('caw.vim')
   let g:caw_no_default_keymappings = 1
 
   " caw.vimをオペレータとして使う
-  function! s:operator_caw_comment_toggle(motion)
-    if a:motion ==# 'char'
-      execute 'normal' "`[v`]\<Plug>(caw:wrap:toggle)"
+  " https://github.com/rhysd/dogfiles/blob/master/vimrc
+  function! s:operator_caw_comment_toggle(motion_wise)
+    if a:motion_wise ==# 'char'
+      execute "normal `[v`]\<Plug>(caw:wrap:toggle)"
     else
-      execute "normal" "`[V`]\<Plug>(caw:i:toggle)"
+      execute "normal `[V`]\<Plug>(caw:i:toggle)"
     endif
   endfunction
   function! neobundle#hooks.on_source(bundle)
