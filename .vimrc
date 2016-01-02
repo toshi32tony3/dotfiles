@@ -372,8 +372,7 @@ NeoBundleLazy 'basyura/J6uil.vim', {
 
 " 本家 : 'kannokanno/previm'
 NeoBundleLazy 'beckorz/previm', {
-      \   'depends' : 'tyru/open-browser.vim',
-      \   'on_ft'   : 'markdown',
+      \   'on_ft' : 'markdown',
       \ }
 
 " NeoBundleLazy 'kurocode25/mdforvim', {
@@ -2523,6 +2522,9 @@ endif "}}}
 " ファイルをブラウザで開く(previm) {{{
 if neobundle#tap('previm')
 
+  if has('win32')
+    let g:previm_open_cmd = 'start'
+  endif
   let g:previm_enable_realtime = 1
 
 endif "}}}
