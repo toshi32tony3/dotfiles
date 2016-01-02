@@ -614,11 +614,8 @@ set foldcolumn=1
 set foldnestmax=1
 set fillchars=vert:\|
 
-" ファイルを開いた時点でどこまで折り畳むか
-" -> 全て閉じた状態で開く
-if has('vim_starting')
-  set foldlevel=0
-endif
+" ファイルを開いた時点では折り畳みを全て閉じた状態で開く
+set foldlevelstart=0
 
 " fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てる
 nnoremap zh zc
@@ -2547,6 +2544,9 @@ if neobundle#tap('vim-markdown')
   " " markdownのfold機能を無効にする
   " " -> むしろ有効活用したい
   " let g:vim_markdown_folding_disabled = 1
+
+  " 折り畳みを1段階閉じた状態で開く
+  " -> autocmd FileTypeでfoldlevelstartを変えても遅いようなのでfoldlevelをいじる
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
