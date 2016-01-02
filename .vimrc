@@ -2094,16 +2094,16 @@ if neobundle#tap('vim-shot-f')
   " for Lazy
   let g:shot_f_no_default_key_mappings = 1
   nmap f <Plug>(shot-f-f)
-  nmap F <Plug>(shot-f-F)
-  nmap t <Plug>(shot-f-t)
-  nmap T <Plug>(shot-f-T)
   omap f <Plug>(shot-f-f)
-  omap F <Plug>(shot-f-F)
-  omap t <Plug>(shot-f-t)
-  omap T <Plug>(shot-f-T)
   xmap f <Plug>(shot-f-f)
+  nmap F <Plug>(shot-f-F)
+  omap F <Plug>(shot-f-F)
   xmap F <Plug>(shot-f-F)
+  nmap t <Plug>(shot-f-t)
+  omap t <Plug>(shot-f-t)
   xmap t <Plug>(shot-f-t)
+  nmap T <Plug>(shot-f-T)
+  omap T <Plug>(shot-f-T)
   xmap T <Plug>(shot-f-T)
 
 endif "}}}
@@ -2119,10 +2119,10 @@ if neobundle#tap('vim-sneak')
 
   " for Lazy
   nmap s <Plug>Sneak_s
-  nmap S <Plug>Sneak_S
   omap s <Plug>Sneak_s
-  omap S <Plug>Sneak_S
   xmap s <Plug>Sneak_s
+  nmap S <Plug>Sneak_S
+  omap S <Plug>Sneak_S
   xmap S <Plug>Sneak_S
 
 endif "}}}
@@ -2440,8 +2440,8 @@ if neobundle#tap('scratch.vim')
   " for Lazy
   let g:scratch_no_mappings = 1
   nmap gs <Plug>(scratch-insert-reuse)
-  nmap gS <Plug>(scratch-insert-clear)
   xmap gs <Plug>(scratch-selection-reuse)
+  nmap gS <Plug>(scratch-insert-clear)
   xmap gS <Plug>(scratch-selection-clear)
 
   function! s:ScratchVimSettings() "{{{
