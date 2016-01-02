@@ -720,14 +720,10 @@ nnoremap k gk
 xnoremap k gk
 
 " 現在開いているファイルのディレクトリに移動
-function! s:ChangeDir(dir) "{{{
-  lcd %:p:h
-  echo 'change directory to: ' . a:dir
-endfunction "}}}
-command! CD call s:ChangeDir(expand('%:p:h'))
+command! LCD echo 'change directory to:' <bar> lcd %:p:h
 
 " " 開いたファイルと同じ場所へ移動する
-" " -> startify/vimfiler/:CDで十分なのでコメントアウト
+" " -> startify/vimfiler/:LCDで十分なのでコメントアウト
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " " 最後のカーソル位置を記憶していたらジャンプ
