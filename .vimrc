@@ -41,7 +41,7 @@ endif
 " ファイル読み込み時の変換候補
 " -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
 "    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
-" -> とりあえず香り屋版GVimのguessを使おう
+" -> とりあえずKaoriya版GVimのguessを使おう
 if has('kaoriya')
   set fileencodings=guess
 else
@@ -106,6 +106,7 @@ set belloff=esc
 
 " カーソル上下に表示する最小の行数
 " -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
+" -> コードを読む時は大きく, 編集する時は小さくすると良いかも
 if has('vim_starting')
   set scrolloff=100
 endif
@@ -143,7 +144,7 @@ if has('vim_starting')
     set nocompatible
   endif
 
-  " Neo Bundleでプラグインを管理する
+  " neobundle.vimでプラグインを管理する
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
@@ -383,6 +384,7 @@ NeoBundleLazy 'beckorz/previm', {
 "       \   'on_cmd' : ['MdPreview', 'MdConvert'],
 "       \ }
 
+" 本家 : 'plasticboy/vim-markdown'
 NeoBundleLazy 'rcmdnk/vim-markdown', {
       \   'on_ft' : 'markdown',
       \ }
@@ -408,7 +410,9 @@ NeoBundleLazy 'junegunn/vim-easy-align', {
 NeoBundleLazy 'thinca/vim-quickrun', {
       \   'on_cmd' : 'QuickRun',
       \ }
+" 本家 : 'jceb/vim-hier'
 " NeoBundle 'pocke/vim-hier'
+
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
 
@@ -799,7 +803,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " GTAGSROOTの登録
-    " -> GNU Globalのタグはプロジェクトルートで生成する
+    " -> GNU GLOBALのタグはプロジェクトルートで生成する
     let $GTAGSROOT = $TARGET_DIR
   endfunction "}}}
 
@@ -2655,4 +2659,5 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
+" TODO: 全体的に変数名/関数名をsneak-caseにしたい
 
