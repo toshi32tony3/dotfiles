@@ -4,6 +4,7 @@
 " Basic {{{
 
 " Do first!
+" http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 set encoding=utf-8
 scriptencoding utf-8
 
