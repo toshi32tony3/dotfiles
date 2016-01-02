@@ -453,7 +453,7 @@ set matchtime=3                " 対応括弧入力時カーソルが飛ぶ時�
 set matchpairs=(:),{:},[:],<:> " 対応括弧に'<'と'>'のペアを追加
 set backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
-" 汎用補完設定
+" 汎用補完設定(complete)
 " Default: complete=.,w,b,u,t,i
 " . :      current buffer
 " w :              buffers in other windows
@@ -466,9 +466,14 @@ set backspace=indent,eol,start " <BS>でなんでも消せるようにする
 " d : current and included files for defined name or macro
 "     -> インクルードファイルが多いと時間がかかるので汎用補完に含めない
 set complete=.,w,b,u,U
-set infercase           " 補完時に大文字小文字を区別しない
-set completeopt=menuone " 補完時は対象が一つでもポップアップを表示
-set pumheight=10        " 補完候補は一度に10個まで表示
+
+" 補完オプション(completeopt)
+" menuone : 対象が一つでもポップアップを表示
+" longest : 候補の共通部分だけを挿入
+set completeopt=menuone,longest
+
+set noinfercase  " 補完時に大文字小文字を区別しない
+set pumheight=10 " 補完候補は一度に10個まで表示
 
 " コマンドライン補完設定
 set wildmenu
