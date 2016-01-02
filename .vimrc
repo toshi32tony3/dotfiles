@@ -2183,6 +2183,7 @@ endif "}}}
 if neobundle#tap('vim-operator-search')
 
   nmap <A-s> <Plug>(operator-search)
+  omap <A-s> <Plug>(operator-search)
   xmap <A-s> <Plug>(operator-search)
 
 endif "}}}
@@ -2192,6 +2193,8 @@ if neobundle#tap('vim-quickhl')
 
   nmap <A-h>      <Plug>(operator-quickhl-manual-this-motion)
   xmap <A-h>      <Plug>(operator-quickhl-manual-this-motion)
+
+  " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
   nmap <A-h><A-h> <Plug>(quickhl-manual-this)
 
 endif "}}}
@@ -2214,6 +2217,7 @@ if neobundle#tap('caw.vim')
   endfunction
 
   nmap co <Plug>(operator-caw)
+  omap co <Plug>(operator-caw)
   xmap co <Plug>(operator-caw)
 
 endif "}}}
