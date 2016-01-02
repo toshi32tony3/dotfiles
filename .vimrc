@@ -2522,6 +2522,14 @@ if neobundle#tap('J6uil.vim')
 
   let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
+  function! s:J6uilSaySetting() "{{{
+    if neobundle#tap('eskk.vim')
+      nmap     <buffer> <C-j> i<Plug>(eskk:toggle)
+    else
+      nnoremap <buffer> <C-j> <Nop>
+    endif
+  endfunction "}}}
+  autocmd MyAutoCmd FileType J6uil_say call s:J6uilSaySetting()
 endif "}}}
 
 " ファイルをブラウザで開く(previm) {{{
