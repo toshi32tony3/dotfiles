@@ -575,8 +575,8 @@ set display=lastline " 長いテキストを省略しない
 set colorcolumn=81   " 81列目に線を表示
 
 if has('vim_starting')
-  set number           " 行番号を表示
-  set relativenumber   " 行番号を相対表示
+  set number         " 行番号を表示
+  set relativenumber " 行番号を相対表示
 endif
 nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>:set relativenumber?<CR>
 
@@ -2635,7 +2635,7 @@ if neobundle#tap('shabadou.vim')
 
 endif "}}}
 
-" Vim上で自動構文チェック(vim-watchdogs) {{{
+" Vimで自動構文チェック(vim-watchdogs) {{{
 if neobundle#tap('vim-watchdogs')
   " Caution: 裏で実行した結果を反映しているのか, pause系の処理があると固まる
 
