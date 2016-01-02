@@ -2146,7 +2146,7 @@ if neobundle#tap('vim-signature')
   " これだけあれば十分
   " mm       : ToggleMarkAtLine
   " m<Space> : PurgeMarks
-  nmap     mm m.
+  nmap mm m.
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
@@ -2195,8 +2195,8 @@ endif "}}}
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  nmap <A-h>      <Plug>(operator-quickhl-manual-this-motion)
-  xmap <A-h>      <Plug>(operator-quickhl-manual-this-motion)
+  nmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
+  xmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
 
   " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
   nmap <A-h><A-h> <Plug>(quickhl-manual-this)
