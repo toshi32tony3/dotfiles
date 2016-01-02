@@ -447,6 +447,7 @@ autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
 
 set nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
 set virtualedit=all            " テキストが存在しない場所でも動けるようにする
+set nostartofline              " カーソルが勝手に行の先頭へ行かないようにする
 set hidden                     " quit時はバッファを削除せず, 隠す
 set confirm                    " 変更されたバッファがある時, どうするか確認する
 set switchbuf=useopen          " すでに開いてあるバッファがあればそっちを開く
