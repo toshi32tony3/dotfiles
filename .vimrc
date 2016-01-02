@@ -2171,6 +2171,7 @@ endif "}}}
 if neobundle#tap('vim-operator-replace')
 
   nmap <A-r> <Plug>(operator-replace)
+  omap <A-r> <Plug>(operator-replace)
   xmap <A-r> <Plug>(operator-replace)
 
 endif "}}}
