@@ -105,7 +105,9 @@ set belloff=esc
 
 " カーソル上下に表示する最小の行数
 " -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
-set scrolloff=100
+if has('vim_starting')
+  set scrolloff=100
+endif
 let g:scrolloffOn = 1
 function! s:ToggleScrollOffSet() "{{{
   if g:scrolloffOn == 1
