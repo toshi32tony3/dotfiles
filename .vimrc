@@ -2298,7 +2298,6 @@ if neobundle#tap('unite.vim')
   let g:u_opt_gd = g:u_hopt
   let g:u_opt_gg = g:u_hopt            . g:u_sbuf
   let g:u_opt_gr = g:u_hopt            . g:u_sbuf . g:u_nqui
-  let g:u_opt_hy = g:u_hopt . g:u_sins
   let g:u_opt_li =            g:u_sins
   let g:u_opt_mf = g:u_hopt . g:u_sins
   let g:u_opt_mg = g:u_hopt            . g:u_sbuf
@@ -2320,7 +2319,6 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>g. ':<C-u>Unite vimgrep:.*'       . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>Unite vimgrep:**'       . g:u_opt_gg . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>Unite gtags/ref'        . g:u_opt_gr . '<CR>'
-  nnoremap <expr> <Leader>hy ':<C-u>Unite history/yank'     . g:u_opt_hy . '<CR>'
   nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
   nnoremap <expr> <Leader>mf ':<C-u>Unite file:~/memo'      . g:u_opt_mf . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memo/*' . g:u_opt_mg . '<CR>'
