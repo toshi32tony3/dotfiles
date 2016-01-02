@@ -276,19 +276,19 @@ NeoBundleLazy 'kana/vim-operator-user'
 
 NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : '<Plug>',
+      \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'osyo-manga/vim-operator-search', {
       \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : '<Plug>',
+      \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : ['<Plug>(operator-quickhl-', '<Plug>(quickhl-'],
+      \   'on_map'  : [['nx', '<Plug>(operator-quickhl-', '<Plug>(quickhl-']],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : '<Plug>(operator-caw)',
+      \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
       \ }
 
 NeoBundle 'tpope/vim-surround'
@@ -2175,28 +2175,25 @@ endif "}}}
 " 置き換えオペレータ(vim-operator-replace) {{{
 if neobundle#tap('vim-operator-replace')
 
-  map R <Plug>(operator-replace)
-
-  " 置換モードは滅多に使わないけど一応...
-  noremap <A-r> R
+  nmap <A-r> <Plug>(operator-replace)
+  xmap <A-r> <Plug>(operator-replace)
 
 endif "}}}
 
 " 検索オペレータ(vim-operator-search) {{{
 if neobundle#tap('vim-operator-search')
 
-  " 関数内検索
-  if neobundle#tap('vim-textobj-function')
-    nmap <Leader>/ <Plug>(operator-search)if
-  endif
+  nmap <A-s> <Plug>(operator-search)
+  xmap <A-s> <Plug>(operator-search)
 
 endif "}}}
 
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  map <A-h>      <Plug>(operator-quickhl-manual-this-motion)
-  map <A-h><A-h> <Plug>(quickhl-manual-this)
+  nmap <A-h>      <Plug>(operator-quickhl-manual-this-motion)
+  xmap <A-h>      <Plug>(operator-quickhl-manual-this-motion)
+  nmap <A-h><A-h> <Plug>(quickhl-manual-this)
 
 endif "}}}
 
@@ -2218,7 +2215,6 @@ if neobundle#tap('caw.vim')
   endfunction
 
   nmap co <Plug>(operator-caw)
-  omap co <Plug>(operator-caw)
   xmap co <Plug>(operator-caw)
 
 endif "}}}
