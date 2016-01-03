@@ -1522,23 +1522,9 @@ if neobundle#tap('neocomplete.vim')
   " 日本語を補完候補として取得しない
   let g:neocomplete#keyword_patterns._ = '\h\w*'
 
-  if neobundle#tap('neosnippet.vim')
-    " neocompleteとneosnippetを良い感じに使うためのキー設定
-    " http://kazuph.hateblo.jp/entry/2013/01/19/193745
-    imap <expr> <TAB> pumvisible() ? "\<C-n>" :
-          \  neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-          \  "\<TAB>"
-    smap <expr> <TAB>
-          \  neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-          \  "\<TAB>"
-    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-    imap <C-k> <Plug>(neosnippet_expand_or_jump)
-    smap <C-k> <Plug>(neosnippet_expand_or_jump)
-
-  else
+  if !neobundle#tap('neosnippet.vim')
     inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
     inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-
   endif
 
   inoremap <expr> <C-g> neocomplete#undo_completion()
@@ -1557,9 +1543,26 @@ if neobundle#tap('neosnippet.vim')
   let g:neosnippet#snippets_directory =
         \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
 
+  imap     <expr>   <TAB> pumvisible() ? "\<C-n>" :
+        \        neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
+        \        "\<TAB>"
+  inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
+  imap <C-k> <Plug>(neosnippet_expand_or_jump)
+
   if neobundle#tap('unite.vim')
     imap <C-s> <Plug>(neosnippet_start_unite_snippet)
   endif
+
+  " smap対策(http://d.hatena.ne.jp/thinca/20090526/1243267812)
+  function! s:neosnippetSettings()
+    smapclear
+    smapclear <buffer>
+    smap <expr> <TAB>
+          \  neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
+          \  "\<TAB>"
+    smap <C-k> <Plug>(neosnippet_expand_or_jump)
+  endfunction
+  autocmd MyAutoCmd BufEnter * call s:neosnippetSettings()
 
 endif "}}}
 
@@ -2040,34 +2043,16 @@ if neobundle#tap('vim-asterisk')
   endfunction "}}}
   noremap <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
-  if neobundle#tap('incsearch.vim') && neobundle#tap('vim-anzu')
-    nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
-    omap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
-    xmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-    nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
-    omap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
-    xmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
-
-    nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    omap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    xmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
-    omap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
-    xmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+  if neobundle#tap('vim-anzu')
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
+    map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
   else
-    nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
-    omap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
-    xmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)
-    nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
-    omap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
-    xmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)
-
-    nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
-    omap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
-    xmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
-    nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
-    omap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
-    xmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
+    map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
+    map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
   endif
 
 endif "}}}
@@ -2093,18 +2078,10 @@ if neobundle#tap('vim-shot-f')
 
   " for Lazy
   let g:shot_f_no_default_key_mappings = 1
-  nmap f <Plug>(shot-f-f)
-  omap f <Plug>(shot-f-f)
-  xmap f <Plug>(shot-f-f)
-  nmap F <Plug>(shot-f-F)
-  omap F <Plug>(shot-f-F)
-  xmap F <Plug>(shot-f-F)
-  nmap t <Plug>(shot-f-t)
-  omap t <Plug>(shot-f-t)
-  xmap t <Plug>(shot-f-t)
-  nmap T <Plug>(shot-f-T)
-  omap T <Plug>(shot-f-T)
-  xmap T <Plug>(shot-f-T)
+  map f <Plug>(shot-f-f)
+  map F <Plug>(shot-f-F)
+  map t <Plug>(shot-f-t)
+  map T <Plug>(shot-f-T)
 
 endif "}}}
 
@@ -2118,12 +2095,8 @@ if neobundle#tap('vim-sneak')
   let g:sneak#use_ic_scs = 1
 
   " for Lazy
-  nmap s <Plug>Sneak_s
-  omap s <Plug>Sneak_s
-  xmap s <Plug>Sneak_s
-  nmap S <Plug>Sneak_S
-  omap S <Plug>Sneak_S
-  xmap S <Plug>Sneak_S
+  map s <Plug>Sneak_s
+  map S <Plug>Sneak_S
 
 endif "}}}
 
@@ -2173,18 +2146,14 @@ endif "}}}
 " 置き換えオペレータ(vim-operator-replace) {{{
 if neobundle#tap('vim-operator-replace')
 
-  nmap <A-r> <Plug>(operator-replace)
-  omap <A-r> <Plug>(operator-replace)
-  xmap <A-r> <Plug>(operator-replace)
+  map <A-r> <Plug>(operator-replace)
 
 endif "}}}
 
 " 検索オペレータ(vim-operator-search) {{{
 if neobundle#tap('vim-operator-search')
 
-  nmap <A-s> <Plug>(operator-search)
-  omap <A-s> <Plug>(operator-search)
-  xmap <A-s> <Plug>(operator-search)
+  map <A-s> <Plug>(operator-search)
 
 endif "}}}
 
@@ -2217,9 +2186,7 @@ if neobundle#tap('caw.vim')
     call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
   endfunction
 
-  nmap co <Plug>(operator-caw)
-  omap co <Plug>(operator-caw)
-  xmap co <Plug>(operator-caw)
+  map co <Plug>(operator-caw)
 
 endif "}}}
 
