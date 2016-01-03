@@ -193,13 +193,18 @@ NeoBundleLazy 'lambdalisue/vim-gita', {
 " completion {{{
 
 NeoBundleLazy 'Shougo/neocomplete.vim', {
+      \   'depends' : [
+      \     'Shougo/neosnippet.vim',
+      \     'toshi32tony3/neosnippet-snippets',
+      \   ],
       \   'on_i' : 1,
       \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
-      \   'on_i' : 1,
+      \   'depends' : 'Shougo/unite.vim',
+      \   'on_i'    : 1,
       \ }
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets', {
-      \   'on_i' : 1,
+      \   'depends' : 'Shougo/neosnippet.vim',
       \ }
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
