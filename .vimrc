@@ -1264,7 +1264,7 @@ function! s:GetCurrentFold() "{{{
     return join(l:foldList, " \u2B81 ")
   endif
 
-  return l:foldList[-1]
+  return get(l:foldList, -1, '')
 endfunction "}}}
 command! EchoCurrentFold echo s:GetCurrentFold()
 autocmd MyAutoCmd User LineChanged let s:currentFold = s:GetCurrentFold()
