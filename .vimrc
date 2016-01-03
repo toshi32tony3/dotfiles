@@ -27,11 +27,11 @@ endfunction
 " -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒強程度)になる
 " -> gvim --startuptime startuptime.txt startuptime.txt
 if has('vim_starting') && has('reltime')
-  let g:startuptime = reltime()
+  let s:startuptime = reltime()
   autocmd MyAutoCmd VimEnter *
-        \   let g:startuptime = reltime(g:startuptime)
+        \   let s:startuptime = reltime(s:startuptime)
         \ | redraw
-        \ | echomsg 'startuptime: ' . reltimestr(g:startuptime)
+        \ | echomsg 'startuptime: ' . reltimestr(s:startuptime)
 endif
 
 " ファイル書き込み時の文字コード。空の場合, encodingの値が使用される
@@ -110,14 +110,14 @@ set belloff=esc
 if has('vim_starting')
   set scrolloff=100
 endif
-let g:scrolloffOn = 1
+let s:scrolloffOn = 1
 function! s:ToggleScrollOffSet() "{{{
-  if g:scrolloffOn == 1
+  if s:scrolloffOn == 1
     setlocal scrolloff=0
-    let g:scrolloffOn = 0
+    let s:scrolloffOn = 0
   else
     setlocal scrolloff=100
-    let g:scrolloffOn = 1
+    let s:scrolloffOn = 1
   endif
   echo 'setlocal scrolloff=' . &scrolloff
 endfunction "}}}
@@ -600,16 +600,16 @@ set listchars=tab:>-,trail:-,eol:\
 if has('kaoriya')
 
   " 透明度をスイッチ
-  let g:transparencyOn = 0
+  let s:transparencyOn = 0
   function! s:ToggleTransParency() "{{{
-    if g:transparencyOn == 1
+    if s:transparencyOn == 1
       set transparency=255
       echo 'set transparency=255'
-      let g:transparencyOn = 0
+      let s:transparencyOn = 0
     else
       set transparency=220
       echo 'set transparency=220'
-      let g:transparencyOn = 1
+      let s:transparencyOn = 1
     endif
   endfunction "}}}
   command! ToggleTransParency call s:ToggleTransParency()
@@ -644,8 +644,8 @@ nnoremap <silent> <F9> :<C-u>set foldenable!<CR>:set foldenable?<CR>
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-let g:saveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
-if filereadable(g:saveWinposFile)
+let s:saveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
+if filereadable(s:saveWinposFile)
   autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
   function! s:SaveWindow() "{{{
     let s:options = [
@@ -653,9 +653,9 @@ if filereadable(g:saveWinposFile)
           \   'set lines='   . &lines,
           \   'winpos ' . getwinposx() . ' ' . getwinposy(),
           \ ]
-    call writefile(s:options, g:saveWinposFile)
+    call writefile(s:options, s:saveWinposFile)
   endfunction "}}}
-  execute 'source ' g:saveWinposFile
+  execute 'source ' s:saveWinposFile
 endif
 
 "}}}
@@ -996,11 +996,11 @@ nnoremap <A-Right> :<C-u>next<CR>
 
 " カウンタ
 function! s:MyCounter() "{{{
-  if !exists('b:myCounter')
-    let b:myCounter = 0
+  if !exists('s:myCounter')
+    let s:myCounter = 0
   endif
-  let b:myCounter += 1
-  echomsg 'count: ' . b:myCounter
+  let s:myCounter += 1
+  echomsg 'count: ' . s:myCounter
 endfunction "}}}
 command! MyCounter call s:MyCounter()
 
@@ -1035,7 +1035,7 @@ command! DeleteJumpList for s:n in range(200) | mark '     | endfor
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
-let g:throttleTimeSpan = 200
+let s:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
   " run on normal/visual mode only
   let     l:currentMode  = mode(1)
@@ -1069,7 +1069,7 @@ function! s:OnCursorMove() "{{{
   let b:lastCursorMoveTime = l:now
 
   " 指定時間経過しているか否かで処理分岐
-  if l:timespan <= g:throttleTimeSpan
+  if l:timespan <= s:throttleTimeSpan
     let b:isLineChanged = 0
     let b:isCursorMoved = 0
     return
@@ -1180,7 +1180,7 @@ command! EchoFoldLevel echo s:GetFoldLevel()
 
 " カーソル位置の親Fold名を取得
 " NOTE: 対応ファイルタイプ : vim/markdown
-let g:currentFold = ''
+let s:currentFold = ''
 function! s:GetCurrentFold() "{{{
   if &ft != 'vim' && &ft != 'markdown'
     return ''
@@ -1267,8 +1267,8 @@ function! s:GetCurrentFold() "{{{
   return l:foldList[-1]
 endfunction "}}}
 command! EchoCurrentFold echo s:GetCurrentFold()
-autocmd MyAutoCmd User LineChanged let g:currentFold = s:GetCurrentFold()
-autocmd MyAutoCmd BufEnter *       let g:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd User LineChanged let s:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd BufEnter *       let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
 function! s:JumpFuncNameCForward() "{{{
@@ -1347,7 +1347,7 @@ nnoremap <silent> ]f :<C-u>JumpFuncNameCForward<CR>
 nnoremap <silent> [f :<C-u>JumpFuncNameCBackward<CR>
 
 " Cの関数名取得
-let g:currentFunc = ''
+let s:currentFunc = ''
 function! s:GetCurrentFuncC() "{{{
   if &ft != 'c'
     return ''
@@ -1386,8 +1386,8 @@ function! s:GetCurrentFuncC() "{{{
   return l:funcName
 endfunction " }}}
 autocmd MyAutoCmd User LineChanged
-      \      if &ft == 'c' | let g:currentFunc = s:GetCurrentFuncC() | endif
-autocmd MyAutoCmd BufEnter * let g:currentFunc = s:GetCurrentFuncC()
+      \      if &ft == 'c' | let s:currentFunc = s:GetCurrentFuncC() | endif
+autocmd MyAutoCmd BufEnter * let s:currentFunc = s:GetCurrentFuncC()
 
 function! s:ClipCurrentFuncName(funcName) "{{{
   if strlen(a:funcName) == 0
@@ -1401,8 +1401,8 @@ function! s:ClipCurrentFuncName(funcName) "{{{
 
 endfunction "}}}
 command! ClipCurrentFuncName
-      \ let g:currentFunc = s:GetCurrentFuncC() |
-      \ call s:ClipCurrentFuncName(g:currentFunc)
+      \ let s:currentFunc = s:GetCurrentFuncC() |
+      \ call s:ClipCurrentFuncName(s:currentFunc)
 
 function! s:PrintCurrentFuncName(funcName) "{{{
   if strlen(a:funcName) == 0
@@ -1417,8 +1417,8 @@ function! s:PrintCurrentFuncName(funcName) "{{{
 
 endfunction "}}}
 command! PrintCurrentFuncName
-      \ let g:currentFunc = s:GetCurrentFuncC() |
-      \ call s:PrintCurrentFuncName(g:currentFunc)
+      \ let s:currentFunc = s:GetCurrentFuncC() |
+      \ call s:PrintCurrentFuncName(s:currentFunc)
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -1836,9 +1836,9 @@ if neobundle#tap('lightline.vim')
 
   function! MyCurrentFunc() "{{{
     if &ft == 'vim' || &ft == 'markdown'
-      return winwidth(0) > 100 ? g:currentFold : ''
+      return winwidth(0) > 100 ? s:currentFold : ''
     else
-      return winwidth(0) > 100 ? g:currentFunc : ''
+      return winwidth(0) > 100 ? s:currentFunc : ''
     endif
   endfunction "}}}
 
@@ -1873,14 +1873,14 @@ endif "}}}
 " フルスクリーンモード(scrnmode.vim) {{{
 if has('kaoriya')
 
-  let g:fullscreenOn = 0
+  let s:fullscreenOn = 0
   function! s:ToggleScreenMode() "{{{
-    if g:fullscreenOn
+    if s:fullscreenOn
       execute 'ScreenMode 0'
-      let g:fullscreenOn = 0
+      let s:fullscreenOn = 0
     else
       execute 'ScreenMode 6'
-      let g:fullscreenOn = 1
+      let s:fullscreenOn = 1
     endif
   endfunction "}}}
   command! ToggleScreenMode call s:ToggleScreenMode()
