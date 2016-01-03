@@ -562,7 +562,9 @@ if has('gui_running')
 
   " M : メニュー・ツールバー領域を削除する
   " c : ポップアップダイアログを使用しない
-  set guioptions=Mc
+  if has('kaoriya')
+    set guioptions=Mc
+  endif
 
   " カーソルを点滅させない
   set guicursor=a:blinkon0
