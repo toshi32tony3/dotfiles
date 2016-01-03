@@ -317,7 +317,7 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \ }
 NeoBundleLazy 'Shougo/neomru.vim', {
       \   'depends'  : 'Shougo/unite.vim',
-      \   'on_unite' : 'file_mru',
+      \   'on_unite' : ['file_mru', 'directory_mru'],
       \ }
 NeoBundleLazy 'hewes/unite-gtags', {
       \   'depends'  : 'Shougo/unite.vim',
@@ -2293,6 +2293,7 @@ if neobundle#tap('unite.vim')
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
   let g:u_opt_bu = 'Unite '       . g:u_hopt
   let g:u_opt_bo = 'Unite '       . g:u_hopt
+  let g:u_opt_dm = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_fi = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_fm = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_gd = 'Unite '       . g:u_hopt
@@ -2311,6 +2312,7 @@ if neobundle#tap('unite.vim')
 
   nnoremap <expr> <Leader>bu ':<C-u>' . g:u_opt_bu . 'buffer'           . '<CR>'
   nnoremap <expr> <Leader>bo ':<C-u>' . g:u_opt_bo . 'bookmark'         . '<CR>'
+  nnoremap <expr> <Leader>dm ':<C-u>' . g:u_opt_dm . 'directory_mru'    . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
   nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>' . g:u_opt_gd . 'gtags/def:'
