@@ -2290,53 +2290,53 @@ if neobundle#tap('unite.vim')
   endif
 
   " オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う
-  let g:u_nqui = ' -no-quit'
-  let g:u_nsyn = ' -no-sync'
-  let g:u_prev = ' -auto-preview'
-  let g:u_sbuf = ' -buffer-name=search-buffer'
-  let g:u_sins = ' -start-insert'
-  let g:u_hopt = ' -split -horizontal -winheight=20'
-  let g:u_vopt = ' -split -vertical -winwidth=90'
+  let g:u_nqui = '-no-quit '
+  let g:u_nsyn = '-no-sync '
+  let g:u_prev = '-auto-preview '
+  let g:u_sbuf = '-buffer-name=search-buffer '
+  let g:u_sins = '-start-insert '
+  let g:u_hopt = '-split -horizontal -winheight=20 '
+  let g:u_vopt = '-split -vertical -winwidth=90 '
 
-  " unite_sourcesに応じたオプション変数を定義して使う
-  let g:u_opt_bu = g:u_hopt
-  let g:u_opt_bo = g:u_hopt
-  let g:u_opt_fi = g:u_hopt . g:u_sins
-  let g:u_opt_fm = g:u_hopt . g:u_sins
-  let g:u_opt_gd = g:u_hopt
-  let g:u_opt_gg = g:u_hopt            . g:u_sbuf
-  let g:u_opt_gr = g:u_hopt            . g:u_sbuf . g:u_nqui
-  let g:u_opt_li =            g:u_sins
-  let g:u_opt_mf = g:u_hopt . g:u_sins
-  let g:u_opt_mg = g:u_hopt            . g:u_sbuf
-  let g:u_opt_mk = g:u_hopt . g:u_sins . g:u_prev
-  let g:u_opt_mp =            g:u_sins
-  let g:u_opt_nl =            g:u_sins
-  let g:u_opt_nu =                       g:u_nsyn
-  let g:u_opt_ol = g:u_vopt . g:u_sins
-  let g:u_opt_op =            g:u_sins
-  let g:u_opt_re = g:u_hopt            . g:u_sbuf
+  " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
+  let g:u_opt_bu = 'Unite '       . g:u_hopt
+  let g:u_opt_bo = 'Unite '       . g:u_hopt
+  let g:u_opt_fi = 'Unite '       . g:u_hopt . g:u_sins
+  let g:u_opt_fm = 'Unite '       . g:u_hopt . g:u_sins
+  let g:u_opt_gd = 'Unite '       . g:u_hopt
+  let g:u_opt_gg = 'Unite '       . g:u_hopt            . g:u_sbuf
+  let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_sbuf . g:u_nqui
+  let g:u_opt_li = 'Unite '                  . g:u_sins . g:u_sbuf
+  let g:u_opt_mf = 'Unite '       . g:u_hopt . g:u_sins
+  let g:u_opt_mg = 'Unite '       . g:u_hopt            . g:u_sbuf
+  let g:u_opt_mk = 'Unite '       . g:u_hopt . g:u_sins . g:u_prev
+  let g:u_opt_mp = 'Unite '                  . g:u_sins
+  let g:u_opt_nl = 'Unite '                  . g:u_sins
+  let g:u_opt_nu = 'Unite '                             . g:u_nsyn
+  let g:u_opt_ol = 'Unite '       . g:u_vopt . g:u_sins
+  let g:u_opt_op = 'Unite '                  . g:u_sins
+  let g:u_opt_re = 'UniteResume ' . g:u_hopt            . g:u_sbuf
 
-  nnoremap <expr> <Leader>bu ':<C-u>Unite buffer'           . g:u_opt_bu . '<CR>'
-  nnoremap <expr> <Leader>bo ':<C-u>Unite bookmark'         . g:u_opt_bo . '<CR>'
-  nnoremap <expr> <Leader>fi ':<C-u>Unite file'             . g:u_opt_fi . '<CR>'
-  nnoremap <expr> <Leader>fm ':<C-u>Unite file_mru'         . g:u_opt_fm . '<CR>'
-  nnoremap <expr> <Leader>gd ':<C-u>Unite gtags/def'        . g:u_opt_gd . '<CR>'
-  nnoremap <expr> <Leader>g% ':<C-u>Unite vimgrep:%'        . g:u_opt_gg . '<CR>'
-  nnoremap <expr> <Leader>g* ':<C-u>Unite vimgrep:*'        . g:u_opt_gg . '<CR>'
-  nnoremap <expr> <Leader>g. ':<C-u>Unite vimgrep:.*'       . g:u_opt_gg . '<CR>'
-  nnoremap <expr> <Leader>gg ':<C-u>Unite vimgrep:**'       . g:u_opt_gg . '<CR>'
-  nnoremap <expr> <Leader>gr ':<C-u>Unite gtags/ref'        . g:u_opt_gr . '<CR>'
-  nnoremap <expr> <Leader>li ':<C-u>Unite line'             . g:u_opt_li . '<CR>'
-  nnoremap <expr> <Leader>mf ':<C-u>Unite file:~/memo'      . g:u_opt_mf . '<CR>'
-  nnoremap <expr> <Leader>mg ':<C-u>Unite vimgrep:~/memo/*' . g:u_opt_mg . '<CR>'
-  nnoremap <expr> <Leader>mk ':<C-u>Unite mark'             . g:u_opt_mk . '<CR>'
-  nnoremap <expr> <Leader>mp ':<C-u>Unite mapping'          . g:u_opt_mp . '<CR>'
-  nnoremap <expr> <Leader>nl ':<C-u>Unite neobundle/lazy'   . g:u_opt_nl . '<CR>'
-  nnoremap <expr> <Leader>nu ':<C-u>Unite neobundle/update' . g:u_opt_nu
-  nnoremap <expr> <Leader>ol ':<C-u>Unite outline'          . g:u_opt_ol . '<CR>'
-  nnoremap <expr> <Leader>op ':<C-u>Unite output'           . g:u_opt_op . '<CR>'
-  nnoremap <expr> <Leader>re ':<C-u>UniteResume'            . g:u_opt_re . '<CR>'
+  nnoremap <expr> <Leader>bu ':<C-u>' . g:u_opt_bu . 'buffer'           . '<CR>'
+  nnoremap <expr> <Leader>bo ':<C-u>' . g:u_opt_bo . 'bookmark'         . '<CR>'
+  nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
+  nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
+  nnoremap <expr> <Leader>gd ':<C-u>' . g:u_opt_gd . 'gtags/def:'
+  nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gg . 'vimgrep:%'        . '<CR>'
+  nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gg . 'vimgrep:*'        . '<CR>'
+  nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gg . 'vimgrep:.*'       . '<CR>'
+  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gg . 'vimgrep:**'       . '<CR>'
+  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'gtags/ref:'
+  nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
+  nnoremap <expr> <Leader>mf ':<C-u>' . g:u_opt_mf . 'file:~/memo'      . '<CR>'
+  nnoremap <expr> <Leader>mg ':<C-u>' . g:u_opt_mg . 'vimgrep:~/memo/*' . '<CR>'
+  nnoremap <expr> <Leader>mk ':<C-u>' . g:u_opt_mk . 'mark'             . '<CR>'
+  nnoremap <expr> <Leader>mp ':<C-u>' . g:u_opt_mp . 'mapping'          . '<CR>'
+  nnoremap <expr> <Leader>nl ':<C-u>' . g:u_opt_nl . 'neobundle/lazy'   . '<CR>'
+  nnoremap <expr> <Leader>nu ':<C-u>' . g:u_opt_nu . 'neobundle/update' . '<CR>'
+  nnoremap <expr> <Leader>ol ':<C-u>' . g:u_opt_ol . 'outline'          . '<CR>'
+  nnoremap <expr> <Leader>op ':<C-u>' . g:u_opt_op . 'output'           . '<CR>'
+  nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re                      . '<CR>'
 
   function! neobundle#hooks.on_post_source(bundle)
     " unite.vimのデフォルトコンテキストを設定する
