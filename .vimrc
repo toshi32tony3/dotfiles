@@ -148,6 +148,7 @@ if has('vim_starting')
   set runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
+" contains filetype off
 call neobundle#begin(expand('~/.vim/bundle'))
 
 " NeoBundle自体の更新をチェックする
