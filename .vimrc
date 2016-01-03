@@ -528,14 +528,14 @@ xnoremap & <silent> :<C-u>&&<CR>
 " クリップボードレジスタを使う
 set clipboard=unnamed
 
-" 現在開いているファイルのパスなどをレジスタやクリップボードへ登録する
+" 現在開いているファイルのパスなどを選択範囲レジスタ(*)に入れる
 " https://gist.github.com/pinzolo/8168337
 function! s:Clip(data) "{{{
   let @* = a:data
   echo 'clipped: ' . a:data
 endfunction "}}}
 
-" 現在開いているファイルのパスをレジスタへ
+" 現在開いているファイルのフルパス(ファイル名含む)をレジスタへ
 command! ClipPath call s:Clip(expand('%:p'))
 
 " 現在開いているファイルのファイル名をレジスタへ
@@ -544,7 +544,7 @@ command! ClipFile call s:Clip(expand('%:t'))
 " 現在開いているファイルのディレクトリパスをレジスタへ
 command! ClipDir  call s:Clip(expand('%:p:h'))
 
-" コマンドの出力結果をクリップボードに格納
+" コマンドの出力結果を選択範囲レジスタ(*)に入れる
 function! s:ClipCommandOutput(cmd) "{{{
   redir @*>
   silent execute a:cmd
