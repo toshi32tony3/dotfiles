@@ -113,13 +113,12 @@ endif
 let s:scrolloffOn = 1
 function! s:ToggleScrollOffSet() "{{{
   if s:scrolloffOn == 1
-    setlocal scrolloff=0
+    setlocal scrolloff=0   scrolloff?
     let s:scrolloffOn = 0
   else
-    setlocal scrolloff=100
+    setlocal scrolloff=100 scrolloff?
     let s:scrolloffOn = 1
   endif
-  echo 'setlocal scrolloff=' . &scrolloff
 endfunction "}}}
 command! ToggleScrollOffSet call s:ToggleScrollOffSet()
 nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
@@ -594,7 +593,7 @@ if has('vim_starting')
   set number         " 行番号を表示
   set relativenumber " 行番号を相対表示
 endif
-nnoremap <silent> <F10> :<C-u>set relativenumber!<CR>:set relativenumber?<CR>
+nnoremap <silent> <F10> :<C-u>set relativenumber!<Space>relativenumber?<CR>
 
 " 不可視文字を可視化
 set list
@@ -608,12 +607,10 @@ if has('kaoriya')
   let s:transparencyOn = 0
   function! s:ToggleTransParency() "{{{
     if s:transparencyOn == 1
-      set transparency=255
-      echo 'set transparency=255'
+      set transparency=255 transparency?
       let s:transparencyOn = 0
     else
-      set transparency=220
-      echo 'set transparency=220'
+      set transparency=220 transparency?
       let s:transparencyOn = 1
     endif
   endfunction "}}}
@@ -645,7 +642,7 @@ endif
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " 折りたたみ機能をON/OFF
-nnoremap <silent> <F9> :<C-u>set foldenable!<CR>:set foldenable?<CR>
+nnoremap <silent> <F9> :<C-u>set foldenable!<Space>foldenable?<CR>
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
