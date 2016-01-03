@@ -792,8 +792,7 @@ nnoremap <Leader>} :<C-u>JumpTagTab <C-r><C-w><CR>
 if filereadable(expand('~/localfiles/local.rc.vim'))
 
   function! s:SetSrcDir() "{{{
-    let g:numberOfSrc = len(g:src_ver_list)
-    let $TARGET_VER = g:src_ver_list[g:indexOfSrc]
+    let $TARGET_VER = g:local_rc#src_ver_list[g:local_rc#index_of_src]
     let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
     let $CTAGS_DIR = $TARGET_DIR . '\.tags'
   endfunction "}}}
@@ -801,8 +800,8 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
   function! s:SetTags() "{{{
     set tags=
 
-    for l:item in g:target_dir_ctags_list
-      let $SET_TAGS = $CTAGS_DIR. '\' . g:target_dir_ctags_name_list[l:item]
+    for l:item in g:local_rc#target_dir_ctags_list
+      let $SET_TAGS = $CTAGS_DIR. '\' . g:local_rc#target_dir_ctags_name_list[l:item]
       set tags+=$SET_TAGS
     endfor
 
@@ -815,13 +814,13 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     set path=
 
     " 起点なしのpath登録
-    for l:item in g:other_dir_path_list
+    for l:item in g:local_rc#other_dir_path_list
       let $SET_PATH = l:item
       set path+=$SET_PATH
     endfor
 
     " $TARGET_DIRを起点にしたpath登録
-    for l:item in g:target_dir_path_list
+    for l:item in g:local_rc#target_dir_path_list
       let $SET_PATH = $TARGET_DIR . '\' . l:item
       set path+=$SET_PATH
     endfor
@@ -831,7 +830,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     set cdpath=
 
     " 起点なしのcdpath登録
-    for l:item in g:other_dir_cdpath_list
+    for l:item in g:local_rc#other_dir_cdpath_list
       let $SET_CDPATH = l:item
       set cdpath+=$SET_CDPATH
     endfor
@@ -841,7 +840,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     set cdpath+=$TARGET_DIR
 
     " $TARGET_DIRを起点にしたcdpath登録
-    for l:item in g:target_dir_cdpath_list
+    for l:item in g:local_rc#target_dir_cdpath_list
       let $SET_CDPATH = $TARGET_DIR . '\' . l:item
       set cdpath+=$SET_CDPATH
     endfor
@@ -854,9 +853,9 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
-    let g:indexOfSrc += 1
-    if  g:indexOfSrc >= g:numberOfSrc
-      let g:indexOfSrc = 0
+    let g:local_rc#index_of_src += 1
+    if  g:local_rc#index_of_src >= len(g:local_rc#src_ver_list)
+      let g:local_rc#index_of_src = 0
     endif
 
     call s:SetSrcDir()
@@ -876,13 +875,13 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     if !isdirectory($CTAGS_DIR)
       call system('mkdir ' . $CTAGS_DIR)
     endif
-    for l:item in g:target_dir_ctags_list
-      if !has_key(g:target_dir_ctags_name_list, l:item)
+    for l:item in g:local_rc#target_dir_ctags_list
+      if !has_key(g:local_rc#target_dir_ctags_name_list, l:item)
         continue
       endif
       let l:updateCommand =
             \ 'ctags -f ' .
-            \ $TARGET_DIR . '\.tags\' . g:target_dir_ctags_name_list[l:item] .
+            \ $TARGET_DIR . '\.tags\' . g:local_rc#target_dir_ctags_name_list[l:item] .
             \ ' -R ' .
             \ $TARGET_DIR . '\' . l:item
       call system(l:updateCommand)
