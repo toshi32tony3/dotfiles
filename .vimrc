@@ -1651,7 +1651,7 @@ if neobundle#tap('eskk.vim')
     " hankaku -> zenkaku
     call t.add_map('~',  '～')
 
-    " special
+    " zenkaku -> hankaku
     call t.add_map('z~', '~')
     call t.add_map('z:', ":\<Space>")
     call t.add_map('z;', ";\<Space>")
