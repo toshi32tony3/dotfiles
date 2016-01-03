@@ -2411,10 +2411,8 @@ if neobundle#tap('vimfiler.vim')
     " カレントディレクトリを開く
     nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
 
-    if neobundle#tap('unite.vim')
-      " Unite vimgrepを使う
-      nnoremap <buffer> <expr> gr ':<C-u>Unite vimgrep:**' . g:u_opt_gg . '<CR>'
-    endif
+    " grepはUniteを使うので潰しておく
+    nnoremap <buffer> gr <Nop>
 
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
     nnoremap <buffer> <Leader>         <Nop>
