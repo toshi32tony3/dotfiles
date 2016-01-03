@@ -1474,10 +1474,6 @@ if neobundle#tap('agit.vim')
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
     nmap <buffer> Rv <Plug>(agit-git-revert)
 
-    " <Leader>がデフォルトマッピングで使用されていた場合の対策
-    nnoremap <buffer> <Leader>         <Nop>
-    nnoremap <buffer> <Leader><Leader> <Nop>
-
   endfunction "}}}
   autocmd MyAutoCmd FileType agit          call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
