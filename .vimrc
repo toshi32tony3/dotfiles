@@ -2035,7 +2035,9 @@ if neobundle#tap('vim-asterisk')
     elseif l:currentMode == 'no'
       let @* = a:data
       return "\<Esc>"
-    elseif l:currentMode == 'v' || l:currentMode == 'V' || l:currentMode == ''
+    elseif  l:currentMode ==# 'v' ||
+          \ l:currentMode ==# 'V' ||
+          \ l:currentMode == ''
       return "\<Esc>gvygv"
     endif
     echomsg 'You can use ClipCword() on following modes : n/no/v/V/CTRL-V'
