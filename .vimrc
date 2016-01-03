@@ -900,9 +900,9 @@ endif
 "-----------------------------------------------------------------------------
 " Prevent erroneous input {{{
 
-" レジスタ機能のキーを<S-q>にする(Exモードは使わないので潰す)
-nnoremap q     <Nop>
-nnoremap <S-q> q
+" レジスタ機能のキーをQにする(Exモードは使わないので潰す)
+nnoremap q <Nop>
+nnoremap Q q
 
 " F3 command history
 nnoremap <F3> <Esc>q:
