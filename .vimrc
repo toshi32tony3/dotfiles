@@ -1088,8 +1088,8 @@ function! s:OnCursorMove() "{{{
     let b:isLineChanged = 1
     let b:lastVisitedLine = line('.')
 
-    " NOTE: If no "User LineChanged" events,
-    " Vim says "No matching autocommands".
+    " NOTE: If no 'User LineChanged' events,
+    " Vim says 'No matching autocommands'.
     autocmd MyAutoCmd User LineChanged :
     doautocmd MyAutoCmd User LineChanged
   else
@@ -1297,12 +1297,12 @@ function! s:JumpFuncNameCForward() "{{{
   endif
 
   call search('(', 'b')
-  execute "normal! b"
+  execute 'normal! b'
 
   " Cの関数名の上から下方向検索するには, ]]を2回使う必要がある
   if l:lastLine == line('.')
-    execute "keepjumps normal! ]]"
-    execute "keepjumps normal! ]]"
+    execute 'keepjumps normal! ]]'
+    execute 'keepjumps normal! ]]'
 
     " 検索対象が居なければViewを戻して処理終了
     if line('.') == line('$')
@@ -1310,7 +1310,7 @@ function! s:JumpFuncNameCForward() "{{{
       return
     endif
     call search('(', 'b')
-    execute "normal! b"
+    execute 'normal! b'
 
   endif
 
@@ -1330,7 +1330,7 @@ function! s:JumpFuncNameCBackward() "{{{
 
   " カーソルがある行の1列目の文字が { ならば [[ は不要
   if getline('.')[0] != '{'
-    execute "keepjumps normal! [["
+    execute 'keepjumps normal! [['
     " for match } }
 
     " 検索対象が居なければViewを戻して処理終了
@@ -1341,7 +1341,7 @@ function! s:JumpFuncNameCBackward() "{{{
   endif
 
   call search('(', 'b')
-  execute "normal! b"
+  execute 'normal! b'
 
   " 現在位置をjumplistに追加
   mark '
@@ -1365,10 +1365,10 @@ function! s:GetCurrentFuncC() "{{{
   if getline('.')[0] != '{' " for match } }
 
     " { よりも先に前方にセクション末尾 } がある場合, 関数定義の間なので検索不要
-    execute "keepjumps normal! []"
+    execute 'keepjumps normal! []'
     let l:endBracketLine = line('.')
     call winrestview(l:savedView)
-    execute "keepjumps normal! [["
+    execute 'keepjumps normal! [['
     if line('.') < l:endBracketLine
       call winrestview(l:savedView)
       return ''
@@ -1382,7 +1382,7 @@ function! s:GetCurrentFuncC() "{{{
   endif
 
   call search('(', 'b')
-  execute "normal! b"
+  execute 'normal! b'
   let l:funcName = expand('<cword>')
 
   " Viewを復元
