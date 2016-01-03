@@ -1615,6 +1615,7 @@ if neobundle#tap('eskk.vim')
   nmap <A-o> o<Plug>(eskk:toggle)
 
   " もっともっとすぐにskkしたい
+  " <C-s>と<A-s>は他の用途で使うので潰せない
   nmap <C-c>l      cl<Plug>(eskk:toggle)
   nmap <C-c>aw    caw<Plug>(eskk:toggle)
   nmap <C-c>iw    ciw<Plug>(eskk:toggle)
