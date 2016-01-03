@@ -61,7 +61,7 @@ set noswapfile
 set nobackup
 set nowritebackup
 
-" ファイルの書き込みをしてバックアップが作られるときの設定
+" ファイルの書き込みをしてバックアップが作られるときの設定(作らないけども)
 " yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
 " no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
 " auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
@@ -90,7 +90,7 @@ set spelllang=en,cjk
 set nospell
 set spellfile=~/dotfiles/en.utf-8.add
 
-" 50あれば十分すぎる
+" コマンドと検索の履歴は50もあれば十分すぎる
 set history=50
 
 " 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
@@ -132,7 +132,7 @@ set diffopt=filler,vertical
 "-----------------------------------------------------------------------------
 " Plugin List {{{
 
-" ftpluginは最後に読み込むため, 一旦オフする
+" filetype関連のファイルはruntimepathの登録が終わってから読み込むため, 一旦オフ
 filetype plugin indent off
 
 " 実は必要のないset nocompatible
@@ -427,10 +427,10 @@ NeoBundleLazy 'thinca/vim-quickrun', {
 
 call neobundle#end()
 
-" ファイルタイプの自動検出をONにする
+" filetype関連のファイルを読み込む
 filetype plugin indent on
 
-" 構文解析ON
+" シンタックスハイライトを有効化(on:現在の設定を破棄する, enable:破棄しない)
 syntax enable
 
 " vimrcに書いてあるプラグインがインストールされているかチェックする
