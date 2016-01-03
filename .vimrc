@@ -173,12 +173,9 @@ NeoBundleLazy 'mhinz/vim-signify', {
       \   'on_cmd' : 'SignifyStart',
       \ }
 
-NeoBundle 'tpope/vim-fugitive', {
-      \   'augroup' : 'fugitive',
-      \ }
+NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'idanarye/vim-merginal', {
       \   'depends' : 'tpope/vim-fugitive',
-      \   'augroup' : 'merginal',
       \ }
 NeoBundleLazy 'cohama/agit.vim', {
       \   'on_cmd' : 'Agit',
@@ -199,8 +196,7 @@ NeoBundleLazy 'Shougo/neocomplete.vim', {
       \   'on_i' : 1,
       \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
-      \   'depends' : 'Shougo/unite.vim',
-      \   'on_i'    : 1,
+      \   'on_i' : 1,
       \ }
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets', {
       \   'depends' : 'Shougo/neosnippet.vim',
