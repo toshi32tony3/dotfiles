@@ -1433,10 +1433,12 @@ if neobundle#tap('vim-signify')
   let g:signify_update_on_focusgained = 1
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
-  command! -bar SignifyStart
-        \ | SignifyToggle
-        \ | SignifyToggle
-        \ | delcommand SignifyStart
+  if has('vim_starting')
+    command! -bar SignifyStart
+          \ | SignifyToggle
+          \ | SignifyToggle
+          \ | delcommand SignifyStart
+  endif
 
   function! neobundle#hooks.on_post_source(bundle)
     nmap ]c <Plug>(signify-next-hunk)zz
