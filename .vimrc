@@ -10,8 +10,8 @@ scriptencoding utf-8
 
 " 左手で<Leader>を入力したい
 let g:mapleader = "\<S-Space>"
-nnoremap <S-Space>          <Nop>
-nnoremap <S-Space><S-Space> <Nop>
+nnoremap <Leader>         <Nop>
+nnoremap <Leader><Leader> <Nop>
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
