@@ -2201,15 +2201,15 @@ if neobundle#tap('caw.vim')
 
   " caw.vimをオペレータとして使う
   " https://github.com/rhysd/dogfiles/blob/master/vimrc
-  function! s:operator_caw_comment_toggle(motion_wise)
-    if a:motion_wise ==# 'char'
+  function! s:OperatorCawCommentToggle(motionWise)
+    if a:motionWise ==# 'char'
       execute "normal `[v`]\<Plug>(caw:wrap:toggle)"
     else
       execute "normal `[V`]\<Plug>(caw:i:toggle)"
     endif
   endfunction
   function! neobundle#hooks.on_source(bundle)
-    call operator#user#define('caw', s:SID() . 'operator_caw_comment_toggle')
+    call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
   endfunction
 
   nmap co <Plug>(operator-caw)
@@ -2650,6 +2650,5 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
-" TODO: 全体的に変数名/関数名をcamel-caseもしくはsneak-caseに統一したい
 " TODO: 行連結を減らしたい(http://www.kaoriya.net/blog/2011/09/20110915/)
 
