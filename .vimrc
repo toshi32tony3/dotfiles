@@ -698,9 +698,9 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 " make後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
-" 最後のウィンドウがQuickfixウィンドウの場合, 自動で閉じる
+" 最後のウィンドウのbuftypeがnofileかquickfixであれば, 自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
-      \ (getbufvar(winbufnr(0), '&buftype')) == 'quickfix' | quit | endif
+      \ (getbufvar(winbufnr(0), '&buftype')) =~ '\v(nofile|quickfix)' | quit | endif
 
 " 簡単にhelpを閉じる, 抜ける
 function! s:HelpSettings() "{{{
