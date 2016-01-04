@@ -786,22 +786,25 @@ nnoremap <Leader>} :<C-u>JumpTagTab <C-r><C-w><CR>
 if filereadable(expand('~/localfiles/local.rc.vim'))
 
   function! s:SetSrcDir() "{{{
-    let $TARGET_VER = g:local_rc#src_ver_list[g:local_rc#index_of_src]
-    let $TARGET_DIR = $SRC_DIR . '\' . $TARGET_VER
-    let $CTAGS_DIR = $TARGET_DIR . '\.tags'
+    let g:local_rc#src_dir         = g:local_rc#src_list[g:local_rc#src_index]
+    let g:local_rc#current_src_dir = g:local_rc#base_dir . '\' . g:local_rc#src_dir
+    let g:local_rc#ctags_dir       = g:local_rc#current_src_dir . '\.tags'
   endfunction "}}}
 
   function! s:SetTags() "{{{
     set tags=
 
-    for l:item in g:local_rc#target_dir_ctags_list
-      let $SET_TAGS = $CTAGS_DIR. '\' . g:local_rc#target_dir_ctags_name_list[l:item]
-      set tags+=$SET_TAGS
+    for l:item in g:local_rc#ctags_list
+      if &tags == ''
+        let &tags =               g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
+      else
+        let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
+      endif
     endfor
 
     " GTAGSROOTの登録
     " -> GNU GLOBALのタグはプロジェクトルートで生成する
-    let $GTAGSROOT = $TARGET_DIR
+    let $GTAGSROOT = g:local_rc#current_src_dir
   endfunction "}}}
 
   function! s:SetPathList() "{{{
@@ -809,14 +812,20 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
     " 起点なしのpath登録
     for l:item in g:local_rc#other_dir_path_list
-      let $SET_PATH = l:item
-      set path+=$SET_PATH
+      if &path == ''
+        let &path =               l:item
+      else
+        let &path = &path . ',' . l:item
+      endif
     endfor
 
-    " $TARGET_DIRを起点にしたpath登録
-    for l:item in g:local_rc#target_dir_path_list
-      let $SET_PATH = $TARGET_DIR . '\' . l:item
-      set path+=$SET_PATH
+    " g:local_rc#current_src_dirを起点にしたpath登録
+    for l:item in g:local_rc#current_src_dir_path_list
+      if &path == ''
+        let &path =               g:local_rc#current_src_dir . '\' . l:item
+      else
+        let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
+      endif
     endfor
   endfunction "}}}
 
@@ -825,18 +834,24 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
     " 起点なしのcdpath登録
     for l:item in g:local_rc#other_dir_cdpath_list
-      let $SET_CDPATH = l:item
-      set cdpath+=$SET_CDPATH
+      if &cdpath == ''
+        let &cdpath =                 l:item
+      else
+        let &cdpath = &cdpath . ',' . l:item
+      endif
     endfor
 
-    " $SRC_DIR, $TARGET_DIRをcdpath登録
-    set cdpath+=$SRC_DIR
-    set cdpath+=$TARGET_DIR
+    " g:local_rc#base_dir, g:local_rc#current_src_dirをcdpath登録
+    let &cdpath = &cdpath . ',' . g:local_rc#base_dir
+    let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir
 
-    " $TARGET_DIRを起点にしたcdpath登録
-    for l:item in g:local_rc#target_dir_cdpath_list
-      let $SET_CDPATH = $TARGET_DIR . '\' . l:item
-      set cdpath+=$SET_CDPATH
+    " g:local_rc#current_src_dirを起点にしたcdpath登録
+    for l:item in g:local_rc#current_src_dir_cdpath_list
+      if &cdpath == ''
+        let &cdpath =                 g:local_rc#current_src_dir . '\' . l:item
+      else
+        let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
+      endif
     endfor
   endfunction "}}}
 
@@ -847,9 +862,9 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
-    let g:local_rc#index_of_src += 1
-    if  g:local_rc#index_of_src >= len(g:local_rc#src_ver_list)
-      let g:local_rc#index_of_src = 0
+    let g:local_rc#src_index += 1
+    if  g:local_rc#src_index >= len(g:local_rc#src_list)
+      let g:local_rc#src_index = 0
     endif
 
     call s:SetSrcDir()
@@ -858,7 +873,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     call s:SetCDPathList()
 
     " ソースコード切り替え後, バージョン名を出力
-    echo 'change source to: ' . $TARGET_VER
+    echo 'switch source to: ' . g:local_rc#src_dir
 
   endfunction "}}}
   command! SwitchSource call s:SwitchSource()
@@ -866,18 +881,18 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
   " ctagsをアップデート
   function! s:UpdateCtags() "{{{
-    if !isdirectory($CTAGS_DIR)
-      call system('mkdir ' . $CTAGS_DIR)
+    if !isdirectory(g:local_rc#ctags_dir)
+      call    mkdir(g:local_rc#ctags_dir)
     endif
-    for l:item in g:local_rc#target_dir_ctags_list
-      if !has_key(g:local_rc#target_dir_ctags_name_list, l:item)
+    for l:item in g:local_rc#ctags_list
+      if !has_key(g:local_rc#ctags_name_list, l:item)
         continue
       endif
       let l:updateCommand =
             \ 'ctags -f ' .
-            \ $TARGET_DIR . '\.tags\' . g:local_rc#target_dir_ctags_name_list[l:item] .
+            \ g:local_rc#current_src_dir . '\.tags\' . g:local_rc#ctags_name_list[l:item] .
             \ ' -R ' .
-            \ $TARGET_DIR . '\' . l:item
+            \ g:local_rc#current_src_dir . '\' . l:item
       call system(l:updateCommand)
     endfor
   endfunction "}}}
