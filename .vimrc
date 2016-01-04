@@ -904,15 +904,15 @@ endif
 "-----------------------------------------------------------------------------
 " Prevent erroneous input {{{
 
-" レジスタ機能のキーをQにする(Exモードは使わないので潰す)
+" レジスタ機能のキーをQにする(Exモードを使う時はgQ)
 nnoremap q <Nop>
 nnoremap Q q
 
-" F3 command history
+" F3 command history (使わないが, 一応退避)
 nnoremap <F3> <Esc>q:
 nnoremap q:   <Nop>
 
-" F4 search history
+" F4  search history (使わないが, 一応退避)
 nnoremap <F4> <Esc>q/
 nnoremap q/   <Nop>
 nnoremap q?   <Nop>
@@ -928,11 +928,12 @@ nnoremap ZQ <Nop>
 inoremap <C-@> <Esc>
 noremap  <C-@> <Esc>
 
-" よくわからないけどGVimが終了されて困るので防ぐ
-nnoremap q<Space>   <Nop>
+" :quitのショートカットは潰す
 nnoremap <C-w><C-q> <Nop>
+nnoremap <C-w>q     <Nop>
 
-" よくわからないけど矩形Visualモードになるので潰す
+" mswin.vim有効時<C-v>がペーストに使われるため, 代替として<C-q>が用意されている
+" -> そもそもmswin.vimは使わないし, 紛らわしいので潰す
 nnoremap <C-q> <Nop>
 
 " マウス中央ボタンは使わない
@@ -946,6 +947,7 @@ inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
 
 " Shift or Ctrl or Alt + カーソルキーはコマンドモードでのみ使用する
+" -> と思ったが, とりあえず潰しておいて, 一部再利用するマッピングを行う
 inoremap <S-Left>  <Nop>
 inoremap <S-Down>  <Nop>
 inoremap <S-Up>    <Nop>
@@ -983,20 +985,14 @@ nnoremap <Right> <C-w>l
 
 " せっかくなので, Shift + カーソルキーでbprevious/bnext
 nnoremap <S-Left>  :<C-u>bprevious<CR>
-nnoremap <S-Down>  :<C-u>bnext<CR>
-nnoremap <S-Up>    :<C-u>bprevious<CR>
 nnoremap <S-Right> :<C-u>bnext<CR>
 
 " せっかくなので,  Ctrl + カーソルキーでcprevious/cnext
 nnoremap <C-Left>  :<C-u>cprevious<CR>
-nnoremap <C-Down>  :<C-u>cnext<CR>
-nnoremap <C-Up>    :<C-u>cprevious<CR>
 nnoremap <C-Right> :<C-u>cnext<CR>
 
 " せっかくなので,   Alt + カーソルキーで previous/next
 nnoremap <A-Left>  :<C-u>previous<CR>
-nnoremap <A-Down>  :<C-u>next<CR>
-nnoremap <A-Up>    :<C-u>previous<CR>
 nnoremap <A-Right> :<C-u>next<CR>
 
 "}}}
