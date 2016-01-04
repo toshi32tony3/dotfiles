@@ -25,7 +25,7 @@ endfunction
 
 " Vim起動時間を計測
 " -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒強程度)になる
-" -> gvim --startuptime startuptime.txt startuptime.txt
+" -> gvim --startuptime startuptime.txt
 if has('vim_starting') && has('reltime')
   let s:startuptime = reltime()
   autocmd MyAutoCmd VimEnter *
