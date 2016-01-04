@@ -984,16 +984,16 @@ nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
 " せっかくなので, Shift + カーソルキーでbprevious/bnext
-nnoremap <S-Left>  :<C-u>bprevious<CR>
-nnoremap <S-Right> :<C-u>bnext<CR>
+nnoremap <S-Left>  :bprevious<CR>
+nnoremap <S-Right> :bnext<CR>
 
 " せっかくなので,  Ctrl + カーソルキーでcprevious/cnext
-nnoremap <C-Left>  :<C-u>cprevious<CR>
-nnoremap <C-Right> :<C-u>cnext<CR>
+nnoremap <C-Left>  :cprevious<CR>
+nnoremap <C-Right> :cnext<CR>
 
 " せっかくなので,   Alt + カーソルキーで previous/next
-nnoremap <A-Left>  :<C-u>previous<CR>
-nnoremap <A-Right> :<C-u>next<CR>
+nnoremap <A-Left>  :previous<CR>
+nnoremap <A-Right> :next<CR>
 
 "}}}
 "-----------------------------------------------------------------------------
