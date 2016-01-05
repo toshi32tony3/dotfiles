@@ -795,15 +795,14 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
   endfunction "}}}
 
   function! s:SetTags() "{{{
+    " tagsをセット
     set tags=
-
     for l:item in g:local_rc#ctags_list
-      if &tags == ''
-        let &tags =               g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
-      else
-        let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
-      endif
+      let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
     endfor
+
+    " 1文字目の','を削除
+    let &tags = &tags[1:]
 
     " GTAGSROOTの登録
     " -> GNU GLOBALのタグはプロジェクトルートで生成する
@@ -815,21 +814,16 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
     " 起点なしのpath登録
     for l:item in g:local_rc#other_dir_path_list
-      if &path == ''
-        let &path =               l:item
-      else
-        let &path = &path . ',' . l:item
-      endif
+      let &path = &path . ',' . l:item
     endfor
 
     " g:local_rc#current_src_dirを起点にしたpath登録
     for l:item in g:local_rc#current_src_dir_path_list
-      if &path == ''
-        let &path =               g:local_rc#current_src_dir . '\' . l:item
-      else
-        let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
-      endif
+      let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
+
+    " 1文字目の','を削除
+    let &path = &path[1:]
   endfunction "}}}
 
   function! s:SetCDPathList() "{{{
@@ -837,11 +831,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
     " 起点なしのcdpath登録
     for l:item in g:local_rc#other_dir_cdpath_list
-      if &cdpath == ''
-        let &cdpath =                 l:item
-      else
-        let &cdpath = &cdpath . ',' . l:item
-      endif
+      let &cdpath = &cdpath . ',' . l:item
     endfor
 
     " g:local_rc#base_dir, g:local_rc#current_src_dirをcdpath登録
@@ -850,12 +840,11 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
     " g:local_rc#current_src_dirを起点にしたcdpath登録
     for l:item in g:local_rc#current_src_dir_cdpath_list
-      if &cdpath == ''
-        let &cdpath =                 g:local_rc#current_src_dir . '\' . l:item
-      else
-        let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
-      endif
+      let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
+
+    " 1文字目の','を削除
+    let &cdpath = &cdpath[1:]
   endfunction "}}}
 
   call s:SetSrcDir()
