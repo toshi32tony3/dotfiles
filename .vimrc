@@ -1105,10 +1105,7 @@ function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " 小細工
   " ------------------------------------------------------------
-  " [z, ]zは'foldlevel'が0の時は動作しない。nofoldenableの時は'foldlevel'が
-  " 設定される機会がないので, foldlevelに大きめの値をセットして解決する
-  " NOTE: 'foldlevel'は「ファイルを開いた時点でどこまで折り畳むか」を設定する
-  "       -> 勝手に変更しても問題無い, はず
+  " foldlevelに大きめの値をセットして[z, ]zを使えるようにする
   if &foldenable == 'nofoldenable'
     setlocal foldlevel=10
   endif
@@ -1123,9 +1120,9 @@ function! s:GetFoldLevel() "{{{
   " Viewを保存
   let l:savedView = winsaveview()
 
-  " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+  " モーションの失敗を前提にしているのでbelloffを使う
   let l:belloffTmp = &l:belloff
-  let &l:belloff = 'error'
+  let &l:belloff   = 'error'
 
   " ------------------------------------------------------------
   " foldLevelをカウント
@@ -1187,9 +1184,9 @@ function! s:GetCurrentFold() "{{{
   let l:savedView = winsaveview()
   let l:cursorPosition = getcurpos()
 
-  " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+  " モーションの失敗を前提にしているのでbelloffを使う
   let l:belloffTmp = &l:belloff
-  let &l:belloff = 'error'
+  let &l:belloff   = 'error'
 
   " 走査回数の設定
   let l:searchCounter = l:foldLevel
@@ -1212,7 +1209,7 @@ function! s:GetCurrentFold() "{{{
 
     " 移動していなければ, 移動前のカーソル行が子Fold開始位置だったということ
     if l:lastLineNumber == l:currentLineNumber
-      " カーソルを戻して子Foldをリストに追加
+      " カーソルを戻して子FoldをfoldListに追加
       call setpos('.', l:cursorPosition)
       let l:currentLine = (&ft == 'markdown') &&
             \             (match(getline('.'), '^#') == -1)
@@ -1226,7 +1223,7 @@ function! s:GetCurrentFold() "{{{
       let l:currentLine = (&ft == 'markdown')
             \           ? getline((line('.') - 1))
             \           : getline('.')
-      " 親Foldをリストに追加
+      " 親FoldをfoldListに追加
       let l:foldName = s:GetFoldName(l:currentLine)
       if  l:foldName != ''
         call insert(l:foldList, l:foldName, 0)
@@ -1235,7 +1232,6 @@ function! s:GetCurrentFold() "{{{
 
     let l:lastLineNumber = l:currentLineNumber
     let l:searchCounter -= 1
-
   endwhile
 
   " ------------------------------------------------------------
@@ -1247,16 +1243,16 @@ function! s:GetCurrentFold() "{{{
   " Viewを復元
   call winrestview(l:savedView)
 
-  " ウィンドウ幅が十分あればfoldListを繋いで返す
+  " ウィンドウ幅が十分ある場合, foldListを繋いで返す
   if winwidth(0) > 120
     return join(l:foldList, " \u2B81 ")
   endif
-
+  " ウィンドウ幅が広くない場合, 直近のFold名を返す
   return get(l:foldList, -1, '')
 endfunction "}}}
 command! EchoCurrentFold echo s:GetCurrentFold()
 autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
-autocmd MyAutoCmd BufEnter *       let s:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
 function! s:JumpFuncNameCForward() "{{{
