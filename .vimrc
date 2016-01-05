@@ -802,7 +802,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " 1文字目の','を削除
-    let &tags = &tags[1:]
+    if &tags != '' | let &tags = &tags[1:] | endif
 
     " GTAGSROOTの登録
     " -> GNU GLOBALのタグはプロジェクトルートで生成する
@@ -823,7 +823,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " 1文字目の','を削除
-    let &path = &path[1:]
+    if &path != '' | let &path = &path[1:] | endif
   endfunction "}}}
 
   function! s:SetCDPathList() "{{{
@@ -844,7 +844,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " 1文字目の','を削除
-    let &cdpath = &cdpath[1:]
+    if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
   endfunction "}}}
 
   call s:SetSrcDir()
@@ -1008,7 +1008,7 @@ function! s:PutTimeStamp() "{{{
 endfunction "}}}
 command! PutTimeStamp call s:PutTimeStamp()
 
-" 区切り線＋タイムスタンプの挿入
+" 区切り線+タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
   let @" = '='
   normal! 080""Po
@@ -1034,59 +1034,50 @@ command! DeleteJumpList for s:n in range(200) | mark '     | endfor
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
 let s:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
-  " run on normal/visual mode only
+  " normalかvisualの時のみ判定
   let     l:currentMode  = mode(1)
   if      l:currentMode != 'n' && l:currentMode != 'no' &&
-        \ l:currentMode != 'v' && l:currentMode != 'V'  && l:currentMode != ''
-    let b:isLineChanged = 0
-    let b:isCursorMoved = 0
+        \ l:currentMode != 'v' && l:currentMode !=# 'V' && l:currentMode != ''
     return
   endif
 
-  " 初回のCursorMoved発火時の処理
+  " 初回の処理
   if !exists('b:lastVisitedLine')
-    let b:isCursorMoved = 0
-    let b:isLineChanged = 0
     let b:lastVisitedLine = line('.')
     let b:lastCursorMoveTime = 0
   endif
 
   " ミリ秒単位の現在時刻を取得
-  let l:ml = matchlist(reltimestr(reltime()), '\(\d*\)\.\(\d\{3}\)')
-  if l:ml == []
+  let l:ml = matchlist(reltimestr(reltime()), '\v(\d*)\.(\d{3})')
+  if  l:ml == []
     return
   endif
   let l:ml[0] = ''
   let l:now = str2nr(join(l:ml, ''))
 
-  " 前回のCursorMoved発火時からの経過時間を算出
+  " 前回のCursorMoved発火時から指定時間経過していなければ何もせず抜ける
   let l:timespan = l:now - b:lastCursorMoveTime
-
-  " lastCursorMoveTimeを更新
-  let b:lastCursorMoveTime = l:now
-
-  " 指定時間経過しているか否かで処理分岐
-  if l:timespan <= s:throttleTimeSpan
-    let b:isLineChanged = 0
-    let b:isCursorMoved = 0
+  if  l:timespan <= s:throttleTimeSpan
     return
   endif
 
   " CursorMoved!!
-  let b:isCursorMoved = 1
+  autocmd   MyAutoCmd User MyCursorMoved :
+  doautocmd MyAutoCmd User MyCursorMoved
 
-  if b:lastVisitedLine != line('.')
-    " LineChanged!!
-    let b:isLineChanged = 1
-    let b:lastVisitedLine = line('.')
+  " lastCursorMoveTimeを更新
+  let b:lastCursorMoveTime = l:now
 
-    " NOTE: If no 'User LineChanged' events,
-    " Vim says 'No matching autocommands'.
-    autocmd MyAutoCmd User LineChanged :
-    doautocmd MyAutoCmd User LineChanged
-  else
-    let b:isLineChanged = 0
+  if b:lastVisitedLine == line('.')
+    return
   endif
+
+  " LineChanged!!
+  autocmd   MyAutoCmd User MyLineChanged :
+  doautocmd MyAutoCmd User MyLineChanged
+
+  " lastVisitedLineを更新
+  let b:lastVisitedLine = line('.')
 endfunction "}}}
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 
@@ -1114,10 +1105,7 @@ function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " 小細工
   " ------------------------------------------------------------
-  " [z, ]zは'foldlevel'が0の時は動作しない。nofoldenableの時は'foldlevel'が
-  " 設定される機会がないので, foldlevelに大きめの値をセットして解決する
-  " NOTE: 'foldlevel'は「ファイルを開いた時点でどこまで折り畳むか」を設定する
-  "       -> 勝手に変更しても問題無い, はず
+  " foldlevelに大きめの値をセットして[z, ]zを使えるようにする
   if &foldenable == 'nofoldenable'
     setlocal foldlevel=10
   endif
@@ -1132,9 +1120,9 @@ function! s:GetFoldLevel() "{{{
   " Viewを保存
   let l:savedView = winsaveview()
 
-  " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+  " モーションの失敗を前提にしているのでbelloffを使う
   let l:belloffTmp = &l:belloff
-  let &l:belloff = 'error'
+  let &l:belloff   = 'error'
 
   " ------------------------------------------------------------
   " foldLevelをカウント
@@ -1196,9 +1184,9 @@ function! s:GetCurrentFold() "{{{
   let l:savedView = winsaveview()
   let l:cursorPosition = getcurpos()
 
-  " モーションの失敗を前提にしたVim scriptを使いたいのでbelloffを使う
+  " モーションの失敗を前提にしているのでbelloffを使う
   let l:belloffTmp = &l:belloff
-  let &l:belloff = 'error'
+  let &l:belloff   = 'error'
 
   " 走査回数の設定
   let l:searchCounter = l:foldLevel
@@ -1221,7 +1209,7 @@ function! s:GetCurrentFold() "{{{
 
     " 移動していなければ, 移動前のカーソル行が子Fold開始位置だったということ
     if l:lastLineNumber == l:currentLineNumber
-      " カーソルを戻して子Foldをリストに追加
+      " カーソルを戻して子FoldをfoldListに追加
       call setpos('.', l:cursorPosition)
       let l:currentLine = (&ft == 'markdown') &&
             \             (match(getline('.'), '^#') == -1)
@@ -1235,7 +1223,7 @@ function! s:GetCurrentFold() "{{{
       let l:currentLine = (&ft == 'markdown')
             \           ? getline((line('.') - 1))
             \           : getline('.')
-      " 親Foldをリストに追加
+      " 親FoldをfoldListに追加
       let l:foldName = s:GetFoldName(l:currentLine)
       if  l:foldName != ''
         call insert(l:foldList, l:foldName, 0)
@@ -1244,7 +1232,6 @@ function! s:GetCurrentFold() "{{{
 
     let l:lastLineNumber = l:currentLineNumber
     let l:searchCounter -= 1
-
   endwhile
 
   " ------------------------------------------------------------
@@ -1256,16 +1243,16 @@ function! s:GetCurrentFold() "{{{
   " Viewを復元
   call winrestview(l:savedView)
 
-  " ウィンドウ幅が十分あればfoldListを繋いで返す
+  " ウィンドウ幅が十分ある場合, foldListを繋いで返す
   if winwidth(0) > 120
     return join(l:foldList, " \u2B81 ")
   endif
-
+  " ウィンドウ幅が広くない場合, 直近のFold名を返す
   return get(l:foldList, -1, '')
 endfunction "}}}
 command! EchoCurrentFold echo s:GetCurrentFold()
-autocmd MyAutoCmd User LineChanged let s:currentFold = s:GetCurrentFold()
-autocmd MyAutoCmd BufEnter *       let s:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
 function! s:JumpFuncNameCForward() "{{{
@@ -1382,7 +1369,7 @@ function! s:GetCurrentFuncC() "{{{
 
   return l:funcName
 endfunction " }}}
-autocmd MyAutoCmd User LineChanged
+autocmd MyAutoCmd User MyLineChanged
       \      if &ft == 'c' | let s:currentFunc = s:GetCurrentFuncC() | endif
 autocmd MyAutoCmd BufEnter * let s:currentFunc = s:GetCurrentFuncC()
 
@@ -1679,43 +1666,6 @@ if neobundle#tap('eskk.vim')
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
-    " モード切り替え(normal <-> skk)を監視するついでにneocompleteをlock/unlock
-    function! MySKKMode() "{{{
-      let l:CurrentMode = eskk#statusline()
-
-      " 初回の処理
-      if !exists('b:LastMode')
-        let b:LastMode = ''
-      endif
-
-      " モードが変更されていなければ何もしない
-      if l:CurrentMode == b:LastMode
-        return winwidth(0) > 30 ? l:CurrentMode : ''
-      endif
-
-      if b:LastMode == ''
-        " normal -> skk : 必要ならunlock
-        if neocomplete#get_current_neocomplete().lock == 1
-          NeoCompleteUnlock
-        else
-          let b:IsAlreadyUnlocked = 1
-        endif
-
-      else
-        " skk -> normal : 必要ならlock
-        if !exists('b:IsAlreadyUnlocked')
-          NeoCompleteLock
-        else
-          unlet b:IsAlreadyUnlocked
-        endif
-
-      endif
-
-      " 直前のモード情報を更新
-      let b:LastMode = l:CurrentMode
-
-      return winwidth(0) > 30 ? l:CurrentMode : ''
-    endfunction "}}}
   endfunction
 
 endif "}}}
@@ -1828,6 +1778,49 @@ if neobundle#tap('lightline.vim')
 
   function! MyMode() "{{{
     return winwidth(0) > 30 ? lightline#mode() : ''
+  endfunction "}}}
+
+  " モード切り替わり(normal <-> skk)を監視するついでにneocompleteをlock/unlock
+  function! MySKKMode() "{{{
+    if      !neobundle#is_sourced('eskk.vim') ||
+          \ !neobundle#is_sourced('neocomplete.vim')
+      return ''
+    endif
+
+    let l:CurrentMode = eskk#statusline()
+
+    " 初回の処理
+    if !exists('b:LastMode')
+      let b:LastMode = ''
+    endif
+
+    " モードが変更されていなければ何もしない
+    if l:CurrentMode == b:LastMode
+      return winwidth(0) > 30 ? l:CurrentMode : ''
+    endif
+
+    if b:LastMode == ''
+      " normal -> skk : 必要ならunlock
+      if neocomplete#get_current_neocomplete().lock == 1
+        NeoCompleteUnlock
+      else
+        let b:IsAlreadyUnlocked = 1
+      endif
+
+    else
+      " skk -> normal : 必要ならlock
+      if !exists('b:IsAlreadyUnlocked')
+        NeoCompleteLock
+      else
+        unlet b:IsAlreadyUnlocked
+      endif
+
+    endif
+
+    " 直前のモード情報を更新
+    let b:LastMode = l:CurrentMode
+
+    return winwidth(0) > 30 ? l:CurrentMode : ''
   endfunction "}}}
 
   function! MyCurrentFunc() "{{{
