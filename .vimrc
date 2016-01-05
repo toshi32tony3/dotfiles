@@ -847,10 +847,11 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
   endfunction "}}}
 
-  call s:SetSrcDir()
-  call s:SetTags()
-  call s:SetPathList()
-  call s:SetCDPathList()
+  autocmd MyAutoCmd VimEnter *
+        \   call s:SetSrcDir()
+        \ | call s:SetTags()
+        \ | call s:SetPathList()
+        \ | call s:SetCDPathList()
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
