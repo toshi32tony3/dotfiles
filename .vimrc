@@ -744,7 +744,7 @@ command! LCD echo 'change directory to:' <bar> lcd %:p:h
 nnoremap ,t :<C-u>tab split<CR>
 
 " 新規タブでgf
-nnoremap <Leader>gf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
+nnoremap <Leader>gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
 
 " 新規タブでvimdiff
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
@@ -769,7 +769,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
-  tablast | tab split
+  tab split
 
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag ' . a:funcName
