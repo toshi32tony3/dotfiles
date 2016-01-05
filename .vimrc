@@ -802,7 +802,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " 1文字目の','を削除
-    let &tags = &tags[1:]
+    if &tags != '' | let &tags = &tags[1:] | endif
 
     " GTAGSROOTの登録
     " -> GNU GLOBALのタグはプロジェクトルートで生成する
@@ -823,7 +823,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " 1文字目の','を削除
-    let &path = &path[1:]
+    if &path != '' | let &path = &path[1:] | endif
   endfunction "}}}
 
   function! s:SetCDPathList() "{{{
@@ -844,7 +844,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     endfor
 
     " 1文字目の','を削除
-    let &cdpath = &cdpath[1:]
+    if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
   endfunction "}}}
 
   call s:SetSrcDir()
