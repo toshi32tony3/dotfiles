@@ -1008,7 +1008,7 @@ function! s:PutTimeStamp() "{{{
 endfunction "}}}
 command! PutTimeStamp call s:PutTimeStamp()
 
-" 区切り線＋タイムスタンプの挿入
+" 区切り線+タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
   let @" = '='
   normal! 080""Po
