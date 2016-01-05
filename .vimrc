@@ -1255,7 +1255,7 @@ function! s:GetCurrentFold() "{{{
   return get(l:foldList, -1, '')
 endfunction "}}}
 command! EchoCurrentFold echo s:GetCurrentFold()
-" autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
+autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd BufEnter *       let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
@@ -1373,7 +1373,7 @@ function! s:GetCurrentFuncC() "{{{
 
   return l:funcName
 endfunction " }}}
-" autocmd MyAutoCmd User MyLineChanged
+autocmd MyAutoCmd User MyLineChanged
       \      if &ft == 'c' | let s:currentFunc = s:GetCurrentFuncC() | endif
 autocmd MyAutoCmd BufEnter * let s:currentFunc = s:GetCurrentFuncC()
 
@@ -1670,43 +1670,6 @@ if neobundle#tap('eskk.vim')
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
-    " モード切り替え(normal <-> skk)を監視するついでにneocompleteをlock/unlock
-    function! MySKKMode() "{{{
-      let l:CurrentMode = eskk#statusline()
-
-      " 初回の処理
-      if !exists('b:LastMode')
-        let b:LastMode = ''
-      endif
-
-      " モードが変更されていなければ何もしない
-      if l:CurrentMode == b:LastMode
-        return winwidth(0) > 30 ? l:CurrentMode : ''
-      endif
-
-      if b:LastMode == ''
-        " normal -> skk : 必要ならunlock
-        if neocomplete#get_current_neocomplete().lock == 1
-          NeoCompleteUnlock
-        else
-          let b:IsAlreadyUnlocked = 1
-        endif
-
-      else
-        " skk -> normal : 必要ならlock
-        if !exists('b:IsAlreadyUnlocked')
-          NeoCompleteLock
-        else
-          unlet b:IsAlreadyUnlocked
-        endif
-
-      endif
-
-      " 直前のモード情報を更新
-      let b:LastMode = l:CurrentMode
-
-      return winwidth(0) > 30 ? l:CurrentMode : ''
-    endfunction "}}}
   endfunction
 
 endif "}}}
@@ -1819,6 +1782,49 @@ if neobundle#tap('lightline.vim')
 
   function! MyMode() "{{{
     return winwidth(0) > 30 ? lightline#mode() : ''
+  endfunction "}}}
+
+  " モード切り替わり(normal <-> skk)を監視するついでにneocompleteをlock/unlock
+  function! MySKKMode() "{{{
+    if      !neobundle#is_sourced('eskk.vim') ||
+          \ !neobundle#is_sourced('neocomplete.vim')
+      return ''
+    endif
+
+    let l:CurrentMode = eskk#statusline()
+
+    " 初回の処理
+    if !exists('b:LastMode')
+      let b:LastMode = ''
+    endif
+
+    " モードが変更されていなければ何もしない
+    if l:CurrentMode == b:LastMode
+      return winwidth(0) > 30 ? l:CurrentMode : ''
+    endif
+
+    if b:LastMode == ''
+      " normal -> skk : 必要ならunlock
+      if neocomplete#get_current_neocomplete().lock == 1
+        NeoCompleteUnlock
+      else
+        let b:IsAlreadyUnlocked = 1
+      endif
+
+    else
+      " skk -> normal : 必要ならlock
+      if !exists('b:IsAlreadyUnlocked')
+        NeoCompleteLock
+      else
+        unlet b:IsAlreadyUnlocked
+      endif
+
+    endif
+
+    " 直前のモード情報を更新
+    let b:LastMode = l:CurrentMode
+
+    return winwidth(0) > 30 ? l:CurrentMode : ''
   endfunction "}}}
 
   function! MyCurrentFunc() "{{{
