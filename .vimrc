@@ -699,8 +699,11 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがnofileかquickfixであれば, 自動で閉じる
+" -> startifyは除外することにした
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
-      \ (getbufvar(winbufnr(0), '&buftype')) =~ '\v(nofile|quickfix)' | quit | endif
+      \ ((getbufvar(winbufnr(0), '&buftype')) =~ '\v(nofile|quickfix)') &&
+      \ (&ft != 'startify')
+      \ | quit | endif
 
 " 簡単にhelpを閉じる, 抜ける
 function! s:HelpSettings() "{{{
