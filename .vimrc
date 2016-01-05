@@ -1034,59 +1034,50 @@ command! DeleteJumpList for s:n in range(200) | mark '     | endfor
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
 let s:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
-  " run on normal/visual mode only
+  " normalかvisualの時のみ判定
   let     l:currentMode  = mode(1)
   if      l:currentMode != 'n' && l:currentMode != 'no' &&
-        \ l:currentMode != 'v' && l:currentMode != 'V'  && l:currentMode != ''
-    let b:isLineChanged = 0
-    let b:isCursorMoved = 0
+        \ l:currentMode != 'v' && l:currentMode !=# 'V' && l:currentMode != ''
     return
   endif
 
-  " 初回のCursorMoved発火時の処理
+  " 初回の処理
   if !exists('b:lastVisitedLine')
-    let b:isCursorMoved = 0
-    let b:isLineChanged = 0
     let b:lastVisitedLine = line('.')
     let b:lastCursorMoveTime = 0
   endif
 
   " ミリ秒単位の現在時刻を取得
-  let l:ml = matchlist(reltimestr(reltime()), '\(\d*\)\.\(\d\{3}\)')
-  if l:ml == []
+  let l:ml = matchlist(reltimestr(reltime()), '\v(\d*)\.(\d{3})')
+  if  l:ml == []
     return
   endif
   let l:ml[0] = ''
   let l:now = str2nr(join(l:ml, ''))
 
-  " 前回のCursorMoved発火時からの経過時間を算出
+  " 前回のCursorMoved発火時から指定時間経過していなければ何もせず抜ける
   let l:timespan = l:now - b:lastCursorMoveTime
-
-  " lastCursorMoveTimeを更新
-  let b:lastCursorMoveTime = l:now
-
-  " 指定時間経過しているか否かで処理分岐
-  if l:timespan <= s:throttleTimeSpan
-    let b:isLineChanged = 0
-    let b:isCursorMoved = 0
+  if  l:timespan <= s:throttleTimeSpan
     return
   endif
 
   " CursorMoved!!
-  let b:isCursorMoved = 1
+  autocmd   MyAutoCmd User MyCursorMoved :
+  doautocmd MyAutoCmd User MyCursorMoved
 
-  if b:lastVisitedLine != line('.')
-    " LineChanged!!
-    let b:isLineChanged = 1
-    let b:lastVisitedLine = line('.')
+  " lastCursorMoveTimeを更新
+  let b:lastCursorMoveTime = l:now
 
-    " NOTE: If no 'User LineChanged' events,
-    " Vim says 'No matching autocommands'.
-    autocmd MyAutoCmd User LineChanged :
-    doautocmd MyAutoCmd User LineChanged
-  else
-    let b:isLineChanged = 0
+  if b:lastVisitedLine == line('.')
+    return
   endif
+
+  " LineChanged!!
+  autocmd   MyAutoCmd User MyLineChanged :
+  doautocmd MyAutoCmd User MyLineChanged
+
+  " lastVisitedLineを更新
+  let b:lastVisitedLine = line('.')
 endfunction "}}}
 autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 
@@ -1264,7 +1255,7 @@ function! s:GetCurrentFold() "{{{
   return get(l:foldList, -1, '')
 endfunction "}}}
 command! EchoCurrentFold echo s:GetCurrentFold()
-autocmd MyAutoCmd User LineChanged let s:currentFold = s:GetCurrentFold()
+" autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd BufEnter *       let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
@@ -1382,7 +1373,7 @@ function! s:GetCurrentFuncC() "{{{
 
   return l:funcName
 endfunction " }}}
-autocmd MyAutoCmd User LineChanged
+" autocmd MyAutoCmd User MyLineChanged
       \      if &ft == 'c' | let s:currentFunc = s:GetCurrentFuncC() | endif
 autocmd MyAutoCmd BufEnter * let s:currentFunc = s:GetCurrentFuncC()
 
