@@ -699,8 +699,11 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがnofileかquickfixであれば, 自動で閉じる
+" -> startifyは除外することにした
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
-      \ (getbufvar(winbufnr(0), '&buftype')) =~ '\v(nofile|quickfix)' | quit | endif
+      \ ((getbufvar(winbufnr(0), '&buftype')) =~ '\v(nofile|quickfix)') &&
+      \ (&ft != 'startify')
+      \ | quit | endif
 
 " 簡単にhelpを閉じる, 抜ける
 function! s:HelpSettings() "{{{
@@ -744,7 +747,7 @@ command! LCD echo 'change directory to:' <bar> lcd %:p:h
 nnoremap ,t :<C-u>tab split<CR>
 
 " 新規タブでgf
-nnoremap <Leader>gf :<C-u>execute 'tablast <bar> tabfind ' . expand('<cfile>')<CR>
+nnoremap <Leader>gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
 
 " 新規タブでvimdiff
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
@@ -769,7 +772,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
-  tablast | tab split
+  tab split
 
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag ' . a:funcName
@@ -792,15 +795,14 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
   endfunction "}}}
 
   function! s:SetTags() "{{{
+    " tagsをセット
     set tags=
-
     for l:item in g:local_rc#ctags_list
-      if &tags == ''
-        let &tags =               g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
-      else
-        let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
-      endif
+      let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
     endfor
+
+    " 1文字目の','を削除
+    let &tags = &tags[1:]
 
     " GTAGSROOTの登録
     " -> GNU GLOBALのタグはプロジェクトルートで生成する
@@ -812,21 +814,16 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
     " 起点なしのpath登録
     for l:item in g:local_rc#other_dir_path_list
-      if &path == ''
-        let &path =               l:item
-      else
-        let &path = &path . ',' . l:item
-      endif
+      let &path = &path . ',' . l:item
     endfor
 
     " g:local_rc#current_src_dirを起点にしたpath登録
     for l:item in g:local_rc#current_src_dir_path_list
-      if &path == ''
-        let &path =               g:local_rc#current_src_dir . '\' . l:item
-      else
-        let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
-      endif
+      let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
+
+    " 1文字目の','を削除
+    let &path = &path[1:]
   endfunction "}}}
 
   function! s:SetCDPathList() "{{{
@@ -834,11 +831,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
     " 起点なしのcdpath登録
     for l:item in g:local_rc#other_dir_cdpath_list
-      if &cdpath == ''
-        let &cdpath =                 l:item
-      else
-        let &cdpath = &cdpath . ',' . l:item
-      endif
+      let &cdpath = &cdpath . ',' . l:item
     endfor
 
     " g:local_rc#base_dir, g:local_rc#current_src_dirをcdpath登録
@@ -847,12 +840,11 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
     " g:local_rc#current_src_dirを起点にしたcdpath登録
     for l:item in g:local_rc#current_src_dir_cdpath_list
-      if &cdpath == ''
-        let &cdpath =                 g:local_rc#current_src_dir . '\' . l:item
-      else
-        let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
-      endif
+      let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
+
+    " 1文字目の','を削除
+    let &cdpath = &cdpath[1:]
   endfunction "}}}
 
   call s:SetSrcDir()
@@ -904,15 +896,15 @@ endif
 "-----------------------------------------------------------------------------
 " Prevent erroneous input {{{
 
-" レジスタ機能のキーをQにする(Exモードは使わないので潰す)
+" レジスタ機能のキーをQにする(Exモードを使う時はgQ)
 nnoremap q <Nop>
 nnoremap Q q
 
-" F3 command history
+" F3 command history (使わないが, 一応退避)
 nnoremap <F3> <Esc>q:
 nnoremap q:   <Nop>
 
-" F4 search history
+" F4  search history (使わないが, 一応退避)
 nnoremap <F4> <Esc>q/
 nnoremap q/   <Nop>
 nnoremap q?   <Nop>
@@ -928,11 +920,12 @@ nnoremap ZQ <Nop>
 inoremap <C-@> <Esc>
 noremap  <C-@> <Esc>
 
-" よくわからないけどGVimが終了されて困るので防ぐ
-nnoremap q<Space>   <Nop>
+" :quitのショートカットは潰す
 nnoremap <C-w><C-q> <Nop>
+nnoremap <C-w>q     <Nop>
 
-" よくわからないけど矩形Visualモードになるので潰す
+" mswin.vim有効時<C-v>がペーストに使われるため, 代替として<C-q>が用意されている
+" -> そもそもmswin.vimは使わないし, 紛らわしいので潰す
 nnoremap <C-q> <Nop>
 
 " マウス中央ボタンは使わない
@@ -946,6 +939,7 @@ inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
 
 " Shift or Ctrl or Alt + カーソルキーはコマンドモードでのみ使用する
+" -> と思ったが, とりあえず潰しておいて, 一部再利用するマッピングを行う
 inoremap <S-Left>  <Nop>
 inoremap <S-Down>  <Nop>
 inoremap <S-Up>    <Nop>
@@ -982,22 +976,16 @@ nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
 " せっかくなので, Shift + カーソルキーでbprevious/bnext
-nnoremap <S-Left>  :<C-u>bprevious<CR>
-nnoremap <S-Down>  :<C-u>bnext<CR>
-nnoremap <S-Up>    :<C-u>bprevious<CR>
-nnoremap <S-Right> :<C-u>bnext<CR>
+nnoremap <S-Left>  :bprevious<CR>
+nnoremap <S-Right> :bnext<CR>
 
 " せっかくなので,  Ctrl + カーソルキーでcprevious/cnext
-nnoremap <C-Left>  :<C-u>cprevious<CR>
-nnoremap <C-Down>  :<C-u>cnext<CR>
-nnoremap <C-Up>    :<C-u>cprevious<CR>
-nnoremap <C-Right> :<C-u>cnext<CR>
+nnoremap <C-Left>  :cprevious<CR>
+nnoremap <C-Right> :cnext<CR>
 
 " せっかくなので,   Alt + カーソルキーで previous/next
-nnoremap <A-Left>  :<C-u>previous<CR>
-nnoremap <A-Down>  :<C-u>next<CR>
-nnoremap <A-Up>    :<C-u>previous<CR>
-nnoremap <A-Right> :<C-u>next<CR>
+nnoremap <A-Left>  :previous<CR>
+nnoremap <A-Right> :next<CR>
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -2628,5 +2616,4 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
-" TODO: 行連結を減らしたい(http://www.kaoriya.net/blog/2011/09/20110915/)
 
