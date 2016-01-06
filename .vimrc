@@ -24,7 +24,7 @@ function! s:SID()
 endfunction
 
 " Vim起動時間を計測
-" -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒強程度)になる
+" -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
 " -> gvim --startuptime startuptime.txt
 if has('vim_starting') && has('reltime')
   let s:startuptime = reltime()
@@ -847,10 +847,11 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
   endfunction "}}}
 
-  call s:SetSrcDir()
-  call s:SetTags()
-  call s:SetPathList()
-  call s:SetCDPathList()
+  autocmd MyAutoCmd VimEnter *
+        \   call s:SetSrcDir()
+        \ | call s:SetTags()
+        \ | call s:SetPathList()
+        \ | call s:SetCDPathList()
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
