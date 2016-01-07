@@ -1544,8 +1544,8 @@ if neobundle#tap('neosnippet.vim')
     smapclear
     smapclear <buffer>
     smap <expr> <TAB>
-          \  neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-          \  "\<TAB>"
+          \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
+          \ "\<TAB>"
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
   endfunction
   autocmd MyAutoCmd BufEnter * call s:neosnippetSettings()
