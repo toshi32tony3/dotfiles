@@ -1510,6 +1510,10 @@ if neobundle#tap('neocomplete.vim')
   function! neobundle#hooks.on_post_source(bundle)
     " Lockされた状態からスタートしたい
     NeoCompleteLock
+
+    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
+    " 使ってプラグインの読み込み完了フラグを立てることにした
+    let s:IsNeoCompleteLoaded = 1
   endfunction
 
 endif "}}}
@@ -1664,6 +1668,14 @@ if neobundle#tap('eskk.vim')
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
+    " wake up!
+    " -> 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
+    call eskk#toggle()
+    call eskk#toggle()
+
+    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
+    " 使ってプラグインの読み込み完了フラグを立てることにした
+    let s:IsEskkLoaded = 1
   endfunction
 
 endif "}}}
@@ -1778,25 +1790,27 @@ if neobundle#tap('lightline.vim')
     return winwidth(0) > 30 ? lightline#mode() : ''
   endfunction "}}}
 
-  " モード切り替わり(normal <-> skk)を監視するついでにneocompleteをlock/unlock
   function! MySKKMode() "{{{
-    if      !neobundle#is_sourced('eskk.vim') ||
-          \ !neobundle#is_sourced('neocomplete.vim')
+    " neobundle#is_sourced()を使っても動作することは確認したが,
+    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
+    " 使ってプラグインの読み込み完了フラグを立てることにした
+    if !exists('s:IsNeoCompleteLoaded') || !exists('s:IsEskkLoaded')
       return ''
     endif
-
-    let l:CurrentMode = eskk#statusline()
 
     " 初回の処理
     if !exists('b:LastMode')
       let b:LastMode = ''
     endif
 
+    let l:CurrentMode = eskk#statusline()
+
     " モードが変更されていなければ何もしない
     if l:CurrentMode == b:LastMode
       return winwidth(0) > 30 ? l:CurrentMode : ''
     endif
 
+    " モード切り替わり(normal <-> skk)を監視するついでにneocompleteをlock/unlock
     if b:LastMode == ''
       " normal -> skk : 必要ならunlock
       if neocomplete#get_current_neocomplete().lock == 1
