@@ -1415,6 +1415,7 @@ if neobundle#tap('vim-signify')
   let g:signify_update_on_focusgained = 1
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
+  " -> SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
   if has('vim_starting')
     command! -bar SignifyStart
           \ | SignifyToggle
