@@ -1424,6 +1424,8 @@ if neobundle#tap('vim-signify')
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
+    " ↑で定義しているSignifyStartを使うまでautoloadは読み込まれない。
+    " そのため, on_post_sourceでマッピングする
     nmap ]c <Plug>(signify-next-hunk)zz
     nmap [c <Plug>(signify-prev-hunk)zz
 
