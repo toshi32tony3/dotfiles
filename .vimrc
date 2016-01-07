@@ -698,13 +698,9 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 " make後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
-" 最後のウィンドウのbuftypeがnofileかquickfixであれば, 自動で閉じる
-" -> startifyは除外することにした
+" 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
-      \ ((getbufvar(winbufnr(0), '&buftype')) =~ '\v(nofile|quickfix)') &&
-      \ (&ft != 'startify') &&
-      \ (&ft != 'vimfiler')
-      \ | quit | endif
+      \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') | quit | endif
 
 " 簡単にhelpを閉じる, 抜ける
 function! s:HelpSettings() "{{{
@@ -1488,7 +1484,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources = {}
   endif
 
-  if neobundle#tap('neosnippet.vim')
+  if neobundle#is_installed('neosnippet.vim')
     " use for neosnippet and eskk only
     let g:neocomplete#sources._ = ['neosnippet']
   else
@@ -1503,7 +1499,7 @@ if neobundle#tap('neocomplete.vim')
   " 日本語を補完候補として取得しない
   let g:neocomplete#keyword_patterns._ = '\h\w*'
 
-  if !neobundle#tap('neosnippet.vim')
+  if !neobundle#is_installed('neosnippet.vim')
     inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
     inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
   endif
@@ -1514,6 +1510,10 @@ if neobundle#tap('neocomplete.vim')
   function! neobundle#hooks.on_post_source(bundle)
     " Lockされた状態からスタートしたい
     NeoCompleteLock
+
+    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
+    " 使ってプラグインの読み込み完了フラグを立てることにした
+    let s:IsNeoCompleteLoaded = 1
   endfunction
 
 endif "}}}
@@ -1530,7 +1530,7 @@ if neobundle#tap('neosnippet.vim')
   inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
 
-  if neobundle#tap('unite.vim')
+  if neobundle#is_installed('unite.vim')
     imap <C-s> <Plug>(neosnippet_start_unite_snippet)
   endif
 
@@ -1554,7 +1554,7 @@ if neobundle#tap('eskk.vim')
     set imdisable
   endif
 
-  if neobundle#tap('skk.vim')
+  if neobundle#is_installed('skk.vim')
     " disable skk.vim
     " -> Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
@@ -1668,6 +1668,14 @@ if neobundle#tap('eskk.vim')
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
+    " wake up!
+    " -> 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
+    call eskk#toggle()
+    call eskk#toggle()
+
+    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
+    " 使ってプラグインの読み込み完了フラグを立てることにした
+    let s:IsEskkLoaded = 1
   endfunction
 
 endif "}}}
@@ -1699,7 +1707,7 @@ if neobundle#tap('lightline.vim')
 
   let g:lightline = {}
 
-  if neobundle#tap('lightline-hybrid.vim')
+  if neobundle#is_installed('lightline-hybrid.vim')
     let g:lightline.colorscheme = 'hybrid'
   endif
 
@@ -1782,25 +1790,27 @@ if neobundle#tap('lightline.vim')
     return winwidth(0) > 30 ? lightline#mode() : ''
   endfunction "}}}
 
-  " モード切り替わり(normal <-> skk)を監視するついでにneocompleteをlock/unlock
   function! MySKKMode() "{{{
-    if      !neobundle#is_sourced('eskk.vim') ||
-          \ !neobundle#is_sourced('neocomplete.vim')
+    " neobundle#is_sourced()を使っても動作することは確認したが,
+    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
+    " 使ってプラグインの読み込み完了フラグを立てることにした
+    if !exists('s:IsNeoCompleteLoaded') || !exists('s:IsEskkLoaded')
       return ''
     endif
-
-    let l:CurrentMode = eskk#statusline()
 
     " 初回の処理
     if !exists('b:LastMode')
       let b:LastMode = ''
     endif
 
+    let l:CurrentMode = eskk#statusline()
+
     " モードが変更されていなければ何もしない
     if l:CurrentMode == b:LastMode
       return winwidth(0) > 30 ? l:CurrentMode : ''
     endif
 
+    " モード切り替わり(normal <-> skk)を監視するついでにneocompleteをlock/unlock
     if b:LastMode == ''
       " normal -> skk : 必要ならunlock
       if neocomplete#get_current_neocomplete().lock == 1
@@ -1834,7 +1844,7 @@ if neobundle#tap('lightline.vim')
   endfunction "}}}
 
   function! MyFugitive() "{{{
-    if !neobundle#tap('vim-fugitive') || &ft == 'vimfiler'
+    if !neobundle#is_installed('vim-fugitive') || &ft == 'vimfiler'
       return ''
     endif
     let l:_ = fugitive#head()
@@ -2032,7 +2042,7 @@ if neobundle#tap('vim-asterisk')
   endfunction "}}}
   noremap <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
-  if neobundle#tap('vim-anzu')
+  if neobundle#is_installed('vim-anzu')
     map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
     map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
     map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
@@ -2472,7 +2482,7 @@ if neobundle#tap('J6uil.vim')
   let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
   function! s:J6uilSaySetting() "{{{
-    if neobundle#tap('eskk.vim')
+    if neobundle#is_installed('eskk.vim')
       nmap     <buffer> <C-j> i<Plug>(eskk:toggle)
     else
       nnoremap <buffer> <C-j> <Nop>
@@ -2601,7 +2611,7 @@ if neobundle#tap('vim-watchdogs')
         \   'ruby' : 1,
         \ }
 
-  if neobundle#tap('vim-quickrun')
+  if neobundle#is_installed('vim-quickrun')
     " quickrun_configにwatchdogs.vimの設定を追加
     call watchdogs#setup(g:quickrun_config)
 
