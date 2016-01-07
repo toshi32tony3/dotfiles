@@ -702,7 +702,8 @@ autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 " -> startifyは除外することにした
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ ((getbufvar(winbufnr(0), '&buftype')) =~ '\v(nofile|quickfix)') &&
-      \ (&ft != 'startify')
+      \ (&ft != 'startify') &&
+      \ (&ft != 'vimfiler')
       \ | quit | endif
 
 " 簡単にhelpを閉じる, 抜ける
