@@ -1430,6 +1430,8 @@ if neobundle#tap('vim-signify')
     nmap [c <Plug>(signify-prev-hunk)zz
 
     " 使わないコマンドを削除する
+    delcommand SignifyEnable
+    delcommand SignifyDisable
     delcommand SignifyDebug
     delcommand SignifyDebugDiff
     delcommand SignifyDebugUnknown
