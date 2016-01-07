@@ -1484,7 +1484,7 @@ if neobundle#tap('neocomplete.vim')
     let g:neocomplete#sources = {}
   endif
 
-  if neobundle#tap('neosnippet.vim')
+  if neobundle#is_installed('neosnippet.vim')
     " use for neosnippet and eskk only
     let g:neocomplete#sources._ = ['neosnippet']
   else
@@ -1499,7 +1499,7 @@ if neobundle#tap('neocomplete.vim')
   " 日本語を補完候補として取得しない
   let g:neocomplete#keyword_patterns._ = '\h\w*'
 
-  if !neobundle#tap('neosnippet.vim')
+  if !neobundle#is_installed('neosnippet.vim')
     inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
     inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
   endif
@@ -1526,7 +1526,7 @@ if neobundle#tap('neosnippet.vim')
   inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
 
-  if neobundle#tap('unite.vim')
+  if neobundle#is_installed('unite.vim')
     imap <C-s> <Plug>(neosnippet_start_unite_snippet)
   endif
 
@@ -1550,7 +1550,7 @@ if neobundle#tap('eskk.vim')
     set imdisable
   endif
 
-  if neobundle#tap('skk.vim')
+  if neobundle#is_installed('skk.vim')
     " disable skk.vim
     " -> Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
@@ -1695,7 +1695,7 @@ if neobundle#tap('lightline.vim')
 
   let g:lightline = {}
 
-  if neobundle#tap('lightline-hybrid.vim')
+  if neobundle#is_installed('lightline-hybrid.vim')
     let g:lightline.colorscheme = 'hybrid'
   endif
 
@@ -1830,7 +1830,7 @@ if neobundle#tap('lightline.vim')
   endfunction "}}}
 
   function! MyFugitive() "{{{
-    if !neobundle#tap('vim-fugitive') || &ft == 'vimfiler'
+    if !neobundle#is_installed('vim-fugitive') || &ft == 'vimfiler'
       return ''
     endif
     let l:_ = fugitive#head()
@@ -2028,7 +2028,7 @@ if neobundle#tap('vim-asterisk')
   endfunction "}}}
   noremap <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
-  if neobundle#tap('vim-anzu')
+  if neobundle#is_installed('vim-anzu')
     map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
     map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)<Plug>(_ModSearchHistory)
     map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
@@ -2468,7 +2468,7 @@ if neobundle#tap('J6uil.vim')
   let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
   function! s:J6uilSaySetting() "{{{
-    if neobundle#tap('eskk.vim')
+    if neobundle#is_installed('eskk.vim')
       nmap     <buffer> <C-j> i<Plug>(eskk:toggle)
     else
       nnoremap <buffer> <C-j> <Nop>
@@ -2597,7 +2597,7 @@ if neobundle#tap('vim-watchdogs')
         \   'ruby' : 1,
         \ }
 
-  if neobundle#tap('vim-quickrun')
+  if neobundle#is_installed('vim-quickrun')
     " quickrun_configにwatchdogs.vimの設定を追加
     call watchdogs#setup(g:quickrun_config)
 
