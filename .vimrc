@@ -2090,7 +2090,7 @@ if neobundle#tap('vim-anzu')
   " nmap N <Plug>(anzu-mode-N)
   "
   " " 検索開始時にジャンプせず, その場でanzu-modeに移行する
-  " nmap <expr>* ':<C-u>call anzu#mode#start('<C-R><C-W>', '', '', '')<CR>'
+  " nmap <expr> * ':<C-u>call anzu#mode#start('<C-R><C-W>', '', '', '')<CR>'
 
   " コマンド結果出力画面にecho
   nmap n <Plug>(anzu-n-with-echo)
