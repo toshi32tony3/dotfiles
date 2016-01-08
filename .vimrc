@@ -1906,34 +1906,23 @@ if neobundle#tap('vim-asterisk')
   " g:incsearch#magic使用時の検索履歴問題の暫定対処
   " https://github.com/haya14busa/incsearch.vim/issues/22
   " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
-  " NOTE: star検索の対象になりそうなものをカバーしたつもりだが, 多分完全ではない
   function! s:ModSearchHistory() "{{{
-    if !exists('g:incsearch#magic')
-      return ''
-    endif
-
-    if g:incsearch#magic != '\v'
-      return ''
-    endif
-
-    if mode() != 'n'
-      return ''
-    endif
-
-    let l:lastHistory = histget('/', -1)
+    if !exists('g:incsearch#magic') | return '' | endif
+    if g:incsearch#magic != '\v'    | return '' | endif
+    if mode() != 'n'                | return '' | endif
 
     " hogeをstar検索すると履歴は\<hoge\>となる
-    "                           ^     ^  ←この位置のバックスラッシュを取り除く
+    "                           ^     ^  ←この'\'を取り除きたい
     "                           12345678 ←文字数
     "                                  ^ ←matchend
     "                           01234567 ←文字列のindex
     " NOTE: 単語区切りは単語を構成する文字のみ付加される
+    let l:lastHistory = histget('/', -1)
     let l:endIndex = matchend(l:lastHistory, '^\\<.*\\>')
     if  l:endIndex >= 0
       let l:lastHistory = '<' . l:lastHistory[2 : (l:endIndex - 3)] . '>'
             \                 . l:lastHistory[l:endIndex :]
     endif
-
     call histdel('/', -1)
     call histadd('/', l:lastHistory)
 
