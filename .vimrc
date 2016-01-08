@@ -978,16 +978,6 @@ nnoremap <A-Right> :next<CR>
 "-----------------------------------------------------------------------------
 " Scripts {{{
 
-" カウンタ
-function! s:MyCounter() "{{{
-  if !exists('s:myCounter')
-    let s:myCounter = 0
-  endif
-  let s:myCounter += 1
-  echomsg 'count: ' . s:myCounter
-endfunction "}}}
-command! MyCounter call s:MyCounter()
-
 " タイムスタンプの挿入
 function! s:PutTimeStamp() "{{{
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
