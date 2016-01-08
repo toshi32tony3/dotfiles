@@ -979,11 +979,11 @@ nnoremap <A-Right> :next<CR>
 " Scripts {{{
 
 " タイムスタンプの挿入
-function! s:PutTimeStamp() "{{{
+function! s:PutDateTime() "{{{
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
   normal! ""P
 endfunction "}}}
-command! PutTimeStamp call s:PutTimeStamp()
+command! PutDateTime call s:PutDateTime()
 
 " 区切り線+タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
