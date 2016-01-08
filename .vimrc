@@ -614,11 +614,6 @@ set fillchars=vert:\|
 " ファイルを開いた時点では折り畳みを全て閉じた状態で開く
 set foldlevelstart=0
 
-" " fold間の移動はzj, zkで行うのでzh, zlに閉じる/開くを割り当てる
-" " -> デフォルトのマッピングで十分な気がするのでコメントアウト
-" nnoremap zh zc
-" nnoremap zl zo
-
 " foldをまとめて閉じる(folds close)/まとめて開く(folds open)
 nnoremap <Leader>fc zM
 nnoremap <Leader>fo zR
