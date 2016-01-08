@@ -1959,78 +1959,87 @@ if neobundle#tap('vim-asterisk')
             \                 . l:lastHistory[l:endIndex :]
     endif
 
-    if match(l:lastHistory, '(') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '(', '\\(', 'g')
-    endif
+    " " 以下は, 検索オフセットに含まれる記号部分にバックスラッシュを付加する処理
+    " " そもそも要らなくないか？→要らない
+    " if      (match(l:lastHistory, '+'          ) >=  0) &&
+    "       \ (match(l:lastHistory, '\v/(b|e|s)+') == -1)
+    "   let l:lastHistory = substitute(l:lastHistory, '+', '\\+', 'g')
+    " endif
+    " if      (match(l:lastHistory, '-'          ) >=  0) &&
+    "       \ (match(l:lastHistory, '\v/(b|e|s)-') == -1)
+    "   let l:lastHistory = substitute(l:lastHistory, '-', '\\-', 'g')
+    " endif
 
-    if match(l:lastHistory, ')') >= 0
-      let l:lastHistory = substitute(l:lastHistory, ')', '\\)', 'g')
-    endif
-
-    if match(l:lastHistory, '|') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '|', '\\|', 'g')
-    endif
-
-    if match(l:lastHistory, '{') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '{', '\\{', 'g')
-    endif
-
-    if match(l:lastHistory, '}') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '}', '\\}', 'g')
-    endif
-
-    if      (match(l:lastHistory, '+'          ) >=  0) &&
-          \ (match(l:lastHistory, '\v/(b|e|s)+') == -1)
-      let l:lastHistory = substitute(l:lastHistory, '+', '\\+', 'g')
-    endif
-
-    if match(l:lastHistory, '=') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '=', '\\=', 'g')
-    endif
-
-    if match(l:lastHistory, '@') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '@', '\\@', 'g')
-    endif
-
-    if match(l:lastHistory, '?') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '?', '\\?', 'g')
-    endif
-
-    if match(l:lastHistory, '&') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '&', '\\&', 'g')
-    endif
-
-    if match(l:lastHistory, '%') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '%', '\\%', 'g')
-    endif
-
-    if    l:lastHistory == '<'
-      let l:lastHistory = substitute(l:lastHistory, '<', '\\<', 'g')
-    endif
-
-    if    l:lastHistory == '<='
-      let l:lastHistory = substitute(l:lastHistory, '<=', '\\<\\=', 'g')
-    endif
-
-    if    l:lastHistory == '<?'
-      let l:lastHistory = substitute(l:lastHistory, '<?', '\\<\\?', 'g')
-    endif
-
-    if    l:lastHistory == '>'
-      let l:lastHistory = substitute(l:lastHistory, '>', '\\>', 'g')
-    endif
-
-    if    l:lastHistory == '>='
-      let l:lastHistory = substitute(l:lastHistory, '>=', '\\>\\=', 'g')
-    endif
-
-    if    l:lastHistory == '>?'
-      let l:lastHistory = substitute(l:lastHistory, '>?', '\\>\\?', 'g')
-    endif
-
-    if    l:lastHistory == '<>'
-      let l:lastHistory = substitute(l:lastHistory, '<>', '\\<\\>', 'g')
-    endif
+    " " 以下は, 単語を構成しない文字にバックスラッシュを付加する処理
+    " " そもそも単語を構成しない文字をnormal modeでstar検索するか？しない気がする
+    "
+    " if match(l:lastHistory, '(') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '(', '\\(', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, ')') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, ')', '\\)', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '|') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '|', '\\|', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '{') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '{', '\\{', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '}') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '}', '\\}', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '=') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '=', '\\=', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '@') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '@', '\\@', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '?') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '?', '\\?', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '&') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '&', '\\&', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '%') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '%', '\\%', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '<'
+    "   let l:lastHistory = substitute(l:lastHistory, '<', '\\<', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '<='
+    "   let l:lastHistory = substitute(l:lastHistory, '<=', '\\<\\=', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '<?'
+    "   let l:lastHistory = substitute(l:lastHistory, '<?', '\\<\\?', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '>'
+    "   let l:lastHistory = substitute(l:lastHistory, '>', '\\>', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '>='
+    "   let l:lastHistory = substitute(l:lastHistory, '>=', '\\>\\=', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '>?'
+    "   let l:lastHistory = substitute(l:lastHistory, '>?', '\\>\\?', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '<>'
+    "   let l:lastHistory = substitute(l:lastHistory, '<>', '\\<\\>', 'g')
+    " endif
 
     call histdel('/', -1)
     call histadd('/', l:lastHistory)
