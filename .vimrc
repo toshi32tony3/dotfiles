@@ -699,6 +699,8 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
+" -> buftypeがnofileかつ特定のfiletypeの追加を試みたが,
+"    暴発する度にfiletypeを追加することになるのでやめた
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') | quit | endif
 
@@ -1034,8 +1036,11 @@ let s:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
   " normalかvisualの時のみ判定
   let     l:currentMode  = mode(1)
-  if      l:currentMode != 'n' && l:currentMode != 'no' &&
-        \ l:currentMode != 'v' && l:currentMode !=# 'V' && l:currentMode != ''
+  if      l:currentMode !=  'n' &&
+        \ l:currentMode != 'no' &&
+        \ l:currentMode !=# 'v' &&
+        \ l:currentMode !=# 'V' &&
+        \ l:currentMode != ''
     return
   endif
 
@@ -1415,6 +1420,7 @@ if neobundle#tap('vim-signify')
   let g:signify_update_on_focusgained = 1
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
+  " -> SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
   if has('vim_starting')
     command! -bar SignifyStart
           \ | SignifyToggle
@@ -1423,10 +1429,14 @@ if neobundle#tap('vim-signify')
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
+    " ↑で定義しているSignifyStartを使うまでautoloadは読み込まれない。
+    " そのため, on_post_sourceでマッピングする
     nmap ]c <Plug>(signify-next-hunk)zz
     nmap [c <Plug>(signify-prev-hunk)zz
 
     " 使わないコマンドを削除する
+    delcommand SignifyEnable
+    delcommand SignifyDisable
     delcommand SignifyDebug
     delcommand SignifyDebugDiff
     delcommand SignifyDebugUnknown
@@ -1539,8 +1549,8 @@ if neobundle#tap('neosnippet.vim')
     smapclear
     smapclear <buffer>
     smap <expr> <TAB>
-          \  neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-          \  "\<TAB>"
+          \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
+          \ "\<TAB>"
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
   endfunction
   autocmd MyAutoCmd BufEnter * call s:neosnippetSettings()
@@ -1936,84 +1946,100 @@ if neobundle#tap('vim-asterisk')
     endif
 
     let l:lastHistory = histget('/', -1)
+
+    " hogeを検索すると, 履歴は\<hoge\>となる
+    "                         ^     ^  ←この位置のバックスラッシュを取り除く
+    "                         12345678 ←文字数
+    "                                ^ ←matchend
+    "                         01234567 ←文字列のindex
+    " MEMO: 単語区切りは単語を構成する文字のみ付加される
     let l:endIndex = matchend(l:lastHistory, '^\\<.*\\>')
     if  l:endIndex >= 0
       let l:lastHistory = '<' . l:lastHistory[2 : (l:endIndex - 3)] . '>'
-            \                 . l:lastHistory[l:endIndex : ]
+            \                 . l:lastHistory[l:endIndex :]
     endif
 
-    if match(l:lastHistory, '(') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '(', '\\(', 'g')
-    endif
+    " " 以下は, 検索オフセットに含まれる記号部分にバックスラッシュを付加する処理
+    " " そもそも要らなくないか？→要らない
+    " if      (match(l:lastHistory, '+'          ) >=  0) &&
+    "       \ (match(l:lastHistory, '\v/(b|e|s)+') == -1)
+    "   let l:lastHistory = substitute(l:lastHistory, '+', '\\+', 'g')
+    " endif
+    " if      (match(l:lastHistory, '-'          ) >=  0) &&
+    "       \ (match(l:lastHistory, '\v/(b|e|s)-') == -1)
+    "   let l:lastHistory = substitute(l:lastHistory, '-', '\\-', 'g')
+    " endif
 
-    if match(l:lastHistory, ')') >= 0
-      let l:lastHistory = substitute(l:lastHistory, ')', '\\)', 'g')
-    endif
-
-    if match(l:lastHistory, '|') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '|', '\\|', 'g')
-    endif
-
-    if match(l:lastHistory, '{') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '{', '\\{', 'g')
-    endif
-
-    if match(l:lastHistory, '}') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '}', '\\}', 'g')
-    endif
-
-    if      (match(l:lastHistory, '+'          ) >=  0) &&
-          \ (match(l:lastHistory, '\v/(b|e|s)+') == -1)
-      let l:lastHistory = substitute(l:lastHistory, '+', '\\+', 'g')
-    endif
-
-    if match(l:lastHistory, '=') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '=', '\\=', 'g')
-    endif
-
-    if match(l:lastHistory, '@') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '@', '\\@', 'g')
-    endif
-
-    if match(l:lastHistory, '?') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '?', '\\?', 'g')
-    endif
-
-    if match(l:lastHistory, '&') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '&', '\\&', 'g')
-    endif
-
-    if match(l:lastHistory, '%') >= 0
-      let l:lastHistory = substitute(l:lastHistory, '%', '\\%', 'g')
-    endif
-
-    if    l:lastHistory == '<'
-      let l:lastHistory = substitute(l:lastHistory, '<', '\\<', 'g')
-    endif
-
-    if    l:lastHistory == '<='
-      let l:lastHistory = substitute(l:lastHistory, '<=', '\\<\\=', 'g')
-    endif
-
-    if    l:lastHistory == '<?'
-      let l:lastHistory = substitute(l:lastHistory, '<?', '\\<\\?', 'g')
-    endif
-
-    if    l:lastHistory == '>'
-      let l:lastHistory = substitute(l:lastHistory, '>', '\\>', 'g')
-    endif
-
-    if    l:lastHistory == '>='
-      let l:lastHistory = substitute(l:lastHistory, '>=', '\\>\\=', 'g')
-    endif
-
-    if    l:lastHistory == '>?'
-      let l:lastHistory = substitute(l:lastHistory, '>?', '\\>\\?', 'g')
-    endif
-
-    if    l:lastHistory == '<>'
-      let l:lastHistory = substitute(l:lastHistory, '<>', '\\<\\>', 'g')
-    endif
+    " " 以下は, 単語を構成しない文字にバックスラッシュを付加する処理
+    " " そもそも単語を構成しない文字をnormal modeでstar検索するか？しない気がする
+    "
+    " if match(l:lastHistory, '(') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '(', '\\(', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, ')') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, ')', '\\)', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '|') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '|', '\\|', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '{') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '{', '\\{', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '}') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '}', '\\}', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '=') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '=', '\\=', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '@') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '@', '\\@', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '?') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '?', '\\?', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '&') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '&', '\\&', 'g')
+    " endif
+    "
+    " if match(l:lastHistory, '%') >= 0
+    "   let l:lastHistory = substitute(l:lastHistory, '%', '\\%', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '<'
+    "   let l:lastHistory = substitute(l:lastHistory, '<', '\\<', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '<='
+    "   let l:lastHistory = substitute(l:lastHistory, '<=', '\\<\\=', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '<?'
+    "   let l:lastHistory = substitute(l:lastHistory, '<?', '\\<\\?', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '>'
+    "   let l:lastHistory = substitute(l:lastHistory, '>', '\\>', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '>='
+    "   let l:lastHistory = substitute(l:lastHistory, '>=', '\\>\\=', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '>?'
+    "   let l:lastHistory = substitute(l:lastHistory, '>?', '\\>\\?', 'g')
+    " endif
+    "
+    " if    l:lastHistory == '<>'
+    "   let l:lastHistory = substitute(l:lastHistory, '<>', '\\<\\>', 'g')
+    " endif
 
     call histdel('/', -1)
     call histadd('/', l:lastHistory)
@@ -2064,7 +2090,7 @@ if neobundle#tap('vim-anzu')
   " nmap N <Plug>(anzu-mode-N)
   "
   " " 検索開始時にジャンプせず, その場でanzu-modeに移行する
-  " nmap <expr>* ':<C-u>call anzu#mode#start('<C-R><C-W>', '', '', '')<CR>'
+  " nmap <expr> * ':<C-u>call anzu#mode#start('<C-R><C-W>', '', '', '')<CR>'
 
   " コマンド結果出力画面にecho
   nmap n <Plug>(anzu-n-with-echo)
@@ -2103,7 +2129,7 @@ endif "}}}
 if neobundle#tap('vim-signature')
 
   " " お試しとして, グローバルマークだけ使うようにしてみる
-  " " -> viminfoに直接書き込まれるためか, 消しても反映されないことが多々
+  " " -> viminfoに直接書き込まれるためか, マークの削除が反映されないことが多々
   " let g:SignatureIncludeMarks = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
   " _viminfoファイルからグローバルマークの削除を行う
@@ -2215,9 +2241,9 @@ if neobundle#tap('vim-startify')
   "   \ ]
 
   let g:startify_list_order = [
-        \   ['My bookmarks:'       ], 'bookmarks',
-        \   ['My sessions:'        ], 'sessions',
-        \   ['Recently used files:'], 'files',
+        \   ['My bookmarks:'          ], 'bookmarks',
+        \   ['My sessions:'           ], 'sessions',
+        \   ['Most recent used files:'], 'files',
         \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
@@ -2263,6 +2289,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_dm = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_fi = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_fm = 'Unite '       . g:u_hopt . g:u_sins
+  let g:u_opt_fr = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_gd = 'Unite '       . g:u_hopt
   let g:u_opt_gg = 'Unite '       . g:u_hopt            . g:u_sbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_sbuf . g:u_nqui
@@ -2282,6 +2309,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>dm ':<C-u>' . g:u_opt_dm . 'directory_mru'    . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
   nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
+  nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'         . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>' . g:u_opt_gd . 'gtags/def:'
   nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gg . 'vimgrep:%'        . '<CR>'
   nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gg . 'vimgrep:*'        . '<CR>'
@@ -2509,7 +2537,8 @@ if neobundle#tap('vim-markdown')
   " let g:vim_markdown_folding_disabled = 1
 
   " 折り畳みを1段階閉じた状態で開く
-  " -> autocmd FileTypeでfoldlevelstartを変えても遅いようなのでfoldlevelをいじる
+  " -> autocmd FileTypeでfoldlevelstartを変えても意味がないぽい
+  " -> foldlevelをいじる
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
@@ -2603,7 +2632,7 @@ endif "}}}
 
 " Vimで自動構文チェック(vim-watchdogs) {{{
 if neobundle#tap('vim-watchdogs')
-  " Caution: 裏で実行した結果を反映しているのか, pause系の処理があると固まる
+  " Caution: 裏で実行した結果を反映しているのか, 入力待ち系の処理があると固まる
 
   let g:watchdogs_check_BufWritePost_enable = 1
   let g:watchdogs_check_BufWritePost_enables = {
