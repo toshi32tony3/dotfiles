@@ -2289,6 +2289,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_dm = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_fi = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_fm = 'Unite '       . g:u_hopt . g:u_sins
+  let g:u_opt_fr = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_gd = 'Unite '       . g:u_hopt
   let g:u_opt_gg = 'Unite '       . g:u_hopt            . g:u_sbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_sbuf . g:u_nqui
@@ -2308,6 +2309,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>dm ':<C-u>' . g:u_opt_dm . 'directory_mru'    . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
   nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
+  nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'         . '<CR>'
   nnoremap <expr> <Leader>gd ':<C-u>' . g:u_opt_gd . 'gtags/def:'
   nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gg . 'vimgrep:%'        . '<CR>'
   nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gg . 'vimgrep:*'        . '<CR>'
