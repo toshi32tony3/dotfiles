@@ -2241,9 +2241,9 @@ if neobundle#tap('vim-startify')
   "   \ ]
 
   let g:startify_list_order = [
-        \   ['My bookmarks:'       ], 'bookmarks',
-        \   ['My sessions:'        ], 'sessions',
-        \   ['Recently used files:'], 'files',
+        \   ['My bookmarks:'          ], 'bookmarks',
+        \   ['My sessions:'           ], 'sessions',
+        \   ['Most recent used files:'], 'files',
         \ ]
 
   nnoremap ,, :<C-u>Startify<CR>
