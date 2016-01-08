@@ -1948,11 +1948,11 @@ if neobundle#tap('vim-asterisk')
 
     let l:lastHistory = histget('/', -1)
 
-    " hogeを検索すると, 履歴は\<hoge\>となる
-    "                         ^     ^  ←この位置のバックスラッシュを取り除く
-    "                         12345678 ←文字数
-    "                                ^ ←matchend
-    "                         01234567 ←文字列のindex
+    " hogeをstar検索すると履歴は\<hoge\>となる
+    "                           ^     ^  ←この位置のバックスラッシュを取り除く
+    "                           12345678 ←文字数
+    "                                  ^ ←matchend
+    "                           01234567 ←文字列のindex
     " MEMO: 単語区切りは単語を構成する文字のみ付加される
     let l:endIndex = matchend(l:lastHistory, '^\\<.*\\>')
     if  l:endIndex >= 0
