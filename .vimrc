@@ -1927,7 +1927,7 @@ if neobundle#tap('vim-asterisk')
     "                           12345678 ←文字数
     "                                  ^ ←matchend
     "                           01234567 ←文字列のindex
-    " MEMO: 単語区切りは単語を構成する文字のみ付加される
+    " NOTE: 単語区切りは単語を構成する文字のみ付加される
     let l:endIndex = matchend(l:lastHistory, '^\\<.*\\>')
     if  l:endIndex >= 0
       let l:lastHistory = '<' . l:lastHistory[2 : (l:endIndex - 3)] . '>'
