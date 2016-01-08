@@ -1036,8 +1036,11 @@ let s:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
   " normalかvisualの時のみ判定
   let     l:currentMode  = mode(1)
-  if      l:currentMode != 'n' && l:currentMode != 'no' &&
-        \ l:currentMode != 'v' && l:currentMode !=# 'V' && l:currentMode != ''
+  if      l:currentMode !=  'n' &&
+        \ l:currentMode != 'no' &&
+        \ l:currentMode !=# 'v' &&
+        \ l:currentMode !=# 'V' &&
+        \ l:currentMode != ''
     return
   endif
 
