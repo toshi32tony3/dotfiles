@@ -1068,8 +1068,8 @@ function! s:GetFoldName(line) "{{{
     " コメント行か, 末尾コメントか判別してFold名を切り出す
     let l:startIndex = match   (a:line, '\w')
     let l:endIndex   = matchend(a:line, '\v^("\ )')
-    let l:preIndex   = ((l:endIndex == -1) ? l:startIndex : l:endIndex)
-    let l:sufIndex   = (strlen(a:line) - ((l:endIndex == -1) ? 6 : 5))
+    let l:preIndex   = (l:endIndex == -1) ? l:startIndex : l:endIndex
+    let l:sufIndex   = strlen(a:line) - ((l:endIndex == -1) ? 6 : 5)
     return a:line[l:preIndex : l:sufIndex]
   elseif &ft == 'markdown'
     let l:foldName = split(a:line, "\<Space>")
