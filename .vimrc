@@ -614,11 +614,6 @@ set fillchars=vert:\|
 " ファイルを開いた時点では折り畳みを全て閉じた状態で開く
 set foldlevelstart=0
 
-" " foldをまとめて閉じる(folds close)/まとめて開く(folds open)
-" " -> デフォルトのマッピングで十分な気がするのでコメントアウト
-" nnoremap <Leader>fc zM
-" nnoremap <Leader>fo zR
-
 set foldmethod=marker
 if has('vim_starting')
   set commentstring=%s
