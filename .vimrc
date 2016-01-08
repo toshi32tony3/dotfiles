@@ -2129,7 +2129,7 @@ endif "}}}
 if neobundle#tap('vim-signature')
 
   " " お試しとして, グローバルマークだけ使うようにしてみる
-  " " -> viminfoに直接書き込まれるためか, 消しても反映されないことが多々
+  " " -> viminfoに直接書き込まれるためか, マークの削除が反映されないことが多々
   " let g:SignatureIncludeMarks = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
   " _viminfoファイルからグローバルマークの削除を行う
