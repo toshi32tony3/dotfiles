@@ -2434,7 +2434,9 @@ endif "}}}
 if neobundle#tap('dicwin-vim')
 
   let g:dicwin_no_default_mappings = 1
+  nmap <silent> <A-k>      <Nop>
   nmap <silent> <A-k><A-k> <Plug>(dicwin-cword)
+  imap <silent> <A-k>      <Nop>
   imap <silent> <A-k><A-k> <Plug>(dicwin-cword-i)
   nmap <silent> <A-k>c     <Plug>(dicwin-close)
   imap <silent> <A-k>c     <Plug>(dicwin-close-i)
