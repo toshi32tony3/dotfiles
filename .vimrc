@@ -1137,7 +1137,7 @@ function! s:GetFoldLevel() "{{{
     " markdownの場合, (現在の行 - 1)にfoldmarkerが含まれていれば, foldLevel+=1
     let l:foldLevel += (match(getline((line('.') - 1)), l:pattern) >= 0) ? 1 : 0
   else
-    let l:pattern = '\v\{\{\{$' " for match } } }
+    let l:pattern = '{{{$' " for match } } }
   endif
 
   " 現在の行にfoldmarkerが含まれていれば, foldLevel+=1
