@@ -1093,9 +1093,9 @@ function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " 前処理
   " ------------------------------------------------------------
-  let l:foldLevel = 0
+  let l:foldLevel         = 0
   let l:currentLineNumber = line('.')
-  let l:lastLineNumber = l:currentLineNumber
+  let l:lastLineNumber    = l:currentLineNumber
 
   " Viewを保存
   let l:savedView = winsaveview()
@@ -1161,7 +1161,7 @@ function! s:GetCurrentFold() "{{{
   endif
 
   " View/カーソル位置を保存
-  let l:savedView = winsaveview()
+  let l:savedView      = winsaveview()
   let l:cursorPosition = getcurpos()
 
   " モーションの失敗を前提にしているのでbelloffを使う
@@ -1246,7 +1246,7 @@ function! s:JumpFuncNameCForward() "{{{
   " Viewを保存
   let l:savedView = winsaveview()
 
-  let l:lastLine = line('.')
+  let l:lastLine  = line('.')
   execute "keepjumps normal! ]]"
 
   " 検索対象が居なければViewを戻して処理終了
@@ -1362,7 +1362,6 @@ function! s:ClipCurrentFuncName(funcName) "{{{
   " 選択範囲レジスタ(*)を使う
   let @* = a:funcName
   echo 'clipped: ' . a:funcName
-
 endfunction "}}}
 command! ClipCurrentFuncName
       \ let s:currentFunc = s:GetCurrentFuncC() |
@@ -1378,7 +1377,6 @@ function! s:PrintCurrentFuncName(funcName) "{{{
   let @" = a:funcName
   normal! ""P
   echo 'printed: ' . a:funcName
-
 endfunction "}}}
 command! PrintCurrentFuncName
       \ let s:currentFunc = s:GetCurrentFuncC() |
@@ -1740,9 +1738,9 @@ if neobundle#tap('lightline.vim')
         \ }
 
   function! MyModified() "{{{
-    return &ft =~ 'help\|vimfiler\' ? ''          :
-          \             &modified   ? "\<Space>+" :
-          \             &modifiable ? ''          : "\<Space>-"
+    return &ft =~  'help\|vimfiler\' ? ''          :
+          \              &modified   ? "\<Space>+" :
+          \              &modifiable ? ''          : "\<Space>-"
   endfunction "}}}
 
   function! MyReadonly() "{{{
