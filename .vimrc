@@ -99,12 +99,6 @@ set autoread
 " メッセージ省略設定
 set shortmess=aoOotTWI
 
-" " ノーマルモードで<Esc>するマッピングがあってもbellを鳴らさない
-" " -> 本当は鳴らすべきだが, search-offsetを使った時に鳴るのが気になるので...
-" " -> https://github.com/haya14busa/incsearch.vim/issues/105
-" " 直してもらったのでコメントアウト
-" set belloff=esc
-
 " カーソル上下に表示する最小の行数
 " -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
 " -> コードを読む時は大きく, 編集する時は小さくすると良いかも
