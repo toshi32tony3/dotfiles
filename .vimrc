@@ -1778,9 +1778,9 @@ if neobundle#tap('lightline.vim')
   endfunction "}}}
 
   function! MySKKMode() "{{{
-    " neobundle#is_sourced()を使っても動作することは確認したが,
     " 処理順を明確にするため, neobundle#hooks.on_post_source()を
     " 使ってプラグインの読み込み完了フラグを立てることにした
+    " -> 一応neobundle#is_sourced()を使っても問題無く動くことは確認した
     if !exists('s:IsNeoCompleteLoaded') || !exists('s:IsEskkLoaded')
       return ''
     endif
