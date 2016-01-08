@@ -699,6 +699,8 @@ nnoremap <C-w><C-w> :<C-u>close<CR>
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
+" -> buftypeがnofileかつ特定のfiletypeの追加を試みたが,
+"    暴発する度にfiletypeを追加することになるのでやめた
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') | quit | endif
 
