@@ -2537,7 +2537,8 @@ if neobundle#tap('vim-markdown')
   " let g:vim_markdown_folding_disabled = 1
 
   " 折り畳みを1段階閉じた状態で開く
-  " -> autocmd FileTypeでfoldlevelstartを変えても遅いようなのでfoldlevelをいじる
+  " -> autocmd FileTypeでfoldlevelstartを変えても意味がないぽい
+  " -> foldlevelをいじる
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
@@ -2631,7 +2632,7 @@ endif "}}}
 
 " Vimで自動構文チェック(vim-watchdogs) {{{
 if neobundle#tap('vim-watchdogs')
-  " Caution: 裏で実行した結果を反映しているのか, pause系の処理があると固まる
+  " Caution: 裏で実行した結果を反映しているのか, 入力待ち系の処理があると固まる
 
   let g:watchdogs_check_BufWritePost_enable = 1
   let g:watchdogs_check_BufWritePost_enables = {
