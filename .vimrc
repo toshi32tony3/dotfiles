@@ -854,7 +854,12 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
             \ g:local_rc#current_src_dir . '\.tags\' . g:local_rc#ctags_name_list[l:item] .
             \ ' -R ' .
             \ g:local_rc#current_src_dir . '\' . l:item
-      call system(l:updateCommand)
+      if has('win32')
+        " 処理中かどうかわかるように/minを使う
+        execute '!start /min ' . l:updateCommand
+      else
+        call system(l:updateCommand)
+      endif
     endfor
   endfunction "}}}
   command! UpdateCtags call s:UpdateCtags()
