@@ -779,6 +779,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     " tagsをセット
     set tags=
     for l:item in g:local_rc#ctags_list
+      if l:item == '' | break | endif
       let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
     endfor
     " 1文字目の','を削除
@@ -792,10 +793,12 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     set path=
     " 起点なしのpath登録
     for l:item in g:local_rc#other_dir_path_list
+      if l:item == '' | break | endif
       let &path = &path . ',' . l:item
     endfor
     " g:local_rc#current_src_dirを起点にしたpath登録
     for l:item in g:local_rc#current_src_dir_path_list
+      if l:item == '' | break | endif
       let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
@@ -806,12 +809,14 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     set cdpath=
     " 起点なしのcdpath登録
     for l:item in g:local_rc#other_dir_cdpath_list
+      if l:item == '' | break | endif
       let &cdpath = &cdpath . ',' . l:item
     endfor
     let &cdpath = &cdpath . ',' . g:local_rc#base_dir
     let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir
     " g:local_rc#current_src_dirを起点にしたcdpath登録
     for l:item in g:local_rc#current_src_dir_cdpath_list
+      if l:item == '' | break | endif
       let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
@@ -846,9 +851,8 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
       call    mkdir(g:local_rc#ctags_dir)
     endif
     for l:item in g:local_rc#ctags_list
-      if !has_key(g:local_rc#ctags_name_list, l:item)
-        continue
-      endif
+      if l:item == '' | break | endif
+      if !has_key(g:local_rc#ctags_name_list, l:item) | continue | endif
       let l:updateCommand =
             \ 'ctags -f ' .
             \ g:local_rc#current_src_dir . '\.tags\' . g:local_rc#ctags_name_list[l:item] .
