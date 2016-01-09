@@ -939,21 +939,21 @@ noremap  <A-Down>  <Nop>
 noremap  <A-Up>    <Nop>
 noremap  <A-Right> <Nop>
 
-" せっかくなので, カーソルキーでウィンドウ間を移動
+" ただ潰すのは勿体無いので,         カーソルキーでウィンドウ間を移動
 nnoremap <Left>  <C-w>h
 nnoremap <Down>  <C-w>j
 nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
-" せっかくなので, Shift + カーソルキーでbprevious/bnext
+" ただ潰すのは勿体無いので, Shift + カーソルキーでbprevious/bnext
 nnoremap <S-Left>  :bprevious<CR>
 nnoremap <S-Right> :bnext<CR>
 
-" せっかくなので,  Ctrl + カーソルキーでcprevious/cnext
+" ただ潰すのは勿体無いので,  Ctrl + カーソルキーでcprevious/cnext
 nnoremap <C-Left>  :cprevious<CR>
 nnoremap <C-Right> :cnext<CR>
 
-" せっかくなので,   Alt + カーソルキーで previous/next
+" ただ潰すのは勿体無いので,   Alt + カーソルキーで previous/next
 nnoremap <A-Left>  :previous<CR>
 nnoremap <A-Right> :next<CR>
 
