@@ -155,8 +155,6 @@ set helplang=ja
 NeoBundle 'Shougo/vimproc.vim', {
       \   'build' : {
       \     'windows' : 'tools\\update-dll-mingw',
-      \     'mac'     : 'make -f make_mac.mak',
-      \     'unix'    : 'make -f make_unix.mak',
       \   },
       \ }
 
@@ -177,6 +175,7 @@ NeoBundleLazy 'cohama/agit.vim', {
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'on_cmd' : 'Gita',
       \ }
+NeoBundle 'rhysd/committia.vim'
 
 "}}}
 "-------------------------------------------------------------------
@@ -719,8 +718,38 @@ xnoremap j gj
 nnoremap k gk
 xnoremap k gk
 
-" 現在開いているファイルのディレクトリに移動
-command! LCD echo 'change directory to:' <bar> lcd %:p:h
+" :cdのディレクトリ名の補完に'cdpath'を使うようにする
+" http://whileimautomaton.net/2007/09/24141900
+function! s:CommandCompleteCDPath(arglead, cmdline, cursorpos)
+  let l:pattern = substitute($HOME, '\\', '\\\\','g')
+  return split(substitute(globpath(&cdpath, a:arglead . '*/'), l:pattern, '~', 'g'), "\n")
+endfunction
+
+" 引数なし : 現在開いているファイルのディレクトリに移動
+" 引数あり : 指定したディレクトリに移動
+function! s:LCD(...)
+  if a:0 == 0
+    execute 'lcd ' . expand('%:p:h')
+  else
+    execute 'lcd ' . a:1
+  endif
+  echo 'change directory to: ' .
+        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
+endfunction
+command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? LCD call s:LCD(<f-args>)
+
+" 引数なし : 現在開いているファイルのディレクトリに移動
+" 引数あり : 指定したディレクトリに移動
+function! s:CD(...)
+  if a:0 == 0
+    execute 'cd ' . expand('%:p:h')
+  else
+    execute 'cd ' . a:1
+  endif
+  echo 'change directory to: ' .
+        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
+endfunction
+command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
 
 " " 開いたファイルと同じ場所へ移動する
 " " -> startify/vimfiler/:LCDで十分なのでコメントアウト
