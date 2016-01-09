@@ -604,19 +604,31 @@ if has('kaoriya')
 
 endif
 
-" 折り畳み機能の設定
+" foldmarkerを使って折り畳みを作成する
+set foldmethod=marker
+
+" 基本的にはfoldmarkerに余計なものを付けない
+if has('vim_starting')
+  set commentstring=%s
+endif
+
+" filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
+autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
+
+" 画面左端に折り畳み状態, レベルを表示する列を1列設ける
 set foldcolumn=1
-set foldnestmax=1
+
+" foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
+" -> marker以外使わない気がするけれど, 小さくしておく
+set foldnestmax=2
+
+" Default: fillchars=vert:\|,fold:-
+" foldを指定すると折り畳み行がウィンドウ幅まで指定した文字でfillされる
+" -> fill不要なので, fillcharsからfoldを削除
 set fillchars=vert:\|
 
 " ファイルを開いた時点では折り畳みを全て閉じた状態で開く
 set foldlevelstart=0
-
-set foldmethod=marker
-if has('vim_starting')
-  set commentstring=%s
-endif
-autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " 折りたたみ機能をON/OFF
 nnoremap <silent> <F9> :<C-u>set foldenable! foldenable?<CR>
