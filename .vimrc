@@ -335,13 +335,15 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
 " (調査中)
 " on_pathでvimfiler.vimを読み込む設定にしておき, vimfilerがsourceされる前に
 " git commitすると何故かcommittia.vimでエラーが出た
-" -> unite-outlineにon_pathの設定を移しても同じエラーが出た
-"    -> vimfilerは関係ない
-"    -> neobundleの何かと処理がぶつかるのか？
-"
+
 " function committia#open[12]..<SNR>79_open_singlecolumn[3]..<SNR>79_open_diff_window[1]..<SNR>79_open_window の処理中にエラーが検出されました:
 " 行    8:
 " E21: 'modifiable' がオフなので, 変更できません
+
+" -> unite-outlineにon_pathの設定を移しても同じエラーが出た
+" -> vimfilerは関係ない
+" -> neobundleの何かと処理がぶつかるのか？
+" -> committia.vimのsetlocal nomodifiableが関係あるぽい。そりゃそうか
 
 "}}}
 "-------------------------------------------------------------------
