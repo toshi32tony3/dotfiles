@@ -106,7 +106,7 @@ if has('vim_starting')
   set scrolloff=100
 endif
 let s:scrolloffOn = 1
-function! s:ToggleScrollOffSet() "{{{
+function! s:ToggleScrollOffSet()
   if s:scrolloffOn == 1
     setlocal scrolloff=0   scrolloff?
     let s:scrolloffOn = 0
@@ -114,7 +114,7 @@ function! s:ToggleScrollOffSet() "{{{
     setlocal scrolloff=100 scrolloff?
     let s:scrolloffOn = 1
   endif
-endfunction "}}}
+endfunction
 nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
 
 " vimdiff用オプション
@@ -515,10 +515,10 @@ set clipboard=unnamed
 
 " 現在開いているファイルのパスなどを選択範囲レジスタ(*)に入れる
 " https://gist.github.com/pinzolo/8168337
-function! s:Clip(data) "{{{
+function! s:Clip(data)
   let @* = a:data
   echo 'clipped: ' . a:data
-endfunction "}}}
+endfunction
 
 " 現在開いているファイルのフルパス(ファイル名含む)をレジスタへ
 command! ClipPath call s:Clip(expand('%:p'))
@@ -530,11 +530,11 @@ command! ClipFile call s:Clip(expand('%:t'))
 command! ClipDir  call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果を選択範囲レジスタ(*)に入れる
-function! s:ClipCommandOutput(cmd) "{{{
+function! s:ClipCommandOutput(cmd)
   redir @*>
   silent execute a:cmd
   redir END
-endfunction "}}}
+endfunction
 command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<f-args>)
 
 "}}}
@@ -591,7 +591,7 @@ if has('kaoriya')
 
   " 透明度をスイッチ
   let s:transparencyOn = 0
-  function! s:ToggleTransParency() "{{{
+  function! s:ToggleTransParency()
     if s:transparencyOn == 1
       set transparency=255 transparency?
       let s:transparencyOn = 0
@@ -599,8 +599,8 @@ if has('kaoriya')
       set transparency=220 transparency?
       let s:transparencyOn = 1
     endif
-  endfunction "}}}
-  nnoremap <silent> <F12> :<C-u>call <SID>ToggleTransParency<CR>
+  endfunction
+  nnoremap <silent> <F12> :<C-u>call <SID>ToggleTransParency()<CR>
 
 endif
 
@@ -626,14 +626,14 @@ nnoremap <silent> <F9> :<C-u>set foldenable! foldenable?<CR>
 let s:saveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
 if filereadable(s:saveWinposFile)
   autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
-  function! s:SaveWindow() "{{{
+  function! s:SaveWindow()
     let s:options = [
           \   'set columns=' . &columns,
           \   'set lines='   . &lines,
           \   'winpos ' . getwinposx() . ' ' . getwinposy(),
           \ ]
     call writefile(s:options, s:saveWinposFile)
-  endfunction "}}}
+  endfunction
   execute 'source ' s:saveWinposFile
 endif
 
@@ -690,10 +690,10 @@ autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') | quit | endif
 
 " 簡単にhelpを閉じる, 抜ける
-function! s:HelpSettings() "{{{
+function! s:HelpSettings()
   nnoremap <buffer> <F1>  :<C-u>q<CR>
   nnoremap <buffer> <Esc> <C-w>j
-endfunction "}}}
+endfunction
 autocmd MyAutoCmd FileType help call s:HelpSettings()
 
 " 検索テキストハイライトを消す
@@ -737,9 +737,9 @@ nnoremap <Leader>gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
 " 引数が2つ以上 : 引数指定ファイル同士の比較
 " http://koturn.hatenablog.com/entry/2013/08/10/034242
-function! s:TabDiff(...) "{{{
+function! s:TabDiff(...)
   if a:0 == 1
-    tabedit %:p
+    tabnew %:p
     execute 'rightbelow vertical diffsplit ' . a:1
   else
     execute 'tabedit ' a:1
@@ -747,7 +747,7 @@ function! s:TabDiff(...) "{{{
       execute 'rightbelow vertical diffsplit ' . l:file
     endfor
   endif
-endfunction "}}}
+endfunction
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 "}}}
@@ -870,11 +870,11 @@ nnoremap q <Nop>
 nnoremap Q q
 
 " F3 command history (使わないが, 一応退避)
-nnoremap <F3> <Esc>q:
+nnoremap <F3> q:
 nnoremap q:   <Nop>
 
 " F4  search history (使わないが, 一応退避)
-nnoremap <F4> <Esc>q/
+nnoremap <F4> q/
 nnoremap q/   <Nop>
 nnoremap q?   <Nop>
 
@@ -1340,7 +1340,6 @@ function! s:ClipCurrentFuncName(funcName) "{{{
     echo 'There is no function nearby cursor.'
     return
   endif
-
   " 選択範囲レジスタ(*)を使う
   let @* = a:funcName
   echo 'clipped: ' . a:funcName
@@ -1354,7 +1353,6 @@ function! s:PrintCurrentFuncName(funcName) "{{{
     echo 'There is no function nearby cursor.'
     return
   endif
-
   " 無名レジスタ(")を使う
   let @" = a:funcName
   normal! ""P
@@ -1419,11 +1417,10 @@ endif "}}}
 " VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
-  function! s:AgitSettings() "{{{
+  function! s:AgitSettings()
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
     nmap <buffer> Rv <Plug>(agit-git-revert)
-
-  endfunction "}}}
+  endfunction
   autocmd MyAutoCmd FileType agit          call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
 
@@ -1601,7 +1598,7 @@ if neobundle#tap('eskk.vim')
   nmap <C-c><C-c>  cc<Plug>(eskk:toggle)
   nmap <A-c>        C<Plug>(eskk:toggle)
 
-  function! s:EskkInitialPreSettings() "{{{
+  function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
     " hankaku -> zenkaku
     call t.add_map('~',  '～')
@@ -1613,23 +1610,19 @@ if neobundle#tap('eskk.vim')
     call t.add_map('z.', '.')
     call t.add_map('z?', '?')
     call eskk#register_mode_table('hira', t)
-  endfunction "}}}
+  endfunction
   autocmd MyAutoCmd User eskk-initialize-pre call s:EskkInitialPreSettings()
 
   " skk-jisyoをソートしたい
   if filereadable(expand('~/dotfiles/.skk-jisyo'))
-    function! s:SortSKKDictionary() "{{{
+    function! s:SortSKKDictionary()
       let l:savedView = winsaveview()
       execute "keepjumps normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
       execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>"
       call winrestview(l:savedView)
       echo 'ソートしました!!'
-    endfunction "}}}
-
-    function! s:SKKDictionarySettings() "{{{
-      command! -buffer SortSKKDictionary call s:SortSKKDictionary()
-    endfunction "}}}
-    autocmd MyAutoCmd FileType skkdict call s:SKKDictionarySettings()
+    endfunction
+    autocmd MyAutoCmd FileType skkdict command! -buffer SortSKKDictionary call s:SortSKKDictionary()
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
@@ -1717,17 +1710,17 @@ if neobundle#tap('lightline.vim')
         \   'currentfunc'  : 'MyCurrentFunc',
         \ }
 
-  function! MyModified() "{{{
+  function! MyModified()
     return &ft =~  'help\|vimfiler\' ? ''          :
           \              &modified   ? "\<Space>+" :
           \              &modifiable ? ''          : "\<Space>-"
-  endfunction "}}}
+  endfunction
 
-  function! MyReadonly() "{{{
+  function! MyReadonly()
     return &ft !~? 'help\|vimfiler\' && &readonly ? "\<Space>\u2B64" : ''
-  endfunction "}}}
+  endfunction
 
-  function! MyFilename() "{{{
+  function! MyFilename()
     " 以下の条件を満たすと処理負荷が急激に上がる。理由は不明
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており, ファイル名をフルパス(%:p)出力
@@ -1737,25 +1730,25 @@ if neobundle#tap('lightline.vim')
           \  '' != expand('%:t') ? expand('%:t') : '[No Name]') .
           \ ('' != MyReadonly()  ? MyReadonly()  : ''         ) .
           \ ('' != MyModified()  ? MyModified()  : ''         )
-  endfunction "}}}
+  endfunction
 
-  function! MyFileformat() "{{{
+  function! MyFileformat()
     return winwidth(0) > 70 ? &fileformat : ''
-  endfunction "}}}
+  endfunction
 
-  function! MyFiletype() "{{{
+  function! MyFiletype()
     return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype : 'no ft') : ''
-  endfunction "}}}
+  endfunction
 
-  function! MyFileencoding() "{{{
+  function! MyFileencoding()
     return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
-  endfunction "}}}
+  endfunction
 
-  function! MyMode() "{{{
+  function! MyMode()
     return winwidth(0) > 30 ? lightline#mode() : ''
-  endfunction "}}}
+  endfunction
 
-  function! MySKKMode() "{{{
+  function! MySKKMode()
     " 処理順を明確にするため, neobundle#hooks.on_post_source()を
     " 使ってプラグインの読み込み完了フラグを立てることにした
     " -> 一応neobundle#is_sourced()を使っても問題無く動くことは確認した
@@ -1798,23 +1791,23 @@ if neobundle#tap('lightline.vim')
     let b:LastMode = l:CurrentMode
 
     return winwidth(0) > 30 ? l:CurrentMode : ''
-  endfunction "}}}
+  endfunction
 
-  function! MyCurrentFunc() "{{{
+  function! MyCurrentFunc()
     if &ft == 'vim' || &ft == 'markdown'
       return winwidth(0) > 100 ? s:currentFold : ''
     else
       return winwidth(0) > 100 ? s:currentFunc : ''
     endif
-  endfunction "}}}
+  endfunction
 
-  function! MyFugitive() "{{{
+  function! MyFugitive()
     if !neobundle#is_installed('vim-fugitive') || &ft == 'vimfiler'
       return ''
     endif
     let l:_ = fugitive#head()
     return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
-  endfunction "}}}
+  endfunction
 
 endif "}}}
 
@@ -1840,7 +1833,7 @@ endif "}}}
 if has('kaoriya')
 
   let s:fullscreenOn = 0
-  function! s:ToggleScreenMode() "{{{
+  function! s:ToggleScreenMode()
     if s:fullscreenOn
       execute 'ScreenMode 0'
       let s:fullscreenOn = 0
@@ -1848,8 +1841,8 @@ if has('kaoriya')
       execute 'ScreenMode 6'
       let s:fullscreenOn = 1
     endif
-  endfunction "}}}
-  nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode<CR>
+  endfunction
+  nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
 
 endif "}}}
 
@@ -1885,7 +1878,7 @@ if neobundle#tap('vim-asterisk')
   " g:incsearch#magic使用時の検索履歴問題の暫定対処
   " https://github.com/haya14busa/incsearch.vim/issues/22
   " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
-  function! s:ModSearchHistory() "{{{
+  function! s:ModSearchHistory()
     if !exists('g:incsearch#magic') | return '' | endif
     if g:incsearch#magic != '\v'    | return '' | endif
     if mode() != 'n'                | return '' | endif
@@ -1906,12 +1899,11 @@ if neobundle#tap('vim-asterisk')
     call histadd('/', l:lastHistory)
 
     return ''
-  endfunction "}}}
+  endfunction
   noremap <silent> <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
-  command! ModSearchHistory call s:ModSearchHistory()
 
   " star-search対象をクリップボードに入れる
-  function! s:ClipCword(data) "{{{
+  function! s:ClipCword(data)
     let    l:currentMode  = mode(1)
     if     l:currentMode == 'n'
       let @* = a:data
@@ -1926,7 +1918,7 @@ if neobundle#tap('vim-asterisk')
     endif
     echomsg 'You can use ClipCword() on following modes : n/no/v/V/CTRL-V'
     return ''
-  endfunction "}}}
+  endfunction
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
   " 暫定対応として<silent>を追加した
@@ -2077,6 +2069,7 @@ if neobundle#tap('caw.vim')
       execute "normal `[V`]\<Plug>(caw:i:toggle)"
     endif
   endfunction
+
   function! neobundle#hooks.on_source(bundle)
     call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
   endfunction
@@ -2222,15 +2215,13 @@ if neobundle#tap('unite.vim')
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory_mru',             'vimfiler')
 
-    function! s:UniteSettings() "{{{
-      imap <buffer> <Esc> <Plug>(unite_insert_leave)
-      nmap <buffer> <Esc> <Plug>(unite_exit)
-
+    function! s:UniteSettings()
       " <Leader>がデフォルトマッピングで使用されていた場合の対策
       nnoremap <buffer> <Leader>         <Nop>
       nnoremap <buffer> <Leader><Leader> <Nop>
-
-    endfunction "}}}
+      imap     <buffer> <Esc> <Plug>(unite_insert_leave)
+      nmap     <buffer> <Esc> <Plug>(unite_exit)
+    endfunction
     autocmd MyAutoCmd FileType unite call s:UniteSettings()
   endfunction
 
@@ -2272,18 +2263,17 @@ if neobundle#tap('vimfiler.vim')
   nnoremap ,c :<C-u>VimFilerCurrentDir<CR>
 
   " vimfilerのマッピングを一部変更
-  function! s:VimfilerSettings() "{{{
-    " カレントディレクトリを開く
-    nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
-
-    " grepはUniteを使うので潰しておく
-    nnoremap <buffer> gr <Nop>
-
+  function! s:VimfilerSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
     nnoremap <buffer> <Leader>         <Nop>
     nnoremap <buffer> <Leader><Leader> <Nop>
 
-  endfunction "}}}
+    " grepはUniteを使うので潰しておく
+    nnoremap <buffer> gr <Nop>
+
+    " カレントディレクトリを開く
+    nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
+  endfunction
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
 endif "}}}
@@ -2308,9 +2298,9 @@ if neobundle#tap('scratch.vim')
   nmap gS <Plug>(scratch-insert-clear)
   xmap gS <Plug>(scratch-selection-clear)
 
-  function! s:ScratchVimSettings() "{{{
+  function! s:ScratchVimSettings()
     nnoremap <buffer> <Esc> <C-w>j
-  endfunction "}}}
+  endfunction
   autocmd MyAutoCmd FileType scratch call s:ScratchVimSettings()
 
   function! neobundle#hooks.on_post_source(bundle)
@@ -2337,9 +2327,9 @@ if neobundle#tap('dicwin-vim')
 
   if filereadable(expand('~/vimfiles/dict/gene.txt'))
     autocmd MyAutoCmd BufRead gene.txt setlocal filetype=dicwin
-    function! s:DicwinSettings() "{{{
+    function! s:DicwinSettings()
       nnoremap <buffer> <Esc> :<C-u>q<CR>
-    endfunction "}}}
+    endfunction
     autocmd MyAutoCmd FileType dicwin call s:DicwinSettings()
   endif
 
@@ -2368,10 +2358,10 @@ if neobundle#tap('TweetVim')
 
   let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
 
-  function! s:TweetVimSettings() "{{{
+  function! s:TweetVimSettings()
     nnoremap <buffer> <C-CR>     :<C-u>TweetVimSay<CR>
     nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
-  endfunction "}}}
+  endfunction
   autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
 
 endif "}}}
@@ -2381,14 +2371,15 @@ if neobundle#tap('J6uil.vim')
 
   let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
-  function! s:J6uilSaySetting() "{{{
+  function! s:J6uilSaySetting()
     if neobundle#is_installed('eskk.vim')
       nmap     <buffer> <C-j> i<Plug>(eskk:toggle)
     else
       nnoremap <buffer> <C-j> <Nop>
     endif
-  endfunction "}}}
+  endfunction
   autocmd MyAutoCmd FileType J6uil_say call s:J6uilSaySetting()
+
 endif "}}}
 
 " ファイルをブラウザで開く(previm) {{{
