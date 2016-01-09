@@ -778,125 +778,122 @@ nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('cword'))<CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/local.rc.vim
-if filereadable(expand('~/localfiles/local.rc.vim'))
 
-  function! s:SetSrcDir() "{{{
-    let g:local_rc#src_dir         = g:local_rc#src_list[g:local_rc#src_index]
-    let g:local_rc#current_src_dir = g:local_rc#base_dir . '\' . g:local_rc#src_dir
-    let g:local_rc#ctags_dir       = g:local_rc#current_src_dir . '\.tags'
-  endfunction "}}}
+function! s:SetSrcDir() "{{{
+  let g:local_rc#src_dir         = g:local_rc#src_list[g:local_rc#src_index]
+  let g:local_rc#current_src_dir = g:local_rc#base_dir . '\' . g:local_rc#src_dir
+  let g:local_rc#ctags_dir       = g:local_rc#current_src_dir . '\.tags'
+endfunction "}}}
 
-  function! s:SetTags() "{{{
-    " tagsをセット
-    set tags=
-    for l:item in g:local_rc#ctags_list
-      if l:item == '' | break | endif
-      let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
-    endfor
-    " 1文字目の','を削除
-    if &tags != '' | let &tags = &tags[1:] | endif
-    " GTAGSROOTの登録
-    " -> GNU GLOBALのタグはプロジェクトルートで生成する
-    let $GTAGSROOT = g:local_rc#current_src_dir
-  endfunction "}}}
+function! s:SetTags() "{{{
+  " tagsをセット
+  set tags=
+  for l:item in g:local_rc#ctags_list
+    if l:item == '' | break | endif
+    let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
+  endfor
+  " 1文字目の','を削除
+  if &tags != '' | let &tags = &tags[1:] | endif
+  " GTAGSROOTの登録
+  " -> GNU GLOBALのタグはプロジェクトルートで生成する
+  let $GTAGSROOT = g:local_rc#current_src_dir
+endfunction "}}}
 
-  function! s:SetPathList() "{{{
-    set path=
-    " 起点なしのpath登録
-    for l:item in g:local_rc#other_dir_path_list
-      if l:item == '' | break | endif
-      let &path = &path . ',' . l:item
-    endfor
-    " g:local_rc#current_src_dirを起点にしたpath登録
-    for l:item in g:local_rc#current_src_dir_path_list
-      if l:item == '' | break | endif
-      let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
-    endfor
-    " 1文字目の','を削除
-    if &path != '' | let &path = &path[1:] | endif
-  endfunction "}}}
+function! s:SetPathList() "{{{
+  set path=
+  " 起点なしのpath登録
+  for l:item in g:local_rc#other_dir_path_list
+    if l:item == '' | break | endif
+    let &path = &path . ',' . l:item
+  endfor
+  " g:local_rc#current_src_dirを起点にしたpath登録
+  for l:item in g:local_rc#current_src_dir_path_list
+    if l:item == '' | break | endif
+    let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
+  endfor
+  " 1文字目の','を削除
+  if &path != '' | let &path = &path[1:] | endif
+endfunction "}}}
 
-  function! s:SetCDPathList() "{{{
-    set cdpath=
-    " 起点なしのcdpath登録
-    for l:item in g:local_rc#other_dir_cdpath_list
-      if l:item == '' | break | endif
-      let &cdpath = &cdpath . ',' . l:item
-    endfor
-    let &cdpath = &cdpath . ',' . g:local_rc#base_dir
-    let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir
-    " g:local_rc#current_src_dirを起点にしたcdpath登録
-    for l:item in g:local_rc#current_src_dir_cdpath_list
-      if l:item == '' | break | endif
-      let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
-    endfor
-    " 1文字目の','を削除
-    if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
-  endfunction "}}}
+function! s:SetCDPathList() "{{{
+  set cdpath=
+  " 起点なしのcdpath登録
+  for l:item in g:local_rc#other_dir_cdpath_list
+    if l:item == '' | break | endif
+    let &cdpath = &cdpath . ',' . l:item
+  endfor
+  let &cdpath = &cdpath . ',' . g:local_rc#base_dir
+  let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir
+  " g:local_rc#current_src_dirを起点にしたcdpath登録
+  for l:item in g:local_rc#current_src_dir_cdpath_list
+    if l:item == '' | break | endif
+    let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
+  endfor
+  " 1文字目の','を削除
+  if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
+endfunction "}}}
 
-  " 初回のtags, path設定
-  autocmd MyAutoCmd VimEnter *
-        \   call s:SetSrcDir()
-        \ | call s:SetTags()
-        \ | call s:SetPathList()
-        \ | call s:SetCDPathList()
+" 初回のtags, path設定
+autocmd MyAutoCmd VimEnter *
+      \   call s:SetSrcDir()
+      \ | call s:SetTags()
+      \ | call s:SetPathList()
+      \ | call s:SetCDPathList()
 
-  " ソースコードをスイッチ
-  function! s:SwitchSource() "{{{
-    let g:local_rc#src_index += 1
-    if  g:local_rc#src_index >= len(g:local_rc#src_list)
-      let g:local_rc#src_index = 0
-    endif
-    call s:SetSrcDir()
-    call s:SetTags()
-    call s:SetPathList()
-    call s:SetCDPathList()
-    " ソースコード切り替え後, バージョン名を出力
-    echo 'switch source to: ' . g:local_rc#src_dir
-  endfunction "}}}
-  nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
+" ソースコードをスイッチ
+function! s:SwitchSource() "{{{
+  let g:local_rc#src_index += 1
+  if  g:local_rc#src_index >= len(g:local_rc#src_list)
+    let g:local_rc#src_index = 0
+  endif
+  call s:SetSrcDir()
+  call s:SetTags()
+  call s:SetPathList()
+  call s:SetCDPathList()
+  " ソースコード切り替え後, バージョン名を出力
+  echo 'switch source to: ' . g:local_rc#src_dir
+endfunction "}}}
+nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
 
-  " ctagsをアップデート
-  function! s:UpdateCtags() "{{{
-    if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
-    if !isdirectory(g:local_rc#ctags_dir)
-      call    mkdir(g:local_rc#ctags_dir)
-    endif
-    for l:item in g:local_rc#ctags_list
-      if l:item == '' | break | endif
-      if !has_key(g:local_rc#ctags_name_list, l:item) | continue | endif
-      let l:updateCommand =
-            \ 'ctags -f ' .
-            \ g:local_rc#current_src_dir . '\.tags\' . g:local_rc#ctags_name_list[l:item] .
-            \ ' -R ' .
-            \ g:local_rc#current_src_dir . '\' . l:item
-      if has('win32')
-        " 処理中かどうかわかるように/minを使う
-        execute '!start /min ' . l:updateCommand
-      else
-        call system(l:updateCommand)
-      endif
-    endfor
-  endfunction "}}}
-  command! UpdateCtags call s:UpdateCtags()
-
-  " GNU GLOBALのタグをアップデート
-  function! s:UpdateGtags() "{{{
-    if !executable('gtags') | echomsg 'gtagsが見つかりません' | return | endif
-    let l:currentDir = getcwd()
-    execute 'cd ' . $GTAGSROOT
-    let l:updateCommand = 'gtags -iv'
+" ctagsをアップデート
+function! s:UpdateCtags() "{{{
+  if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
+  if !isdirectory(g:local_rc#ctags_dir)
+    call    mkdir(g:local_rc#ctags_dir)
+  endif
+  for l:item in g:local_rc#ctags_list
+    if l:item == '' | break | endif
+    if !has_key(g:local_rc#ctags_name_list, l:item) | continue | endif
+    let l:updateCommand =
+          \ 'ctags -f ' .
+          \ g:local_rc#current_src_dir . '\.tags\' . g:local_rc#ctags_name_list[l:item] .
+          \ ' -R ' .
+          \ g:local_rc#current_src_dir . '\' . l:item
     if has('win32')
       " 処理中かどうかわかるように/minを使う
       execute '!start /min ' . l:updateCommand
     else
       call system(l:updateCommand)
     endif
-    execute 'cd ' . l:currentDir
-  endfunction "}}}
-  command! UpdateGtags call s:UpdateGtags()
+  endfor
+endfunction "}}}
+command! UpdateCtags call s:UpdateCtags()
 
-endif
+" GNU GLOBALのタグをアップデート
+function! s:UpdateGtags() "{{{
+  if !executable('gtags') | echomsg 'gtagsが見つかりません' | return | endif
+  let l:currentDir = getcwd()
+  execute 'cd ' . $GTAGSROOT
+  let l:updateCommand = 'gtags -iv'
+  if has('win32')
+    " 処理中かどうかわかるように/minを使う
+    execute '!start /min ' . l:updateCommand
+  else
+    call system(l:updateCommand)
+  endif
+  execute 'cd ' . l:currentDir
+endfunction "}}}
+command! UpdateGtags call s:UpdateGtags()
 
 "}}}
 "-----------------------------------------------------------------------------
