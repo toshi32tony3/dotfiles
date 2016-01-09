@@ -763,7 +763,7 @@ function! s:JumpTagTab(funcName) "{{{
   " execute 'tjump ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
-nnoremap <Leader>} :<C-u>JumpTagTab <C-r><C-w><CR>
+nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('cword'))<CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/local.rc.vim
@@ -1852,7 +1852,7 @@ if has('kaoriya')
       let s:fullscreenOn = 1
     endif
   endfunction "}}}
-  nnoremap <F11> :<C-u>call <SID>ToggleScreenMode<CR>
+  nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode<CR>
 
 endif "}}}
 
@@ -1910,7 +1910,7 @@ if neobundle#tap('vim-asterisk')
 
     return ''
   endfunction "}}}
-  noremap <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
+  noremap <silent> <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
   command! ModSearchHistory call s:ModSearchHistory()
 
   " star-search対象をクリップボードに入れる
@@ -1930,7 +1930,7 @@ if neobundle#tap('vim-asterisk')
     echomsg 'You can use ClipCword() on following modes : n/no/v/V/CTRL-V'
     return ''
   endfunction "}}}
-  noremap <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
+  noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
   " 暫定対応として<silent>を追加した
   " https://github.com/haya14busa/vim-asterisk/issues/19
