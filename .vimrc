@@ -752,7 +752,7 @@ endfunction
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
 
 " " 開いたファイルと同じ場所へ移動する
-" " -> startify/vimfiler/:LCDで十分なのでコメントアウト
+" " -> startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " " 最後のカーソル位置を記憶していたらジャンプ
