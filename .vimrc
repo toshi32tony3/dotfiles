@@ -115,8 +115,7 @@ function! s:ToggleScrollOffSet() "{{{
     let s:scrolloffOn = 1
   endif
 endfunction "}}}
-command! ToggleScrollOffSet call s:ToggleScrollOffSet()
-nnoremap <silent> <F2> :<C-u>ToggleScrollOffSet<CR>
+nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
 
 " vimdiff用オプション
 " filler   : 埋め合わせ行を表示する
@@ -601,8 +600,7 @@ if has('kaoriya')
       let s:transparencyOn = 1
     endif
   endfunction "}}}
-  command! ToggleTransParency call s:ToggleTransParency()
-  nnoremap <silent> <F12> :<C-u>ToggleTransParency<CR>
+  nnoremap <silent> <F12> :<C-u>call <SID>ToggleTransParency<CR>
 
 endif
 
@@ -1869,8 +1867,7 @@ if has('kaoriya')
       let s:fullscreenOn = 1
     endif
   endfunction "}}}
-  command! ToggleScreenMode call s:ToggleScreenMode()
-  nnoremap <F11> :<C-u>ToggleScreenMode<CR>
+  nnoremap <F11> :<C-u>call <SID>ToggleScreenMode<CR>
 
 endif "}}}
 
