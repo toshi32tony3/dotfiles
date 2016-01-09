@@ -1602,12 +1602,10 @@ if neobundle#tap('eskk.vim')
   nmap <C-c><C-c>  cc<Plug>(eskk:toggle)
   nmap <A-c>        C<Plug>(eskk:toggle)
 
-  autocmd MyAutoCmd User eskk-initialize-pre call s:eskk_initial_pre()
-  function! s:eskk_initial_pre() "{{{
+  function! s:EskkInitialPreSettings() "{{{
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
     " hankaku -> zenkaku
     call t.add_map('~',  '～')
-
     " zenkaku -> hankaku
     call t.add_map('z~', '~')
     call t.add_map('z:', ":\<Space>")
@@ -1615,9 +1613,9 @@ if neobundle#tap('eskk.vim')
     call t.add_map('z,', ",\<Space>")
     call t.add_map('z.', '.')
     call t.add_map('z?', '?')
-
     call eskk#register_mode_table('hira', t)
   endfunction "}}}
+  autocmd MyAutoCmd User eskk-initialize-pre call s:EskkInitialPreSettings()
 
   " skk-jisyoをソートしたい
   if filereadable(expand('~/dotfiles/.skk-jisyo'))
