@@ -1124,7 +1124,7 @@ function! s:GetFoldLevel() "{{{
 
   " [zを使ってカーソルが移動していればfoldLevelをインクリメント
   while 1
-    keepjumps normal! [z
+    execute 'keepjumps normal! [z'
     let l:currentLineNumber = line('.')
     if l:lastLineNumber == l:currentLineNumber | break | endif
     let l:foldLevel += 1
@@ -1179,7 +1179,7 @@ function! s:GetCurrentFold() "{{{
     if l:searchCounter <= 0 | break | endif
 
     " 1段階親のところへ移動
-    keepjumps normal! [z
+    execute 'keepjumps normal! [z'
     let l:currentLineNumber = line('.')
 
     " 移動していなければ, 移動前のカーソル行が子Fold開始位置だったということ
@@ -1239,13 +1239,13 @@ function! s:JumpFuncNameCForward() "{{{
   let l:savedView = winsaveview()
 
   let l:lastLine  = line('.')
-  execute "keepjumps normal! ]]"
+  execute 'keepjumps normal! ]]'
 
   " 検索対象が居なければViewを戻して処理終了
   if line('.') == line('$') | call winrestview(l:savedView) | return | endif
 
   call search('(', 'b')
-  execute 'normal! b'
+  execute 'keepjumps normal! b'
 
   " Cの関数名の上から下方向検索するには, ]]を2回使う必要がある
   if l:lastLine == line('.')
@@ -1255,7 +1255,7 @@ function! s:JumpFuncNameCForward() "{{{
     " 検索対象が居なければViewを戻して処理終了
     if line('.') == line('$') | call winrestview(l:savedView) | return | endif
     call search('(', 'b')
-    execute 'normal! b'
+    execute 'keepjumps normal! b'
 
   endif
 
@@ -1281,7 +1281,7 @@ function! s:JumpFuncNameCBackward() "{{{
   endif
 
   call search('(', 'b')
-  execute 'normal! b'
+  execute 'keepjumps normal! b'
 
   " 現在位置をjumplistに追加
   mark '
@@ -1314,7 +1314,7 @@ function! s:GetCurrentFuncC() "{{{
   endif
 
   call search('(', 'b')
-  execute 'normal! b'
+  execute 'keepjumps normal! b'
   let l:funcName = expand('<cword>')
 
   " Viewを復元
