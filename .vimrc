@@ -327,15 +327,15 @@ NeoBundleLazy 'Shougo/unite-outline', {
       \ }
 
 NeoBundleLazy 'Shougo/vimfiler.vim', {
-      \   'depends'  : 'Shougo/unite.vim',
-      \   'on_cmd'   : 'VimFilerCurrentDir',
-      \   'explorer' : 1,
+      \   'depends' : 'Shougo/unite.vim',
+      \   'on_cmd'  : 'VimFilerCurrentDir',
+      \   'on_path' : '.*',
       \ }
 
 " (調査中)
-" explorerでvimfiler.vimを読み込む設定にしておき, vimfilerがsourceされる前に
+" on_pathでvimfiler.vimを読み込む設定にしておき, vimfilerがsourceされる前に
 " git commitすると何故かcommittia.vimでエラーが出る
-" -> unite-outlineにexplolerの設定を移しても同じエラーが出た
+" -> unite-outlineにon_pathの設定を移しても同じエラーが出た
 "    -> vimfilerは関係ない
 "    -> neobundleの何かと処理がぶつかるのか？
 "
