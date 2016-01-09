@@ -864,6 +864,25 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
   endfunction "}}}
   command! UpdateCtags call s:UpdateCtags()
 
+  " GNU GLOBALのタグをアップデート
+  function! s:UpdateGtags() "{{{
+    if !executable('gtags')
+      echomsg 'gtagsが見つかりません'
+      return
+    endif
+    let l:currentDir = getcwd()
+    execute 'cd ' . $GTAGSROOT
+    let l:updateCommand = 'gtags -iv'
+    if has('win32')
+      " 処理中かどうかわかるように/minを使う
+      execute '!start /min ' . l:updateCommand
+    else
+      call system(l:updateCommand)
+    endif
+    execute 'cd ' . l:currentDir
+  endfunction "}}}
+  command! UpdateGtags call s:UpdateGtags()
+
 endif
 
 "}}}
