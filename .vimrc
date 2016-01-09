@@ -332,9 +332,9 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'on_path' : '.*',
       \ }
 
-" (調査中) test
+" (調査中)
 " on_pathでvimfiler.vimを読み込む設定にしておき, vimfilerがsourceされる前に
-" git commitすると何故かcommittia.vimでエラーが出る
+" git commitすると何故かcommittia.vimでエラーが出た
 " -> unite-outlineにon_pathの設定を移しても同じエラーが出た
 "    -> vimfilerは関係ない
 "    -> neobundleの何かと処理がぶつかるのか？
@@ -817,9 +817,8 @@ command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
 nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('cword'))<CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
-" see: ~/localfiles/local.rc.vim
-if      filereadable(expand('~/localfiles/local.rc.vim'))          ||
-      \ filereadable(expand('~/localfiles/template/local.rc.vim'))
+" see: ~/localfiles/template/local.rc.vim
+if filereadable(expand('~/localfiles/template/local.rc.vim'))
 
   function! s:SetSrcDir() "{{{
     let g:local_rc#src_dir         = g:local_rc#src_list[g:local_rc#src_index]
@@ -1591,7 +1590,7 @@ if neobundle#tap('eskk.vim')
   let g:eskk#tab_select_completion = 1
   let g:eskk#start_completion_length = 2
 
-  " see : http://tyru.hatenablog.com/entry/20101214/vim_de_skk
+  " http://tyru.hatenablog.com/entry/20101214/vim_de_skk
   let g:eskk#egg_like_newline = 1
   let g:eskk#egg_like_newline_completion = 1
   let g:eskk#rom_input_style = 'msime'
@@ -2145,7 +2144,7 @@ if neobundle#tap('vim-startify')
   let g:startify_session_delete_buffers = 1
 
   " ブックマークの設定はローカル設定ファイルに記述する
-  " see: ~/localfiles/local.rc.vim
+  " see: ~/localfiles/template/local.rc.vim
   " let g:startify_bookmarks = [
   "   \   '.',
   "   \   '~\.vimrc',
