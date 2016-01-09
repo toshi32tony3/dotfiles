@@ -717,7 +717,7 @@ command! LCD echo 'change directory to:' <bar> lcd %:p:h
 
 " " 最後のカーソル位置を記憶していたらジャンプ
 " " -> Gdiff時に不便なことがあったのでコメントアウト
-" autocmd MyAutoCmd BufRead * silent normal! `"
+" autocmd MyAutoCmd BufRead * silent execute 'normal! `"'
 
 " 保存時にViewの状態を保存し, 読み込み時にViewの状態を前回の状態に戻す
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
@@ -989,22 +989,22 @@ nnoremap <A-Right> :next<CR>
 " タイムスタンプの挿入
 function! s:PutDateTime() "{{{
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""P
+  execute 'normal! ""P'
 endfunction "}}}
 command! PutDateTime call s:PutDateTime()
 
 " 区切り線+タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
   let @" = '='
-  normal! 080""Po
+  execute 'normal! 080""Po'
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""P
+  execute 'normal! ""P'
   let @" = '{'
-  normal! $l3""p
+  execute 'normal! $l3""p'
   let @" = '}'
-  normal! o
-  normal! 03""P
-  normal! ko
+  execute 'normal! o'
+  execute 'normal! 03""P'
+  execute 'normal! ko'
 endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
