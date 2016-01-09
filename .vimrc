@@ -847,6 +847,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
   " ctagsをアップデート
   function! s:UpdateCtags() "{{{
+    if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
     if !isdirectory(g:local_rc#ctags_dir)
       call    mkdir(g:local_rc#ctags_dir)
     endif
@@ -870,10 +871,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
   " GNU GLOBALのタグをアップデート
   function! s:UpdateGtags() "{{{
-    if !executable('gtags')
-      echomsg 'gtagsが見つかりません'
-      return
-    endif
+    if !executable('gtags') | echomsg 'gtagsが見つかりません' | return | endif
     let l:currentDir = getcwd()
     execute 'cd ' . $GTAGSROOT
     let l:updateCommand = 'gtags -iv'
@@ -1039,17 +1037,13 @@ function! s:OnCursorMove() "{{{
 
   " ミリ秒単位の現在時刻を取得
   let l:ml = matchlist(reltimestr(reltime()), '\v(\d*)\.(\d{3})')
-  if  l:ml == []
-    return
-  endif
+  if  l:ml == [] | return | endif
   let l:ml[0] = ''
   let l:now = str2nr(join(l:ml, ''))
 
   " 前回のCursorMoved発火時から指定時間経過していなければ何もせず抜ける
   let l:timespan = l:now - b:lastCursorMoveTime
-  if  l:timespan <= s:throttleTimeSpan
-    return
-  endif
+  if  l:timespan <= s:throttleTimeSpan | return | endif
 
   " CursorMoved!!
   autocmd   MyAutoCmd User MyCursorMoved :
@@ -1058,9 +1052,8 @@ function! s:OnCursorMove() "{{{
   " lastCursorMoveTimeを更新
   let b:lastCursorMoveTime = l:now
 
-  if b:lastVisitedLine == line('.')
-    return
-  endif
+  " 行移動していなければ抜ける
+  if b:lastVisitedLine == line('.') | return | endif
 
   " LineChanged!!
   autocmd   MyAutoCmd User MyLineChanged :
@@ -1133,9 +1126,7 @@ function! s:GetFoldLevel() "{{{
   while 1
     keepjumps normal! [z
     let l:currentLineNumber = line('.')
-    if l:lastLineNumber == l:currentLineNumber
-      break
-    endif
+    if l:lastLineNumber == l:currentLineNumber | break | endif
     let l:foldLevel += 1
     let l:lastLineNumber = l:currentLineNumber
   endwhile
@@ -1157,18 +1148,14 @@ command! EchoFoldLevel echo s:GetFoldLevel()
 " NOTE: 対応ファイルタイプ : vim/markdown
 let s:currentFold = ''
 function! s:GetCurrentFold() "{{{
-  if &ft != 'vim' && &ft != 'markdown'
-    return ''
-  endif
+  if &ft != 'vim' && &ft != 'markdown' | return '' | endif
 
   " ------------------------------------------------------------
   " 前処理
   " ------------------------------------------------------------
   " foldlevel('.')はあてにならないことがあるので自作関数で求める
   let l:foldLevel = s:GetFoldLevel()
-  if  l:foldLevel <= 0
-    return ''
-  endif
+  if  l:foldLevel <= 0 | return '' | endif
 
   " View/カーソル位置を保存
   let l:savedView      = winsaveview()
@@ -1189,9 +1176,7 @@ function! s:GetCurrentFold() "{{{
   " カーソル位置のfoldListを取得
   " ------------------------------------------------------------
   while 1
-    if l:searchCounter <= 0
-      break
-    endif
+    if l:searchCounter <= 0 | break | endif
 
     " 1段階親のところへ移動
     keepjumps normal! [z
@@ -1234,9 +1219,8 @@ function! s:GetCurrentFold() "{{{
   call winrestview(l:savedView)
 
   " ウィンドウ幅が十分ある場合, foldListを繋いで返す
-  if winwidth(0) > 120
-    return join(l:foldList, " \u2B81 ")
-  endif
+  if winwidth(0) > 120 | return join(l:foldList, " \u2B81 ") | endif
+
   " ウィンドウ幅が広くない場合, 直近のFold名を返す
   return get(l:foldList, -1, '')
 endfunction "}}}
@@ -1246,9 +1230,7 @@ autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
 function! s:JumpFuncNameCForward() "{{{
-  if &ft != 'c'
-    return
-  endif
+  if &ft != 'c' | return | endif
 
   " 現在位置をjumplistに追加
   mark '
@@ -1260,10 +1242,7 @@ function! s:JumpFuncNameCForward() "{{{
   execute "keepjumps normal! ]]"
 
   " 検索対象が居なければViewを戻して処理終了
-  if line('.') == line('$')
-    call winrestview(l:savedView)
-    return
-  endif
+  if line('.') == line('$') | call winrestview(l:savedView) | return | endif
 
   call search('(', 'b')
   execute 'normal! b'
@@ -1274,10 +1253,7 @@ function! s:JumpFuncNameCForward() "{{{
     execute 'keepjumps normal! ]]'
 
     " 検索対象が居なければViewを戻して処理終了
-    if line('.') == line('$')
-      call winrestview(l:savedView)
-      return
-    endif
+    if line('.') == line('$') | call winrestview(l:savedView) | return | endif
     call search('(', 'b')
     execute 'normal! b'
 
@@ -1287,9 +1263,7 @@ function! s:JumpFuncNameCForward() "{{{
   mark '
 endfunction " }}}
 function! s:JumpFuncNameCBackward() "{{{
-  if &ft != 'c'
-    return
-  endif
+  if &ft != 'c' | return | endif
 
   " 現在位置をjumplistに追加
   mark '
@@ -1303,10 +1277,7 @@ function! s:JumpFuncNameCBackward() "{{{
     " for match } }
 
     " 検索対象が居なければViewを戻して処理終了
-    if line('.') == 1
-      call winrestview(l:savedView)
-      return
-    endif
+    if line('.') == 1 | call winrestview(l:savedView) | return | endif
   endif
 
   call search('(', 'b')
@@ -1323,9 +1294,7 @@ nnoremap <silent> [f :<C-u>JumpFuncNameCBackward<CR>
 " Cの関数名取得
 let s:currentFunc = ''
 function! s:GetCurrentFuncC() "{{{
-  if &ft != 'c'
-    return ''
-  endif
+  if &ft != 'c' | return '' | endif
 
   " Viewを保存
   let l:savedView = winsaveview()
@@ -1338,16 +1307,10 @@ function! s:GetCurrentFuncC() "{{{
     let l:endBracketLine = line('.')
     call winrestview(l:savedView)
     execute 'keepjumps normal! [['
-    if line('.') < l:endBracketLine
-      call winrestview(l:savedView)
-      return ''
-    endif
+    if line('.') < l:endBracketLine | call winrestview(l:savedView) | return '' | endif
 
     " 検索対象が居なければViewを戻して処理終了
-    if line('.') == 1
-      call winrestview(l:savedView)
-      return ''
-    endif
+    if line('.') == 1 | call winrestview(l:savedView) | return '' | endif
   endif
 
   call search('(', 'b')
