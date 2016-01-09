@@ -838,8 +838,7 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     " ソースコード切り替え後, バージョン名を出力
     echo 'switch source to: ' . g:local_rc#src_dir
   endfunction "}}}
-  command! SwitchSource call s:SwitchSource()
-  nnoremap ,s :<C-u>SwitchSource<CR>
+  nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
 
   " ctagsをアップデート
   function! s:UpdateCtags() "{{{
