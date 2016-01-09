@@ -332,6 +332,14 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'explorer' : 1,
       \ }
 
+" (調査中)
+" explorerでvimfiler.vimを読み込む設定にしておき, vimfilerがsourceされる前に
+" git commitすると何故かcommittia.vimでエラーが出る
+"
+" function committia#open[12]..<SNR>79_open_singlecolumn[3]..<SNR>79_open_diff_window[1]..<SNR>79_open_window の処理中にエラーが検出されました:
+" 行    8:
+" E21: 'modifiable' がオフなので, 変更できません
+
 "}}}
 "-------------------------------------------------------------------
 " quickfix / special buffer {{{
@@ -1460,6 +1468,11 @@ endif "}}}
 
 " VimからGitを使う(編集, コマンド実行, vim-gita) {{{
 if neobundle#tap('vim-gita')
+
+endif "}}}
+
+" git commitした時にコミットされる差分を表示(committia.vim) {{{
+if neobundle#tap('committia.vim')
 
 endif "}}}
 
