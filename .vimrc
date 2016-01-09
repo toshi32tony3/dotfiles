@@ -332,7 +332,7 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'on_path' : '.*',
       \ }
 
-" (調査中)
+" (調査中) test
 " on_pathでvimfiler.vimを読み込む設定にしておき, vimfilerがsourceされる前に
 " git commitすると何故かcommittia.vimでエラーが出る
 " -> unite-outlineにon_pathの設定を移しても同じエラーが出た
