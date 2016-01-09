@@ -757,13 +757,10 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
   tab split
-
   " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
   execute 'tag ' . a:funcName
-
   " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
   " execute 'tjump ' . a:funcName
-
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
 nnoremap <Leader>} :<C-u>JumpTagTab <C-r><C-w><CR>
@@ -784,10 +781,8 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     for l:item in g:local_rc#ctags_list
       let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
     endfor
-
     " 1文字目の','を削除
     if &tags != '' | let &tags = &tags[1:] | endif
-
     " GTAGSROOTの登録
     " -> GNU GLOBALのタグはプロジェクトルートで生成する
     let $GTAGSROOT = g:local_rc#current_src_dir
@@ -795,42 +790,35 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
 
   function! s:SetPathList() "{{{
     set path=
-
     " 起点なしのpath登録
     for l:item in g:local_rc#other_dir_path_list
       let &path = &path . ',' . l:item
     endfor
-
     " g:local_rc#current_src_dirを起点にしたpath登録
     for l:item in g:local_rc#current_src_dir_path_list
       let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
-
     " 1文字目の','を削除
     if &path != '' | let &path = &path[1:] | endif
   endfunction "}}}
 
   function! s:SetCDPathList() "{{{
     set cdpath=
-
     " 起点なしのcdpath登録
     for l:item in g:local_rc#other_dir_cdpath_list
       let &cdpath = &cdpath . ',' . l:item
     endfor
-
-    " g:local_rc#base_dir, g:local_rc#current_src_dirをcdpath登録
     let &cdpath = &cdpath . ',' . g:local_rc#base_dir
     let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir
-
     " g:local_rc#current_src_dirを起点にしたcdpath登録
     for l:item in g:local_rc#current_src_dir_cdpath_list
       let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
-
     " 1文字目の','を削除
     if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
   endfunction "}}}
 
+  " 初回のtags, path設定
   autocmd MyAutoCmd VimEnter *
         \   call s:SetSrcDir()
         \ | call s:SetTags()
@@ -843,15 +831,12 @@ if filereadable(expand('~/localfiles/local.rc.vim'))
     if  g:local_rc#src_index >= len(g:local_rc#src_list)
       let g:local_rc#src_index = 0
     endif
-
     call s:SetSrcDir()
     call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
-
     " ソースコード切り替え後, バージョン名を出力
     echo 'switch source to: ' . g:local_rc#src_dir
-
   endfunction "}}}
   command! SwitchSource call s:SwitchSource()
   nnoremap ,s :<C-u>SwitchSource<CR>
