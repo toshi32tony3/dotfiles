@@ -428,7 +428,7 @@ NeoBundleLazy 'junegunn/vim-easy-align', {
 NeoBundleLazy 'thinca/vim-quickrun', {
       \   'on_cmd' : 'QuickRun',
       \ }
-" 本家 : 'jceb/vim-hier'
+" " 本家 : 'jceb/vim-hier'
 " NeoBundle 'pocke/vim-hier'
 
 " NeoBundle 'osyo-manga/shabadou.vim'
@@ -789,10 +789,10 @@ cnoremap <expr> d<Space> <SID>ToLCDorCD(getcmdline())
 " " -> Gdiff時に不便なことがあったのでコメントアウト
 " autocmd MyAutoCmd BufRead * silent execute 'normal! `"'
 
-" 保存時にViewの状態を保存し, 読み込み時にViewの状態を前回の状態に戻す
-" http://ac-mopp.blogspot.jp/2012/10/vim-to.html
-" -> プラグインの挙動とぶつかることもあるらしいので使わない
-" -> https://github.com/Shougo/vimproc.vim/issues/116
+" " 保存時にViewの状態を保存し, 読み込み時にViewの状態を前回の状態に戻す
+" " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
+" " -> プラグインの挙動とぶつかることもあるらしいので使わない
+" " -> https://github.com/Shougo/vimproc.vim/issues/116
 " setglobal viewdir=~/vimfiles/view
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
@@ -978,10 +978,11 @@ nnoremap q?   <Nop>
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
-" <C-@>  : 直前に挿入したテキストをもう一度挿入し, ノーマルモードに戻る
-" <C-g>u : アンドゥ単位を区切る
-" -> 割りと暴発する＆あまり用途が見当たらないので, <Esc>に置き替え
+" " <C-@>  : 直前に挿入したテキストをもう一度挿入し, ノーマルモードに戻る
+" " <C-g>u : アンドゥ単位を区切る
 " inoremap <C-@> <C-g>u<C-@>
+
+" <C-@>は割りと暴発する＆あまり用途が見当たらないので, <Esc>に置き替え
 inoremap <C-@> <Esc>
 noremap  <C-@> <Esc>
 
