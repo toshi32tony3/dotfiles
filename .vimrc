@@ -2298,8 +2298,8 @@ if neobundle#tap('unite.vim')
       " <Leader>がデフォルトマッピングで使用されていた場合の対策
       nnoremap <buffer> <Leader>         <Nop>
       nnoremap <buffer> <Leader><Leader> <Nop>
-      imap     <buffer> <Esc> <Plug>(unite_insert_leave)
-      nmap     <buffer> <Esc> <Plug>(unite_exit)
+
+      nmap <buffer> <Esc> <Plug>(unite_exit)
     endfunction
     autocmd MyAutoCmd FileType unite call s:UniteSettings()
   endfunction
