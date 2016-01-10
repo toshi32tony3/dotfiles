@@ -1356,10 +1356,8 @@ function! s:JumpFuncNameCBackward() "{{{
   " 現在位置をjumplistに追加
   mark '
 endfunction " }}}
-command! JumpFuncNameCForward  call s:JumpFuncNameCForward()
-command! JumpFuncNameCBackward call s:JumpFuncNameCBackward()
-nnoremap <silent> ]f :<C-u>JumpFuncNameCForward<CR>
-nnoremap <silent> [f :<C-u>JumpFuncNameCBackward<CR>
+nnoremap <silent> ]f :<C-u>call <SID>JumpFuncNameCForward()<CR>
+nnoremap <silent> [f :<C-u>call <SID>JumpFuncNameCBackward()<CR>
 
 " Cの関数名取得
 let s:currentFunc = ''
