@@ -255,6 +255,8 @@ NeoBundle 'tmhedberg/matchit'
 "}}}
 "-------------------------------------------------------------------
 " text-objects {{{
+" NOTE: 多分設定が間違っており, 初回入力時にbellが鳴るのでbelloffする
+setglobal belloff+=esc
 
 NeoBundleLazy 'kana/vim-textobj-user'
 
