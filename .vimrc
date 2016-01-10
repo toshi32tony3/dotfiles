@@ -71,11 +71,24 @@ setglobal nowritebackup
 setglobal backupcopy=yes
 
 " Vim生成物の生成先ディレクトリ指定
-setglobal dir=~/vimfiles/swap
-setglobal backupdir=~/vimfiles/backup
+let s:saveSwapDir = expand('~/vimfiles/swap')
+if !isdirectory(s:saveSwapDir)
+  call    mkdir(s:saveSwapDir)
+endif
+let &g:dir = s:saveSwapDir
 
+let s:saveBackupDir = expand('~/vimfiles/backup')
+if !isdirectory(s:saveBackupDir)
+  call    mkdir(s:saveBackupDir)
+endif
+let &g:backupdir = s:saveBackupDir
+
+let s:saveUndoDir = expand('~/vimfiles/undo')
+if !isdirectory(s:saveUndoDir)
+  call    mkdir(s:saveUndoDir)
+endif
 if has('persistent_undo')
-  setglobal undodir=~/vimfiles/undo
+  let &g:undodir = s:saveUndoDir
   setglobal undofile
 endif
 
