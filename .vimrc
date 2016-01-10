@@ -5,7 +5,7 @@
 
 " Do first!
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
-set encoding=utf-8
+setglobal encoding=utf-8
 scriptencoding utf-8
 
 " 左手で<Leader>を入力したい
@@ -34,18 +34,18 @@ if has('vim_starting') && has('reltime')
         \ | echomsg 'startuptime: ' . reltimestr(s:startuptime)
 endif
 
-" ファイル書き込み時の文字コード。空の場合, encodingの値が使用される
-" -> vimrcで設定するものではない
-" set fileencoding=
+" ファイル書き込み時の文字コード。fileencodingが空の場合, encodingの値を使う
+" -> encodingと同じ値にしたい場合は設定不要
+" setglobal fileencoding=
 
 " ファイル読み込み時の変換候補
 " -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
 "    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
 " -> とりあえずKaoriya版GVimのguessを使おう
 if has('kaoriya')
-  set fileencodings=guess
+  setglobal fileencodings=guess
 else
-  set fileencodings=utf-8,cp932,euc-jp
+  setglobal fileencodings=utf-8,cp932,euc-jp
 endif
 
 " 文字コードを指定してファイルを開き直す
@@ -57,61 +57,59 @@ nnoremap <Leader>ff  :<C-u>e ++fileformat=
 " バックアップ, スワップファイルの設定
 " -> ネットワーク上ファイルの編集時に重くなる？ので作らない
 " -> 生成先をローカルに指定していたからかも。要検証
-set noswapfile
-set nobackup
-set nowritebackup
+setglobal noswapfile
+setglobal nobackup
+setglobal nowritebackup
 
 " ファイルの書き込みをしてバックアップが作られるときの設定(作らないけども)
 " yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
 " no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
 " auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
-set backupcopy=yes
+setglobal backupcopy=yes
 
 " Vim生成物の生成先ディレクトリ指定
-set dir=~/vimfiles/swap
-set backupdir=~/vimfiles/backup
+setglobal dir=~/vimfiles/swap
+setglobal backupdir=~/vimfiles/backup
 
 if has('persistent_undo')
-  set undodir=~/vimfiles/undo
-  set undofile
+  setglobal undodir=~/vimfiles/undo
+  setglobal undofile
 endif
 
 " Windowsは_viminfo, 他は.viminfoとする
 if has('win32') || has('win64')
-  set viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
+  setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
 else
-  set viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
+  setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
 endif
 
 " 日本語はスペルチェックから除外
-set spelllang=en,cjk
+setglobal spelllang=en,cjk
 
 " デフォルトではスペルチェックしない
-set nospell
-set spellfile=~/dotfiles/en.utf-8.add
+setglobal nospell
+setglobal spellfile=~/dotfiles/en.utf-8.add
 
 " コマンドと検索の履歴は50もあれば十分すぎる
-set history=50
+setglobal history=50
 
-" 編集中のファイルがVimの外部で変更された時, 自動的に読み直す
-set autoread
+" 開いているファイルがVimの外部で変更された時, 自動的に読み直す
+setglobal autoread
 
 " メッセージ省略設定
-set shortmess=aoOotTWI
+setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数
 " -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
 " -> コードを読む時は大きく, 編集する時は小さくすると良いかも
-if has('vim_starting')
-  set scrolloff=100
-endif
+set scrolloff=100
 let s:scrolloffOn = 1
 function! s:ToggleScrollOffSet()
   if s:scrolloffOn == 1
-    setlocal scrolloff=0   scrolloff?
+    set scrolloff=0   scrolloff?
     let s:scrolloffOn = 0
   else
-    setlocal scrolloff=100 scrolloff?
+    set scrolloff=100 scrolloff?
     let s:scrolloffOn = 1
   endif
 endfunction
@@ -120,7 +118,7 @@ nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
 " vimdiff用オプション
 " filler   : 埋め合わせ行を表示する
 " vertical : 縦分割する
-set diffopt=filler,vertical
+setglobal diffopt=filler,vertical
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -134,11 +132,11 @@ filetype plugin indent off
 if has('vim_starting')
   if &compatible
     " Vi互換モードをオフ(Vimの拡張機能を有効化)
-    set nocompatible
+    setglobal nocompatible
   endif
 
   " neobundle.vimでプラグインを管理する
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  setglobal runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
 
 " contains filetype off
@@ -149,7 +147,7 @@ NeoBundleFetch 'Shougo/neobundle.vim'
 
 " 日本語ヘルプを卒業したいが, なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
-set helplang=ja
+setglobal helplang=ja
 
 " ヴィむぷろしー
 NeoBundle 'Shougo/vimproc.vim', {
@@ -268,6 +266,18 @@ NeoBundleLazy 'sgur/vim-textobj-parameter', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [['xo', 'i,', 'a,']],
       \ }
+NeoBundleLazy 'kana/vim-textobj-indent', {
+      \   'depends' : 'kana/vim-textobj-user',
+      \   'on_map'  : [['xo', 'ii', 'ai', 'iI', 'aI']],
+      \ }
+NeoBundleLazy 'kana/vim-textobj-entire', {
+      \   'depends' : 'kana/vim-textobj-user',
+      \   'on_map'  : [['xo', 'ie', 'ae']],
+      \ }
+NeoBundleLazy 'kana/vim-textobj-line', {
+      \   'depends' : 'kana/vim-textobj-user',
+      \   'on_map'  : [['xo', 'il', 'al']],
+      \ }
 
 "}}}
 "-------------------------------------------------------------------
@@ -286,7 +296,6 @@ NeoBundleLazy 'toshi32tony3/vim-operator-search', {
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
-      \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>(operator-quickhl-', '<Plug>(quickhl-']],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
@@ -373,7 +382,7 @@ NeoBundleLazy 'tyru/capture.vim', {
 " web / markdown {{{
 
 NeoBundleLazy 'tyru/open-browser.vim', {
-      \   'on_map' : '<Plug>(openbrowser-',
+      \   'on_map' : '<Plug>(',
       \ }
 
 NeoBundleLazy 'basyura/twibill.vim'
@@ -452,23 +461,21 @@ endif
 " Edit {{{
 
 " タブ幅, シフト幅, タブ使用有無の設定
-if has('vim_starting')
-  set tabstop=2 shiftwidth=2 softtabstop=0 expandtab
-endif
+setglobal tabstop=2 shiftwidth=2 softtabstop=0 expandtab
 autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
 autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
 
-set nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
-set virtualedit=all            " テキストが存在しない場所でも動けるようにする
-set nostartofline              " カーソルが勝手に行の先頭へ行かないようにする
-set hidden                     " quit時はバッファを削除せず, 隠す
-set confirm                    " 変更されたバッファがある時, どうするか確認する
-set switchbuf=useopen          " すでに開いてあるバッファがあればそっちを開く
-set showmatch                  " 対応する括弧などの入力時にハイライト表示する
-set matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒にする
-set matchpairs=(:),{:},[:],<:> " 対応括弧に'<'と'>'のペアを追加
-set backspace=indent,eol,start " <BS>でなんでも消せるようにする
+setglobal nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
+setglobal virtualedit=all            " テキストが存在しない場所でも動きたい
+setglobal nostartofline              " カーソルが勝手に行の先頭へ行くのは嫌
+setglobal hidden                     " quit時はバッファを削除せず, 隠す
+setglobal confirm                    " 変更されたバッファを閉じる時に確認する
+setglobal switchbuf=useopen          " 既に開かれていたら, そっちを使う
+setglobal showmatch                  " 対応する括弧などの入力時にハイライト表示
+setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
+setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
+setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
 " 汎用補完設定(complete)
 " Default: complete=.,w,b,u,t,i
@@ -482,19 +489,19 @@ set backspace=indent,eol,start " <BS>でなんでも消せるようにする
 " i : current and included files
 " d : current and included files for defined name or macro
 "     -> インクルードファイルが多いと時間がかかるので汎用補完に含めない
-set complete=.,w,b,u,U
+setglobal complete=.,w,b,u,U
 
 " 補完オプション(completeopt)
 " menuone : 対象が一つでもポップアップを表示
 " longest : 候補の共通部分だけを挿入
-set completeopt=menuone,longest
+setglobal completeopt=menuone,longest
 
-set noinfercase  " 補完時に大文字小文字を区別しない
-set pumheight=10 " 補完候補は一度に10個まで表示
+setglobal noinfercase  " 補完時に大文字小文字を区別しない
+setglobal pumheight=10 " 補完候補は一度に10個まで表示
 
 " コマンドライン補完設定
-set wildmenu
-set wildmode=full
+setglobal wildmenu
+setglobal wildmode=full
 
 " <C-p>や<C-n>でもコマンド履歴のフィルタリングを有効にする
 cnoremap <C-p> <Up>
@@ -525,7 +532,7 @@ autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
 nnoremap Y y$
 
 " クリップボードレジスタを使う
-set clipboard=unnamed
+setglobal clipboard=unnamed
 
 " 現在開いているファイルのパスなどを選択範囲レジスタ(*)に入れる
 " https://gist.github.com/pinzolo/8168337
@@ -557,49 +564,44 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 
 if has('gui_running')
   " Ricty for Powerline
-  set guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
+  setglobal guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
 
   " 行間隔[pixel]の設定(default 1 for Win32 GUI)
-  set linespace=0
-
-  if has('kaoriya') && has('win32')
-    set ambiwidth=auto
-  endif
+  setglobal linespace=0
 
   " M : メニュー・ツールバー領域を削除する
   " c : ポップアップダイアログを使用しない
   if has('kaoriya')
-    set guioptions=Mc
+    setglobal guioptions=Mc
   endif
 
-  " カーソルを点滅させない
-  set guicursor=a:blinkon0
-
-  set mouse=a      " マウス機能有効
-  set nomousefocus " マウスの移動でフォーカスを自動的に切替えない
-  set mousehide    " 入力時にマウスポインタを隠す
-
+  setglobal guicursor=a:blinkon0 " カーソルを点滅させない
+  setglobal nomousefocus         " マウス移動でフォーカスを自動的に切り替えない
+  setglobal mousehide            " 入力時にマウスポインタを隠す
 endif
 
-set showcmd          " 入力中のキーを画面右下に表示
-set cmdheight=2      " コマンド行は2行がちょうど良い
-set showtabline=2    " 常にタブ行を表示する
-set laststatus=2     " 常にステータス行を表示する
-set wrap             " 長いテキストを折り返す
-set display=lastline " 長いテキストを省略しない
-set colorcolumn=81   " 81列目に線を表示
-
-if has('vim_starting')
-  set number         " 行番号を表示
-  set relativenumber " 行番号を相対表示
+if has('kaoriya') && has('win32')
+  setglobal ambiwidth=auto
 endif
+
+setglobal mouse=a          " マウス機能有効
+setglobal showcmd          " 入力中のキーを画面右下に表示
+setglobal cmdheight=2      " コマンド行は2行がちょうど良い
+setglobal showtabline=2    " 常にタブ行を表示する
+setglobal laststatus=2     " 常にステータス行を表示する
+setglobal wrap             " 長いテキストを折り返す
+setglobal display=lastline " 長いテキストを省略しない
+setglobal colorcolumn=81   " 81列目に線を表示
+
+setglobal number         " 行番号を表示
+setglobal relativenumber " 行番号を相対表示
 nnoremap <silent> <F10> :<C-u>set relativenumber!<Space>relativenumber?<CR>
 
 " 不可視文字を可視化
-set list
+setglobal list
 
 " 不可視文字の設定(UTF-8特有の文字は使わない方が良い)
-set listchars=tab:>-,trail:-,eol:\
+setglobal listchars=tab:>-,trail:-,eol:\
 
 if has('kaoriya')
 
@@ -619,47 +621,49 @@ if has('kaoriya')
 endif
 
 " foldmarkerを使って折り畳みを作成する
-set foldmethod=marker
+setglobal foldmethod=marker
 
 " 基本的にはfoldmarkerに余計なものを付けない
-if has('vim_starting')
-  set commentstring=%s
-endif
+setglobal commentstring=%s
 
 " filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " 画面左端に折り畳み状態, レベルを表示する列を1列設ける
-set foldcolumn=1
+setglobal foldcolumn=1
 
 " foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
-" -> marker以外使わない気がするけれど, 小さくしておく
-set foldnestmax=2
+" -> marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
+setglobal foldnestmax=2
 
 " Default: fillchars=vert:\|,fold:-
 " foldを指定すると折り畳み行がウィンドウ幅まで指定した文字でfillされる
 " -> fill不要なので, fillcharsからfoldを削除
-set fillchars=vert:\|
+setglobal fillchars=vert:\|
 
 " ファイルを開いた時点では折り畳みを全て閉じた状態で開く
-set foldlevelstart=0
+setglobal foldlevelstart=0
 
 " 折りたたみ機能をON/OFF
-nnoremap <silent> <F9> :<C-u>set foldenable! foldenable?<CR>
+nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
-let s:saveWinposFile = expand('~/vimfiles/winpos/.vimwinpos')
+let s:saveWinposDir = expand('~/vimfiles/winpos')
+if !isdirectory(s:saveWinposDir)
+  call    mkdir(s:saveWinposDir)
+endif
+let s:saveWinposFile = expand('~/vimfiles/winpos/.winpos')
+autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
+function! s:SaveWindow()
+  let s:options = [
+        \   'setglobal columns=' . &columns,
+        \   'setglobal lines='   . &lines,
+        \   'winpos ' . getwinposx() . ' ' . getwinposy(),
+        \ ]
+  call writefile(s:options, s:saveWinposFile)
+endfunction
 if filereadable(s:saveWinposFile)
-  autocmd MyAutoCmd VimLeavePre * call s:SaveWindow()
-  function! s:SaveWindow()
-    let s:options = [
-          \   'set columns=' . &columns,
-          \   'set lines='   . &lines,
-          \   'winpos ' . getwinposx() . ' ' . getwinposy(),
-          \ ]
-    call writefile(s:options, s:saveWinposFile)
-  endfunction
   execute 'source ' s:saveWinposFile
 endif
 
@@ -670,18 +674,18 @@ endif
 " very magic
 nnoremap / /\v
 
-set ignorecase " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
-set smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
-set wrapscan   " 検索時に最後まで行ったら最初に戻る
-set incsearch  " インクリメンタルサーチ
-set hlsearch   " マッチしたテキストをハイライト
+setglobal ignorecase " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
+setglobal smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
+setglobal wrapscan   " 検索時に最後まで行ったら最初に戻る
+setglobal incsearch  " インクリメンタルサーチ
+setglobal hlsearch   " マッチしたテキストをハイライト
 
 " grep/vimgrep結果が0件の場合, Quickfixを開かない
 autocmd MyAutoCmd QuickfixCmdPost grep,vimgrep if len(getqflist()) != 0 | copen | endif
 
 if has('kaoriya') && has('migemo')
   " 逆方向migemo検索g?を有効化
-  set migemo
+  setglobal migemo
 
   " kaoriya版のmigemo searchを再マッピング
   noremap m/ g/
@@ -693,7 +697,7 @@ endif
 " Simplify operation {{{
 
 " キー入力タイムアウトはあると邪魔だし, 待つ意味も無い気がする
-set notimeout
+setglobal notimeout
 
 " vimrcをリロード
 nnoremap ,r :<C-u>source $MYVIMRC<CR>
@@ -789,7 +793,7 @@ cnoremap <expr> d<Space> <SID>ToLCDorCD(getcmdline())
 " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
 " -> プラグインの挙動とぶつかることもあるらしいので使わない
 " -> https://github.com/Shougo/vimproc.vim/issues/116
-" set viewdir=~/vimfiles/view
+" setglobal viewdir=~/vimfiles/view
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
 
@@ -1576,8 +1580,8 @@ endif "}}}
 " Vimでskkする(eskk.vim) {{{
 if neobundle#tap('eskk.vim')
 
-  if has('vim_starting') && has('kaoriya')
-    set imdisable
+  if has('kaoriya')
+    setglobal imdisable
   endif
 
   if neobundle#is_installed('skk.vim')
@@ -2092,6 +2096,21 @@ if neobundle#tap('vim-textobj-parameter')
 
 endif "}}}
 
+" 同インデント範囲を選択するテキストオブジェクト(vim-textobj-indent) {{{
+if neobundle#tap('vim-textobj-indent')
+
+endif "}}}
+
+" バッファ全体を選択するテキストオブジェクト(vim-textobj-entire) {{{
+if neobundle#tap('vim-textobj-entire')
+
+endif "}}}
+
+" カーソル行を選択するテキストオブジェクト(vim-textobj-line) {{{
+if neobundle#tap('vim-textobj-line')
+
+endif "}}}
+
 " 置き換えオペレータ(vim-operator-replace) {{{
 if neobundle#tap('vim-operator-replace')
 
@@ -2191,7 +2210,7 @@ if neobundle#tap('unite.vim')
   " use pt
   " https://github.com/monochromegane/the_platinum_searcher
   if executable('pt')
-    set grepprg=pt\ --hidden\ --nogroup\ --nocolor\ --smart-case
+    setglobal grepprg=pt\ --hidden\ --nogroup\ --nocolor\ --smart-case
     let g:unite_source_grep_command = 'pt'
     let g:unite_source_grep_default_opts =
           \ '--hidden --nogroup --nocolor --smart-case'
