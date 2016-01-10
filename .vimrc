@@ -543,13 +543,14 @@ function! s:Clip(data)
 endfunction
 
 " 現在開いているファイルのフルパス(ファイル名含む)をレジスタへ
-command! ClipPath call s:Clip(expand('%:p'))
+command! ClipFilePath call s:Clip(expand('%:p'))
 
 " 現在開いているファイルのファイル名をレジスタへ
-command! ClipFile call s:Clip(expand('%:t'))
+command! ClipFileName call s:Clip(expand('%:t'))
 
 " 現在開いているファイルのディレクトリパスをレジスタへ
-command! ClipDir  call s:Clip(expand('%:p:h'))
+" -> :cfdが存在するため, ClipFileDirだとvim-ambicmdで補完できないので改名した
+command! ClipFileFolder call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果を選択範囲レジスタ(*)に入れる
 function! s:ClipCommandOutput(cmd)
