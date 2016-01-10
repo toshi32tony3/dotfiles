@@ -234,15 +234,11 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 "-------------------------------------------------------------------
 " move {{{
 
-" 本家 : 'haya14busa/incsearch.vim'
-NeoBundleLazy 'toshi32tony3/incsearch.vim', {
-      \   'rev'    : 'add_stay_backward',
+NeoBundleLazy 'haya14busa/incsearch.vim', {
       \   'on_map' : '<Plug>',
       \ }
-" 本家 : 'haya14busa/incsearch-fuzzy.vim'
-NeoBundleLazy 'toshi32tony3/incsearch-fuzzy.vim', {
-      \   'rev'     : 'add_stay_backward',
-      \   'depends' : 'toshi32tony3/incsearch.vim',
+NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
+      \   'depends' : 'haya14busa/incsearch.vim',
       \   'on_map'  : '<Plug>',
       \ }
 
@@ -1917,20 +1913,20 @@ if neobundle#tap('incsearch.vim')
   " very magic
   let g:incsearch#magic = '\v'
 
-  map /  <Plug>(incsearch-/)
-  map ?  <Plug>(incsearch-?)
-  map g/ <Plug>(incsearch-stay-/)
-  map g? <Plug>(incsearch-stay-?)
+  map                      / <Plug>(incsearch-forward)
+  map                      ? <Plug>(incsearch-backward)
+  map                     g/ <Plug>(incsearch-stay)
+  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
 
 endif "}}}
 
 " incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
 if neobundle#tap('incsearch-fuzzy.vim')
 
-  map  z/ <Plug>(incsearch-fuzzy-/)
-  map  z? <Plug>(incsearch-fuzzy-?)
-  map gz/ <Plug>(incsearch-fuzzy-stay-/)
-  map gz? <Plug>(incsearch-fuzzy-stay-?)
+  map                      z/ <Plug>(incsearch-fuzzy-/)
+  map                      z? <Plug>(incsearch-fuzzy-?)
+  map                     gz/ <Plug>(incsearch-fuzzy-stay)
+  noremap <silent> <expr> gz? incsearch#go(incsearch#config#fuzzy#make({'command': '?', 'is_stay': 1}))
 
 endif "}}}
 
