@@ -549,8 +549,7 @@ command! ClipFilePath call s:Clip(expand('%:p'))
 command! ClipFileName call s:Clip(expand('%:t'))
 
 " 現在開いているファイルのディレクトリパスをレジスタへ
-" -> :cfdが存在するため, ClipFileDirだとvim-ambicmdで補完できないので改名した
-command! ClipFileFolder call s:Clip(expand('%:p:h'))
+command! ClipFileDir  call s:Clip(expand('%:p:h'))
 
 " コマンドの出力結果を選択範囲レジスタ(*)に入れる
 function! s:ClipCommandOutput(cmd)
@@ -771,18 +770,6 @@ function! s:CD(...)
         \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
 endfunction
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
-
-" :lcdと:cdを勝手に置き換えることで簡単に便利な方を使う
-" -> vim-ambicmdと共存させたかったので, 限定的にしてみた
-" -> 共存と言いつつ末尾がdの時vim-ambicmdできない。いざ困ったら考えるとする
-" -> 汎用的にしたかったら以下を参考にする
-" http://whileimautomaton.net/2007/09/24141900
-function s:ToLCDorCD(cmdline)
-  if     a:cmdline ==# 'lc' | return "\<C-u>LCD\<Space>"
-  elseif a:cmdline ==# 'c'  | return "\<C-u>CD\<Space>"  | endif
-  return "d\<Space>"
-endfunction
-cnoremap <expr> d<Space> <SID>ToLCDorCD(getcmdline())
 
 " " 開いたファイルと同じ場所へ移動する
 " " -> startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
@@ -1710,8 +1697,32 @@ endif "}}}
 " コマンド名補完(vim-ambicmd) {{{
 if neobundle#tap('vim-ambicmd')
 
-  " 下手にマッピングするよりもambicmdで補完する方が捗る
-  cnoremap <expr> <Space> ambicmd#expand("\<Space>")
+  " " 下手にマッピングするよりもambicmdで補完する方が捗る
+  " cnoremap <expr> <Space> ambicmd#expand("\<Space>")
+
+  " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
+  " http://whileimautomaton.net/2007/09/24141900
+  let g:MyCMapEntries = []
+  function! s:AddMyCMap(originalPattern, alternateName)
+    call add(g:MyCMapEntries, [a:originalPattern, a:alternateName])
+  endfunction
+
+  " リストに登録されている   : 登録されたコマンド名を返す
+  " リストに登録されていない : ambicmdで変換を試みる
+  function! s:MyCMap(cmdline)
+    for [originalPattern, alternateName] in g:MyCMapEntries
+      if a:cmdline =~# originalPattern
+        return "\<C-u>" . alternateName . "\<Space>"
+      endif
+    endfor
+    return ambicmd#expand("\<Space>")
+  endfunction
+  cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
+
+  " リストへの変換候補登録
+  call s:AddMyCMap( '^cd$',  'CD')
+  call s:AddMyCMap('^lcd$', 'LCD')
+  call s:AddMyCMap('^cfd$', 'ClipFileDir')
 
 endif "}}}
 
