@@ -772,6 +772,7 @@ command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<
 
 " :lcdと:cdを勝手に置き換えることで簡単に便利な方を使う
 " -> vim-ambicmdと共存させたかったので, 限定的にしてみた
+" -> 共存と言いつつ末尾がdの時vim-ambicmdできない。いざ困ったら考えるとする
 " -> 汎用的にしたかったら以下を参考にする
 " http://whileimautomaton.net/2007/09/24141900
 function s:ToLCDorCD(cmdline)
