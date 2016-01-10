@@ -473,8 +473,10 @@ setglobal confirm                    " 変更されたバッファを閉じる�
 setglobal switchbuf=useopen          " 既に開かれていたら, そっちを使う
 setglobal showmatch                  " 対応する括弧などの入力時にハイライト表示
 setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
-setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
+
+" " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
+" setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
 
 " 汎用補完設定(complete)
 " Default: complete=.,w,b,u,t,i
