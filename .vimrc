@@ -764,6 +764,17 @@ function! s:CD(...)
 endfunction
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
 
+" :lcdと:cdを勝手に置き換えることで簡単に便利な方を使う
+" -> vim-ambicmdと共存させたかったので, 限定的にしてみた
+" -> 汎用的にしたかったら以下を参考にする
+" http://whileimautomaton.net/2007/09/24141900
+function s:ToLCDorCD(cmdline)
+  if     a:cmdline ==# 'lc' | return "\<C-u>LCD\<Space>"
+  elseif a:cmdline ==# 'c'  | return "\<C-u>CD\<Space>"  | endif
+  return "d\<Space>"
+endfunction
+cnoremap <expr> d<Space> <SID>ToLCDorCD(getcmdline())
+
 " " 開いたファイルと同じ場所へ移動する
 " " -> startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
