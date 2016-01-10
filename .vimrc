@@ -37,8 +37,8 @@ if has('vim_starting') && has('reltime')
         \ | echomsg 'startuptime: ' . reltimestr(s:startuptime)
 endif
 
-" ファイル書き込み時の文字コード。fileencodingが空の場合, encodingの値を使う
-" -> encodingと同じ値にしたい場合は設定不要
+" " ファイル書き込み時の文字コード。fileencodingが空の場合, encodingの値を使う
+" " -> encodingと同じ値にしたい場合は設定不要
 " setglobal fileencoding=
 
 " ファイル読み込み時の変換候補
