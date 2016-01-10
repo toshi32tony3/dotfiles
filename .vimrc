@@ -1448,6 +1448,12 @@ if neobundle#tap('vim-signify')
     nmap ]c <Plug>(signify-next-hunk)zz
     nmap [c <Plug>(signify-prev-hunk)zz
 
+    " Hunk text object
+    omap ic <Plug>(signify-motion-inner-pending)
+    xmap ic <Plug>(signify-motion-inner-visual)
+    omap ac <Plug>(signify-motion-outer-pending)
+    xmap ac <Plug>(signify-motion-outer-visual)
+
     " 使わないコマンドを削除する
     delcommand SignifyEnable
     delcommand SignifyDisable
