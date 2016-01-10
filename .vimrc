@@ -23,6 +23,9 @@ function! s:SID()
   return matchstr(expand('<sfile>'), '<SNR>\d_')
 endfunction
 
+" setglobalがVim起動直後に生成されるバッファに適用されない件の対策
+autocmd MyAutoCmd VimEnter * if argc() == 0 | enew | endif
+
 " Vim起動時間を計測
 " -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
 " -> gvim --startuptime startuptime.txt
