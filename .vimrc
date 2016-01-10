@@ -173,7 +173,6 @@ NeoBundleLazy 'cohama/agit.vim', {
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'on_cmd' : 'Gita',
       \ }
-NeoBundle 'rhysd/committia.vim'
 
 "}}}
 "-------------------------------------------------------------------
@@ -253,7 +252,7 @@ NeoBundle 'tmhedberg/matchit'
 "}}}
 "-------------------------------------------------------------------
 " text-objects {{{
-" NOTE: 多分設定が間違っており, 初回入力時にbellが鳴るのでbelloffする
+" NOTE: 多分設定方法が間違っており, 初回入力時にbellが鳴るのでbelloffする
 setglobal belloff+=esc
 
 NeoBundleLazy 'kana/vim-textobj-user'
@@ -342,19 +341,6 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'on_cmd'  : 'VimFilerCurrentDir',
       \   'on_path' : '.*',
       \ }
-
-" (調査中)
-" on_pathでvimfiler.vimを読み込む設定にしておき, vimfilerがsourceされる前に
-" git commitすると何故かcommittia.vimでエラーが出た
-
-" function committia#open[12]..<SNR>79_open_singlecolumn[3]..<SNR>79_open_diff_window[1]..<SNR>79_open_window の処理中にエラーが検出されました:
-" 行    8:
-" E21: 'modifiable' がオフなので, 変更できません
-
-" -> unite-outlineにon_pathの設定を移しても同じエラーが出た
-" -> vimfilerは関係ない
-" -> neobundleの何かと処理がぶつかるのか？
-" -> committia.vimのsetlocal nomodifiableが関係あるぽい。そりゃそうか
 
 "}}}
 "-------------------------------------------------------------------
@@ -1490,11 +1476,6 @@ endif "}}}
 
 " VimからGitを使う(編集, コマンド実行, vim-gita) {{{
 if neobundle#tap('vim-gita')
-
-endif "}}}
-
-" git commitした時にコミットされる差分を表示(committia.vim) {{{
-if neobundle#tap('committia.vim')
 
 endif "}}}
 
