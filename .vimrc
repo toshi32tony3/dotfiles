@@ -2218,6 +2218,7 @@ if neobundle#tap('unite.vim')
 
   " オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う
   let g:u_nqui = '-no-quit '
+  let g:u_nspl = '-no-split '
   let g:u_nsyn = '-no-sync '
   let g:u_prev = '-auto-preview '
   let g:u_sbuf = '-buffer-name=search-buffer '
@@ -2235,15 +2236,15 @@ if neobundle#tap('unite.vim')
   let g:u_opt_gd = 'Unite '       . g:u_hopt
   let g:u_opt_gg = 'Unite '       . g:u_hopt            . g:u_sbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_sbuf . g:u_nqui
-  let g:u_opt_li = 'Unite '                  . g:u_sins . g:u_sbuf
+  let g:u_opt_li = 'Unite '       . g:u_nspl . g:u_sins . g:u_sbuf
   let g:u_opt_mf = 'Unite '       . g:u_hopt . g:u_sins
   let g:u_opt_mg = 'Unite '       . g:u_hopt            . g:u_sbuf
   let g:u_opt_mk = 'Unite '       . g:u_hopt . g:u_sins . g:u_prev
-  let g:u_opt_mp = 'Unite '                  . g:u_sins
-  let g:u_opt_nl = 'Unite '                  . g:u_sins
-  let g:u_opt_nu = 'Unite '                             . g:u_nsyn
+  let g:u_opt_mp = 'Unite '       . g:u_nspl . g:u_sins
+  let g:u_opt_nl = 'Unite '       . g:u_nspl . g:u_sins
+  let g:u_opt_nu = 'Unite '       . g:u_nspl                      . g:u_nsyn
   let g:u_opt_ol = 'Unite '       . g:u_vopt . g:u_sins
-  let g:u_opt_op = 'Unite '                  . g:u_sins
+  let g:u_opt_op = 'Unite '       . g:u_nspl . g:u_sins
   let g:u_opt_re = 'UniteResume ' . g:u_hopt            . g:u_sbuf
 
   nnoremap <expr> <Leader>bu ':<C-u>' . g:u_opt_bu . 'buffer'           . '<CR>'
@@ -2280,7 +2281,7 @@ if neobundle#tap('unite.vim')
           \   'prompt'           : '> ',
           \   'prompt_direction' : 'top',
           \   'prompt_focus'     : 1,
-          \   'split'            : 0,
+          \   'split'            : 1,
           \   'start_insert'     : 0,
           \   'sync'             : 1,
           \ })
