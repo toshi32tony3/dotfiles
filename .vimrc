@@ -2396,13 +2396,13 @@ endif "}}}
 if neobundle#tap('dicwin-vim')
 
   let g:dicwin_no_default_mappings = 1
-  nmap <silent> <A-k>      <Nop>
-  nmap <silent> <A-k><A-k> <Plug>(dicwin-cword)
-  imap <silent> <A-k>      <Nop>
-  imap <silent> <A-k><A-k> <Plug>(dicwin-cword-i)
-  nmap <silent> <A-k>c     <Plug>(dicwin-close)
-  imap <silent> <A-k>c     <Plug>(dicwin-close-i)
-  nmap <silent> <A-/>      <Plug>(dicwin-query)
+  nmap <A-k>      <Nop>
+  nmap <A-k><A-k> <Plug>(dicwin-cword)
+  imap <A-k>      <Nop>
+  imap <A-k><A-k> <Plug>(dicwin-cword-i)
+  nmap <A-k>c     <Plug>(dicwin-close)
+  imap <A-k>c     <Plug>(dicwin-close-i)
+  nmap <A-/>      <Plug>(dicwin-query)
 
   if filereadable(expand('~/vimfiles/dict/gene.txt'))
     autocmd MyAutoCmd BufRead gene.txt setlocal filetype=dicwin
@@ -2513,7 +2513,7 @@ endif "}}}
 " テキスト整形を簡易化(vim-easy-align) {{{
 if neobundle#tap('vim-easy-align')
 
-  xnoremap <silent> <CR> :EasyAlign<CR>
+  xnoremap <CR> :EasyAlign<CR>
 
 endif "}}}
 
