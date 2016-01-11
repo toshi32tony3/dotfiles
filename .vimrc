@@ -1702,15 +1702,15 @@ if neobundle#tap('vim-ambicmd')
 
   " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
   " http://whileimautomaton.net/2007/09/24141900
-  let g:MyCMapEntries = []
+  let s:MyCMapEntries = []
   function! s:AddMyCMap(originalPattern, alternateName)
-    call add(g:MyCMapEntries, [a:originalPattern, a:alternateName])
+    call add(s:MyCMapEntries, [a:originalPattern, a:alternateName])
   endfunction
 
   " リストに登録されている   : 登録されたコマンド名を返す
   " リストに登録されていない : ambicmdで変換を試みる
   function! s:MyCMap(cmdline)
-    for [originalPattern, alternateName] in g:MyCMapEntries
+    for [originalPattern, alternateName] in s:MyCMapEntries
       if a:cmdline =~# originalPattern
         return "\<C-u>" . alternateName . "\<Space>"
       endif
