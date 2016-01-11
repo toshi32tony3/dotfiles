@@ -265,6 +265,8 @@ NeoBundle 'tmhedberg/matchit'
 "-------------------------------------------------------------------
 " text-objects {{{
 " NOTE: 多分設定方法が間違っており, 初回入力時にbellが鳴るのでbelloffする
+" -> 余計なEscがあるせいだったぽい
+" https://github.com/Shougo/neobundle.vim/issues/486
 setglobal belloff+=esc
 
 NeoBundleLazy 'kana/vim-textobj-user'
