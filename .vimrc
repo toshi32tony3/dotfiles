@@ -959,12 +959,12 @@ nnoremap Q q
 
 " F3 command history (使わないが, 一応退避)
 nnoremap <F3> q:
-nnoremap q:   <Nop>
+nnoremap Q:   <Nop>
 
 " F4  search history (使わないが, 一応退避)
 nnoremap <F4> q/
-nnoremap q/   <Nop>
-nnoremap q?   <Nop>
+nnoremap Q/   <Nop>
+nnoremap Q?   <Nop>
 
 " 「保存して閉じる」「保存せず閉じる」を無効にする
 nnoremap ZZ <Nop>
