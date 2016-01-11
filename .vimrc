@@ -1073,10 +1073,10 @@ command! PutMemoFormat call s:PutMemoFormat()
 
 " :messageで表示される履歴を削除
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! DeleteMessage  for s:n in range(200) | echomsg '' | endfor
+command! ClearMessage  for s:n in range(200) | echomsg '' | endfor
 
 " :jumplistを空にする
-command! DeleteJumpList for s:n in range(200) | mark '     | endfor
+command! ClearJumpList for s:n in range(200) | mark '     | endfor
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
@@ -1725,6 +1725,9 @@ if neobundle#tap('vim-ambicmd')
   call s:AddMyCMap( '^cd$',  'CD')
   call s:AddMyCMap('^lcd$', 'LCD')
   call s:AddMyCMap('^cfd$', 'ClipFileDir')
+  call s:AddMyCMap( '^uc$', 'UpdateCtags')
+  call s:AddMyCMap( '^pd$', 'PutDateTime')
+  call s:AddMyCMap( '^cm$', 'ClearMessage')
 
 endif "}}}
 
