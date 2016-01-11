@@ -308,12 +308,16 @@ NeoBundleLazy 'osyo-manga/vim-operator-search', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-NeoBundleLazy 't9md/vim-quickhl', {
-      \   'on_map'  : [['nx', '<Plug>(operator-quickhl-', '<Plug>(quickhl-']],
+NeoBundleLazy 'sgur/vim-operator-openbrowser', {
+      \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
+      \   'on_map'  : [['nx', '<Plug>(operator-openbrowser)']],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
+      \ }
+NeoBundleLazy 't9md/vim-quickhl', {
+      \   'on_map'  : [['nx', '<Plug>(operator-quickhl-', '<Plug>(quickhl-']],
       \ }
 
 NeoBundle 'tpope/vim-surround'
@@ -382,6 +386,7 @@ NeoBundleLazy 'tyru/capture.vim', {
 " web / markdown {{{
 
 NeoBundleLazy 'tyru/open-browser.vim', {
+      \   'rev'     : 'v0.1.1',
       \   'on_map' : '<Plug>(',
       \ }
 
@@ -2133,14 +2138,11 @@ if neobundle#tap('vim-operator-search')
 
 endif "}}}
 
-" 自由にテキストハイライト(vim-quickhl) {{{
-if neobundle#tap('vim-quickhl')
+" Web検索オペレータ(vim-operator-openbrowser) {{{
+if neobundle#tap('vim-operator-openbrowser')
 
-  nmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
-  xmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
-
-  " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
-  nmap <A-h><A-h> <Plug>(quickhl-manual-this)
+  nmap <A-l> <Plug>(operator-openbrowser)
+  xmap <A-l> <Plug>(operator-openbrowser)
 
 endif "}}}
 
@@ -2164,6 +2166,17 @@ if neobundle#tap('caw.vim')
   endfunction
 
   map co <Plug>(operator-caw)
+
+endif "}}}
+
+" 自由にテキストハイライト(vim-quickhl) {{{
+if neobundle#tap('vim-quickhl')
+
+  nmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
+  xmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
+
+  " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
+  nmap <A-h><A-h> <Plug>(quickhl-manual-this)
 
 endif "}}}
 
@@ -2438,8 +2451,8 @@ endif "}}}
 " Vimからブラウザを開く(open-browser) {{{
 if neobundle#tap('open-browser.vim')
 
-  nmap <Leader>L <Plug>(openbrowser-smart-search)
-  xmap <Leader>L <Plug>(openbrowser-smart-search)
+  " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
+  nmap <A-l><A-l> <Plug>(openbrowser-smart-search)
 
 endif "}}}
 
