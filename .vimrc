@@ -954,18 +954,18 @@ endif
 "-----------------------------------------------------------------------------
 " Prevent erroneous input {{{
 
-" レジスタ機能のキーをQにする(Exモードを使う時はgQ)
-nnoremap q <Nop>
-nnoremap Q q
-
-" F3 command history (使わないが, 一応退避)
-nnoremap <F3> q:
-nnoremap Q:   <Nop>
-
-" F4  search history (使わないが, 一応退避)
-nnoremap <F4> q/
-nnoremap Q/   <Nop>
-nnoremap Q?   <Nop>
+" " レジスタ機能のキーをQにする(Exモードを使う時はgQ)
+" nnoremap q <Nop>
+" nnoremap Q q
+"
+" " F3 command history (使わないが, 一応退避)
+" nnoremap <F3> q:
+" nnoremap Q:   <Nop>
+"
+" " F4  search history (使わないが, 一応退避)
+" nnoremap <F4> q/
+" nnoremap Q/   <Nop>
+" nnoremap Q?   <Nop>
 
 " 「保存して閉じる」「保存せず閉じる」を無効にする
 nnoremap ZZ <Nop>
