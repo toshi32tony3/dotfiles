@@ -707,12 +707,6 @@ setglobal notimeout
 " vimrcをリロード
 nnoremap ,r :<C-u>source $MYVIMRC<CR>
 
-" カレントウィンドウ以外を閉じる
-nnoremap ,o :<C-u>only<CR>
-
-" closeの入力を簡易化
-nnoremap <C-q><C-q> :<C-u>close<CR>
-
 " make後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
@@ -721,13 +715,6 @@ autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 "    暴発する度にfiletypeを追加することになるのでやめた
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') | quit | endif
-
-" 簡単にhelpを閉じる, 抜ける
-function! s:HelpSettings()
-  nnoremap <buffer> <F1>  :<C-u>q<CR>
-  nnoremap <buffer> <Esc> <C-w>j
-endfunction
-autocmd MyAutoCmd FileType help call s:HelpSettings()
 
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
