@@ -2625,4 +2625,6 @@ endif "}}}
 " TODO: open-browserの残件
 "       1. smart-searchの挙動が変わっていることの報告
 "       2. smart-searchの挙動が変わっていることの変化点調査
+" TODO: eskkの残件
+"       1. Replace Modeで使えないことの報告
 
