@@ -714,9 +714,8 @@ nnoremap ,r :<C-u>source $MYVIMRC<CR>
 " カレントウィンドウ以外を閉じる
 nnoremap ,o :<C-u>only<CR>
 
-" 閉じる系の入力を簡易化
-nnoremap <C-q><C-q> :<C-u>bdelete<CR>
-nnoremap <C-w><C-w> :<C-u>close<CR>
+" closeの入力を簡易化
+nnoremap <C-q><C-q> :<C-u>close<CR>
 
 " make後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
