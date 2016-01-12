@@ -929,7 +929,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
             \ g:local_rc#current_src_dir . '\' . l:item
       if has('win32')
         " 処理中かどうかわかるように/minを使う
-        execute '!start /min ' . l:updateCommand
+        silent execute '!start /min ' . l:updateCommand
       else
         call system(l:updateCommand)
       endif
