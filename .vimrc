@@ -24,7 +24,16 @@ function! s:SID()
 endfunction
 
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
-autocmd MyAutoCmd VimEnter * if argc() == 0 && bufname('%') == '' | enew | endif
+function! s:regenerateFirstBuffer(path)
+  if     bufname('%') ==# ''
+    " 無名バッファなら, バッファを再生成
+    new | execute "normal! \<C-w>\<C-w>" | bd
+  elseif argc() >= 1
+    " ファイルが指定されていたら最初のファイルをbdして開き直す
+    bd | execute 'edit ' . a:path
+  endif
+endfunction
+autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
 " Vim起動時間を計測
 " -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
@@ -265,10 +274,6 @@ NeoBundle 'tmhedberg/matchit'
 "}}}
 "-------------------------------------------------------------------
 " text-objects {{{
-" NOTE: 多分設定方法が間違っており, 初回入力時にbellが鳴るのでbelloffする
-" -> 余計なEscがあるせいだったぽい
-" https://github.com/Shougo/neobundle.vim/issues/486
-setglobal belloff+=esc
 
 NeoBundleLazy 'kana/vim-textobj-user'
 
@@ -388,7 +393,6 @@ NeoBundleLazy 'tyru/capture.vim', {
 " web / markdown {{{
 
 NeoBundleLazy 'tyru/open-browser.vim', {
-      \   'rev'     : 'v0.1.1',
       \   'on_map' : '<Plug>(',
       \ }
 
@@ -711,13 +715,6 @@ setglobal notimeout
 " vimrcをリロード
 nnoremap ,r :<C-u>source $MYVIMRC<CR>
 
-" カレントウィンドウ以外を閉じる
-nnoremap ,o :<C-u>only<CR>
-
-" 閉じる系の入力を簡易化
-nnoremap <C-q><C-q> :<C-u>bdelete<CR>
-nnoremap <C-w><C-w> :<C-u>close<CR>
-
 " make後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
@@ -727,18 +724,8 @@ autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
       \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') | quit | endif
 
-" 簡単にhelpを閉じる, 抜ける
-function! s:HelpSettings()
-  nnoremap <buffer> <F1>  :<C-u>q<CR>
-  nnoremap <buffer> <Esc> <C-w>j
-endfunction
-autocmd MyAutoCmd FileType help call s:HelpSettings()
-
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
-
-" カレントファイルをfull pathで表示(ただし$HOME以下はrelative path)
-nnoremap <C-g> 1<C-g>
 
 " j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
@@ -2622,9 +2609,4 @@ endif "}}}
 "       1. lineが条件から抜けていた件のPR
 "       2. オペレータを2回連続で入力した時の行指向検索
 "       3. 矩形Visualモードで指定したblock検索
-" TODO: open-browserの残件
-"       1. smart-searchの挙動が変わっていることの報告
-"       2. smart-searchの挙動が変わっていることの変化点調査
-" TODO: eskkの残件
-"       1. Replace Modeで使えないことの報告
 
