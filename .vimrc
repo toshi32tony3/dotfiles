@@ -384,7 +384,6 @@ NeoBundleLazy 'tyru/capture.vim', {
 " web / markdown {{{
 
 NeoBundleLazy 'tyru/open-browser.vim', {
-      \   'rev'     : 'v0.1.1',
       \   'on_map' : '<Plug>(',
       \ }
 
@@ -2601,7 +2600,4 @@ endif "}}}
 "       1. lineが条件から抜けていた件のPR
 "       2. オペレータを2回連続で入力した時の行指向検索
 "       3. 矩形Visualモードで指定したblock検索
-" TODO: open-browserの残件
-"       1. smart-searchの挙動が変わっていることの報告
-"       2. smart-searchの挙動が変わっていることの変化点調査
 
