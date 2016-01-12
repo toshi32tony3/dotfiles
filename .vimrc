@@ -831,7 +831,7 @@ function! s:JumpTagTab(funcName) "{{{
   " execute 'tjump ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
-nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('cword'))<CR>
+nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/template/local.rc.vim
@@ -929,7 +929,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
             \ g:local_rc#current_src_dir . '\' . l:item
       if has('win32')
         " 処理中かどうかわかるように/minを使う
-        execute '!start /min ' . l:updateCommand
+        silent execute '!start /min ' . l:updateCommand
       else
         call system(l:updateCommand)
       endif
@@ -2243,34 +2243,34 @@ if neobundle#tap('unite.vim')
 
   " オプション名がやたらめったら長いので変数に入れてみたけど微妙感が漂う
   let g:u_nqui = '-no-quit '
-  let g:u_nspl = '-no-split '
   let g:u_nsyn = '-no-sync '
   let g:u_prev = '-auto-preview '
   let g:u_sbuf = '-buffer-name=search-buffer '
-  let g:u_sins = '-start-insert '
-  let g:u_hopt = '-split -horizontal -winheight=20 '
-  let g:u_vopt = '-split -vertical -winwidth=90 '
+  let g:u_nins = '-no-start-insert '
+  let g:u_nspl = '-no-split '
+  let g:u_hopt =    '-split -horizontal -winheight=20 '
+  let g:u_vopt =    '-split -vertical -winwidth=90 '
 
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
-  let g:u_opt_bu = 'Unite '       . g:u_hopt
+  let g:u_opt_bu = 'Unite '       . g:u_hopt . g:u_nins
   let g:u_opt_bo = 'Unite '       . g:u_hopt
-  let g:u_opt_dm = 'Unite '       . g:u_hopt . g:u_sins
-  let g:u_opt_fi = 'Unite '       . g:u_hopt . g:u_sins
-  let g:u_opt_fm = 'Unite '       . g:u_hopt . g:u_sins
-  let g:u_opt_fr = 'Unite '       . g:u_hopt . g:u_sins
+  let g:u_opt_dm = 'Unite '       . g:u_hopt
+  let g:u_opt_fi = 'Unite '       . g:u_hopt
+  let g:u_opt_fm = 'Unite '       . g:u_hopt
+  let g:u_opt_fr = 'Unite '       . g:u_hopt
   let g:u_opt_gd = 'Unite '       . g:u_hopt
-  let g:u_opt_gg = 'Unite '       . g:u_hopt            . g:u_sbuf
-  let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_sbuf . g:u_nqui
-  let g:u_opt_li = 'Unite '       . g:u_nspl . g:u_sins . g:u_sbuf
-  let g:u_opt_mf = 'Unite '       . g:u_hopt . g:u_sins
-  let g:u_opt_mg = 'Unite '       . g:u_hopt            . g:u_sbuf
-  let g:u_opt_mk = 'Unite '       . g:u_hopt . g:u_sins . g:u_prev
-  let g:u_opt_mp = 'Unite '       . g:u_nspl . g:u_sins
-  let g:u_opt_nl = 'Unite '       . g:u_nspl . g:u_sins
-  let g:u_opt_nu = 'Unite '       . g:u_nspl                      . g:u_nsyn
-  let g:u_opt_ol = 'Unite '       . g:u_vopt . g:u_sins
-  let g:u_opt_op = 'Unite '       . g:u_nspl . g:u_sins
-  let g:u_opt_re = 'UniteResume ' . g:u_hopt            . g:u_sbuf
+  let g:u_opt_gg = 'Unite '       . g:u_hopt                       . g:u_sbuf
+  let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
+  let g:u_opt_li = 'Unite '       . g:u_nspl                       . g:u_sbuf
+  let g:u_opt_mf = 'Unite '       . g:u_hopt
+  let g:u_opt_mg = 'Unite '       . g:u_hopt                       . g:u_sbuf
+  let g:u_opt_mk = 'Unite '       . g:u_hopt            . g:u_prev
+  let g:u_opt_mp = 'Unite '       . g:u_nspl
+  let g:u_opt_nl = 'Unite '       . g:u_nspl
+  let g:u_opt_nu = 'Unite '       . g:u_nspl . g:u_nins . g:u_nsyn
+  let g:u_opt_ol = 'Unite '       . g:u_vopt
+  let g:u_opt_op = 'Unite '       . g:u_nspl
+  let g:u_opt_re = 'UniteResume ' . g:u_hopt                       . g:u_sbuf
 
   nnoremap <expr> <Leader>bu ':<C-u>' . g:u_opt_bu . 'buffer'           . '<CR>'
   nnoremap <expr> <Leader>bo ':<C-u>' . g:u_opt_bo . 'bookmark'         . '<CR>'
@@ -2307,7 +2307,7 @@ if neobundle#tap('unite.vim')
           \   'prompt_direction' : 'top',
           \   'prompt_focus'     : 1,
           \   'split'            : 1,
-          \   'start_insert'     : 0,
+          \   'start_insert'     : 1,
           \   'sync'             : 1,
           \ })
 
@@ -2625,4 +2625,6 @@ endif "}}}
 " TODO: open-browserの残件
 "       1. smart-searchの挙動が変わっていることの報告
 "       2. smart-searchの挙動が変わっていることの変化点調査
+" TODO: eskkの残件
+"       1. Replace Modeで使えないことの報告
 
