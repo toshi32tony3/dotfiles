@@ -831,7 +831,7 @@ function! s:JumpTagTab(funcName) "{{{
   " execute 'tjump ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
-nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('cword'))<CR>
+nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/template/local.rc.vim
