@@ -24,7 +24,16 @@ function! s:SID()
 endfunction
 
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
-autocmd MyAutoCmd VimEnter * if argc() == 0 && bufname('%') == '' | enew | endif
+function! s:regenerateFirstBuffer(path)
+  if     bufname('%') ==# ''
+    " 無名バッファなら, バッファを再生成
+    new | execute "normal! \<C-w>\<C-w>" | bd
+  elseif argc() >= 1
+    " ファイルが指定されていたら最初のファイルをbdして開き直す
+    bd | execute 'edit ' . a:path
+  endif
+endfunction
+autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
 " Vim起動時間を計測
 " -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
