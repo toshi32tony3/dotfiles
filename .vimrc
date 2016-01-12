@@ -736,9 +736,6 @@ autocmd MyAutoCmd FileType help call s:HelpSettings()
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
-" カレントファイルをfull pathで表示(ただし$HOME以下はrelative path)
-nnoremap <C-g> 1<C-g>
-
 " j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
 nnoremap j gj
 xnoremap j gj
