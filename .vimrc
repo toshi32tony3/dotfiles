@@ -559,11 +559,11 @@ command! ClipFileName call s:Clip(expand('%:t'))
 " 現在開いているファイルのディレクトリパスをレジスタへ
 command! ClipFileDir  call s:Clip(expand('%:p:h'))
 
-" コマンドの出力結果を選択範囲レジスタ(*)に入れる
+" コマンドの出力結果を選択範囲レジスタ(*)へ
 function! s:ClipCommandOutput(cmd)
-  redir @*>
-  silent execute a:cmd
-  redir END
+  redir @*> | silent execute a:cmd | redir END
+  " 先頭の改行文字を取り除く
+  if len(@*) != 0 | let @* = @*[1:] | endif
 endfunction
 command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<f-args>)
 
