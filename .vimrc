@@ -46,9 +46,9 @@ if has('vim_starting') && has('reltime')
         \ | echomsg 'startuptime: ' . reltimestr(s:startuptime)
 endif
 
-" " ファイル書き込み時の文字コード。fileencodingが空の場合, encodingの値を使う
-" " -> encodingと同じ値にしたい場合は設定不要
-" setglobal fileencoding=
+" " ファイル書き込み時の文字コード。空の場合, encodingの値を使う
+" " -> デフォルト値が空であるため, encodingと同じ値にしたい場合は設定不要
+" setglobal fileencoding=utf-8
 
 " ファイル読み込み時の変換候補
 " -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
@@ -61,10 +61,10 @@ else
 endif
 
 " 文字コードを指定してファイルを開き直す
-nnoremap <Leader>enc :<C-u>e ++encoding=
+nnoremap <Leader>en :<C-u>e ++encoding=
 
 " 改行コードを指定してファイルを開き直す
-nnoremap <Leader>ff  :<C-u>e ++fileformat=
+nnoremap <Leader>ff :<C-u>e ++fileformat=
 
 " バックアップ, スワップファイルの設定
 " -> ネットワーク上ファイルの編集時に重くなる？ので作らない
@@ -384,10 +384,6 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {
       \   'on_map' : [['ni', '<Plug>']],
       \ }
 
-NeoBundleLazy 'tyru/capture.vim', {
-      \   'on_cmd' : 'Capture',
-      \ }
-
 "}}}
 "-------------------------------------------------------------------
 " web / markdown {{{
@@ -563,11 +559,11 @@ command! ClipFileName call s:Clip(expand('%:t'))
 " 現在開いているファイルのディレクトリパスをレジスタへ
 command! ClipFileDir  call s:Clip(expand('%:p:h'))
 
-" コマンドの出力結果を選択範囲レジスタ(*)に入れる
+" コマンドの出力結果を選択範囲レジスタ(*)へ
 function! s:ClipCommandOutput(cmd)
-  redir @*>
-  silent execute a:cmd
-  redir END
+  redir @*> | silent execute a:cmd | redir END
+  " 先頭の改行文字を取り除く
+  if len(@*) != 0 | let @* = @*[1:] | endif
 endfunction
 command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<f-args>)
 
@@ -1113,14 +1109,14 @@ autocmd MyAutoCmd CursorMoved * call s:OnCursorMove()
 " 引数に渡した行のFold名を取得
 " NOTE: 対応ファイルタイプ : vim/markdown
 function! s:GetFoldName(line) "{{{
-  if     &ft == 'vim'
+  if     &filetype == 'vim'
     " コメント行か, 末尾コメントか判別してFold名を切り出す
     let l:startIndex = match   (a:line, '\w')
     let l:endIndex   = matchend(a:line, '\v^("\ )')
     let l:preIndex   = (l:endIndex == -1) ? l:startIndex : l:endIndex
     let l:sufIndex   = strlen(a:line) - ((l:endIndex == -1) ? 6 : 5)
     return a:line[l:preIndex : l:sufIndex]
-  elseif &ft == 'markdown'
+  elseif &filetype == 'markdown'
     let l:foldName = split(a:line, "\<Space>")
     return empty(l:foldName) ? '' : join(l:foldName[1:], "\<Space>")
   endif
@@ -1156,7 +1152,7 @@ function! s:GetFoldLevel() "{{{
   " ------------------------------------------------------------
   " foldLevelをカウント
   " ------------------------------------------------------------
-  if &ft == 'markdown'
+  if &filetype == 'markdown'
     let l:pattern = '^#'
 
     " markdownの場合, (現在の行 - 1)にfoldmarkerが含まれていれば, foldLevel+=1
@@ -1194,7 +1190,7 @@ command! EchoFoldLevel echo s:GetFoldLevel()
 " NOTE: 対応ファイルタイプ : vim/markdown
 let s:currentFold = ''
 function! s:GetCurrentFold() "{{{
-  if &ft != 'vim' && &ft != 'markdown' | return '' | endif
+  if &filetype != 'vim' && &filetype != 'markdown' | return '' | endif
 
   " ------------------------------------------------------------
   " 前処理
@@ -1232,7 +1228,7 @@ function! s:GetCurrentFold() "{{{
     if l:lastLineNumber == l:currentLineNumber
       " カーソルを戻して子FoldをfoldListに追加
       call setpos('.', l:cursorPosition)
-      let l:currentLine = (&ft == 'markdown') &&
+      let l:currentLine = (&filetype == 'markdown') &&
             \             (match(getline('.'), '^#') == -1)
             \           ? getline((line('.') - 1))
             \           : getline('.')
@@ -1241,7 +1237,7 @@ function! s:GetCurrentFold() "{{{
         call add(l:foldList, l:foldName)
       endif
     else
-      let l:currentLine = (&ft == 'markdown')
+      let l:currentLine = (&filetype == 'markdown')
             \           ? getline((line('.') - 1))
             \           : getline('.')
       " 親FoldをfoldListに追加
@@ -1276,10 +1272,7 @@ autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
 function! s:JumpFuncNameCForward() "{{{
-  if &ft != 'c' | return | endif
-
-  " 現在位置をjumplistに追加
-  mark '
+  if &filetype != 'c' | return | endif
 
   " Viewを保存
   let l:savedView = winsaveview()
@@ -1293,34 +1286,29 @@ function! s:JumpFuncNameCForward() "{{{
   call search('(', 'b')
   execute 'keepjumps normal! b'
 
-  " Cの関数名の上から下方向検索するには, ]]を2回使う必要がある
-  if l:lastLine == line('.')
-    execute 'keepjumps normal! ]]'
-    execute 'keepjumps normal! ]]'
+  " 行移動していたら処理終了
+  if l:lastLine != line('.') | return  | endif
 
-    " 検索対象が居なければViewを戻して処理終了
-    if line('.') == line('$') | call winrestview(l:savedView) | return | endif
-    call search('(', 'b')
-    execute 'keepjumps normal! b'
+  " 行移動していなければ, 開始位置がCの関数名上だったということ
+  " -> 下方向検索するには, ]]を2回使う必要がある
+  execute 'keepjumps normal! ]]'
+  execute 'keepjumps normal! ]]'
 
-  endif
+  " 検索対象が居なければViewを戻して処理終了
+  if line('.') == line('$') | call winrestview(l:savedView) | return | endif
 
-  " 現在位置をjumplistに追加
-  mark '
+  call search('(', 'b')
+  execute 'keepjumps normal! b'
 endfunction " }}}
 function! s:JumpFuncNameCBackward() "{{{
-  if &ft != 'c' | return | endif
-
-  " 現在位置をjumplistに追加
-  mark '
+  if &filetype != 'c' | return | endif
 
   " Viewを保存
   let l:savedView = winsaveview()
 
-  " カーソルがある行の1列目の文字が { ならば [[ は不要
-  if getline('.')[0] != '{'
+  " カーソルがある行の1列目の文字が { ならば [[ は不要 " for match }
+  if getline('.')[0] != '{'                            " for match }
     execute 'keepjumps normal! [['
-    " for match } }
 
     " 検索対象が居なければViewを戻して処理終了
     if line('.') == 1 | call winrestview(l:savedView) | return | endif
@@ -1328,9 +1316,6 @@ function! s:JumpFuncNameCBackward() "{{{
 
   call search('(', 'b')
   execute 'keepjumps normal! b'
-
-  " 現在位置をjumplistに追加
-  mark '
 endfunction " }}}
 nnoremap <silent> ]f :<C-u>call <SID>JumpFuncNameCForward()<CR>
 nnoremap <silent> [f :<C-u>call <SID>JumpFuncNameCBackward()<CR>
@@ -1338,7 +1323,7 @@ nnoremap <silent> [f :<C-u>call <SID>JumpFuncNameCBackward()<CR>
 " Cの関数名取得
 let s:currentFunc = ''
 function! s:GetCurrentFuncC() "{{{
-  if &ft != 'c' | return '' | endif
+  if &filetype != 'c' | return '' | endif
 
   " Viewを保存
   let l:savedView = winsaveview()
@@ -1367,8 +1352,8 @@ function! s:GetCurrentFuncC() "{{{
   return l:funcName
 endfunction " }}}
 autocmd MyAutoCmd User MyLineChanged
-      \      if &ft == 'c' | let s:currentFunc = s:GetCurrentFuncC() | endif
-autocmd MyAutoCmd BufEnter * let s:currentFunc = s:GetCurrentFuncC()
+      \ if &filetype == 'c' | let s:currentFunc = s:GetCurrentFuncC() | endif
+autocmd MyAutoCmd BufEnter *  let s:currentFunc = s:GetCurrentFuncC()
 
 function! s:ClipCurrentFuncName(funcName) "{{{
   if strlen(a:funcName) == 0
@@ -1779,13 +1764,13 @@ if neobundle#tap('lightline.vim')
         \ }
 
   function! MyModified()
-    return &ft =~  'help\|vimfiler\' ? ''          :
-          \              &modified   ? "\<Space>+" :
-          \              &modifiable ? ''          : "\<Space>-"
+    return &filetype =~  'help\|vimfiler\' ? ''          :
+          \              &modified         ? "\<Space>+" :
+          \              &modifiable       ? ''          : "\<Space>-"
   endfunction
 
   function! MyReadonly()
-    return &ft !~? 'help\|vimfiler\' && &readonly ? "\<Space>\u2B64" : ''
+    return &filetype !~? 'help\|vimfiler\' && &readonly ? "\<Space>\u2B64" : ''
   endfunction
 
   function! MyFilename()
@@ -1793,11 +1778,10 @@ if neobundle#tap('lightline.vim')
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており, ファイル名をフルパス(%:p)出力
     " -> GVIMウィンドウ上部にフルパスが表示されているので, そちらを参照する
-    return (&ft == 'unite'       ? ''            :
-          \ &ft == 'vimfiler'    ? ''            :
-          \  '' != expand('%:t') ? expand('%:t') : '[No Name]') .
-          \ ('' != MyReadonly()  ? MyReadonly()  : ''         ) .
-          \ ('' != MyModified()  ? MyModified()  : ''         )
+    return (&filetype == 'vimfiler' ? ''          :
+          \     expand('%:t') == '' ? '[No Name]' : expand('%:t'))
+          \   . (MyReadonly() == '' ? ''          : MyReadonly() )
+          \   . (MyModified() == '' ? ''          : MyModified() )
   endfunction
 
   function! MyFileformat()
@@ -1809,7 +1793,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyFileencoding()
-    return winwidth(0) > 70 ? (strlen(&fenc) ? &fenc : &enc) : ''
+    return winwidth(0) > 70 ? (strlen(&fileencoding) ? &fileencoding : &encoding) : ''
   endfunction
 
   function! MyMode()
@@ -1862,7 +1846,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyCurrentFunc()
-    if &ft == 'vim' || &ft == 'markdown'
+    if &filetype == 'vim' || &filetype == 'markdown'
       return winwidth(0) > 100 ? s:currentFold : ''
     else
       return winwidth(0) > 100 ? s:currentFunc : ''
@@ -1870,7 +1854,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyFugitive()
-    if !neobundle#is_installed('vim-fugitive') || &ft == 'vimfiler'
+    if !neobundle#is_installed('vim-fugitive') || &filetype == 'vimfiler'
       return ''
     endif
     let l:_ = fugitive#head()
@@ -1989,18 +1973,16 @@ if neobundle#tap('vim-asterisk')
   endfunction
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
-  " 暫定対応として<silent>を追加した
-  " https://github.com/haya14busa/vim-asterisk/issues/19
   if neobundle#is_installed('vim-anzu')
-    map <silent> *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
-    map <silent> #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
-    map <silent> g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    map <silent> g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
+    map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
   else
-    map <silent> *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
-    map <silent> #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
-    map <silent> g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
-    map <silent> g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
+    map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
+    map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
   endif
 
 endif "}}}
@@ -2424,16 +2406,6 @@ if neobundle#tap('dicwin-vim')
     endfunction
     autocmd MyAutoCmd FileType dicwin call s:DicwinSettings()
   endif
-
-endif "}}}
-
-" コマンドの結果をバッファに表示する(capture.vim) {{{
-if neobundle#tap('capture.vim')
-
-  let g:capture_open_command = 'botright 12sp new'
-
-  nnoremap <Leader>who :<C-u>Capture echo expand('%:p')<CR>
-  nnoremap <Leader>sn  :<C-u>Capture scriptnames<CR>
 
 endif "}}}
 
