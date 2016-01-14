@@ -61,10 +61,10 @@ else
 endif
 
 " 文字コードを指定してファイルを開き直す
-nnoremap <Leader>enc :<C-u>e ++encoding=
+nnoremap <Leader>en :<C-u>e ++encoding=
 
 " 改行コードを指定してファイルを開き直す
-nnoremap <Leader>ff  :<C-u>e ++fileformat=
+nnoremap <Leader>ff :<C-u>e ++fileformat=
 
 " バックアップ, スワップファイルの設定
 " -> ネットワーク上ファイルの編集時に重くなる？ので作らない
