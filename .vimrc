@@ -1274,9 +1274,6 @@ autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 function! s:JumpFuncNameCForward() "{{{
   if &ft != 'c' | return | endif
 
-  " 現在位置をjumplistに追加
-  mark '
-
   " Viewを保存
   let l:savedView = winsaveview()
 
@@ -1289,20 +1286,19 @@ function! s:JumpFuncNameCForward() "{{{
   call search('(', 'b')
   execute 'keepjumps normal! b'
 
-  " Cの関数名の上から下方向検索するには, ]]を2回使う必要がある
-  if l:lastLine == line('.')
-    execute 'keepjumps normal! ]]'
-    execute 'keepjumps normal! ]]'
+  " 行移動していたら処理終了
+  if l:lastLine != line('.') | return  | endif
 
-    " 検索対象が居なければViewを戻して処理終了
-    if line('.') == line('$') | call winrestview(l:savedView) | return | endif
-    call search('(', 'b')
-    execute 'keepjumps normal! b'
+  " 行移動していなければ, 開始位置がCの関数名上だったということ
+  " -> 下方向検索するには, ]]を2回使う必要がある
+  execute 'keepjumps normal! ]]'
+  execute 'keepjumps normal! ]]'
 
-  endif
+  " 検索対象が居なければViewを戻して処理終了
+  if line('.') == line('$') | call winrestview(l:savedView) | return | endif
 
-  " 現在位置をjumplistに追加
-  mark '
+  call search('(', 'b')
+  execute 'keepjumps normal! b'
 endfunction " }}}
 function! s:JumpFuncNameCBackward() "{{{
   if &ft != 'c' | return | endif
