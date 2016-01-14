@@ -1985,18 +1985,16 @@ if neobundle#tap('vim-asterisk')
   endfunction
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
-  " 暫定対応として<silent>を追加した
-  " https://github.com/haya14busa/vim-asterisk/issues/19
   if neobundle#is_installed('vim-anzu')
-    map <silent> *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
-    map <silent> #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
-    map <silent> g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    map <silent> g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
+    map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+    map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
   else
-    map <silent> *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
-    map <silent> #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
-    map <silent> g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
-    map <silent> g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
+    map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
+    map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
   endif
 
 endif "}}}
