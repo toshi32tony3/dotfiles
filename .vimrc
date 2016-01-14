@@ -420,7 +420,6 @@ NeoBundleLazy 'glidenote/memolist.vim', {
       \ }
 
 NeoBundle 'lambdalisue/vim-gista', {
-      \   'rev'    : 'fix/authorize_HTTP502_in_Windows',
       \   'on_cmd' : 'Gista',
       \ }
 
