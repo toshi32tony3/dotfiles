@@ -377,6 +377,7 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
 
 NeoBundleLazy 'mtth/scratch.vim', {
       \   'on_map' : '<Plug>',
+      \   'on_cmd' : ['Scratch', 'ScratchPreview'],
       \ }
 
 " 本家 : 'koron/dicwin-vim'
@@ -1697,6 +1698,11 @@ if neobundle#tap('vim-ambicmd')
   call s:AddMyCMap( '^pd$', 'PutDateTime')
   call s:AddMyCMap( '^cm$', 'ClearMessage')
 
+  if neobundle#is_installed('scratch.vim')
+    call s:AddMyCMap('^scr$', 'Scratch')
+    call s:AddMyCMap('^scp$', 'ScratchPreview')
+  endif
+
 endif "}}}
 
 " My favorite colorscheme(vim-tomorrow-theme) {{{
@@ -2379,7 +2385,6 @@ if neobundle#tap('scratch.vim')
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
-    delcommand Scratch
     delcommand ScratchInsert
     delcommand ScratchSelection
 
