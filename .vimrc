@@ -46,9 +46,9 @@ if has('vim_starting') && has('reltime')
         \ | echomsg 'startuptime: ' . reltimestr(s:startuptime)
 endif
 
-" " ファイル書き込み時の文字コード。fileencodingが空の場合, encodingの値を使う
-" " -> encodingと同じ値にしたい場合は設定不要
-" setglobal fileencoding=
+" " ファイル書き込み時の文字コード。空の場合, encodingの値を使う
+" " -> デフォルト値が空であるため, encodingと同じ値にしたい場合は設定不要
+" setglobal fileencoding=utf-8
 
 " ファイル読み込み時の変換候補
 " -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
