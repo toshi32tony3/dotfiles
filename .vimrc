@@ -1699,7 +1699,7 @@ if neobundle#tap('vim-ambicmd')
   call s:AddMyCMap( '^cm$', 'ClearMessage')
 
   if neobundle#is_installed('scratch.vim')
-    call s:AddMyCMap('^sc$', 'Scratch')
+    call s:AddMyCMap('^sc$',  'Scratch')
     call s:AddMyCMap('^scp$', 'ScratchPreview')
   endif
 
