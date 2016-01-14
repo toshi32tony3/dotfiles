@@ -384,10 +384,6 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {
       \   'on_map' : [['ni', '<Plug>']],
       \ }
 
-NeoBundleLazy 'tyru/capture.vim', {
-      \   'on_cmd' : 'Capture',
-      \ }
-
 "}}}
 "-------------------------------------------------------------------
 " web / markdown {{{
@@ -2424,16 +2420,6 @@ if neobundle#tap('dicwin-vim')
     endfunction
     autocmd MyAutoCmd FileType dicwin call s:DicwinSettings()
   endif
-
-endif "}}}
-
-" コマンドの結果をバッファに表示する(capture.vim) {{{
-if neobundle#tap('capture.vim')
-
-  let g:capture_open_command = 'botright 12sp new'
-
-  nnoremap <Leader>who :<C-u>Capture echo expand('%:p')<CR>
-  nnoremap <Leader>sn  :<C-u>Capture scriptnames<CR>
 
 endif "}}}
 
