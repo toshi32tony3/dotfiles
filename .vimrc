@@ -1303,16 +1303,12 @@ endfunction " }}}
 function! s:JumpFuncNameCBackward() "{{{
   if &ft != 'c' | return | endif
 
-  " 現在位置をjumplistに追加
-  mark '
-
   " Viewを保存
   let l:savedView = winsaveview()
 
-  " カーソルがある行の1列目の文字が { ならば [[ は不要
-  if getline('.')[0] != '{'
+  " カーソルがある行の1列目の文字が { ならば [[ は不要 " for match }
+  if getline('.')[0] != '{'                            " for match }
     execute 'keepjumps normal! [['
-    " for match } }
 
     " 検索対象が居なければViewを戻して処理終了
     if line('.') == 1 | call winrestview(l:savedView) | return | endif
@@ -1320,9 +1316,6 @@ function! s:JumpFuncNameCBackward() "{{{
 
   call search('(', 'b')
   execute 'keepjumps normal! b'
-
-  " 現在位置をjumplistに追加
-  mark '
 endfunction " }}}
 nnoremap <silent> ]f :<C-u>call <SID>JumpFuncNameCForward()<CR>
 nnoremap <silent> [f :<C-u>call <SID>JumpFuncNameCBackward()<CR>
