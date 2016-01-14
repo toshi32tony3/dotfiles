@@ -419,6 +419,11 @@ NeoBundleLazy 'glidenote/memolist.vim', {
       \   'on_cmd' : 'MemoNew',
       \ }
 
+NeoBundle 'lambdalisue/vim-gista', {
+      \   'rev'    : 'fix/authorize_HTTP502_in_Windows',
+      \   'on_cmd' : 'Gista',
+      \ }
+
 "}}}
 "-------------------------------------------------------------------
 " formatter {{{
