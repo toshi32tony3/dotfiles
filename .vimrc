@@ -309,7 +309,7 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-" 本家 'osyo-manga/vim-operator-search', {
+" 本家 : 'osyo-manga/vim-operator-search', {
 NeoBundleLazy 'toshi32tony3/vim-operator-search', {
       \   'rev'     : 'operator_for_line',
       \   'depends' : 'kana/vim-operator-user',
@@ -420,7 +420,6 @@ NeoBundleLazy 'glidenote/memolist.vim', {
       \ }
 
 NeoBundle 'lambdalisue/vim-gista', {
-      \   'rev'    : 'fix/authorize_HTTP502_in_Windows',
       \   'on_cmd' : 'Gista',
       \ }
 
