@@ -899,7 +899,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
-    " ソースコード切り替え後, バージョン名を出力
+    " ソースコード切り替え後, ソースディレクトリ名を出力
     echo 'switch source to: ' . g:local_rc#src_dir
   endfunction "}}}
   nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
