@@ -2224,6 +2224,7 @@ if neobundle#tap('unite.vim')
   let g:u_nqui = '-no-quit '
   let g:u_nsyn = '-no-sync '
   let g:u_prev = '-auto-preview '
+  let g:u_fbuf = '-buffer-name=file-buffer '
   let g:u_sbuf = '-buffer-name=search-buffer '
   let g:u_nins = '-no-start-insert '
   let g:u_nspl = '-no-split '
@@ -2236,7 +2237,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_dm = 'Unite '       . g:u_hopt
   let g:u_opt_fi = 'Unite '       . g:u_hopt
   let g:u_opt_fm = 'Unite '       . g:u_hopt
-  let g:u_opt_fr = 'Unite '       . g:u_hopt
+  let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
   let g:u_opt_gd = 'Unite '       . g:u_hopt
   let g:u_opt_gg = 'Unite '       . g:u_hopt                       . g:u_sbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
