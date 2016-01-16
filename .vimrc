@@ -726,8 +726,7 @@ autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
 " -> buftypeがnofileかつ特定のfiletypeの追加を試みたが,
 "    暴発する度にfiletypeを追加することになるのでやめた
-autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
-      \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') | quit | endif
+autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit | endif
 
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
