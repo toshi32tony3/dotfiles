@@ -572,7 +572,7 @@ command! ClipFileDir  call s:Clip(expand('%:p:h'))
 function! s:ClipCommandOutput(cmd)
   redir @*> | silent execute a:cmd | redir END
   " 先頭の改行文字を取り除く
-  if len(@*) != 0 | let @* = @*[1:] | endif
+  if len(@*) != 0 | let @* = @*[1 :] | endif
 endfunction
 command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<f-args>)
 
@@ -843,7 +843,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
     endfor
     " 1文字目の','を削除
-    if &tags != '' | let &tags = &tags[1:] | endif
+    if &tags != '' | let &tags = &tags[1 :] | endif
     " GTAGSROOTの登録
     " -> GNU GLOBALのタグはプロジェクトルートで生成する
     let $GTAGSROOT = g:local_rc#current_src_dir
@@ -862,7 +862,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
-    if &path != '' | let &path = &path[1:] | endif
+    if &path != '' | let &path = &path[1 :] | endif
   endfunction "}}}
 
   function! s:SetCDPathList() "{{{
@@ -880,7 +880,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
-    if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
+    if &cdpath != '' | let &cdpath = &cdpath[1 :] | endif
   endfunction "}}}
 
   " 初回のtags, path設定
@@ -1128,7 +1128,7 @@ function! s:GetFoldName(line) "{{{
     return a:line[l:preIndex : l:sufIndex]
   elseif &filetype == 'markdown'
     let l:foldName = split(a:line, "\<Space>")
-    return empty(l:foldName) ? '' : join(l:foldName[1:], "\<Space>")
+    return empty(l:foldName) ? '' : join(l:foldName[1 :], "\<Space>")
   endif
   return ''
 endfunction "}}}
