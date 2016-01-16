@@ -1056,11 +1056,12 @@ endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
 " :messageで表示される履歴を削除
+" -> 空文字で埋めているだけ。:ClipCommandOutput messageすると202行になる
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! ClearMessage  for s:n in range(200) | echomsg '' | endfor
+command! ClearMessage  for s:n in range(250) | echomsg '' | endfor
 
 " :jumplistを空にする
-command! ClearJumpList for s:n in range(200) | mark '     | endfor
+command! ClearJumpList for s:n in range(250) | mark '     | endfor
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
