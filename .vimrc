@@ -263,6 +263,7 @@ NeoBundleLazy 'haya14busa/vim-asterisk', {
 
 " 本家 : 'deris/vim-shot-f'
 NeoBundleLazy 'toshi32tony3/vim-shot-f', {
+      \   'rev'    : 'develop',
       \   'on_map' : '<Plug>',
       \ }
 NeoBundleLazy 'justinmk/vim-sneak', {
