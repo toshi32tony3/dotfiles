@@ -1076,7 +1076,7 @@ function! s:OnCursorMove() "{{{
         \ l:currentMode != 'no' &&
         \ l:currentMode !=# 'v' &&
         \ l:currentMode !=# 'V' &&
-        \ l:currentMode != ''
+        \ l:currentMode !=  "\<C-v>"
     return
   endif
 
@@ -1967,7 +1967,7 @@ if neobundle#tap('vim-asterisk')
       return "\<Esc>"
     elseif  l:currentMode ==# 'v' ||
           \ l:currentMode ==# 'V' ||
-          \ l:currentMode == ''
+          \ l:currentMode ==  "\<C-v>"
       return "\<Esc>gvygv"
     endif
     return ''
