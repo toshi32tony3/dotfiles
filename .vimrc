@@ -1958,11 +1958,11 @@ if neobundle#tap('vim-asterisk')
 
   " star-search対象をクリップボードに入れる
   function! s:ClipCword(data)
-    let    l:currentMode  = mode(1)
-    if     l:currentMode == 'n'
+    let     l:currentMode  = mode(1)
+    if      l:currentMode == 'n'
       let @* = a:data
       return ''
-    elseif l:currentMode == 'no'
+    elseif  l:currentMode == 'no'
       let @* = a:data
       return "\<Esc>"
     elseif  l:currentMode ==# 'v' ||
@@ -1970,7 +1970,6 @@ if neobundle#tap('vim-asterisk')
           \ l:currentMode == ''
       return "\<Esc>gvygv"
     endif
-    echomsg 'You can use ClipCword() on following modes : n/no/v/V/CTRL-V'
     return ''
   endfunction
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
