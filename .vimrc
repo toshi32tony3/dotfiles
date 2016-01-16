@@ -320,6 +320,7 @@ NeoBundleLazy 'toshi32tony3/vim-operator-search', {
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>(operator-openbrowser)']],
+      \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : 'kana/vim-operator-user',
