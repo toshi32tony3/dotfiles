@@ -1649,18 +1649,6 @@ if neobundle#tap('eskk.vim')
   endfunction
   autocmd MyAutoCmd User eskk-initialize-pre call s:EskkInitialPreSettings()
 
-  " skk-jisyoをソートしたい
-  if filereadable(expand('~/dotfiles/.skk-jisyo'))
-    function! s:SortSKKDictionary()
-      let l:savedView = winsaveview()
-      execute "keepjumps normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
-      execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>"
-      call winrestview(l:savedView)
-      echo 'ソートしました!!'
-    endfunction
-    autocmd MyAutoCmd FileType skkdict command! -buffer SortSKKDictionary call s:SortSKKDictionary()
-  endif
-
   function! neobundle#hooks.on_post_source(bundle)
     " wake up!
     " -> 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
