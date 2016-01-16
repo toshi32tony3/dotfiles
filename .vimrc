@@ -2423,7 +2423,7 @@ if neobundle#tap('dicwin-vim')
 
 endif "}}}
 
-" Vimからブラウザを開く(open-browser) {{{
+" Vimからブラウザを開く(open-browser.vim) {{{
 if neobundle#tap('open-browser.vim')
 
   " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
