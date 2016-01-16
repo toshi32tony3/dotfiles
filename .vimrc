@@ -221,6 +221,8 @@ NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
       \   'depends' : 'Shougo/neocomplete.vim',
       \   'on_map'  : [['ni', '<Plug>']],
+      \ }
+NeoBundleLazy 'tyru/skkdict.vim', {
       \   'on_ft'   : 'skkdict',
       \ }
 
