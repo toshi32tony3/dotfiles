@@ -1039,22 +1039,22 @@ nnoremap <A-Right> :next<CR>
 " タイムスタンプの挿入
 function! s:PutDateTime() "{{{
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  execute 'normal! ""P'
+  normal! ""P
 endfunction "}}}
 command! PutDateTime call s:PutDateTime()
 
 " 区切り線+タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
   let @" = '='
-  execute 'normal! 080""Po'
+  normal! 080""Po
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  execute 'normal! ""P'
+  normal! ""P
   let @" = '{'
-  execute 'normal! $l3""p'
+  normal! $l3""p
   let @" = '}'
-  execute 'normal! o'
-  execute 'normal! 03""P'
-  execute 'normal! ko'
+  normal! o
+  normal! 03""P
+  normal! ko
 endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
