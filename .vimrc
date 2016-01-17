@@ -1620,7 +1620,8 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " for Lazy
-  imap <C-j> <Plug>(eskk:toggle)
+  imap        <C-j> <Plug>(eskk:toggle)
+  cmap <expr> <C-j> eskk#toggle()
 
   " すぐにskkしたい
   " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
