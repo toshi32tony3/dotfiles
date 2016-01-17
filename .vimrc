@@ -2522,43 +2522,41 @@ if neobundle#tap('vim-quickrun')
 
   let g:quickrun_config = {
         \   '_' : {
-        \     'outputter/buffer/split' : ':botright 24sp',
+        \     'outputter'                 : 'quickfix',
+        \     'outputter/buffer/split'    : ':botright 16sp',
+        \     'runner'                    : 'vimproc',
+        \     'runner/vimproc/updatetime' : 50,
         \   },
         \   'vb' : {
-        \     'command'   : 'cscript',
-        \     'cmdopt'    : '//Nologo',
-        \     'tempfile'  : '{tempname()}.vbs',
+        \     'command' : 'cscript',
+        \     'cmdopt'  : '//Nologo',
         \   },
         \   'c' : {
-        \     'command'   : 'gcc',
-        \     'cmdopt'    : '-Wall',
+        \     'command' : 'gcc',
+        \     'cmdopt'  : '-Wall',
         \   },
         \   'cpp' : {
-        \     'command'   : 'g++',
-        \     'cmdopt'    : '-Wall',
+        \     'command' : 'g++',
+        \     'cmdopt'  : '-Wall',
         \   },
         \   'make' : {
-        \     'command'   : 'make',
-        \     'cmdopt'    : 'run',
-        \     'exec'      : '%c %o',
-        \     'outputter' : 'error:buffer:quickfix',
+        \     'command' : 'make',
+        \     'cmdopt'  : 'run',
         \   },
         \ }
 
   "       " clangを使う時の設定はこんな感じ？
   "       \   'cpp' : {
-  "       \     'type' : 'cpp/clang3_4',
+  "       \     'type' : 'cpp/clang',
   "       \   },
-  "       \   'cpp/clang3_4' : {
+  "       \   'cpp/clang' : {
   "       \       'command' : 'clang++',
-  "       \       'exec'    : '%c %o %s -o %s:p:r',
   "       \       'cmdopt'  : '-std=gnu++0x',
   "       \   },
 
   " デフォルトの<Leader>rだと入力待ちになるので, 別のキーをマッピング
   let g:quickrun_no_default_key_mappings = 1
-  nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
-  xnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
+  noremap <Leader>q :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
 
 endif "}}}
 
