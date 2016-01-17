@@ -2533,11 +2533,11 @@ if neobundle#tap('vim-quickrun')
         \   },
         \   'c' : {
         \     'command' : 'gcc',
-        \     'cmdopt'  : '-Wall',
+        \     'cmdopt'  : '-g -Wall',
         \   },
         \   'cpp' : {
         \     'command' : 'g++',
-        \     'cmdopt'  : '-Wall',
+        \     'cmdopt'  : '-g -Wall',
         \   },
         \   'make' : {
         \     'command' : 'make',
