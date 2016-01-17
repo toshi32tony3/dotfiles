@@ -771,7 +771,6 @@ endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
 
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
-" http://whileimautomaton.net/2007/09/24141900
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
   call add(s:MyCMapEntries, [a:originalPattern, a:alternateName])
