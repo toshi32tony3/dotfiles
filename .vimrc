@@ -1858,7 +1858,7 @@ if neobundle#tap('lightline.vim')
     if &filetype == 'vim' || &filetype == 'markdown'
       return winwidth(0) > 100 ? s:currentFold : ''
     else
-      return winwidth(0) > 100 ? s:currentFunc : ''
+      return winwidth(0) > 70  ? s:currentFunc : ''
     endif
   endfunction
 
