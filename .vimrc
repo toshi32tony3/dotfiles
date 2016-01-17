@@ -115,8 +115,8 @@ setglobal spelllang=en,cjk
 setglobal nospell
 setglobal spellfile=~/dotfiles/en.utf-8.add
 
-" コマンドと検索の履歴は50もあれば十分すぎる
-setglobal history=50
+" コマンドと検索の履歴は多めに保持できるようにしておく
+setglobal history=1000
 
 " 開いているファイルがVimの外部で変更された時, 自動的に読み直す
 setglobal autoread
