@@ -212,11 +212,12 @@ NeoBundleLazy 'Shougo/neocomplete.vim', {
       \   'on_i' : 1,
       \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
-      \   'on_i' : 1,
+      \   'depends'  : 'toshi32tony3/neosnippet-snippets',
+      \   'on_i'     : 1,
+      \   'on_ft'    : 'neosnippet',
+      \   'on_unite' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }
-NeoBundleLazy 'toshi32tony3/neosnippet-snippets', {
-      \   'depends' : 'Shougo/neosnippet.vim',
-      \ }
+NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
       \   'depends' : 'Shougo/neocomplete.vim',
