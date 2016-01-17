@@ -328,7 +328,7 @@ NeoBundleLazy 'tyru/caw.vim', {
       \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
-      \   'on_map'  : [['nx', '<Plug>(operator-quickhl-', '<Plug>(quickhl-']],
+      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator-quickhl-']],
       \ }
 
 NeoBundle 'tpope/vim-surround'
