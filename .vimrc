@@ -1867,7 +1867,7 @@ if neobundle#tap('lightline.vim')
       return ''
     endif
     let l:_ = fugitive#head()
-    return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
+    return winwidth(0) > 30 ? (strlen(l:_) ? "\u2B60 " . l:_ : '') : ''
   endfunction
 
 endif "}}}
