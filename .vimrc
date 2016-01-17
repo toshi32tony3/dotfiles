@@ -739,14 +739,14 @@ xnoremap k gk
 
 " :cdのディレクトリ名の補完に'cdpath'を使うようにする
 " http://whileimautomaton.net/2007/09/24141900
-function! s:CommandCompleteCDPath(arglead, cmdline, cursorpos)
+function! s:CommandCompleteCDPath(arglead, cmdline, cursorpos) "{{{
   let l:pattern = substitute($HOME, '\\', '\\\\','g')
   return split(substitute(globpath(&cdpath, a:arglead . '*/'), l:pattern, '~', 'g'), "\n")
-endfunction
+endfunction "}}}
 
 " 引数なし : 現在開いているファイルのディレクトリに移動
 " 引数あり : 指定したディレクトリに移動
-function! s:LCD(...)
+function! s:LCD(...) "{{{
   if a:0 == 0
     execute 'lcd ' . expand('%:p:h')
   else
@@ -754,12 +754,12 @@ function! s:LCD(...)
   endif
   echo 'change directory to: ' .
         \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
-endfunction
+endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? LCD call s:LCD(<f-args>)
 
 " 引数なし : 現在開いているファイルのディレクトリに移動
 " 引数あり : 指定したディレクトリに移動
-function! s:CD(...)
+function! s:CD(...) "{{{
   if a:0 == 0
     execute 'cd ' . expand('%:p:h')
   else
@@ -767,8 +767,43 @@ function! s:CD(...)
   endif
   echo 'change directory to: ' .
         \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
-endfunction
+endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
+
+" vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
+" http://whileimautomaton.net/2007/09/24141900
+let s:MyCMapEntries = []
+function! s:AddMyCMap(originalPattern, alternateName) "{{{
+  call add(s:MyCMapEntries, [a:originalPattern, a:alternateName])
+endfunction "}}}
+
+" リストに登録されている   : 登録されたコマンド名を返す
+" リストに登録されていない : vim-ambicmdで変換を試みる
+function! s:MyCMap(cmdline) "{{{
+  for [originalPattern, alternateName] in s:MyCMapEntries
+    if a:cmdline =~# originalPattern
+      return "\<C-u>" . alternateName . "\<Space>"
+    endif
+  endfor
+  if neobundle#is_installed('vim-ambicmd')
+    return ambicmd#expand("\<Space>")
+  endif
+  return "\<Space>"
+endfunction "}}}
+cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
+
+" リストへの変換候補登録
+call s:AddMyCMap( '^cd$',  'CD')
+call s:AddMyCMap('^lcd$', 'LCD')
+call s:AddMyCMap('^cfd$', 'ClipFileDir')
+call s:AddMyCMap( '^uc$', 'UpdateCtags')
+call s:AddMyCMap( '^pd$', 'PutDateTime')
+call s:AddMyCMap( '^cm$', 'ClearMessage')
+
+if neobundle#is_installed('scratch.vim')
+  call s:AddMyCMap('^sc$',  'Scratch')
+  call s:AddMyCMap('^scp$', 'ScratchPreview')
+endif
 
 " " 開いたファイルと同じ場所へ移動する
 " " -> startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
@@ -1665,39 +1700,8 @@ endif "}}}
 if neobundle#tap('vim-ambicmd')
 
   " " 下手にマッピングするよりもambicmdで補完する方が捗る
+  " " リスト補完を併用することにした。→s:MyCMap()を参照のこと
   " cnoremap <expr> <Space> ambicmd#expand("\<Space>")
-
-  " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
-  " http://whileimautomaton.net/2007/09/24141900
-  let s:MyCMapEntries = []
-  function! s:AddMyCMap(originalPattern, alternateName)
-    call add(s:MyCMapEntries, [a:originalPattern, a:alternateName])
-  endfunction
-
-  " リストに登録されている   : 登録されたコマンド名を返す
-  " リストに登録されていない : ambicmdで変換を試みる
-  function! s:MyCMap(cmdline)
-    for [originalPattern, alternateName] in s:MyCMapEntries
-      if a:cmdline =~# originalPattern
-        return "\<C-u>" . alternateName . "\<Space>"
-      endif
-    endfor
-    return ambicmd#expand("\<Space>")
-  endfunction
-  cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
-
-  " リストへの変換候補登録
-  call s:AddMyCMap( '^cd$',  'CD')
-  call s:AddMyCMap('^lcd$', 'LCD')
-  call s:AddMyCMap('^cfd$', 'ClipFileDir')
-  call s:AddMyCMap( '^uc$', 'UpdateCtags')
-  call s:AddMyCMap( '^pd$', 'PutDateTime')
-  call s:AddMyCMap( '^cm$', 'ClearMessage')
-
-  if neobundle#is_installed('scratch.vim')
-    call s:AddMyCMap('^sc$',  'Scratch')
-    call s:AddMyCMap('^scp$', 'ScratchPreview')
-  endif
 
 endif "}}}
 
