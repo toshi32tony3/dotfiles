@@ -830,7 +830,7 @@ nnoremap <Leader>gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
 " 引数が2つ以上 : 引数指定ファイル同士の比較
 " http://koturn.hatenablog.com/entry/2013/08/10/034242
-function! s:TabDiff(...)
+function! s:TabDiff(...) "{{{
   if a:0 == 1
     tabnew %:p
     execute 'rightbelow vertical diffsplit ' . a:1
@@ -840,7 +840,7 @@ function! s:TabDiff(...)
       execute 'rightbelow vertical diffsplit ' . l:file
     endfor
   endif
-endfunction
+endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 "}}}
