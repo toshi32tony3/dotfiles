@@ -2444,6 +2444,9 @@ if neobundle#tap('J6uil.vim')
   function! s:J6uilSaySetting()
     if neobundle#is_installed('eskk.vim')
       nmap     <buffer> <C-j> i<Plug>(eskk:toggle)
+
+      " bd!が誤爆して悲しいので防ぐ(入力が記憶されてたら嬉しいのだけれど)
+      nmap     <buffer> <Esc> <Nop>
     else
       nnoremap <buffer> <C-j> <Nop>
     endif
