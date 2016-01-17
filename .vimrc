@@ -791,7 +791,7 @@ function! s:MyCMap(cmdline) "{{{
 endfunction "}}}
 cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
 
-" リストへの変換候補登録
+" リストへの変換候補登録(My Command)
 call s:AddMyCMap( '^cd$',  'CD')
 call s:AddMyCMap('^lcd$', 'LCD')
 call s:AddMyCMap('^cfd$', 'ClipFileDir')
@@ -799,6 +799,7 @@ call s:AddMyCMap( '^uc$', 'UpdateCtags')
 call s:AddMyCMap( '^pd$', 'PutDateTime')
 call s:AddMyCMap( '^cm$', 'ClearMessage')
 
+" リストへの変換候補登録(Plugin's command)
 if neobundle#is_installed('scratch.vim')
   call s:AddMyCMap('^sc$',  'Scratch')
   call s:AddMyCMap('^scp$', 'ScratchPreview')
