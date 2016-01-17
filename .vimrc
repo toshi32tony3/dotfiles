@@ -193,7 +193,7 @@ NeoBundle 'idanarye/vim-merginal', {
       \   'depends' : 'tpope/vim-fugitive',
       \ }
 NeoBundleLazy 'cohama/agit.vim', {
-      \   'on_cmd' : 'Agit',
+      \   'on_cmd' : ['Agit', 'AgitFile'],
       \ }
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'external_command' : 'git',
