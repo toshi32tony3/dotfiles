@@ -1039,22 +1039,22 @@ nnoremap <A-Right> :next<CR>
 " タイムスタンプの挿入
 function! s:PutDateTime() "{{{
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  execute 'normal! ""P'
+  normal! ""P
 endfunction "}}}
 command! PutDateTime call s:PutDateTime()
 
 " 区切り線+タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
   let @" = '='
-  execute 'normal! 080""Po'
+  normal! 080""Po
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  execute 'normal! ""P'
+  normal! ""P
   let @" = '{'
-  execute 'normal! $l3""p'
+  normal! $l3""p
   let @" = '}'
-  execute 'normal! o'
-  execute 'normal! 03""P'
-  execute 'normal! ko'
+  normal! o
+  normal! 03""P
+  normal! ko
 endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
@@ -1175,7 +1175,7 @@ function! s:GetFoldLevel() "{{{
 
   " [zを使ってカーソルが移動していればfoldLevelをインクリメント
   while 1
-    execute 'keepjumps normal! [z'
+    keepjumps normal! [z
     let l:currentLineNumber = line('.')
     if l:lastLineNumber == l:currentLineNumber | break | endif
     let l:foldLevel += 1
@@ -1230,7 +1230,7 @@ function! s:GetCurrentFold() "{{{
     if l:searchCounter <= 0 | break | endif
 
     " 1段階親のところへ移動
-    execute 'keepjumps normal! [z'
+    keepjumps normal! [z
     let l:currentLineNumber = line('.')
 
     " 移動していなければ, 移動前のカーソル行が子Fold開始位置だったということ
@@ -1287,27 +1287,27 @@ function! s:JumpFuncNameCForward() "{{{
   let l:savedView = winsaveview()
 
   let l:lastLine  = line('.')
-  execute 'keepjumps normal! ]]'
+  keepjumps normal! ]]
 
   " 検索対象が居なければViewを戻して処理終了
   if line('.') == line('$') | call winrestview(l:savedView) | return | endif
 
   call search('(', 'b')
-  execute 'keepjumps normal! b'
+  keepjumps normal! b
 
   " 行移動していたら処理終了
   if l:lastLine != line('.') | return  | endif
 
   " 行移動していなければ, 開始位置がCの関数名上だったということ
   " -> 下方向検索するには, ]]を2回使う必要がある
-  execute 'keepjumps normal! ]]'
-  execute 'keepjumps normal! ]]'
+  keepjumps normal! ]]
+  keepjumps normal! ]]
 
   " 検索対象が居なければViewを戻して処理終了
   if line('.') == line('$') | call winrestview(l:savedView) | return | endif
 
   call search('(', 'b')
-  execute 'keepjumps normal! b'
+  keepjumps normal! b
 endfunction " }}}
 function! s:JumpFuncNameCBackward() "{{{
   if &filetype != 'c' | return | endif
@@ -1317,14 +1317,14 @@ function! s:JumpFuncNameCBackward() "{{{
 
   " カーソルがある行の1列目の文字が { ならば [[ は不要 " for match }
   if getline('.')[0] != '{'                            " for match }
-    execute 'keepjumps normal! [['
+    keepjumps normal! [[
 
     " 検索対象が居なければViewを戻して処理終了
     if line('.') == 1 | call winrestview(l:savedView) | return | endif
   endif
 
   call search('(', 'b')
-  execute 'keepjumps normal! b'
+  keepjumps normal! b
 endfunction " }}}
 nnoremap <silent> ]f :<C-u>call <SID>JumpFuncNameCForward()<CR>
 nnoremap <silent> [f :<C-u>call <SID>JumpFuncNameCBackward()<CR>
@@ -1341,10 +1341,10 @@ function! s:GetCurrentFuncC() "{{{
   if getline('.')[0] != '{' " for match } }
 
     " { よりも先に前方にセクション末尾 } がある場合, 関数定義の間なので検索不要
-    execute 'keepjumps normal! []'
+    keepjumps normal! []
     let l:endBracketLine = line('.')
     call winrestview(l:savedView)
-    execute 'keepjumps normal! [['
+    keepjumps normal! [[
     if line('.') < l:endBracketLine | call winrestview(l:savedView) | return '' | endif
 
     " 検索対象が居なければViewを戻して処理終了
@@ -1352,7 +1352,7 @@ function! s:GetCurrentFuncC() "{{{
   endif
 
   call search('(', 'b')
-  execute 'keepjumps normal! b'
+  keepjumps normal! b
   let l:funcName = expand('<cword>')
 
   " Viewを復元
