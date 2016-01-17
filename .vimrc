@@ -221,6 +221,8 @@ NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
       \   'depends' : 'Shougo/neocomplete.vim',
       \   'on_map'  : [['ni', '<Plug>']],
+      \ }
+NeoBundleLazy 'tyru/skkdict.vim', {
       \   'on_ft'   : 'skkdict',
       \ }
 
@@ -261,6 +263,7 @@ NeoBundleLazy 'haya14busa/vim-asterisk', {
 
 " 本家 : 'deris/vim-shot-f'
 NeoBundleLazy 'toshi32tony3/vim-shot-f', {
+      \   'rev'    : 'develop',
       \   'on_map' : '<Plug>',
       \ }
 NeoBundleLazy 'justinmk/vim-sneak', {
@@ -309,7 +312,7 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-" 本家 : 'osyo-manga/vim-operator-search', {
+" 本家 : 'osyo-manga/vim-operator-search'
 NeoBundleLazy 'toshi32tony3/vim-operator-search', {
       \   'rev'     : 'operator_for_line',
       \   'depends' : 'kana/vim-operator-user',
@@ -318,6 +321,7 @@ NeoBundleLazy 'toshi32tony3/vim-operator-search', {
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>(operator-openbrowser)']],
+      \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : 'kana/vim-operator-user',
@@ -568,7 +572,7 @@ command! ClipFileDir  call s:Clip(expand('%:p:h'))
 function! s:ClipCommandOutput(cmd)
   redir @*> | silent execute a:cmd | redir END
   " 先頭の改行文字を取り除く
-  if len(@*) != 0 | let @* = @*[1:] | endif
+  if len(@*) != 0 | let @* = @*[1 :] | endif
 endfunction
 command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<f-args>)
 
@@ -722,8 +726,7 @@ autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
 " -> buftypeがnofileかつ特定のfiletypeの追加を試みたが,
 "    暴発する度にfiletypeを追加することになるのでやめた
-autocmd MyAutoCmd WinEnter * if (winnr('$') == 1) &&
-      \ ((getbufvar(winbufnr(0), '&buftype')) == 'quickfix') | quit | endif
+autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit | endif
 
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
@@ -839,7 +842,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
     endfor
     " 1文字目の','を削除
-    if &tags != '' | let &tags = &tags[1:] | endif
+    if &tags != '' | let &tags = &tags[1 :] | endif
     " GTAGSROOTの登録
     " -> GNU GLOBALのタグはプロジェクトルートで生成する
     let $GTAGSROOT = g:local_rc#current_src_dir
@@ -858,7 +861,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
-    if &path != '' | let &path = &path[1:] | endif
+    if &path != '' | let &path = &path[1 :] | endif
   endfunction "}}}
 
   function! s:SetCDPathList() "{{{
@@ -876,7 +879,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
-    if &cdpath != '' | let &cdpath = &cdpath[1:] | endif
+    if &cdpath != '' | let &cdpath = &cdpath[1 :] | endif
   endfunction "}}}
 
   " 初回のtags, path設定
@@ -896,7 +899,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
-    " ソースコード切り替え後, バージョン名を出力
+    " ソースコード切り替え後, ソースディレクトリ名を出力
     echo 'switch source to: ' . g:local_rc#src_dir
   endfunction "}}}
   nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
@@ -1056,11 +1059,12 @@ endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
 " :messageで表示される履歴を削除
+" -> 空文字で埋めているだけ。:ClipCommandOutput messageすると202行になる
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! ClearMessage  for s:n in range(200) | echomsg '' | endfor
+command! ClearMessage  for s:n in range(250) | echomsg '' | endfor
 
 " :jumplistを空にする
-command! ClearJumpList for s:n in range(200) | mark '     | endfor
+command! ClearJumpList for s:n in range(250) | mark '     | endfor
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
@@ -1072,7 +1076,7 @@ function! s:OnCursorMove() "{{{
         \ l:currentMode != 'no' &&
         \ l:currentMode !=# 'v' &&
         \ l:currentMode !=# 'V' &&
-        \ l:currentMode != ''
+        \ l:currentMode !=  "\<C-v>"
     return
   endif
 
@@ -1123,7 +1127,7 @@ function! s:GetFoldName(line) "{{{
     return a:line[l:preIndex : l:sufIndex]
   elseif &filetype == 'markdown'
     let l:foldName = split(a:line, "\<Space>")
-    return empty(l:foldName) ? '' : join(l:foldName[1:], "\<Space>")
+    return empty(l:foldName) ? '' : join(l:foldName[1 :], "\<Space>")
   endif
   return ''
 endfunction "}}}
@@ -1644,18 +1648,6 @@ if neobundle#tap('eskk.vim')
   endfunction
   autocmd MyAutoCmd User eskk-initialize-pre call s:EskkInitialPreSettings()
 
-  " skk-jisyoをソートしたい
-  if filereadable(expand('~/dotfiles/.skk-jisyo'))
-    function! s:SortSKKDictionary()
-      let l:savedView = winsaveview()
-      execute "keepjumps normal! 0ggjv/okuri\<CR>k:sort\<CR>v\<Esc>"
-      execute "keepjumps normal! /okuri\<CR>0jvG:sort\<CR>"
-      call winrestview(l:savedView)
-      echo 'ソートしました!!'
-    endfunction
-    autocmd MyAutoCmd FileType skkdict command! -buffer SortSKKDictionary call s:SortSKKDictionary()
-  endif
-
   function! neobundle#hooks.on_post_source(bundle)
     " wake up!
     " -> 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
@@ -1966,19 +1958,18 @@ if neobundle#tap('vim-asterisk')
 
   " star-search対象をクリップボードに入れる
   function! s:ClipCword(data)
-    let    l:currentMode  = mode(1)
-    if     l:currentMode == 'n'
+    let     l:currentMode  = mode(1)
+    if      l:currentMode == 'n'
       let @* = a:data
       return ''
-    elseif l:currentMode == 'no'
+    elseif  l:currentMode == 'no'
       let @* = a:data
       return "\<Esc>"
     elseif  l:currentMode ==# 'v' ||
           \ l:currentMode ==# 'V' ||
-          \ l:currentMode == ''
+          \ l:currentMode ==  "\<C-v>"
       return "\<Esc>gvygv"
     endif
-    echomsg 'You can use ClipCword() on following modes : n/no/v/V/CTRL-V'
     return ''
   endfunction
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
@@ -2224,6 +2215,7 @@ if neobundle#tap('unite.vim')
   let g:u_nqui = '-no-quit '
   let g:u_nsyn = '-no-sync '
   let g:u_prev = '-auto-preview '
+  let g:u_fbuf = '-buffer-name=file-buffer '
   let g:u_sbuf = '-buffer-name=search-buffer '
   let g:u_nins = '-no-start-insert '
   let g:u_nspl = '-no-split '
@@ -2236,7 +2228,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_dm = 'Unite '       . g:u_hopt
   let g:u_opt_fi = 'Unite '       . g:u_hopt
   let g:u_opt_fm = 'Unite '       . g:u_hopt
-  let g:u_opt_fr = 'Unite '       . g:u_hopt
+  let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
   let g:u_opt_gd = 'Unite '       . g:u_hopt
   let g:u_opt_gg = 'Unite '       . g:u_hopt                       . g:u_sbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
@@ -2418,7 +2410,7 @@ if neobundle#tap('dicwin-vim')
 
 endif "}}}
 
-" Vimからブラウザを開く(open-browser) {{{
+" Vimからブラウザを開く(open-browser.vim) {{{
 if neobundle#tap('open-browser.vim')
 
   " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
