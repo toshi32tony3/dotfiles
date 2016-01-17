@@ -985,8 +985,9 @@ endif
 "-----------------------------------------------------------------------------
 " Prevent erroneous input {{{
 
-" Exモードを潰す(Exモードを使いたかったらgQを使おう。使わないけど)
-nnoremap Q <Nop>
+" レジスタ機能のキーをQにする(Exモードを使う時はgQを使おう)
+nnoremap q <Nop>
+nnoremap Q q
 
 " 「保存して閉じる」「保存せず閉じる」を無効にする
 nnoremap ZZ <Nop>
