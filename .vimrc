@@ -2230,13 +2230,14 @@ if neobundle#tap('unite.vim')
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
   let g:u_opt_bu = 'Unite '       . g:u_hopt . g:u_nins
   let g:u_opt_bo = 'Unite '       . g:u_hopt
+  let g:u_opt_de = 'Unite '       . g:u_hopt
   let g:u_opt_dm = 'Unite '       . g:u_hopt
+  let g:u_opt_fb = 'UniteResume ' . g:u_hopt                       . g:u_fbuf
+  let g:u_opt_fg = 'Unite '       . g:u_hopt
   let g:u_opt_fi = 'Unite '       . g:u_hopt
   let g:u_opt_fm = 'Unite '       . g:u_hopt
   let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
-  let g:u_opt_gd = 'Unite '       . g:u_hopt
-  let g:u_opt_gg = 'Unite '       . g:u_hopt                       . g:u_sbuf
-  let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
+  let g:u_opt_gr = 'Unite '       . g:u_hopt                       . g:u_sbuf
   let g:u_opt_li = 'Unite '       . g:u_nspl                       . g:u_sbuf
   let g:u_opt_mf = 'Unite '       . g:u_hopt
   let g:u_opt_mg = 'Unite '       . g:u_hopt                       . g:u_sbuf
@@ -2246,20 +2247,24 @@ if neobundle#tap('unite.vim')
   let g:u_opt_nu = 'Unite '       . g:u_nspl . g:u_nins . g:u_nsyn
   let g:u_opt_ol = 'Unite '       . g:u_vopt
   let g:u_opt_op = 'Unite '       . g:u_nspl
-  let g:u_opt_re = 'UniteResume ' . g:u_hopt                       . g:u_sbuf
+  let g:u_opt_re = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
+  let g:u_opt_sb = 'UniteResume ' . g:u_hopt                       . g:u_sbuf
 
   nnoremap <expr> <Leader>bu ':<C-u>' . g:u_opt_bu . 'buffer'           . '<CR>'
   nnoremap <expr> <Leader>bo ':<C-u>' . g:u_opt_bo . 'bookmark'         . '<CR>'
+  nnoremap <expr> <Leader>de ':<C-u>' . g:u_opt_de . 'gtags/def:'
   nnoremap <expr> <Leader>dm ':<C-u>' . g:u_opt_dm . 'directory_mru'    . '<CR>'
+  nnoremap <expr> <Leader>fb ':<C-u>' . g:u_opt_fb                      . '<CR>'
+  nnoremap <expr> <Leader>fg ':<C-u>' . g:u_opt_fg . 'file_rec/git'     . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
   nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
   nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'         . '<CR>'
-  nnoremap <expr> <Leader>gd ':<C-u>' . g:u_opt_gd . 'gtags/def:'
-  nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gg . 'vimgrep:%'        . '<CR>'
-  nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gg . 'vimgrep:*'        . '<CR>'
-  nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gg . 'vimgrep:.*'       . '<CR>'
-  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gg . 'vimgrep:**'       . '<CR>'
-  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'gtags/ref:'
+  nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
+  nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
+  nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
+  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:.'       . '<CR>'
+  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'       . '<CR>'
+  nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
   nnoremap <expr> <Leader>mf ':<C-u>' . g:u_opt_mf . 'file:~/memo'      . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>' . g:u_opt_mg . 'vimgrep:~/memo/*' . '<CR>'
@@ -2269,7 +2274,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>nu ':<C-u>' . g:u_opt_nu . 'neobundle/update'
   nnoremap <expr> <Leader>ol ':<C-u>' . g:u_opt_ol . 'outline'          . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>' . g:u_opt_op . 'output'           . '<CR>'
-  nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re                      . '<CR>'
+  nnoremap <expr> <Leader>sb ':<C-u>' . g:u_opt_sb                      . '<CR>'
 
   function! neobundle#hooks.on_post_source(bundle)
     " unite.vimのデフォルトコンテキストを設定する
