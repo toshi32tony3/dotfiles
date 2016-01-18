@@ -115,8 +115,8 @@ setglobal spelllang=en,cjk
 setglobal nospell
 setglobal spellfile=~/dotfiles/en.utf-8.add
 
-" コマンドと検索の履歴は50もあれば十分すぎる
-setglobal history=50
+" コマンドと検索の履歴は多めに保持できるようにしておく
+setglobal history=1000
 
 " 開いているファイルがVimの外部で変更された時, 自動的に読み直す
 setglobal autoread
@@ -193,7 +193,7 @@ NeoBundle 'idanarye/vim-merginal', {
       \   'depends' : 'tpope/vim-fugitive',
       \ }
 NeoBundleLazy 'cohama/agit.vim', {
-      \   'on_cmd' : 'Agit',
+      \   'on_cmd' : ['Agit', 'AgitFile'],
       \ }
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'external_command' : 'git',
@@ -212,11 +212,12 @@ NeoBundleLazy 'Shougo/neocomplete.vim', {
       \   'on_i' : 1,
       \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
-      \   'on_i' : 1,
+      \   'depends'  : 'toshi32tony3/neosnippet-snippets',
+      \   'on_i'     : 1,
+      \   'on_ft'    : 'neosnippet',
+      \   'on_unite' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }
-NeoBundleLazy 'toshi32tony3/neosnippet-snippets', {
-      \   'depends' : 'Shougo/neosnippet.vim',
-      \ }
+NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
       \   'depends' : 'Shougo/neocomplete.vim',
@@ -328,7 +329,7 @@ NeoBundleLazy 'tyru/caw.vim', {
       \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
-      \   'on_map'  : [['nx', '<Plug>(operator-quickhl-', '<Plug>(quickhl-']],
+      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator-quickhl-']],
       \ }
 
 NeoBundle 'tpope/vim-surround'
@@ -739,14 +740,14 @@ xnoremap k gk
 
 " :cdのディレクトリ名の補完に'cdpath'を使うようにする
 " http://whileimautomaton.net/2007/09/24141900
-function! s:CommandCompleteCDPath(arglead, cmdline, cursorpos)
+function! s:CommandCompleteCDPath(arglead, cmdline, cursorpos) "{{{
   let l:pattern = substitute($HOME, '\\', '\\\\','g')
   return split(substitute(globpath(&cdpath, a:arglead . '*/'), l:pattern, '~', 'g'), "\n")
-endfunction
+endfunction "}}}
 
 " 引数なし : 現在開いているファイルのディレクトリに移動
 " 引数あり : 指定したディレクトリに移動
-function! s:LCD(...)
+function! s:LCD(...) "{{{
   if a:0 == 0
     execute 'lcd ' . expand('%:p:h')
   else
@@ -754,12 +755,12 @@ function! s:LCD(...)
   endif
   echo 'change directory to: ' .
         \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
-endfunction
+endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? LCD call s:LCD(<f-args>)
 
 " 引数なし : 現在開いているファイルのディレクトリに移動
 " 引数あり : 指定したディレクトリに移動
-function! s:CD(...)
+function! s:CD(...) "{{{
   if a:0 == 0
     execute 'cd ' . expand('%:p:h')
   else
@@ -767,8 +768,43 @@ function! s:CD(...)
   endif
   echo 'change directory to: ' .
         \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
-endfunction
+endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
+
+" vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
+let s:MyCMapEntries = []
+function! s:AddMyCMap(originalPattern, alternateName) "{{{
+  call add(s:MyCMapEntries, [a:originalPattern, a:alternateName])
+endfunction "}}}
+
+" リストに登録されている   : 登録されたコマンド名を返す
+" リストに登録されていない : vim-ambicmdで変換を試みる
+function! s:MyCMap(cmdline) "{{{
+  for [originalPattern, alternateName] in s:MyCMapEntries
+    if a:cmdline =~# originalPattern
+      return "\<C-u>" . alternateName . "\<Space>"
+    endif
+  endfor
+  if neobundle#is_installed('vim-ambicmd')
+    return ambicmd#expand("\<Space>")
+  endif
+  return "\<Space>"
+endfunction "}}}
+cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
+
+" リストへの変換候補登録(My Command)
+call s:AddMyCMap( '^cd$',  'CD')
+call s:AddMyCMap('^lcd$', 'LCD')
+call s:AddMyCMap('^cfd$', 'ClipFileDir')
+call s:AddMyCMap( '^uc$', 'UpdateCtags')
+call s:AddMyCMap( '^pd$', 'PutDateTime')
+call s:AddMyCMap( '^cm$', 'ClearMessage')
+
+" リストへの変換候補登録(Plugin's command)
+if neobundle#is_installed('scratch.vim')
+  call s:AddMyCMap('^sc$',  'Scratch')
+  call s:AddMyCMap('^scp$', 'ScratchPreview')
+endif
 
 " " 開いたファイルと同じ場所へ移動する
 " " -> startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
@@ -796,7 +832,7 @@ nnoremap <Leader>gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
 " 引数が2つ以上 : 引数指定ファイル同士の比較
 " http://koturn.hatenablog.com/entry/2013/08/10/034242
-function! s:TabDiff(...)
+function! s:TabDiff(...) "{{{
   if a:0 == 1
     tabnew %:p
     execute 'rightbelow vertical diffsplit ' . a:1
@@ -806,7 +842,7 @@ function! s:TabDiff(...)
       execute 'rightbelow vertical diffsplit ' . l:file
     endfor
   endif
-endfunction
+endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 "}}}
@@ -950,8 +986,9 @@ endif
 "-----------------------------------------------------------------------------
 " Prevent erroneous input {{{
 
-" Exモードを潰す(Exモードを使いたかったらgQを使おう。使わないけど)
-nnoremap Q <Nop>
+" レジスタ機能のキーをQにする(Exモードを使う時はgQを使おう)
+nnoremap q <Nop>
+nnoremap Q q
 
 " 「保存して閉じる」「保存せず閉じる」を無効にする
 nnoremap ZZ <Nop>
@@ -1584,7 +1621,8 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " for Lazy
-  imap <C-j> <Plug>(eskk:toggle)
+  imap        <C-j> <Plug>(eskk:toggle)
+  cmap <expr> <C-j> eskk#toggle()
 
   " すぐにskkしたい
   " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
@@ -1665,39 +1703,8 @@ endif "}}}
 if neobundle#tap('vim-ambicmd')
 
   " " 下手にマッピングするよりもambicmdで補完する方が捗る
+  " " リスト補完を併用することにした。→s:MyCMap()を参照のこと
   " cnoremap <expr> <Space> ambicmd#expand("\<Space>")
-
-  " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
-  " http://whileimautomaton.net/2007/09/24141900
-  let s:MyCMapEntries = []
-  function! s:AddMyCMap(originalPattern, alternateName)
-    call add(s:MyCMapEntries, [a:originalPattern, a:alternateName])
-  endfunction
-
-  " リストに登録されている   : 登録されたコマンド名を返す
-  " リストに登録されていない : ambicmdで変換を試みる
-  function! s:MyCMap(cmdline)
-    for [originalPattern, alternateName] in s:MyCMapEntries
-      if a:cmdline =~# originalPattern
-        return "\<C-u>" . alternateName . "\<Space>"
-      endif
-    endfor
-    return ambicmd#expand("\<Space>")
-  endfunction
-  cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
-
-  " リストへの変換候補登録
-  call s:AddMyCMap( '^cd$',  'CD')
-  call s:AddMyCMap('^lcd$', 'LCD')
-  call s:AddMyCMap('^cfd$', 'ClipFileDir')
-  call s:AddMyCMap( '^uc$', 'UpdateCtags')
-  call s:AddMyCMap( '^pd$', 'PutDateTime')
-  call s:AddMyCMap( '^cm$', 'ClearMessage')
-
-  if neobundle#is_installed('scratch.vim')
-    call s:AddMyCMap('^sc$',  'Scratch')
-    call s:AddMyCMap('^scp$', 'ScratchPreview')
-  endif
 
 endif "}}}
 
@@ -1851,7 +1858,7 @@ if neobundle#tap('lightline.vim')
     if &filetype == 'vim' || &filetype == 'markdown'
       return winwidth(0) > 100 ? s:currentFold : ''
     else
-      return winwidth(0) > 100 ? s:currentFunc : ''
+      return winwidth(0) > 70  ? s:currentFunc : ''
     endif
   endfunction
 
@@ -1860,7 +1867,7 @@ if neobundle#tap('lightline.vim')
       return ''
     endif
     let l:_ = fugitive#head()
-    return winwidth(0) > 30 ? (strlen(l:_) ? '⭠ ' . l:_ : '') : ''
+    return winwidth(0) > 30 ? (strlen(l:_) ? "\u2B60 " . l:_ : '') : ''
   endfunction
 
 endif "}}}
@@ -2225,13 +2232,14 @@ if neobundle#tap('unite.vim')
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
   let g:u_opt_bu = 'Unite '       . g:u_hopt . g:u_nins
   let g:u_opt_bo = 'Unite '       . g:u_hopt
+  let g:u_opt_de = 'Unite '       . g:u_hopt
   let g:u_opt_dm = 'Unite '       . g:u_hopt
+  let g:u_opt_fb = 'UniteResume ' . g:u_hopt                       . g:u_fbuf
+  let g:u_opt_fg = 'Unite '       . g:u_hopt
   let g:u_opt_fi = 'Unite '       . g:u_hopt
   let g:u_opt_fm = 'Unite '       . g:u_hopt
   let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
-  let g:u_opt_gd = 'Unite '       . g:u_hopt
-  let g:u_opt_gg = 'Unite '       . g:u_hopt                       . g:u_sbuf
-  let g:u_opt_gr = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
+  let g:u_opt_gr = 'Unite '       . g:u_hopt                       . g:u_sbuf
   let g:u_opt_li = 'Unite '       . g:u_nspl                       . g:u_sbuf
   let g:u_opt_mf = 'Unite '       . g:u_hopt
   let g:u_opt_mg = 'Unite '       . g:u_hopt                       . g:u_sbuf
@@ -2241,20 +2249,24 @@ if neobundle#tap('unite.vim')
   let g:u_opt_nu = 'Unite '       . g:u_nspl . g:u_nins . g:u_nsyn
   let g:u_opt_ol = 'Unite '       . g:u_vopt
   let g:u_opt_op = 'Unite '       . g:u_nspl
-  let g:u_opt_re = 'UniteResume ' . g:u_hopt                       . g:u_sbuf
+  let g:u_opt_re = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
+  let g:u_opt_sb = 'UniteResume ' . g:u_hopt                       . g:u_sbuf
 
   nnoremap <expr> <Leader>bu ':<C-u>' . g:u_opt_bu . 'buffer'           . '<CR>'
   nnoremap <expr> <Leader>bo ':<C-u>' . g:u_opt_bo . 'bookmark'         . '<CR>'
+  nnoremap <expr> <Leader>de ':<C-u>' . g:u_opt_de . 'gtags/def:'
   nnoremap <expr> <Leader>dm ':<C-u>' . g:u_opt_dm . 'directory_mru'    . '<CR>'
+  nnoremap <expr> <Leader>fb ':<C-u>' . g:u_opt_fb                      . '<CR>'
+  nnoremap <expr> <Leader>fg ':<C-u>' . g:u_opt_fg . 'file_rec/git'     . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
   nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
   nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'         . '<CR>'
-  nnoremap <expr> <Leader>gd ':<C-u>' . g:u_opt_gd . 'gtags/def:'
-  nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gg . 'vimgrep:%'        . '<CR>'
-  nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gg . 'vimgrep:*'        . '<CR>'
-  nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gg . 'vimgrep:.*'       . '<CR>'
-  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gg . 'vimgrep:**'       . '<CR>'
-  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'gtags/ref:'
+  nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
+  nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
+  nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
+  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:.'       . '<CR>'
+  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'       . '<CR>'
+  nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
   nnoremap <expr> <Leader>mf ':<C-u>' . g:u_opt_mf . 'file:~/memo'      . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>' . g:u_opt_mg . 'vimgrep:~/memo/*' . '<CR>'
@@ -2264,7 +2276,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>nu ':<C-u>' . g:u_opt_nu . 'neobundle/update'
   nnoremap <expr> <Leader>ol ':<C-u>' . g:u_opt_ol . 'outline'          . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>' . g:u_opt_op . 'output'           . '<CR>'
-  nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re                      . '<CR>'
+  nnoremap <expr> <Leader>sb ':<C-u>' . g:u_opt_sb                      . '<CR>'
 
   function! neobundle#hooks.on_post_source(bundle)
     " unite.vimのデフォルトコンテキストを設定する
@@ -2439,6 +2451,9 @@ if neobundle#tap('J6uil.vim')
   function! s:J6uilSaySetting()
     if neobundle#is_installed('eskk.vim')
       nmap     <buffer> <C-j> i<Plug>(eskk:toggle)
+
+      " bd!が誤爆して悲しいので防ぐ(入力が記憶されてたら嬉しいのだけれど)
+      nmap     <buffer> <Esc> <Nop>
     else
       nnoremap <buffer> <C-j> <Nop>
     endif
@@ -2508,43 +2523,41 @@ if neobundle#tap('vim-quickrun')
 
   let g:quickrun_config = {
         \   '_' : {
-        \     'outputter/buffer/split' : ':botright 24sp',
+        \     'outputter'                 : 'quickfix',
+        \     'outputter/buffer/split'    : ':botright 16sp',
+        \     'runner'                    : 'vimproc',
+        \     'runner/vimproc/updatetime' : 50,
         \   },
         \   'vb' : {
-        \     'command'   : 'cscript',
-        \     'cmdopt'    : '//Nologo',
-        \     'tempfile'  : '{tempname()}.vbs',
+        \     'command' : 'cscript',
+        \     'cmdopt'  : '//Nologo',
         \   },
         \   'c' : {
-        \     'command'   : 'gcc',
-        \     'cmdopt'    : '-Wall',
+        \     'command' : 'gcc',
+        \     'cmdopt'  : '-g -Wall',
         \   },
         \   'cpp' : {
-        \     'command'   : 'g++',
-        \     'cmdopt'    : '-Wall',
+        \     'command' : 'g++',
+        \     'cmdopt'  : '-g -Wall',
         \   },
         \   'make' : {
-        \     'command'   : 'make',
-        \     'cmdopt'    : 'run',
-        \     'exec'      : '%c %o',
-        \     'outputter' : 'error:buffer:quickfix',
+        \     'command' : 'make',
+        \     'cmdopt'  : 'run',
         \   },
         \ }
 
   "       " clangを使う時の設定はこんな感じ？
   "       \   'cpp' : {
-  "       \     'type' : 'cpp/clang3_4',
+  "       \     'type' : 'cpp/clang',
   "       \   },
-  "       \   'cpp/clang3_4' : {
+  "       \   'cpp/clang' : {
   "       \       'command' : 'clang++',
-  "       \       'exec'    : '%c %o %s -o %s:p:r',
   "       \       'cmdopt'  : '-std=gnu++0x',
   "       \   },
 
   " デフォルトの<Leader>rだと入力待ちになるので, 別のキーをマッピング
   let g:quickrun_no_default_key_mappings = 1
-  nnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
-  xnoremap <Leader>q :<C-u>QuickRun -hook/time/enable 1<CR>
+  noremap <Leader>q :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
 
 endif "}}}
 
