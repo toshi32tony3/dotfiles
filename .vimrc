@@ -515,7 +515,7 @@ setglobal complete=.,w,b,u,U
 " longest : 候補の共通部分だけを挿入
 setglobal completeopt=menuone,longest
 
-setglobal noinfercase  " 補完時に大文字小文字を区別しない
+setglobal noinfercase  " 補完時にマッチした単語をそのまま挿入
 setglobal pumheight=10 " 補完候補は一度に10個まで表示
 
 " コマンドライン補完設定
