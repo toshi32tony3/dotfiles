@@ -2529,35 +2529,43 @@ if neobundle#tap('vim-quickrun')
         \     'runner/vimproc/updatetime' : 50,
         \   },
         \   'vb' : {
-        \     'command' : 'cscript',
-        \     'cmdopt'  : '//Nologo',
+        \     'command'  : 'cscript',
+        \     'cmdopt'   : '//Nologo',
+        \     'tempfile' : '{tempname()}.vbs',
         \   },
         \   'c' : {
-        \     'command' : 'gcc',
-        \     'cmdopt'  : '-g -Wall',
+        \     'type'     : 'c/clang4_7_1',
+        \   },
+        \   'c/gcc4_8_1' : {
+        \     'command'  : 'gcc',
+        \     'cmdopt'   : '-g -Wall',
+        \   },
+        \   'c/clang4_7_1' : {
+        \     'command'  : 'clang',
+        \     'cmdopt'   : '-g -Wall',
         \   },
         \   'cpp' : {
-        \     'command' : 'g++',
-        \     'cmdopt'  : '-g -Wall',
+        \     'type' : 'cpp/clang4_7_1',
+        \   },
+        \   'cpp/gcc4_8_1' : {
+        \     'command'  : 'g++',
+        \     'cmdopt'   : '-g -Wall',
+        \   },
+        \   'cpp/clang4_7_1' : {
+        \     'command'  : 'clang++',
+        \     'cmdopt'   : '-g -Wall',
         \   },
         \   'make' : {
-        \     'command' : 'make',
-        \     'cmdopt'  : 'run',
+        \     'command'  : 'make',
+        \     'cmdopt'   : 'run',
         \   },
         \ }
 
-  "       " clangを使う時の設定はこんな感じ？
-  "       \   'cpp' : {
-  "       \     'type' : 'cpp/clang',
-  "       \   },
-  "       \   'cpp/clang' : {
-  "       \       'command' : 'clang++',
-  "       \       'cmdopt'  : '-std=gnu++0x',
-  "       \   },
-
   " デフォルトの<Leader>rだと入力待ちになるので, 別のキーをマッピング
   let g:quickrun_no_default_key_mappings = 1
-  noremap <Leader>q :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
+  noremap <Leader>qq :<C-u>QuickRun -hook/time/enable 1
+  noremap <Leader>qt :<C-u>QuickRun -hook/time/enable 1 -type<Space>
+  noremap <Leader>qa :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
 
 endif "}}}
 
