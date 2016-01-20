@@ -1065,9 +1065,9 @@ nnoremap <S-Right> :bnext<CR>
 nnoremap <C-Left>  :cprevious<CR>
 nnoremap <C-Right> :cnext<CR>
 
-" ただ潰すのは勿体無いので,   Alt + カーソルキーで previous/next
-nnoremap <A-Left>  :previous<CR>
-nnoremap <A-Right> :next<CR>
+" ただ潰すのは勿体無いので,   Alt + カーソルキーでlprevious/lnext
+nnoremap <A-Left>  :lprevious<CR>
+nnoremap <A-Right> :lnext<CR>
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -2523,8 +2523,7 @@ if neobundle#tap('vim-quickrun')
 
   let g:quickrun_config = {
         \   '_' : {
-        \     'outputter'                 : 'quickfix',
-        \     'outputter/buffer/split'    : ':botright 16sp',
+        \     'outputter'                 : 'loclist',
         \     'runner'                    : 'vimproc',
         \     'runner/vimproc/updatetime' : 50,
         \   },
