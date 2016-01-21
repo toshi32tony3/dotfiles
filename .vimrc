@@ -590,9 +590,7 @@ if has('gui_running')
 
   " M : メニュー・ツールバー領域を削除する
   " c : ポップアップダイアログを使用しない
-  if has('kaoriya')
-    setglobal guioptions=Mc
-  endif
+  setglobal guioptions=Mc
 
   setglobal guicursor=a:blinkon0 " カーソルを点滅させない
   setglobal nomousefocus         " マウス移動でフォーカスを自動的に切り替えない
@@ -795,6 +793,8 @@ cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
 " リストへの変換候補登録(My Command)
 call s:AddMyCMap( '^cd$',  'CD')
 call s:AddMyCMap('^lcd$', 'LCD')
+call s:AddMyCMap( '^CD$',  'cd')
+call s:AddMyCMap('^LCD$', 'lcd')
 call s:AddMyCMap('^cfd$', 'ClipFileDir')
 call s:AddMyCMap( '^uc$', 'UpdateCtags')
 call s:AddMyCMap( '^pd$', 'PutDateTime')
