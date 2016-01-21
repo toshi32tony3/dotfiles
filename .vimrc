@@ -349,10 +349,10 @@ NeoBundle 'mhinz/vim-startify'
 NeoBundleLazy 'Shougo/unite.vim', {
       \   'on_cmd' : 'Unite',
       \ }
-NeoBundleLazy 'Shougo/neomru.vim', {
-      \   'depends'  : 'Shougo/unite.vim',
-      \   'on_unite' : ['file_mru', 'directory_mru'],
-      \ }
+
+" 遅延ロードしてしまうと候補収集されないので, Vim起動直後に読み込む
+NeoBundle 'Shougo/neomru.vim'
+
 NeoBundleLazy 'hewes/unite-gtags', {
       \   'depends'  : 'Shougo/unite.vim',
       \   'on_unite' : ['gtags/ref', 'gtags/def'],
