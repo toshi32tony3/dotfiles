@@ -590,9 +590,7 @@ if has('gui_running')
 
   " M : メニュー・ツールバー領域を削除する
   " c : ポップアップダイアログを使用しない
-  if has('kaoriya')
-    setglobal guioptions=Mc
-  endif
+  setglobal guioptions=Mc
 
   setglobal guicursor=a:blinkon0 " カーソルを点滅させない
   setglobal nomousefocus         " マウス移動でフォーカスを自動的に切り替えない
