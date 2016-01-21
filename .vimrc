@@ -924,6 +924,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
         \ | call s:SetTags()
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
+        \ | call g:SetEnvironmentVariables()
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
@@ -935,6 +936,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
+    call g:SetEnvironmentVariables()
     " ソースコード切り替え後, ソースディレクトリ名を出力
     echo 'switch source to: ' . g:local_rc#src_dir
   endfunction "}}}
