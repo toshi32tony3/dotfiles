@@ -8,12 +8,14 @@
 setglobal encoding=utf-8
 scriptencoding utf-8
 
-" 左手で<Leader>を入力したい
-let g:mapleader      =   "\<Space>"
+" マッピング用prefixキー(<Leader>)を変更
+let g:mapleader      = '_Leader_'
 let g:maplocalleader = "\<S-Space>"
-nnoremap <Leader>               <Nop>
-nnoremap <Leader><Leader>       <Nop>
-nnoremap <nowait> <LocalLeader> <Nop>
+nnoremap _Leader_              <Nop>
+nmap             <Space>       _Leader_
+nnoremap _Leader_<Space>       <Nop>
+nmap             <LocalLeader> _Leader_
+nnoremap _Leader_<LocalLeader> <Nop>
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
@@ -856,7 +858,7 @@ function! s:JumpTagTab(funcName) "{{{
   " execute 'tjump ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
-nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
+nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/template/local.rc.vim
@@ -2280,8 +2282,7 @@ if neobundle#tap('unite.vim')
 
   function! s:UniteSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
-    nmap <buffer> <LocalLeader>              <Leader>
-    nmap <buffer> <LocalLeader><LocalLeader> <Nop>
+    nmap <buffer> <LocalLeader> <Leader>
 
     nmap <buffer> <Esc> <Plug>(unite_exit)
   endfunction
@@ -2354,8 +2355,7 @@ if neobundle#tap('vimfiler.vim')
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
-    nmap <buffer> <LocalLeader>              <Leader>
-    nmap <buffer> <LocalLeader><LocalLeader> <Nop>
+    nmap <buffer> <LocalLeader> <Leader>
 
     " grepはUniteを使うので潰しておく
     nnoremap <buffer> gr <Nop>
