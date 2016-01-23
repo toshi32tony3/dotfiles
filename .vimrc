@@ -296,10 +296,6 @@ NeoBundleLazy 'kana/vim-textobj-indent', {
       \   'on_map'  : [['xo', 'ii', 'ai', 'iI', 'aI']],
       \ }
 
-NeoBundleLazy 'kana/vim-textobj-entire', {
-      \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [['xo', 'ie', 'ae']],
-      \ }
 NeoBundleLazy 'kana/vim-textobj-line', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [['xo', 'il', 'al']],
