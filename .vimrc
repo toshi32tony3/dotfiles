@@ -2280,6 +2280,16 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>op ':<C-u>' . g:u_opt_op . 'output'           . '<CR>'
   nnoremap <expr> <Leader>sb ':<C-u>' . g:u_opt_sb                      . '<CR>'
 
+  function! s:UniteSettings()
+    " <Leader>がデフォルトマッピングで使用されていた場合の対策
+    nnoremap <buffer> <Leader>         <Nop>
+    nnoremap <buffer> <Leader><Leader> <Nop>
+    nmap     <buffer> <LocalLeader>    <Leader>
+
+    nmap <buffer> <Esc> <Plug>(unite_exit)
+  endfunction
+  autocmd MyAutoCmd FileType unite call s:UniteSettings()
+
   function! neobundle#hooks.on_post_source(bundle)
     " unite.vimのデフォルトコンテキストを設定する
     " http://d.hatena.ne.jp/osyo-manga/20140627
@@ -2305,14 +2315,6 @@ if neobundle#tap('unite.vim')
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory_mru',             'vimfiler')
 
-    function! s:UniteSettings()
-      " <Leader>がデフォルトマッピングで使用されていた場合の対策
-      nnoremap <buffer> <Leader>         <Nop>
-      nnoremap <buffer> <Leader><Leader> <Nop>
-
-      nmap <buffer> <Esc> <Plug>(unite_exit)
-    endfunction
-    autocmd MyAutoCmd FileType unite call s:UniteSettings()
   endfunction
 
 endif "}}}
