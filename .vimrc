@@ -928,7 +928,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
         \ | call s:SetTags()
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
-        \ | call g:SetEnvironmentVariables()
+        \ | call SetEnvironmentVariables()
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
