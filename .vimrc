@@ -9,9 +9,11 @@ setglobal encoding=utf-8
 scriptencoding utf-8
 
 " 左手で<Leader>を入力したい
-let g:mapleader = "\<S-Space>"
-nnoremap <Leader>         <Nop>
-nnoremap <Leader><Leader> <Nop>
+let g:mapleader      =   "\<Space>"
+let g:maplocalleader = "\<S-Space>"
+nnoremap <Leader>               <Nop>
+nnoremap <Leader><Leader>       <Nop>
+nnoremap <nowait> <LocalLeader> <Nop>
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
@@ -2282,9 +2284,8 @@ if neobundle#tap('unite.vim')
 
   function! s:UniteSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
-    nnoremap <buffer> <Leader>         <Nop>
-    nnoremap <buffer> <Leader><Leader> <Nop>
-    nmap     <buffer> <LocalLeader>    <Leader>
+    nmap <buffer> <LocalLeader>              <Leader>
+    nmap <buffer> <LocalLeader><LocalLeader> <Nop>
 
     nmap <buffer> <Esc> <Plug>(unite_exit)
   endfunction
@@ -2357,8 +2358,8 @@ if neobundle#tap('vimfiler.vim')
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
-    nnoremap <buffer> <Leader>         <Nop>
-    nnoremap <buffer> <Leader><Leader> <Nop>
+    nmap <buffer> <LocalLeader>              <Leader>
+    nmap <buffer> <LocalLeader><LocalLeader> <Nop>
 
     " grepはUniteを使うので潰しておく
     nnoremap <buffer> gr <Nop>
