@@ -731,10 +731,14 @@ autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
 " j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
-nnoremap j gj
-xnoremap j gj
-nnoremap k gk
-xnoremap k gk
+nnoremap <silent> j  gj
+xnoremap <silent> j  gj
+nnoremap <silent> k  gk
+xnoremap <silent> k  gk
+nnoremap <silent> gj j
+xnoremap <silent> gj j
+nnoremap <silent> gk k
+xnoremap <silent> gk k
 
 " :cdのディレクトリ名の補完に'cdpath'を使うようにする
 " http://whileimautomaton.net/2007/09/24141900
