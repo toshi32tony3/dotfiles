@@ -27,12 +27,12 @@ endfunction
 
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
-  if     bufname('%') ==# ''
+  if     bufname('%') == ''
     " 無名バッファなら, バッファを再生成
-    new | execute "normal! \<C-w>\<C-w>" | bd
+    new     | execute "normal! \<C-w>\<C-w>" | bdelete
   elseif argc() >= 1
-    " ファイルが指定されていたら最初のファイルをbdして開き直す
-    bd | execute 'edit ' . a:path
+    " ファイルが指定されていたら最初のファイルをbdeleteして開き直す
+    bdelete | execute 'edit ' . a:path
   endif
 endfunction
 autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
