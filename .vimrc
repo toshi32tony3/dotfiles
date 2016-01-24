@@ -1399,27 +1399,25 @@ function! s:ClipCurrentFunc(funcName) "{{{
     echo 'There is no function nearby cursor.'
     return
   endif
-  let @* = a:funcName
-  echo 'clipped: ' . a:funcName
+  let @* = a:funcName | echo 'clipped: ' . a:funcName
 endfunction "}}}
 command! ClipCurrentFunc
       \ let s:currentFunc = s:GetCurrentFuncC() |
       \ call s:ClipCurrentFunc(s:currentFunc)
 
-function! s:PrintCurrentFunc(funcName) "{{{
+function! s:PutCurrentFunc(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
   endif
   let l:tmp = @"
   let @" = a:funcName
-  let @" = l:tmp
   normal! ""P
-  echo 'printed: ' . a:funcName
+  let @" = l:tmp
 endfunction "}}}
-command! PrintCurrentFunc
+command! PutCurrentFunc
       \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:PrintCurrentFunc(s:currentFunc)
+      \ call s:PutCurrentFunc(s:currentFunc)
 
 "}}}
 "-----------------------------------------------------------------------------
