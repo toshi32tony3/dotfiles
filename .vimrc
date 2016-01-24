@@ -2074,16 +2074,6 @@ if neobundle#tap('vim-textobj-indent')
 
 endif "}}}
 
-" バッファ全体を選択するテキストオブジェクト(vim-textobj-entire) {{{
-if neobundle#tap('vim-textobj-entire')
-
-endif "}}}
-
-" カーソル行を選択するテキストオブジェクト(vim-textobj-line) {{{
-if neobundle#tap('vim-textobj-line')
-
-endif "}}}
-
 " 置き換えオペレータ(vim-operator-replace) {{{
 if neobundle#tap('vim-operator-replace')
 
