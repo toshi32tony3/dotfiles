@@ -1644,7 +1644,7 @@ if neobundle#tap('eskk.vim')
       else
         execute 'normal! `[v`]d'
       endif
-      call eskk#enable() | call feedkeys('i')
+      call eskk#enable() | call feedkeys('i', 'n')
     endfunction
     if neobundle#is_installed('vim-operator-user')
       call operator#user#define('eskk-c', s:SID() . 'OperatorChangeWithEskk')
