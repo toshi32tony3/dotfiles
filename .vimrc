@@ -543,21 +543,14 @@ nnoremap Y y$
 " クリップボードレジスタを使う
 setglobal clipboard=unnamed
 
-" 現在開いているファイルのパスなどを選択範囲レジスタ(*)に入れる
-" https://gist.github.com/pinzolo/8168337
-function! s:Clip(data)
-  let @* = a:data
-  echo 'clipped: ' . a:data
-endfunction
-
 " 現在開いているファイルのフルパス(ファイル名含む)をレジスタへ
-command! ClipFilePath call s:Clip(expand('%:p'))
+command! ClipFilePath let @* = expand('%:p')   | echo 'clipped: ' . @*
 
 " 現在開いているファイルのファイル名をレジスタへ
-command! ClipFileName call s:Clip(expand('%:t'))
+command! ClipFileName let @* = expand('%:t')   | echo 'clipped: ' . @*
 
 " 現在開いているファイルのディレクトリパスをレジスタへ
-command! ClipFileDir  call s:Clip(expand('%:p:h'))
+command! ClipFileDir  let @* = expand('%:p:h') | echo 'clipped: ' . @*
 
 " コマンドの出力結果を選択範囲レジスタ(*)へ
 function! s:ClipCommandOutput(cmd)
@@ -1071,13 +1064,16 @@ nnoremap <A-Right> :lnext<CR>
 
 " タイムスタンプの挿入
 function! s:PutDateTime() "{{{
+  let l:tmp = @"
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
   normal! ""P
+  let @" = l:tmp
 endfunction "}}}
 command! PutDateTime call s:PutDateTime()
 
 " 区切り線+タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
+  let l:tmp = @"
   let @" = '='
   normal! 080""Po
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
@@ -1088,6 +1084,7 @@ function! s:PutMemoFormat() "{{{
   normal! o
   normal! 03""P
   normal! ko
+  let @" = l:tmp
 endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
@@ -1397,32 +1394,32 @@ autocmd MyAutoCmd User MyLineChanged
       \ if &filetype == 'c' | let s:currentFunc = s:GetCurrentFuncC() | endif
 autocmd MyAutoCmd BufEnter *  let s:currentFunc = s:GetCurrentFuncC()
 
-function! s:ClipCurrentFuncName(funcName) "{{{
+function! s:ClipCurrentFunc(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
   endif
-  " 選択範囲レジスタ(*)を使う
   let @* = a:funcName
   echo 'clipped: ' . a:funcName
 endfunction "}}}
-command! ClipCurrentFuncName
+command! ClipCurrentFunc
       \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:ClipCurrentFuncName(s:currentFunc)
+      \ call s:ClipCurrentFunc(s:currentFunc)
 
-function! s:PrintCurrentFuncName(funcName) "{{{
+function! s:PrintCurrentFunc(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
   endif
-  " 無名レジスタ(")を使う
+  let l:tmp = @"
   let @" = a:funcName
+  let @" = l:tmp
   normal! ""P
   echo 'printed: ' . a:funcName
 endfunction "}}}
-command! PrintCurrentFuncName
+command! PrintCurrentFunc
       \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:PrintCurrentFuncName(s:currentFunc)
+      \ call s:PrintCurrentFunc(s:currentFunc)
 
 "}}}
 "-----------------------------------------------------------------------------
