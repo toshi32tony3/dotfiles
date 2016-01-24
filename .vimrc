@@ -1940,7 +1940,7 @@ if neobundle#tap('vim-asterisk')
   " g:incsearch#magic使用時の検索履歴問題の暫定対処
   " https://github.com/haya14busa/incsearch.vim/issues/22
   " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
-  function! s:ModSearchHistory()
+  function! s:ModSearchHistory() "{{{
     if !exists('g:incsearch#magic') | return '' | endif
     if g:incsearch#magic != '\v'    | return '' | endif
     if mode() != 'n'                | return '' | endif
@@ -1961,7 +1961,7 @@ if neobundle#tap('vim-asterisk')
     call histadd('/', l:lastHistory)
 
     return ''
-  endfunction
+  endfunction "}}}
   noremap <silent> <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
 
   " star-search対象をクリップボードに入れる
