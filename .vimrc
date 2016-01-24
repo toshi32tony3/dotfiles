@@ -1610,8 +1610,7 @@ if neobundle#tap('eskk.vim')
   nmap <A-o>     o<Plug>(eskk:enable)
 
   " もっとすぐにskkしたい
-  map  <Leader>c <Plug>(operator-eskk-c)
-  nmap <A-c>     C<Plug>(eskk:enable)
+  map <Leader>c <Plug>(operator-eskk-c)
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
@@ -1640,11 +1639,11 @@ if neobundle#tap('eskk.vim')
 
     function! s:OperatorChangeWithEskk(motionWise)
       if a:motionWise == 'line'
-        execute 'normal! `[V`]d'
+        execute 'normal! `[V`]'
       else
-        execute 'normal! `[v`]d'
+        execute 'normal! `[v`]'
       endif
-      call eskk#enable() | call feedkeys('i', 'n')
+      call feedkeys('c', 'n') | call eskk#enable()
     endfunction
     if neobundle#is_installed('vim-operator-user')
       call operator#user#define('eskk-c', s:SID() . 'OperatorChangeWithEskk')
@@ -2495,4 +2494,14 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
+
+" TODO: 以下の関数の使い方をfixする
+function! s:ExeFuncWithOperation(type, cmd, func)
+  if a:type == 'line'
+    execute 'normal! `[V`]'
+  else
+    execute 'normal! `[v`]'
+  endif
+  call feedkeys(a:cmd, 'n') | call a:func
+endfunction
 
