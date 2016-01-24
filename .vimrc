@@ -40,8 +40,8 @@ endfunction
 autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
 " Vim起動時間を計測
-" -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
-" -> gvim --startuptime startuptime.txt
+" → あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
+" → gvim --startuptime startuptime.txt
 if has('vim_starting') && has('reltime')
   let s:startuptime = reltime()
   autocmd MyAutoCmd VimEnter *
@@ -51,13 +51,13 @@ if has('vim_starting') && has('reltime')
 endif
 
 " " ファイル書き込み時の文字コード。空の場合, encodingの値を使う
-" " -> デフォルト値が空であるため, encodingと同じ値にしたい場合は設定不要
+" " → デフォルト値が空であるため, encodingと同じ値にしたい場合は設定不要
 " setglobal fileencoding=utf-8
 
 " ファイル読み込み時の変換候補
-" -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
+" → 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
 "    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
-" -> とりあえずKaoriya版GVimのguessを使おう
+" → とりあえずKaoriya版GVimのguessを使おう
 if has('kaoriya')
   setglobal fileencodings=guess
 else
@@ -71,8 +71,8 @@ nnoremap <Leader>en :<C-u>e ++encoding=
 nnoremap <Leader>ff :<C-u>e ++fileformat=
 
 " バックアップ, スワップファイルの設定
-" -> ネットワーク上ファイルの編集時に重くなる？ので作らない
-" -> 生成先をローカルに指定していたからかも。要検証
+" → ネットワーク上ファイルの編集時に重くなる？ので作らない
+" → 生成先をローカルに指定していたからかも。要検証
 setglobal noswapfile
 setglobal nobackup
 setglobal nowritebackup
@@ -129,8 +129,8 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数
-" -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
-" -> コードを読む時は大きく, 編集する時は小さくすると良いかも
+" → 大きい値にするとカーソル移動時に必ず再描画されるようになる
+" → コードを読む時は大きく, 編集する時は小さくすると良いかも
 set scrolloff=100
 let s:scrolloffOn = 1
 function! s:ToggleScrollOffSet()
@@ -493,8 +493,9 @@ setglobal showmatch                  " 対応する括弧などの入力時に�
 setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
-" " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
-" setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
+" 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
+" → 矢印は(→)を使おう
+setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
 
 " 汎用補完設定(complete)
 " Default: complete=.,w,b,u,t,i
@@ -504,10 +505,10 @@ setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにす�
 " u :     unloaded buffers in the buffer list
 " U :              buffers that are not in the buffer list
 " t : tag completion
-"     -> タグファイルが大きいと時間がかかるので汎用補完に含めない
+"     → タグファイルが大きいと時間がかかるので汎用補完に含めない
 " i : current and included files
 " d : current and included files for defined name or macro
-"     -> インクルードファイルが多いと時間がかかるので汎用補完に含めない
+"     → インクルードファイルが多いと時間がかかるので汎用補完に含めない
 setglobal complete=.,w,b,u,U
 
 " 補完オプション(completeopt)
@@ -650,12 +651,12 @@ autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 setglobal foldcolumn=1
 
 " foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
-" -> marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
+" → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
 setglobal foldnestmax=2
 
 " Default: fillchars=vert:\|,fold:-
 " foldを指定すると折り畳み行がウィンドウ幅まで指定した文字でfillされる
-" -> fill不要なので, fillcharsからfoldを削除
+" → fill不要なので, fillcharsからfoldを削除
 setglobal fillchars=vert:\|
 
 " ファイルを開いた時点では折り畳みを全て閉じた状態で開く
@@ -723,7 +724,7 @@ nnoremap ,r :<C-u>source $MYVIMRC<CR>
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
-" -> buftypeがnofileかつ特定のfiletypeの追加を試みたが,
+" → buftypeがnofileかつ特定のfiletypeの追加を試みたが,
 "    暴発する度にfiletypeを追加することになるのでやめた
 autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit | endif
 
@@ -811,17 +812,17 @@ if neobundle#is_installed('scratch.vim')
 endif
 
 " " 開いたファイルと同じ場所へ移動する
-" " -> startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
+" " → startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " " 最後のカーソル位置を記憶していたらジャンプ
-" " -> Gdiff時に不便なことがあったのでコメントアウト
+" " → Gdiff時に不便なことがあったのでコメントアウト
 " autocmd MyAutoCmd BufRead * silent execute 'normal! `"'
 
 " " 保存時にViewの状態を保存し, 読み込み時にViewの状態を前回の状態に戻す
 " " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
-" " -> プラグインの挙動とぶつかることもあるらしいので使わない
-" " -> https://github.com/Shougo/vimproc.vim/issues/116
+" " → プラグインの挙動とぶつかることもあるらしいので使わない
+" " → https://github.com/Shougo/vimproc.vim/issues/116
 " setglobal viewdir=~/vimfiles/view
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
@@ -884,7 +885,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     " 1文字目の','を削除
     if &tags != '' | let &tags = &tags[1 :] | endif
     " GTAGSROOTの登録
-    " -> GNU GLOBALのタグはプロジェクトルートで生成する
+    " → GNU GLOBALのタグはプロジェクトルートで生成する
     let $GTAGSROOT = g:local_rc#current_src_dir
   endfunction "}}}
 
@@ -1013,7 +1014,7 @@ nnoremap <C-w><C-q> <Nop>
 nnoremap <C-w>q     <Nop>
 
 " mswin.vim有効時<C-v>がペーストに使われるため, 代替として<C-q>が用意されている
-" -> そもそもmswin.vimは使わないし, 紛らわしいので潰す
+" → そもそもmswin.vimは使わないし, 紛らわしいので潰す
 nnoremap <C-q> <Nop>
 
 " マウス中央ボタンは使わない
@@ -1027,7 +1028,7 @@ inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
 
 " Shift or Ctrl or Alt + カーソルキーはコマンドモードでのみ使用する
-" -> と思ったが, とりあえず潰しておいて, 一部再利用するマッピングを行う
+" → と思ったが, とりあえず潰しておいて, 一部再利用するマッピングを行う
 inoremap <S-Left>  <Nop>
 inoremap <S-Down>  <Nop>
 inoremap <S-Up>    <Nop>
@@ -1102,7 +1103,7 @@ endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
 " :messageで表示される履歴を削除
-" -> 空文字で埋めているだけ。:ClipCommandOutput messageすると202行になる
+" → 空文字で埋めているだけ。:ClipCommandOutput messageすると202行になる
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
 command! ClearMessage  for s:n in range(250) | echomsg '' | endfor
 
@@ -1342,7 +1343,7 @@ function! s:JumpFuncNameCForward() "{{{
   if l:lastLine != line('.') | return  | endif
 
   " 行移動していなければ, 開始位置がCの関数名上だったということ
-  " -> 下方向検索するには, ]]を2回使う必要がある
+  " → 下方向検索するには, ]]を2回使う必要がある
   keepjumps normal! ]]
   keepjumps normal! ]]
 
@@ -1447,7 +1448,7 @@ if neobundle#tap('vim-signify')
   let g:signify_update_on_focusgained = 1
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
-  " -> SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
+  " → SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
   if has('vim_starting')
     command! -bar SignifyStart
           \ | SignifyToggle
@@ -1598,7 +1599,7 @@ if neobundle#tap('eskk.vim')
 
   if neobundle#is_installed('skk.vim')
     " disable skk.vim
-    " -> Helpを見るためにskk.vim自体は入れておきたい
+    " → Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
 
   endif
@@ -1679,9 +1680,9 @@ if neobundle#tap('eskk.vim')
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
-    " hankaku -> zenkaku
+    " hankaku → zenkaku
     call t.add_map('~',  '～')
-    " zenkaku -> hankaku
+    " zenkaku → hankaku
     call t.add_map('z~', '~')
     call t.add_map('z:', ":\<Space>")
     call t.add_map('z;', ";\<Space>")
@@ -1694,7 +1695,7 @@ if neobundle#tap('eskk.vim')
 
   function! neobundle#hooks.on_post_source(bundle)
     " wake up!
-    " -> 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
+    " → 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
     call eskk#toggle()
     call eskk#toggle()
 
@@ -1792,7 +1793,7 @@ if neobundle#tap('lightline.vim')
     " 以下の条件を満たすと処理負荷が急激に上がる。理由は不明
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており, ファイル名をフルパス(%:p)出力
-    " -> GVIMウィンドウ上部にフルパスが表示されているので, そちらを参照する
+    " → GVIMウィンドウ上部にフルパスが表示されているので, そちらを参照する
     return (&filetype == 'vimfiler' ? ''          :
           \     expand('%:t') == '' ? '[No Name]' : expand('%:t'))
           \   . (MyReadonly() == '' ? ''          : MyReadonly() )
@@ -1818,7 +1819,7 @@ if neobundle#tap('lightline.vim')
   function! MySKKMode()
     " 処理順を明確にするため, neobundle#hooks.on_post_source()を
     " 使ってプラグインの読み込み完了フラグを立てることにした
-    " -> 一応neobundle#is_sourced()を使っても問題無く動くことは確認した
+    " → 一応neobundle#is_sourced()を使っても問題無く動くことは確認した
     if !exists('s:IsNeoCompleteLoaded') || !exists('s:IsEskkLoaded')
       return ''
     endif
@@ -1835,9 +1836,9 @@ if neobundle#tap('lightline.vim')
       return winwidth(0) > 30 ? l:CurrentMode : ''
     endif
 
-    " モード切り替わり(normal <-> skk)を監視するついでにneocompleteをlock/unlock
+    " モード切り替わり(normal⇔skk)を監視するついでにneocompleteをlock/unlock
     if b:LastMode == ''
-      " normal -> skk : 必要ならunlock
+      " normal → skk : 必要ならunlock
       if neocomplete#get_current_neocomplete().lock == 1
         NeoCompleteUnlock
       else
@@ -1845,7 +1846,7 @@ if neobundle#tap('lightline.vim')
       endif
 
     else
-      " skk -> normal : 必要ならlock
+      " skk → normal : 必要ならlock
       if !exists('b:IsAlreadyUnlocked')
         NeoCompleteLock
       else
@@ -1889,8 +1890,8 @@ if neobundle#tap('vim-fontzoom')
   nmap - <Plug>(fontzoom-smaller)
 
   " vim-fontzoomには, 以下のデフォルトキーマッピングが設定されている
-  " -> しかし, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
-  " -> https://github.com/vim-jp/issues/issues/73
+  " → しかし, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
+  " → https://github.com/vim-jp/issues/issues/73
   nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
   nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
 
@@ -2055,12 +2056,12 @@ endif "}}}
 if neobundle#tap('vim-signature')
 
   " " お試しとして, グローバルマークだけ使うようにしてみる
-  " " -> viminfoに直接書き込まれるためか, マークの削除が反映されないことが多々
+  " " → viminfoに直接書き込まれるためか, マークの削除が反映されないことが多々
   " let g:SignatureIncludeMarks = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
   " _viminfoファイルからグローバルマークの削除を行う
-  " -> Unix系だと「~/.viminfo」, Windowsだと「~/_viminfo」を対象とする
-  " -> Windowsでは_viminfoが書き込み禁止になり削除失敗するので無効化する
+  " → Unix系だと「~/.viminfo」, Windowsだと「~/_viminfo」を対象とする
+  " → Windowsでは_viminfoが書き込み禁止になり削除失敗するので無効化する
   let g:SignatureForceRemoveGlobal = 0
 
   " これだけあれば十分
@@ -2295,8 +2296,8 @@ if neobundle#tap('unite.vim')
   function! neobundle#hooks.on_post_source(bundle)
     " unite.vimのデフォルトコンテキストを設定する
     " http://d.hatena.ne.jp/osyo-manga/20140627
-    " -> なんだかんだ非同期で処理させる必要は無い気がする
-    " -> emptyの時にメッセージ通知を出せるか調べる
+    " → なんだかんだ非同期で処理させる必要は無い気がする
+    " → emptyの時にメッセージ通知を出せるか調べる
     call unite#custom#profile('default', 'context', {
           \   'no_empty'         : 1,
           \   'no_quit'          : 0,
@@ -2481,12 +2482,12 @@ endif "}}}
 if neobundle#tap('vim-markdown')
 
   " " markdownのfold機能を無効にする
-  " " -> むしろ有効活用したい
+  " " → むしろ有効活用したい
   " let g:vim_markdown_folding_disabled = 1
 
   " 折り畳みを1段階閉じた状態で開く
-  " -> autocmd FileTypeでfoldlevelstartを変えても意味がないぽい
-  " -> foldlevelをいじる
+  " → autocmd FileTypeでfoldlevelstartを変えても意味がないぽい
+  " → foldlevelをいじる
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
