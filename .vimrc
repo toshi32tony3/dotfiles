@@ -106,11 +106,8 @@ else
   setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
 endif
 
-" 日本語はスペルチェックから除外
-setglobal spelllang=en,cjk
-
-" デフォルトではスペルチェックしない
-setglobal nospell
+setglobal nospell          " デフォルトではスペルチェックしない
+setglobal spelllang=en,cjk " 日本語はスペルチェックから除外
 setglobal spellfile=~/dotfiles/en.utf-8.add
 
 " コマンドと検索の履歴は多めに保持できるようにしておく
@@ -154,10 +151,8 @@ filetype plugin indent off
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if has('vim_starting')
   if &compatible
-    " Vi互換モードをオフ(Vimの拡張機能を有効化)
-    setglobal nocompatible
+    setglobal nocompatible " Vi互換モードをオフ(Vimの拡張機能を有効化)
   endif
-
   " neobundle.vimでプラグインを管理する
   setglobal runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
