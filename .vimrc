@@ -213,8 +213,8 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
-      \   'depends' : 'Shougo/neocomplete.vim',
-      \   'on_map'  : [['ni', '<Plug>']],
+      \   'depends' : ['Shougo/neocomplete.vim', 'kana/vim-operator-user'],
+      \   'on_map'  : [['nxi', '<Plug>', '<Plug>(operator-eskk-c)']],
       \ }
 NeoBundleLazy 'tyru/skkdict.vim', {
       \   'on_ft'   : 'skkdict',
@@ -1615,16 +1615,8 @@ if neobundle#tap('eskk.vim')
   nmap <A-o>     o<Plug>(eskk:enable)
 
   " もっとすぐにskkしたい
-  nmap <silent> <Leader>c :<C-u>call <SID>EnableEskkAfterOperation('c')<CR>
-  nmap <A-c>              C<Plug>(eskk:enable)
-
-  function! s:EnableEskkAfterOperation(cmd)
-    let  l:firstChar = nr2char(getchar())
-    if   l:firstChar !=# 'a' && l:firstChar !=# 'i' | return | endif
-    let l:secondChar = nr2char(getchar())
-    call feedkeys(a:cmd . l:firstChar . l:secondChar)
-    call eskk#enable()
-  endfunction
+  map  <Leader>c <Plug>(operator-eskk-c)
+  nmap <A-c>     C<Plug>(eskk:enable)
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
@@ -1650,6 +1642,18 @@ if neobundle#tap('eskk.vim')
     " 処理順を明確にするため, neobundle#hooks.on_post_source()を
     " 使ってプラグインの読み込み完了フラグを立てることにした
     let s:IsEskkLoaded = 1
+
+    function! s:OperatorChangeWithEskk(motionWise)
+      if a:motionWise == 'line'
+        execute 'normal! `[V`]d'
+      else
+        execute 'normal! `[v`]d'
+      endif
+      call eskk#enable() | call feedkeys('i')
+    endfunction
+    if neobundle#is_installed('vim-textobj-user')
+      call operator#user#define('eskk-c', s:SID() . 'OperatorChangeWithEskk')
+    endif
   endfunction
 
 endif "}}}
