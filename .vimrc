@@ -331,6 +331,7 @@ NeoBundleLazy 'Shougo/unite.vim', {
 
 " 遅延読み込みすると候補収集されないので, Vim起動直後に読み込む
 NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'Shougo/neoyank.vim'
 
 NeoBundleLazy 'hewes/unite-gtags', {
       \   'depends'  : 'Shougo/unite.vim',
@@ -2169,6 +2170,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_fm = 'Unite '       . g:u_hopt
   let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt                       . g:u_sbuf
+  let g:u_opt_hy = 'Unite '       . g:u_hopt
   let g:u_opt_li = 'Unite '       . g:u_nspl                       . g:u_sbuf
   let g:u_opt_mf = 'Unite '       . g:u_hopt
   let g:u_opt_mg = 'Unite '       . g:u_hopt                       . g:u_sbuf
@@ -2195,6 +2197,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:.'       . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'       . '<CR>'
+  nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
   nnoremap <expr> <Leader>mf ':<C-u>' . g:u_opt_mf . 'file:~/memo'      . '<CR>'
@@ -2246,6 +2249,13 @@ endif "}}}
 
 " for unite-file_mru {{{
 if neobundle#tap('neomru.vim')
+
+endif "}}}
+
+" for unite-history/yank {{{
+if neobundle#tap('neoyank.vim')
+
+  let g:neoyank#limit = 15
 
 endif "}}}
 
