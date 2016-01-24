@@ -2351,14 +2351,9 @@ if neobundle#tap('J6uil.vim')
   let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
   function! s:J6uilSaySetting()
-    if neobundle#is_installed('eskk.vim')
-      nmap     <buffer> <C-j> i<Plug>(eskk:toggle)
-
-      " bd!が誤爆して悲しいので防ぐ(入力が記憶されてたら嬉しいのだけれど)
-      nmap     <buffer> <Esc> <Nop>
-    else
-      nnoremap <buffer> <C-j> <Nop>
-    endif
+    " bd!の誤爆防止(入力が記憶されてたら嬉しいのだけれど)
+    nnoremap <buffer> <C-j> <Nop>
+    nnoremap <buffer> <Esc> <Nop>
   endfunction
   autocmd MyAutoCmd FileType J6uil_say call s:J6uilSaySetting()
 
