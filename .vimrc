@@ -1945,7 +1945,7 @@ if neobundle#tap('vim-asterisk')
   noremap <silent> <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
 
   " star-search対象をクリップボードに入れる
-  function! s:ClipCword(data)
+  function! s:ClipCword(data) "{{{
     let     l:currentMode  = mode(1)
     if      l:currentMode == 'n'
       let @* = a:data
@@ -1959,7 +1959,7 @@ if neobundle#tap('vim-asterisk')
       return "\<Esc>gvygv"
     endif
     return ''
-  endfunction
+  endfunction "}}}
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
   if neobundle#is_installed('vim-anzu')
