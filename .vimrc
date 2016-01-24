@@ -478,10 +478,10 @@ endif
 " Edit {{{
 
 " タブ幅, シフト幅, タブ使用有無の設定
-setglobal tabstop=2 shiftwidth=0 softtabstop=-1 expandtab
-autocmd MyAutoCmd FileType c        setlocal tabstop=4
-autocmd MyAutoCmd FileType cpp      setlocal tabstop=4
-autocmd MyAutoCmd FileType makefile setlocal tabstop=4 noexpandtab
+setglobal tabstop=2 shiftwidth=2 softtabstop=0 expandtab
+autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
+autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
+autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
 
 setglobal nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
 setglobal virtualedit=all            " テキストが存在しない場所でも動きたい
