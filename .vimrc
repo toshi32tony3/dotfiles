@@ -2037,7 +2037,7 @@ if neobundle#tap('caw.vim')
   " caw.vimをオペレータとして使う
   " https://github.com/rhysd/dogfiles/blob/master/vimrc
   function! s:OperatorCawCommentToggle(motionWise)
-    if a:motionWise ==# 'char'
+    if a:motionWise == 'char'
       execute "normal `[v`]\<Plug>(caw:wrap:toggle)"
     else
       execute "normal `[V`]\<Plug>(caw:i:toggle)"
@@ -2045,7 +2045,9 @@ if neobundle#tap('caw.vim')
   endfunction
 
   function! neobundle#hooks.on_source(bundle)
-    call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
+    if neobundle#is_installed('vim-textobj-user')
+      call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
+    endif
   endfunction
 
   map co <Plug>(operator-caw)
