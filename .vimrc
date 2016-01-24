@@ -251,13 +251,10 @@ NeoBundleLazy 'haya14busa/vim-asterisk', {
       \ }
 
 " 本家 : 'deris/vim-shot-f'
-NeoBundleLazy 'toshi32tony3/vim-shot-f', {
+NeoBundle 'toshi32tony3/vim-shot-f', {
       \   'rev'    : 'develop',
-      \   'on_map' : '<Plug>',
       \ }
-NeoBundleLazy 'justinmk/vim-sneak', {
-      \   'on_map' : '<Plug>Sneak_',
-      \ }
+NeoBundle 'justinmk/vim-sneak'
 
 NeoBundle 'kshenoy/vim-signature'
 
@@ -302,7 +299,7 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
-      \   'depends' : 'kana/vim-operator-user',
+      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
       \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
@@ -1937,13 +1934,6 @@ endif "}}}
 " f検索を便利に(vim-shot-f) {{{
 if neobundle#tap('vim-shot-f')
 
-  " for Lazy
-  let g:shot_f_no_default_key_mappings = 1
-  map f <Plug>(shot-f-f)
-  map F <Plug>(shot-f-F)
-  map t <Plug>(shot-f-t)
-  map T <Plug>(shot-f-T)
-
 endif "}}}
 
 " f検索の2文字版(vim-sneak) {{{
@@ -1954,10 +1944,6 @@ if neobundle#tap('vim-sneak')
 
   " smartcase
   let g:sneak#use_ic_scs = 1
-
-  " for Lazy
-  map s <Plug>Sneak_s
-  map S <Plug>Sneak_S
 
 endif "}}}
 
