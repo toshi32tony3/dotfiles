@@ -1651,7 +1651,7 @@ if neobundle#tap('eskk.vim')
       endif
       call eskk#enable() | call feedkeys('i')
     endfunction
-    if neobundle#is_installed('vim-textobj-user')
+    if neobundle#is_installed('vim-operator-user')
       call operator#user#define('eskk-c', s:SID() . 'OperatorChangeWithEskk')
     endif
   endfunction
@@ -2049,7 +2049,7 @@ if neobundle#tap('caw.vim')
   endfunction
 
   function! neobundle#hooks.on_source(bundle)
-    if neobundle#is_installed('vim-textobj-user')
+    if neobundle#is_installed('vim-operator-user')
       call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
     endif
   endfunction
