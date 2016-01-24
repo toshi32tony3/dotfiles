@@ -9,13 +9,13 @@ setglobal encoding=utf-8
 scriptencoding utf-8
 
 " マッピング用prefixキー(<Leader>)を変更
-let g:mapleader      = '_Leader_'
+let g:mapleader      = '[Leader]'
 let g:maplocalleader = "\<S-Space>"
-nnoremap _Leader_              <Nop>
-nmap             <Space>       _Leader_
-nnoremap _Leader_<Space>       <Nop>
-nmap             <LocalLeader> _Leader_
-nnoremap _Leader_<LocalLeader> <Nop>
+nnoremap [Leader]              <Nop>
+nmap             <Space>       [Leader]
+nnoremap [Leader]<Space>       <Nop>
+nmap             <LocalLeader> [Leader]
+nnoremap [Leader]<LocalLeader> <Nop>
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
