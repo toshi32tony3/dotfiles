@@ -329,7 +329,7 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \   'on_cmd' : 'Unite',
       \ }
 
-" 遅延ロードしてしまうと候補収集されないので, Vim起動直後に読み込む
+" 遅延読み込みすると候補収集されないので, Vim起動直後に読み込む
 NeoBundle 'Shougo/neomru.vim'
 
 NeoBundleLazy 'hewes/unite-gtags', {
