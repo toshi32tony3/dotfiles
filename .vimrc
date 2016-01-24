@@ -1602,55 +1602,29 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " for Lazy
-  imap        <C-j> <Plug>(eskk:toggle)
+  imap        <C-j> <Plug>(eskk:enable)
   cmap <expr> <C-j> eskk#toggle()
 
   " すぐにskkしたい
-  " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
-  " nmap <C-i> i<Plug>(eskk:toggle)
-  nmap <C-j> i<Plug>(eskk:toggle)
-
-  " インクリメントは潰せない
-  " nmap <C-a> a<Plug>(eskk:toggle)
-  nmap <A-j> a<Plug>(eskk:toggle)
-
-  " もっとすぐにskkしたい
-  nmap <A-i> I<Plug>(eskk:toggle)
-  nmap <A-a> A<Plug>(eskk:toggle)
+  nmap <Leader>i i<Plug>(eskk:enable)
+  nmap <Leader>a a<Plug>(eskk:enable)
+  nmap <A-i>     I<Plug>(eskk:enable)
+  nmap <A-a>     A<Plug>(eskk:enable)
 
   " <C-o>はjumplist戻るなので潰せない。Oは我慢
-  " nmap <C-o> o<Plug>(eskk:toggle)
-  nmap <A-o> o<Plug>(eskk:toggle)
+  nmap <A-o>     o<Plug>(eskk:enable)
 
-  " もっともっとすぐにskkしたい
-  " <C-s>と<A-s>は他の用途で使うので潰せない
-  nmap <C-c>l      cl<Plug>(eskk:toggle)
-  nmap <C-c>aw    caw<Plug>(eskk:toggle)
-  nmap <C-c>iw    ciw<Plug>(eskk:toggle)
-  nmap <C-c>aW    caW<Plug>(eskk:toggle)
-  nmap <C-c>iW    ciW<Plug>(eskk:toggle)
-  nmap <C-c>as    cas<Plug>(eskk:toggle)
-  nmap <C-c>is    cis<Plug>(eskk:toggle)
-  nmap <C-c>ap    cap<Plug>(eskk:toggle)
-  nmap <C-c>ip    cip<Plug>(eskk:toggle)
-  nmap <C-c>a]    ca]<Plug>(eskk:toggle)
-  nmap <C-c>a[    ca[<Plug>(eskk:toggle)
-  nmap <C-c>i]    ci]<Plug>(eskk:toggle)
-  nmap <C-c>i[    ci[<Plug>(eskk:toggle)
-  nmap <C-c>a)    ca)<Plug>(eskk:toggle)
-  nmap <C-c>a(    ca(<Plug>(eskk:toggle)
-  nmap <C-c>ab    cab<Plug>(eskk:toggle)
-  nmap <C-c>i)    ci)<Plug>(eskk:toggle)
-  nmap <C-c>i(    ci(<Plug>(eskk:toggle)
-  nmap <C-c>ib    cib<Plug>(eskk:toggle)
-  nmap <C-c>a}    ca}<Plug>(eskk:toggle)
-  nmap <C-c>a{    ca{<Plug>(eskk:toggle)
-  nmap <C-c>aB    caB<Plug>(eskk:toggle)
-  nmap <C-c>i}    ci}<Plug>(eskk:toggle)
-  nmap <C-c>i{    ci{<Plug>(eskk:toggle)
-  nmap <C-c>iB    ciB<Plug>(eskk:toggle)
-  nmap <C-c><C-c>  cc<Plug>(eskk:toggle)
-  nmap <A-c>        C<Plug>(eskk:toggle)
+  " もっとすぐにskkしたい
+  nmap <silent> <Leader>c :<C-u>call <SID>EnableEskkAfterOperation('c')<CR>
+  nmap <A-c>              C<Plug>(eskk:enable)
+
+  function! s:EnableEskkAfterOperation(cmd)
+    let  l:firstChar = nr2char(getchar())
+    if   l:firstChar !=# 'a' && l:firstChar !=# 'i' | return | endif
+    let l:secondChar = nr2char(getchar())
+    call feedkeys(a:cmd . l:firstChar . l:secondChar)
+    call eskk#enable()
+  endfunction
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
