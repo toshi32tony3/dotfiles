@@ -251,9 +251,8 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 "-------------------------------------------------------------------
 " move {{{
 
-NeoBundleLazy 'haya14busa/incsearch.vim', {
-      \   'on_map' : '<Plug>',
-      \ }
+" 遅延読み込みが追い付かないことがあるのでLazyしない
+NeoBundle 'haya14busa/incsearch.vim'
 
 NeoBundleLazy 'osyo-manga/vim-anzu', {
       \   'on_map' : '<Plug>',
