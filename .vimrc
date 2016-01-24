@@ -1917,14 +1917,15 @@ if neobundle#tap('vim-asterisk')
   " 検索開始時のカーソル位置を保持する
   let g:asterisk#keeppos = 1
 
-  " star-search対象をクリップボードに入れる
+  " star-search対象を無名レジスタに入れる
+  " → クリップボードを誤って上書きすることがあったので無名レジスタに変更
   function! s:ClipCword(data) "{{{
     let     l:currentMode  = mode(1)
     if      l:currentMode == 'n'
-      let @* = a:data
+      let @" = a:data
       return ''
     elseif  l:currentMode == 'no'
-      let @* = a:data
+      let @" = a:data
       return "\<Esc>"
     elseif  l:currentMode ==# 'v' ||
           \ l:currentMode ==# 'V' ||
