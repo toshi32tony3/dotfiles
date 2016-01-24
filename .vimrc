@@ -254,10 +254,6 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 NeoBundleLazy 'haya14busa/incsearch.vim', {
       \   'on_map' : '<Plug>',
       \ }
-NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
-      \   'depends' : 'haya14busa/incsearch.vim',
-      \   'on_map'  : '<Plug>',
-      \ }
 
 NeoBundleLazy 'osyo-manga/vim-anzu', {
       \   'on_map' : '<Plug>',
@@ -684,13 +680,13 @@ endif
 " Search {{{
 
 " very magic
-nnoremap / /\v
+nnoremap / /\v<Left><Left>
 
-setglobal ignorecase " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
-setglobal smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
-setglobal wrapscan   " 検索時に最後まで行ったら最初に戻る
-setglobal incsearch  " インクリメンタルサーチ
-setglobal hlsearch   " マッチしたテキストをハイライト
+setglobal ignorecase  " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
+setglobal smartcase   " 大文字小文字の両方が含まれている場合は, 区別する
+setglobal wrapscan    " 検索時に最後まで行ったら最初に戻る
+setglobal noincsearch " インクリメンタルサーチしない
+setglobal hlsearch    " マッチしたテキストをハイライト
 
 " grep/vimgrep結果が0件の場合, Quickfixを開かない
 autocmd MyAutoCmd QuickfixCmdPost grep,vimgrep if len(getqflist()) != 0 | copen | endif
@@ -1911,23 +1907,8 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  " very magic
-  let g:incsearch#magic = '\v'
-
-  map                      / <Plug>(incsearch-forward)
-  map                      ? <Plug>(incsearch-backward)
-  map                     g/ <Plug>(incsearch-stay)
-  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
-
-endif "}}}
-
-" incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
-if neobundle#tap('incsearch-fuzzy.vim')
-
-  map                      z/ <Plug>(incsearch-fuzzy-/)
-  map                      z? <Plug>(incsearch-fuzzy-?)
-  map                     gz/ <Plug>(incsearch-fuzzy-stay)
-  noremap <silent> <expr> gz? incsearch#go(incsearch#config#fuzzy#make({'command': '?', 'is_stay': 1}))
+  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1, 'pattern' : '\v<Left><Left>'})
+  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1, 'pattern' : '\v<Left><Left>'})
 
 endif "}}}
 
