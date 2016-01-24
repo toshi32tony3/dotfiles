@@ -295,7 +295,7 @@ NeoBundleLazy 'osyo-manga/vim-operator-search', {
       \ }
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
-      \   'on_map'  : [['nx', '<Plug>(operator-openbrowser)']],
+      \   'on_map'  : [['nx', '<Plug>']],
       \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
