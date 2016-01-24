@@ -1917,33 +1917,6 @@ if neobundle#tap('vim-asterisk')
   " 検索開始時のカーソル位置を保持する
   let g:asterisk#keeppos = 1
 
-  " g:incsearch#magic使用時の検索履歴問題の暫定対処
-  " https://github.com/haya14busa/incsearch.vim/issues/22
-  " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
-  function! s:ModSearchHistory() "{{{
-    if !exists('g:incsearch#magic') | return '' | endif
-    if g:incsearch#magic != '\v'    | return '' | endif
-    if mode() != 'n'                | return '' | endif
-
-    " hogeをstar検索すると履歴は\<hoge\>となる
-    "                           ^     ^  ←この'\'を取り除きたい
-    "                           12345678 ←文字数
-    "                                  ^ ←matchend
-    "                           01234567 ←文字列のindex
-    " NOTE: 単語区切りは単語を構成する文字のみ付加される
-    let l:lastHistory = histget('/', -1)
-    let l:endIndex = matchend(l:lastHistory, '^\\<.*\\>')
-    if  l:endIndex >= 0
-      let l:lastHistory = '<' . l:lastHistory[2 : (l:endIndex - 3)] . '>'
-            \                 . l:lastHistory[l:endIndex :]
-    endif
-    call histdel('/', -1)
-    call histadd('/', l:lastHistory)
-
-    return ''
-  endfunction "}}}
-  noremap <silent> <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
-
   " star-search対象をクリップボードに入れる
   function! s:ClipCword(data) "{{{
     let     l:currentMode  = mode(1)
@@ -1963,13 +1936,13 @@ if neobundle#tap('vim-asterisk')
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
   if neobundle#is_installed('vim-anzu')
-    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
-    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
     map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
   else
-    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
-    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)
     map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
     map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
   endif
