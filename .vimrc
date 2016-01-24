@@ -292,10 +292,8 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-" 本家 : 'osyo-manga/vim-operator-search'
-NeoBundleLazy 'toshi32tony3/vim-operator-search', {
-      \   'rev'     : 'operator_for_line',
-      \   'depends' : 'kana/vim-operator-user',
+NeoBundleLazy 'osyo-manga/vim-operator-search', {
+      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-function', 'kana/vim-textobj-indent'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
