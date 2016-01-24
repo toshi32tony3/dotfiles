@@ -1611,6 +1611,8 @@ if neobundle#tap('eskk.vim')
 
   " もっとすぐにskkしたい
   map <Leader>c <Plug>(operator-eskk-c)
+  " nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
+  " xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
@@ -2495,13 +2497,29 @@ endif "}}}
 "}}}
 "-----------------------------------------------------------------------------
 
-" TODO: 以下の関数の使い方をfixする
-function! s:ExeFuncWithOperation(type, cmd, func)
-  if a:type == 'line'
+" TODO: 以下の関数をfixする
+function! ExeFuncWithOperation(type, ...)
+  if a:0
+    execute 'normal! gv'
+  elseif a:type == 'line'
     execute 'normal! `[V`]'
   else
     execute 'normal! `[v`]'
   endif
-  call feedkeys(a:cmd, 'n') | call a:func
+  call feedkeys(g:MyOperator, 'n') | call function(g:MyFunction)
 endfunction
+
+function! ExeFuncWithOperationPre(cmd, func, ...)
+  let g:MyOperator = a:cmd
+  let g:MyFunction = a:func
+  if a:0
+    call ExeFuncWithOperation(visualmode(), 1)
+  else
+    set operatorfunc=ExeFuncWithOperation
+    call feedkeys('g@', 'n')
+  endif
+endfunction
+
+" nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
+" xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
 
