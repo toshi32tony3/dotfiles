@@ -8,10 +8,14 @@
 setglobal encoding=utf-8
 scriptencoding utf-8
 
-" 左手で<Leader>を入力したい
-let g:mapleader = "\<S-Space>"
-nnoremap <Leader>         <Nop>
-nnoremap <Leader><Leader> <Nop>
+" マッピング用prefixキー(<Leader>)を変更
+let g:mapleader      = '[Leader]'
+let g:maplocalleader = "\<S-Space>"
+noremap [Leader]              <Nop>
+map             <Space>       [Leader]
+noremap [Leader]<Space>       <Nop>
+map             <LocalLeader> [Leader]
+noremap [Leader]<LocalLeader> <Nop>
 
 " vimrc内全体で使うaugroupを定義
 augroup MyAutoCmd
@@ -25,19 +29,19 @@ endfunction
 
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
-  if     bufname('%') ==# ''
+  if     bufname('%') == ''
     " 無名バッファなら, バッファを再生成
-    new | execute "normal! \<C-w>\<C-w>" | bd
+    new     | execute "normal! \<C-w>\<C-w>" | bdelete
   elseif argc() >= 1
-    " ファイルが指定されていたら最初のファイルをbdして開き直す
-    bd | execute 'edit ' . a:path
+    " ファイルが指定されていたら最初のファイルをbdeleteして開き直す
+    bdelete | execute 'edit ' . a:path
   endif
 endfunction
 autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
 " Vim起動時間を計測
-" -> あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
-" -> gvim --startuptime startuptime.txt
+" → あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
+" → gvim --startuptime startuptime.txt
 if has('vim_starting') && has('reltime')
   let s:startuptime = reltime()
   autocmd MyAutoCmd VimEnter *
@@ -47,13 +51,13 @@ if has('vim_starting') && has('reltime')
 endif
 
 " " ファイル書き込み時の文字コード。空の場合, encodingの値を使う
-" " -> デフォルト値が空であるため, encodingと同じ値にしたい場合は設定不要
+" " → デフォルト値が空であるため, encodingと同じ値にしたい場合は設定不要
 " setglobal fileencoding=utf-8
 
 " ファイル読み込み時の変換候補
-" -> 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
+" → 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
 "    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
-" -> とりあえずKaoriya版GVimのguessを使おう
+" → とりあえずKaoriya版GVimのguessを使おう
 if has('kaoriya')
   setglobal fileencodings=guess
 else
@@ -67,8 +71,8 @@ nnoremap <Leader>en :<C-u>e ++encoding=
 nnoremap <Leader>ff :<C-u>e ++fileformat=
 
 " バックアップ, スワップファイルの設定
-" -> ネットワーク上ファイルの編集時に重くなる？ので作らない
-" -> 生成先をローカルに指定していたからかも。要検証
+" → ネットワーク上ファイルの編集時に重くなる？ので作らない
+" → 生成先をローカルに指定していたからかも。要検証
 setglobal noswapfile
 setglobal nobackup
 setglobal nowritebackup
@@ -81,21 +85,15 @@ setglobal backupcopy=yes
 
 " Vim生成物の生成先ディレクトリ指定
 let s:saveSwapDir = expand('~/vimfiles/swap')
-if !isdirectory(s:saveSwapDir)
-  call    mkdir(s:saveSwapDir)
-endif
+if !isdirectory(s:saveSwapDir)   | call mkdir(s:saveSwapDir)   | endif
 let &g:dir = s:saveSwapDir
 
 let s:saveBackupDir = expand('~/vimfiles/backup')
-if !isdirectory(s:saveBackupDir)
-  call    mkdir(s:saveBackupDir)
-endif
+if !isdirectory(s:saveBackupDir) | call mkdir(s:saveBackupDir) | endif
 let &g:backupdir = s:saveBackupDir
 
 let s:saveUndoDir = expand('~/vimfiles/undo')
-if !isdirectory(s:saveUndoDir)
-  call    mkdir(s:saveUndoDir)
-endif
+if !isdirectory(s:saveUndoDir)   | call mkdir(s:saveUndoDir)   | endif
 if has('persistent_undo')
   let &g:undodir = s:saveUndoDir
   setglobal undofile
@@ -108,11 +106,8 @@ else
   setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
 endif
 
-" 日本語はスペルチェックから除外
-setglobal spelllang=en,cjk
-
-" デフォルトではスペルチェックしない
-setglobal nospell
+setglobal nospell          " デフォルトではスペルチェックしない
+setglobal spelllang=en,cjk " 日本語はスペルチェックから除外
 setglobal spellfile=~/dotfiles/en.utf-8.add
 
 " コマンドと検索の履歴は多めに保持できるようにしておく
@@ -125,8 +120,8 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数
-" -> 大きい値にするとカーソル移動時に必ず再描画されるようになる
-" -> コードを読む時は大きく, 編集する時は小さくすると良いかも
+" → 大きい値にするとカーソル移動時に必ず再描画されるようになる
+" → コードを読む時は大きく, 編集する時は小さくすると良いかも
 set scrolloff=100
 let s:scrolloffOn = 1
 function! s:ToggleScrollOffSet()
@@ -156,10 +151,8 @@ filetype plugin indent off
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if has('vim_starting')
   if &compatible
-    " Vi互換モードをオフ(Vimの拡張機能を有効化)
-    setglobal nocompatible
+    setglobal nocompatible " Vi互換モードをオフ(Vimの拡張機能を有効化)
   endif
-
   " neobundle.vimでプラグインを管理する
   setglobal runtimepath+=~/.vim/bundle/neobundle.vim/
 endif
@@ -220,8 +213,8 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
-      \   'depends' : 'Shougo/neocomplete.vim',
-      \   'on_map'  : [['ni', '<Plug>']],
+      \   'depends' : ['Shougo/neocomplete.vim', 'kana/vim-operator-user'],
+      \   'on_map'  : [['nxi', '<Plug>', '<Plug>(operator-eskk-c)']],
       \ }
 NeoBundleLazy 'tyru/skkdict.vim', {
       \   'on_ft'   : 'skkdict',
@@ -247,13 +240,8 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 "-------------------------------------------------------------------
 " move {{{
 
-NeoBundleLazy 'haya14busa/incsearch.vim', {
-      \   'on_map' : '<Plug>',
-      \ }
-NeoBundleLazy 'haya14busa/incsearch-fuzzy.vim', {
-      \   'depends' : 'haya14busa/incsearch.vim',
-      \   'on_map'  : '<Plug>',
-      \ }
+" 遅延読み込みが追い付かないことがあるのでLazyしない
+NeoBundle 'haya14busa/incsearch.vim'
 
 NeoBundleLazy 'osyo-manga/vim-anzu', {
       \   'on_map' : '<Plug>',
@@ -263,13 +251,10 @@ NeoBundleLazy 'haya14busa/vim-asterisk', {
       \ }
 
 " 本家 : 'deris/vim-shot-f'
-NeoBundleLazy 'toshi32tony3/vim-shot-f', {
+NeoBundle 'toshi32tony3/vim-shot-f', {
       \   'rev'    : 'develop',
-      \   'on_map' : '<Plug>',
       \ }
-NeoBundleLazy 'justinmk/vim-sneak', {
-      \   'on_map' : '<Plug>Sneak_',
-      \ }
+NeoBundle 'justinmk/vim-sneak'
 
 NeoBundle 'kshenoy/vim-signature'
 
@@ -294,15 +279,6 @@ NeoBundleLazy 'kana/vim-textobj-indent', {
       \   'on_map'  : [['xo', 'ii', 'ai', 'iI', 'aI']],
       \ }
 
-NeoBundleLazy 'kana/vim-textobj-entire', {
-      \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [['xo', 'ie', 'ae']],
-      \ }
-NeoBundleLazy 'kana/vim-textobj-line', {
-      \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [['xo', 'il', 'al']],
-      \ }
-
 "}}}
 "-------------------------------------------------------------------
 " operator {{{
@@ -313,19 +289,17 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-" 本家 : 'osyo-manga/vim-operator-search'
-NeoBundleLazy 'toshi32tony3/vim-operator-search', {
-      \   'rev'     : 'operator_for_line',
-      \   'depends' : 'kana/vim-operator-user',
+NeoBundleLazy 'osyo-manga/vim-operator-search', {
+      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-function', 'kana/vim-textobj-indent'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
-      \   'on_map'  : [['nx', '<Plug>(operator-openbrowser)']],
+      \   'on_map'  : [['nx', '<Plug>']],
       \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
-      \   'depends' : 'kana/vim-operator-user',
+      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
       \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
@@ -350,8 +324,9 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \   'on_cmd' : 'Unite',
       \ }
 
-" 遅延ロードしてしまうと候補収集されないので, Vim起動直後に読み込む
+" 遅延読み込みすると候補収集されないので, Vim起動直後に読み込む
 NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'Shougo/neoyank.vim'
 
 NeoBundleLazy 'hewes/unite-gtags', {
       \   'depends'  : 'Shougo/unite.vim',
@@ -479,9 +454,8 @@ endif
 
 " タブ幅, シフト幅, タブ使用有無の設定
 setglobal tabstop=2 shiftwidth=2 softtabstop=0 expandtab
-autocmd MyAutoCmd FileType c        setlocal tabstop=4 shiftwidth=4
-autocmd MyAutoCmd FileType cpp      setlocal tabstop=4 shiftwidth=4
-autocmd MyAutoCmd FileType makefile setlocal tabstop=4 shiftwidth=4 noexpandtab
+autocmd MyAutoCmd FileType c,cpp,make setlocal tabstop=4 shiftwidth=4
+autocmd MyAutoCmd FileType make       setlocal noexpandtab
 
 setglobal nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
 setglobal virtualedit=all            " テキストが存在しない場所でも動きたい
@@ -493,8 +467,9 @@ setglobal showmatch                  " 対応する括弧などの入力時に�
 setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
-" " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
-" setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
+" 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
+" → 矢印は(→)を使おう
+setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
 
 " 汎用補完設定(complete)
 " Default: complete=.,w,b,u,t,i
@@ -504,10 +479,10 @@ setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにす�
 " u :     unloaded buffers in the buffer list
 " U :              buffers that are not in the buffer list
 " t : tag completion
-"     -> タグファイルが大きいと時間がかかるので汎用補完に含めない
+"     → タグファイルが大きいと時間がかかるので汎用補完に含めない
 " i : current and included files
 " d : current and included files for defined name or macro
-"     -> インクルードファイルが多いと時間がかかるので汎用補完に含めない
+"     → インクルードファイルが多いと時間がかかるので汎用補完に含めない
 setglobal complete=.,w,b,u,U
 
 " 補完オプション(completeopt)
@@ -553,21 +528,14 @@ nnoremap Y y$
 " クリップボードレジスタを使う
 setglobal clipboard=unnamed
 
-" 現在開いているファイルのパスなどを選択範囲レジスタ(*)に入れる
-" https://gist.github.com/pinzolo/8168337
-function! s:Clip(data)
-  let @* = a:data
-  echo 'clipped: ' . a:data
-endfunction
-
 " 現在開いているファイルのフルパス(ファイル名含む)をレジスタへ
-command! ClipFilePath call s:Clip(expand('%:p'))
+command! ClipFilePath let @* = expand('%:p')   | echo 'clipped: ' . @*
 
 " 現在開いているファイルのファイル名をレジスタへ
-command! ClipFileName call s:Clip(expand('%:t'))
+command! ClipFileName let @* = expand('%:t')   | echo 'clipped: ' . @*
 
 " 現在開いているファイルのディレクトリパスをレジスタへ
-command! ClipFileDir  call s:Clip(expand('%:p:h'))
+command! ClipFileDir  let @* = expand('%:p:h') | echo 'clipped: ' . @*
 
 " コマンドの出力結果を選択範囲レジスタ(*)へ
 function! s:ClipCommandOutput(cmd)
@@ -650,12 +618,12 @@ autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 setglobal foldcolumn=1
 
 " foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
-" -> marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
+" → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
 setglobal foldnestmax=2
 
 " Default: fillchars=vert:\|,fold:-
 " foldを指定すると折り畳み行がウィンドウ幅まで指定した文字でfillされる
-" -> fill不要なので, fillcharsからfoldを削除
+" → fill不要なので, fillcharsからfoldを削除
 setglobal fillchars=vert:\|
 
 " ファイルを開いた時点では折り畳みを全て閉じた状態で開く
@@ -689,13 +657,13 @@ endif
 " Search {{{
 
 " very magic
-nnoremap / /\v
+nnoremap / /\v<Left><Left>
 
-setglobal ignorecase " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
-setglobal smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
-setglobal wrapscan   " 検索時に最後まで行ったら最初に戻る
-setglobal incsearch  " インクリメンタルサーチ
-setglobal hlsearch   " マッチしたテキストをハイライト
+setglobal ignorecase  " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
+setglobal smartcase   " 大文字小文字の両方が含まれている場合は, 区別する
+setglobal wrapscan    " 検索時に最後まで行ったら最初に戻る
+setglobal noincsearch " インクリメンタルサーチしない
+setglobal hlsearch    " マッチしたテキストをハイライト
 
 " grep/vimgrep結果が0件の場合, Quickfixを開かない
 autocmd MyAutoCmd QuickfixCmdPost grep,vimgrep if len(getqflist()) != 0 | copen | endif
@@ -723,7 +691,7 @@ nnoremap ,r :<C-u>source $MYVIMRC<CR>
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
-" -> buftypeがnofileかつ特定のfiletypeの追加を試みたが,
+" → buftypeがnofileかつ特定のfiletypeの追加を試みたが,
 "    暴発する度にfiletypeを追加することになるのでやめた
 autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit | endif
 
@@ -731,10 +699,14 @@ autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
 " j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
-nnoremap j gj
-xnoremap j gj
-nnoremap k gk
-xnoremap k gk
+nnoremap <silent> j  gj
+xnoremap <silent> j  gj
+nnoremap <silent> k  gk
+xnoremap <silent> k  gk
+nnoremap <silent> gj j
+xnoremap <silent> gj j
+nnoremap <silent> gk k
+xnoremap <silent> gk k
 
 " :cdのディレクトリ名の補完に'cdpath'を使うようにする
 " http://whileimautomaton.net/2007/09/24141900
@@ -807,17 +779,17 @@ if neobundle#is_installed('scratch.vim')
 endif
 
 " " 開いたファイルと同じ場所へ移動する
-" " -> startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
+" " → startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 
 " " 最後のカーソル位置を記憶していたらジャンプ
-" " -> Gdiff時に不便なことがあったのでコメントアウト
+" " → Gdiff時に不便なことがあったのでコメントアウト
 " autocmd MyAutoCmd BufRead * silent execute 'normal! `"'
 
 " " 保存時にViewの状態を保存し, 読み込み時にViewの状態を前回の状態に戻す
 " " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
-" " -> プラグインの挙動とぶつかることもあるらしいので使わない
-" " -> https://github.com/Shougo/vimproc.vim/issues/116
+" " → プラグインの挙動とぶつかることもあるらしいので使わない
+" " → https://github.com/Shougo/vimproc.vim/issues/116
 " setglobal viewdir=~/vimfiles/view
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
@@ -858,7 +830,7 @@ function! s:JumpTagTab(funcName) "{{{
   " execute 'tjump ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
-nnoremap <silent> <Leader>} :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
+nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/template/local.rc.vim
@@ -880,7 +852,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     " 1文字目の','を削除
     if &tags != '' | let &tags = &tags[1 :] | endif
     " GTAGSROOTの登録
-    " -> GNU GLOBALのタグはプロジェクトルートで生成する
+    " → GNU GLOBALのタグはプロジェクトルートで生成する
     let $GTAGSROOT = g:local_rc#current_src_dir
   endfunction "}}}
 
@@ -924,7 +896,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
         \ | call s:SetTags()
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
-        \ | call g:SetEnvironmentVariables()
+        \ | call SetEnvironmentVariables()
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
@@ -1009,7 +981,7 @@ nnoremap <C-w><C-q> <Nop>
 nnoremap <C-w>q     <Nop>
 
 " mswin.vim有効時<C-v>がペーストに使われるため, 代替として<C-q>が用意されている
-" -> そもそもmswin.vimは使わないし, 紛らわしいので潰す
+" → そもそもmswin.vimは使わないし, 紛らわしいので潰す
 nnoremap <C-q> <Nop>
 
 " マウス中央ボタンは使わない
@@ -1023,7 +995,7 @@ inoremap <Up>    <Nop>
 inoremap <Right> <Nop>
 
 " Shift or Ctrl or Alt + カーソルキーはコマンドモードでのみ使用する
-" -> と思ったが, とりあえず潰しておいて, 一部再利用するマッピングを行う
+" → と思ったが, とりあえず潰しておいて, 一部再利用するマッピングを行う
 inoremap <S-Left>  <Nop>
 inoremap <S-Down>  <Nop>
 inoremap <S-Up>    <Nop>
@@ -1077,13 +1049,16 @@ nnoremap <A-Right> :lnext<CR>
 
 " タイムスタンプの挿入
 function! s:PutDateTime() "{{{
+  let l:tmp = @"
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
   normal! ""P
+  let @" = l:tmp
 endfunction "}}}
 command! PutDateTime call s:PutDateTime()
 
 " 区切り線+タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
+  let l:tmp = @"
   let @" = '='
   normal! 080""Po
   let @" = strftime('%Y/%m/%d(%a) %H:%M')
@@ -1094,11 +1069,12 @@ function! s:PutMemoFormat() "{{{
   normal! o
   normal! 03""P
   normal! ko
+  let @" = l:tmp
 endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
 " :messageで表示される履歴を削除
-" -> 空文字で埋めているだけ。:ClipCommandOutput messageすると202行になる
+" → 空文字で埋めているだけ。:ClipCommandOutput messageすると202行になる
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
 command! ClearMessage  for s:n in range(250) | echomsg '' | endfor
 
@@ -1338,7 +1314,7 @@ function! s:JumpFuncNameCForward() "{{{
   if l:lastLine != line('.') | return  | endif
 
   " 行移動していなければ, 開始位置がCの関数名上だったということ
-  " -> 下方向検索するには, ]]を2回使う必要がある
+  " → 下方向検索するには, ]]を2回使う必要がある
   keepjumps normal! ]]
   keepjumps normal! ]]
 
@@ -1403,32 +1379,30 @@ autocmd MyAutoCmd User MyLineChanged
       \ if &filetype == 'c' | let s:currentFunc = s:GetCurrentFuncC() | endif
 autocmd MyAutoCmd BufEnter *  let s:currentFunc = s:GetCurrentFuncC()
 
-function! s:ClipCurrentFuncName(funcName) "{{{
+function! s:ClipCurrentFunc(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
   endif
-  " 選択範囲レジスタ(*)を使う
-  let @* = a:funcName
-  echo 'clipped: ' . a:funcName
+  let @* = a:funcName | echo 'clipped: ' . a:funcName
 endfunction "}}}
-command! ClipCurrentFuncName
+command! ClipCurrentFunc
       \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:ClipCurrentFuncName(s:currentFunc)
+      \ call s:ClipCurrentFunc(s:currentFunc)
 
-function! s:PrintCurrentFuncName(funcName) "{{{
+function! s:PutCurrentFunc(funcName) "{{{
   if strlen(a:funcName) == 0
     echo 'There is no function nearby cursor.'
     return
   endif
-  " 無名レジスタ(")を使う
+  let l:tmp = @"
   let @" = a:funcName
   normal! ""P
-  echo 'printed: ' . a:funcName
+  let @" = l:tmp
 endfunction "}}}
-command! PrintCurrentFuncName
+command! PutCurrentFunc
       \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:PrintCurrentFuncName(s:currentFunc)
+      \ call s:PutCurrentFunc(s:currentFunc)
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -1443,7 +1417,7 @@ if neobundle#tap('vim-signify')
   let g:signify_update_on_focusgained = 1
 
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
-  " -> SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
+  " → SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
   if has('vim_starting')
     command! -bar SignifyStart
           \ | SignifyToggle
@@ -1594,7 +1568,7 @@ if neobundle#tap('eskk.vim')
 
   if neobundle#is_installed('skk.vim')
     " disable skk.vim
-    " -> Helpを見るためにskk.vim自体は入れておきたい
+    " → Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
 
   endif
@@ -1623,61 +1597,28 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " for Lazy
-  imap        <C-j> <Plug>(eskk:toggle)
+  imap        <C-j> <Plug>(eskk:enable)
   cmap <expr> <C-j> eskk#toggle()
 
   " すぐにskkしたい
-  " Vimで<C-i>は<Tab>と同義かつjumplist進むなので潰せない
-  " nmap <C-i> i<Plug>(eskk:toggle)
-  nmap <C-j> i<Plug>(eskk:toggle)
-
-  " インクリメントは潰せない
-  " nmap <C-a> a<Plug>(eskk:toggle)
-  nmap <A-j> a<Plug>(eskk:toggle)
-
-  " もっとすぐにskkしたい
-  nmap <A-i> I<Plug>(eskk:toggle)
-  nmap <A-a> A<Plug>(eskk:toggle)
+  nmap <Leader>i i<Plug>(eskk:enable)
+  nmap <Leader>a a<Plug>(eskk:enable)
+  nmap <A-i>     I<Plug>(eskk:enable)
+  nmap <A-a>     A<Plug>(eskk:enable)
 
   " <C-o>はjumplist戻るなので潰せない。Oは我慢
-  " nmap <C-o> o<Plug>(eskk:toggle)
-  nmap <A-o> o<Plug>(eskk:toggle)
+  nmap <A-o>     o<Plug>(eskk:enable)
 
-  " もっともっとすぐにskkしたい
-  " <C-s>と<A-s>は他の用途で使うので潰せない
-  nmap <C-c>l      cl<Plug>(eskk:toggle)
-  nmap <C-c>aw    caw<Plug>(eskk:toggle)
-  nmap <C-c>iw    ciw<Plug>(eskk:toggle)
-  nmap <C-c>aW    caW<Plug>(eskk:toggle)
-  nmap <C-c>iW    ciW<Plug>(eskk:toggle)
-  nmap <C-c>as    cas<Plug>(eskk:toggle)
-  nmap <C-c>is    cis<Plug>(eskk:toggle)
-  nmap <C-c>ap    cap<Plug>(eskk:toggle)
-  nmap <C-c>ip    cip<Plug>(eskk:toggle)
-  nmap <C-c>a]    ca]<Plug>(eskk:toggle)
-  nmap <C-c>a[    ca[<Plug>(eskk:toggle)
-  nmap <C-c>i]    ci]<Plug>(eskk:toggle)
-  nmap <C-c>i[    ci[<Plug>(eskk:toggle)
-  nmap <C-c>a)    ca)<Plug>(eskk:toggle)
-  nmap <C-c>a(    ca(<Plug>(eskk:toggle)
-  nmap <C-c>ab    cab<Plug>(eskk:toggle)
-  nmap <C-c>i)    ci)<Plug>(eskk:toggle)
-  nmap <C-c>i(    ci(<Plug>(eskk:toggle)
-  nmap <C-c>ib    cib<Plug>(eskk:toggle)
-  nmap <C-c>a}    ca}<Plug>(eskk:toggle)
-  nmap <C-c>a{    ca{<Plug>(eskk:toggle)
-  nmap <C-c>aB    caB<Plug>(eskk:toggle)
-  nmap <C-c>i}    ci}<Plug>(eskk:toggle)
-  nmap <C-c>i{    ci{<Plug>(eskk:toggle)
-  nmap <C-c>iB    ciB<Plug>(eskk:toggle)
-  nmap <C-c><C-c>  cc<Plug>(eskk:toggle)
-  nmap <A-c>        C<Plug>(eskk:toggle)
+  " もっとすぐにskkしたい
+  map <Leader>c <Plug>(operator-eskk-c)
+  " nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
+  " xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
-    " hankaku -> zenkaku
+    " hankaku → zenkaku
     call t.add_map('~',  '～')
-    " zenkaku -> hankaku
+    " zenkaku → hankaku
     call t.add_map('z~', '~')
     call t.add_map('z:', ":\<Space>")
     call t.add_map('z;', ";\<Space>")
@@ -1690,13 +1631,25 @@ if neobundle#tap('eskk.vim')
 
   function! neobundle#hooks.on_post_source(bundle)
     " wake up!
-    " -> 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
+    " → 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
     call eskk#toggle()
     call eskk#toggle()
 
     " 処理順を明確にするため, neobundle#hooks.on_post_source()を
     " 使ってプラグインの読み込み完了フラグを立てることにした
     let s:IsEskkLoaded = 1
+
+    function! s:OperatorChangeWithEskk(motionWise)
+      if a:motionWise == 'line'
+        execute 'normal! `[V`]'
+      else
+        execute 'normal! `[v`]'
+      endif
+      call feedkeys('c', 'n') | call eskk#enable()
+    endfunction
+    if neobundle#is_installed('vim-operator-user')
+      call operator#user#define('eskk-c', s:SID() . 'OperatorChangeWithEskk')
+    endif
   endfunction
 
 endif "}}}
@@ -1788,7 +1741,7 @@ if neobundle#tap('lightline.vim')
     " 以下の条件を満たすと処理負荷が急激に上がる。理由は不明
     " ・Vimのカレントディレクトリがネットワーク上
     " ・ネットワーク上のファイルを開いており, ファイル名をフルパス(%:p)出力
-    " -> GVIMウィンドウ上部にフルパスが表示されているので, そちらを参照する
+    " → GVIMウィンドウ上部にフルパスが表示されているので, そちらを参照する
     return (&filetype == 'vimfiler' ? ''          :
           \     expand('%:t') == '' ? '[No Name]' : expand('%:t'))
           \   . (MyReadonly() == '' ? ''          : MyReadonly() )
@@ -1814,7 +1767,7 @@ if neobundle#tap('lightline.vim')
   function! MySKKMode()
     " 処理順を明確にするため, neobundle#hooks.on_post_source()を
     " 使ってプラグインの読み込み完了フラグを立てることにした
-    " -> 一応neobundle#is_sourced()を使っても問題無く動くことは確認した
+    " → 一応neobundle#is_sourced()を使っても問題無く動くことは確認した
     if !exists('s:IsNeoCompleteLoaded') || !exists('s:IsEskkLoaded')
       return ''
     endif
@@ -1831,9 +1784,9 @@ if neobundle#tap('lightline.vim')
       return winwidth(0) > 30 ? l:CurrentMode : ''
     endif
 
-    " モード切り替わり(normal <-> skk)を監視するついでにneocompleteをlock/unlock
+    " モード切り替わり(normal⇔skk)を監視するついでにneocompleteをlock/unlock
     if b:LastMode == ''
-      " normal -> skk : 必要ならunlock
+      " normal → skk : 必要ならunlock
       if neocomplete#get_current_neocomplete().lock == 1
         NeoCompleteUnlock
       else
@@ -1841,7 +1794,7 @@ if neobundle#tap('lightline.vim')
       endif
 
     else
-      " skk -> normal : 必要ならlock
+      " skk → normal : 必要ならlock
       if !exists('b:IsAlreadyUnlocked')
         NeoCompleteLock
       else
@@ -1885,8 +1838,8 @@ if neobundle#tap('vim-fontzoom')
   nmap - <Plug>(fontzoom-smaller)
 
   " vim-fontzoomには, 以下のデフォルトキーマッピングが設定されている
-  " -> しかし, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
-  " -> https://github.com/vim-jp/issues/issues/73
+  " → しかし, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
+  " → https://github.com/vim-jp/issues/issues/73
   nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
   nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
 
@@ -1912,23 +1865,8 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  " very magic
-  let g:incsearch#magic = '\v'
-
-  map                      / <Plug>(incsearch-forward)
-  map                      ? <Plug>(incsearch-backward)
-  map                     g/ <Plug>(incsearch-stay)
-  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
-
-endif "}}}
-
-" incsearch.vimをパワーアップ(incsearch-fuzzy.vim) {{{
-if neobundle#tap('incsearch-fuzzy.vim')
-
-  map                      z/ <Plug>(incsearch-fuzzy-/)
-  map                      z? <Plug>(incsearch-fuzzy-?)
-  map                     gz/ <Plug>(incsearch-fuzzy-stay)
-  noremap <silent> <expr> gz? incsearch#go(incsearch#config#fuzzy#make({'command': '?', 'is_stay': 1}))
+  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1, 'pattern' : '\v<Left><Left>'})
+  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1, 'pattern' : '\v<Left><Left>'})
 
 endif "}}}
 
@@ -1938,41 +1876,15 @@ if neobundle#tap('vim-asterisk')
   " 検索開始時のカーソル位置を保持する
   let g:asterisk#keeppos = 1
 
-  " g:incsearch#magic使用時の検索履歴問題の暫定対処
-  " https://github.com/haya14busa/incsearch.vim/issues/22
-  " http://lingr.com/room/vim/archives/2014/10/27#message-20478448
-  function! s:ModSearchHistory()
-    if !exists('g:incsearch#magic') | return '' | endif
-    if g:incsearch#magic != '\v'    | return '' | endif
-    if mode() != 'n'                | return '' | endif
-
-    " hogeをstar検索すると履歴は\<hoge\>となる
-    "                           ^     ^  ←この'\'を取り除きたい
-    "                           12345678 ←文字数
-    "                                  ^ ←matchend
-    "                           01234567 ←文字列のindex
-    " NOTE: 単語区切りは単語を構成する文字のみ付加される
-    let l:lastHistory = histget('/', -1)
-    let l:endIndex = matchend(l:lastHistory, '^\\<.*\\>')
-    if  l:endIndex >= 0
-      let l:lastHistory = '<' . l:lastHistory[2 : (l:endIndex - 3)] . '>'
-            \                 . l:lastHistory[l:endIndex :]
-    endif
-    call histdel('/', -1)
-    call histadd('/', l:lastHistory)
-
-    return ''
-  endfunction
-  noremap <silent> <expr> <Plug>(_ModSearchHistory) <SID>ModSearchHistory()
-
-  " star-search対象をクリップボードに入れる
-  function! s:ClipCword(data)
+  " star-search対象を無名レジスタに入れる
+  " → クリップボードを誤って上書きすることがあったので無名レジスタに変更
+  function! s:ClipCword(data) "{{{
     let     l:currentMode  = mode(1)
     if      l:currentMode == 'n'
-      let @* = a:data
+      let @" = a:data
       return ''
     elseif  l:currentMode == 'no'
-      let @* = a:data
+      let @" = a:data
       return "\<Esc>"
     elseif  l:currentMode ==# 'v' ||
           \ l:currentMode ==# 'V' ||
@@ -1980,17 +1892,17 @@ if neobundle#tap('vim-asterisk')
       return "\<Esc>gvygv"
     endif
     return ''
-  endfunction
+  endfunction "}}}
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
   if neobundle#is_installed('vim-anzu')
-    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
-    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)<Plug>(anzu-update-search-status-with-echo)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
     map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
     map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
   else
-    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)
-    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)
+    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)
+    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)
     map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
     map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
   endif
@@ -2023,13 +1935,6 @@ endif "}}}
 " f検索を便利に(vim-shot-f) {{{
 if neobundle#tap('vim-shot-f')
 
-  " for Lazy
-  let g:shot_f_no_default_key_mappings = 1
-  map f <Plug>(shot-f-f)
-  map F <Plug>(shot-f-F)
-  map t <Plug>(shot-f-t)
-  map T <Plug>(shot-f-T)
-
 endif "}}}
 
 " f検索の2文字版(vim-sneak) {{{
@@ -2041,22 +1946,18 @@ if neobundle#tap('vim-sneak')
   " smartcase
   let g:sneak#use_ic_scs = 1
 
-  " for Lazy
-  map s <Plug>Sneak_s
-  map S <Plug>Sneak_S
-
 endif "}}}
 
 " Vimのマーク機能を使いやすく(vim-signature) {{{
 if neobundle#tap('vim-signature')
 
   " " お試しとして, グローバルマークだけ使うようにしてみる
-  " " -> viminfoに直接書き込まれるためか, マークの削除が反映されないことが多々
+  " " → viminfoに直接書き込まれるためか, マークの削除が反映されないことが多々
   " let g:SignatureIncludeMarks = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
   " _viminfoファイルからグローバルマークの削除を行う
-  " -> Unix系だと「~/.viminfo」, Windowsだと「~/_viminfo」を対象とする
-  " -> Windowsでは_viminfoが書き込み禁止になり削除失敗するので無効化する
+  " → Unix系だと「~/.viminfo」, Windowsだと「~/_viminfo」を対象とする
+  " → Windowsでは_viminfoが書き込み禁止になり削除失敗するので無効化する
   let g:SignatureForceRemoveGlobal = 0
 
   " これだけあれば十分
@@ -2095,16 +1996,6 @@ if neobundle#tap('vim-textobj-indent')
 
 endif "}}}
 
-" バッファ全体を選択するテキストオブジェクト(vim-textobj-entire) {{{
-if neobundle#tap('vim-textobj-entire')
-
-endif "}}}
-
-" カーソル行を選択するテキストオブジェクト(vim-textobj-line) {{{
-if neobundle#tap('vim-textobj-line')
-
-endif "}}}
-
 " 置き換えオペレータ(vim-operator-replace) {{{
 if neobundle#tap('vim-operator-replace')
 
@@ -2135,7 +2026,7 @@ if neobundle#tap('caw.vim')
   " caw.vimをオペレータとして使う
   " https://github.com/rhysd/dogfiles/blob/master/vimrc
   function! s:OperatorCawCommentToggle(motionWise)
-    if a:motionWise ==# 'char'
+    if a:motionWise == 'char'
       execute "normal `[v`]\<Plug>(caw:wrap:toggle)"
     else
       execute "normal `[V`]\<Plug>(caw:i:toggle)"
@@ -2143,7 +2034,9 @@ if neobundle#tap('caw.vim')
   endfunction
 
   function! neobundle#hooks.on_source(bundle)
-    call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
+    if neobundle#is_installed('vim-operator-user')
+      call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
+    endif
   endfunction
 
   map co <Plug>(operator-caw)
@@ -2242,6 +2135,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_fm = 'Unite '       . g:u_hopt
   let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt                       . g:u_sbuf
+  let g:u_opt_hy = 'Unite '       . g:u_hopt
   let g:u_opt_li = 'Unite '       . g:u_nspl                       . g:u_sbuf
   let g:u_opt_mf = 'Unite '       . g:u_hopt
   let g:u_opt_mg = 'Unite '       . g:u_hopt                       . g:u_sbuf
@@ -2268,6 +2162,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:.'       . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'       . '<CR>'
+  nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
   nnoremap <expr> <Leader>mf ':<C-u>' . g:u_opt_mf . 'file:~/memo'      . '<CR>'
@@ -2280,11 +2175,19 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>op ':<C-u>' . g:u_opt_op . 'output'           . '<CR>'
   nnoremap <expr> <Leader>sb ':<C-u>' . g:u_opt_sb                      . '<CR>'
 
+  function! s:UniteSettings()
+    " <Leader>がデフォルトマッピングで使用されていた場合の対策
+    nmap <buffer> <LocalLeader> <Leader>
+
+    nmap <buffer> <Esc> <Plug>(unite_exit)
+  endfunction
+  autocmd MyAutoCmd FileType unite call s:UniteSettings()
+
   function! neobundle#hooks.on_post_source(bundle)
     " unite.vimのデフォルトコンテキストを設定する
     " http://d.hatena.ne.jp/osyo-manga/20140627
-    " -> なんだかんだ非同期で処理させる必要は無い気がする
-    " -> emptyの時にメッセージ通知を出せるか調べる
+    " → なんだかんだ非同期で処理させる必要は無い気がする
+    " → emptyの時にメッセージ通知を出せるか調べる
     call unite#custom#profile('default', 'context', {
           \   'no_empty'         : 1,
           \   'no_quit'          : 0,
@@ -2305,20 +2208,19 @@ if neobundle#tap('unite.vim')
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory_mru',             'vimfiler')
 
-    function! s:UniteSettings()
-      " <Leader>がデフォルトマッピングで使用されていた場合の対策
-      nnoremap <buffer> <Leader>         <Nop>
-      nnoremap <buffer> <Leader><Leader> <Nop>
-
-      nmap <buffer> <Esc> <Plug>(unite_exit)
-    endfunction
-    autocmd MyAutoCmd FileType unite call s:UniteSettings()
   endfunction
 
 endif "}}}
 
 " for unite-file_mru {{{
 if neobundle#tap('neomru.vim')
+
+endif "}}}
+
+" for unite-history/yank {{{
+if neobundle#tap('neoyank.vim')
+
+  let g:neoyank#limit = 15
 
 endif "}}}
 
@@ -2355,8 +2257,7 @@ if neobundle#tap('vimfiler.vim')
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
-    nnoremap <buffer> <Leader>         <Nop>
-    nnoremap <buffer> <Leader><Leader> <Nop>
+    nmap <buffer> <LocalLeader> <Leader>
 
     " grepはUniteを使うので潰しておく
     nnoremap <buffer> gr <Nop>
@@ -2451,14 +2352,9 @@ if neobundle#tap('J6uil.vim')
   let g:J6uil_config_dir = expand('~/.cache/J6uil')
 
   function! s:J6uilSaySetting()
-    if neobundle#is_installed('eskk.vim')
-      nmap     <buffer> <C-j> i<Plug>(eskk:toggle)
-
-      " bd!が誤爆して悲しいので防ぐ(入力が記憶されてたら嬉しいのだけれど)
-      nmap     <buffer> <Esc> <Nop>
-    else
-      nnoremap <buffer> <C-j> <Nop>
-    endif
+    " bd!の誤爆防止(入力が記憶されてたら嬉しいのだけれど)
+    nnoremap <buffer> <C-j> <Nop>
+    nnoremap <buffer> <Esc> <Nop>
   endfunction
   autocmd MyAutoCmd FileType J6uil_say call s:J6uilSaySetting()
 
@@ -2478,12 +2374,12 @@ endif "}}}
 if neobundle#tap('vim-markdown')
 
   " " markdownのfold機能を無効にする
-  " " -> むしろ有効活用したい
+  " " → むしろ有効活用したい
   " let g:vim_markdown_folding_disabled = 1
 
   " 折り畳みを1段階閉じた状態で開く
-  " -> autocmd FileTypeでfoldlevelstartを変えても意味がないぽい
-  " -> foldlevelをいじる
+  " → autocmd FileTypeでfoldlevelstartを変えても意味がないぽい
+  " → foldlevelをいじる
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
@@ -2600,8 +2496,30 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
-" TODO: operator-searchの残件
-"       1. lineが条件から抜けていた件のPR
-"       2. オペレータを2回連続で入力した時の行指向検索
-"       3. 矩形Visualモードで指定したblock検索
+
+" TODO: 以下の関数をfixする
+function! ExeFuncWithOperation(type, ...)
+  if a:0
+    execute 'normal! gv'
+  elseif a:type == 'line'
+    execute 'normal! `[V`]'
+  else
+    execute 'normal! `[v`]'
+  endif
+  call feedkeys(g:MyOperator, 'n') | call function(g:MyFunction)
+endfunction
+
+function! ExeFuncWithOperationPre(cmd, func, ...)
+  let g:MyOperator = a:cmd
+  let g:MyFunction = a:func
+  if a:0
+    call ExeFuncWithOperation(visualmode(), 1)
+  else
+    set operatorfunc=ExeFuncWithOperation
+    call feedkeys('g@', 'n')
+  endif
+endfunction
+
+" nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
+" xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
 
