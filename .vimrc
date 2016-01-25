@@ -821,6 +821,8 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 "-----------------------------------------------------------------------------
 " tags, path {{{
 
+setglobal notagbsearch " 検索順の優先度付けしているので, 線形検索させる
+
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
   tab split
@@ -2499,6 +2501,9 @@ endif "}}}
 
 " TODO: 以下の関数をfixする
 function! ExeFuncWithOperation(type, ...)
+  let l:selectionTmp = &selection
+  let &selection = 'inclusive'
+
   if a:0
     execute 'normal! gv'
   elseif a:type == 'line'
@@ -2506,12 +2511,14 @@ function! ExeFuncWithOperation(type, ...)
   else
     execute 'normal! `[v`]'
   endif
-  call feedkeys(g:MyOperator, 'n') | call function(g:MyFunction)
+  call feedkeys(g:MyOperator, 'n') | call g:MyFunction()
+
+  let &selection = l:selectionTmp
 endfunction
 
-function! ExeFuncWithOperationPre(cmd, func, ...)
-  let g:MyOperator = a:cmd
-  let g:MyFunction = a:func
+function! ExeFuncWithOperationPre(operator, function, ...)
+  let g:MyOperator = a:operator
+  let g:MyFunction = function(a:function)
   if a:0
     call ExeFuncWithOperation(visualmode(), 1)
   else
@@ -2520,6 +2527,6 @@ function! ExeFuncWithOperationPre(cmd, func, ...)
   endif
 endfunction
 
-" nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
-" xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
+nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
+xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
 
