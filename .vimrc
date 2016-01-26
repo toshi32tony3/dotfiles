@@ -1424,7 +1424,6 @@ if neobundle#tap('vim-signify')
     command! -bar SignifyStart
           \ | SignifyToggle
           \ | SignifyToggle
-          \ | delcommand SignifyStart
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
