@@ -1610,11 +1610,6 @@ if neobundle#tap('eskk.vim')
   " <C-o>はjumplist戻るなので潰せない。Oは我慢
   nmap <A-o>     o<Plug>(eskk:enable)
 
-  " もっとすぐにskkしたい
-  map <Leader>c <Plug>(operator-eskk-c)
-  " nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
-  " xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
-
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
     " hankaku → zenkaku
@@ -1639,18 +1634,6 @@ if neobundle#tap('eskk.vim')
     " 処理順を明確にするため, neobundle#hooks.on_post_source()を
     " 使ってプラグインの読み込み完了フラグを立てることにした
     let s:IsEskkLoaded = 1
-
-    function! s:OperatorChangeWithEskk(motionWise)
-      if a:motionWise == 'line'
-        execute 'normal! `[V`]'
-      else
-        execute 'normal! `[v`]'
-      endif
-      call feedkeys('c', 'n') | call eskk#enable()
-    endfunction
-    if neobundle#is_installed('vim-operator-user')
-      call operator#user#define('eskk-c', s:SID() . 'OperatorChangeWithEskk')
-    endif
   endfunction
 
 endif "}}}
@@ -2498,7 +2481,7 @@ endif "}}}
 "}}}
 "-----------------------------------------------------------------------------
 
-" TODO: 以下の関数をfixする
+" operator + motion + function (マッピング用スクリプト本体)
 function! ExeFuncWithOperation(type, ...)
   let l:selectionTmp = &selection
   let &selection = 'inclusive'
@@ -2515,6 +2498,7 @@ function! ExeFuncWithOperation(type, ...)
   let &selection = l:selectionTmp
 endfunction
 
+" operator + motion + function (マッピング用スクリプトのインターフェース)
 function! ExeFuncWithOperationPre(operator, function, ...)
   let g:MyOperator = a:operator
   let g:MyFunction = function(a:function)
@@ -2526,6 +2510,7 @@ function! ExeFuncWithOperationPre(operator, function, ...)
   endif
 endfunction
 
+" もっとすぐにskkしたい
 nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
 xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
 
