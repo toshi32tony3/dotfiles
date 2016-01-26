@@ -821,8 +821,6 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 "-----------------------------------------------------------------------------
 " tags, path {{{
 
-setglobal notagbsearch " 検索順の優先度付けしているので, 線形検索させる
-
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
   tab split
