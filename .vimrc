@@ -226,8 +226,6 @@ NeoBundleLazy 'thinca/vim-ambicmd'
 "-------------------------------------------------------------------
 " view {{{
 
-NeoBundle 'chriskempson/vim-tomorrow-theme'
-
 NeoBundle 'cocopon/lightline-hybrid.vim'
 NeoBundle 'itchyny/lightline.vim'
 
@@ -551,6 +549,17 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 "}}}
 "-----------------------------------------------------------------------------
 " View {{{
+
+" 現在のカーソル位置をわかりやすくする
+autocmd MyAutoCmd ColorScheme * highlight Cursor guifg=White guibg=Red
+
+" 検索中のフォーカス位置をわかりやすくする
+autocmd MyAutoCmd ColorScheme * highlight IncSearch
+      \ term=NONE cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
+
+if filereadable(expand('~/vimfiles/colors/Tomorrow-Night.vim'))
+  colorscheme Tomorrow-Night
+endif
 
 if has('gui_running')
   " Ricty for Powerline
@@ -1651,20 +1660,6 @@ if neobundle#tap('vim-ambicmd')
   " " 下手にマッピングするよりもambicmdで補完する方が捗る
   " " リスト補完を併用することにした。→s:MyCMap()を参照のこと
   " cnoremap <expr> <Space> ambicmd#expand("\<Space>")
-
-endif "}}}
-
-" My favorite colorscheme(vim-tomorrow-theme) {{{
-if neobundle#tap('vim-tomorrow-theme')
-
-  " 現在のカーソル位置をわかりやすくする
-  autocmd MyAutoCmd ColorScheme * highlight Cursor guifg=White guibg=Red
-
-  " 検索中のフォーカス位置をわかりやすくする
-  autocmd MyAutoCmd ColorScheme * highlight IncSearch
-        \ term=NONE cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
-
-  colorscheme Tomorrow-Night
 
 endif "}}}
 
