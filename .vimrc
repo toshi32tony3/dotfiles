@@ -1858,15 +1858,14 @@ if neobundle#tap('vim-asterisk')
   " 検索開始時のカーソル位置を保持する
   let g:asterisk#keeppos = 1
 
-  " star-search対象を無名レジスタに入れる
-  " → クリップボードを誤って上書きすることがあったので無名レジスタに変更
+  " star-search対象を選択レジスタに入れる
   function! s:ClipCword(data) "{{{
     let     l:currentMode  = mode(1)
     if      l:currentMode == 'n'
-      let @" = a:data
+      let @* = a:data
       return ''
     elseif  l:currentMode == 'no'
-      let @" = a:data
+      let @* = a:data
       return "\<Esc>"
     elseif  l:currentMode ==# 'v' ||
           \ l:currentMode ==# 'V' ||
@@ -2125,7 +2124,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_mp = 'Unite '       . g:u_nspl
   let g:u_opt_nl = 'Unite '       . g:u_nspl
   let g:u_opt_nu = 'Unite '       . g:u_nspl . g:u_nins . g:u_nsyn
-  let g:u_opt_ol = 'Unite '       . g:u_vopt
+  let g:u_opt_ol = 'Unite '       . g:u_vopt            . g:u_nqui
   let g:u_opt_op = 'Unite '       . g:u_nspl
   let g:u_opt_re = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
   let g:u_opt_sb = 'UniteResume ' . g:u_hopt                       . g:u_sbuf
@@ -2511,4 +2510,9 @@ endfunction
 " もっとすぐにskkしたい
 nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
 xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
+
+" 選択範囲をHTML化してヤンクする
+command! -range=% -bar ClipHTML
+      \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
+cnoreabbrev CH ClipHTML
 
