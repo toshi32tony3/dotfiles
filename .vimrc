@@ -2335,8 +2335,11 @@ endif "}}}
 if neobundle#tap('TweetVim')
 
   let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
-  autocmd MyAutoCmd FileType tweetvim nnoremap <buffer> s :<C-u>TweetVimSay<CR>
-
+  function! s:TweetVimSettings()
+    nnoremap <buffer> s :<C-u>TweetVimSay<CR>
+    nnoremap <buffer> <nowait> <Leader>u <Plug>(tweetvim_action_reload)
+  endfunction
+  autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
 endif "}}}
 
 " VimからLingrを見る(J6uil.vim) {{{
