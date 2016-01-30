@@ -2124,7 +2124,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_mp = 'Unite '       . g:u_nspl
   let g:u_opt_nl = 'Unite '       . g:u_nspl
   let g:u_opt_nu = 'Unite '       . g:u_nspl . g:u_nins . g:u_nsyn
-  let g:u_opt_ol = 'Unite '       . g:u_vopt
+  let g:u_opt_ol = 'Unite '       . g:u_vopt            . g:u_nqui
   let g:u_opt_op = 'Unite '       . g:u_nspl
   let g:u_opt_re = 'Unite '       . g:u_hopt            . g:u_nqui . g:u_sbuf
   let g:u_opt_sb = 'UniteResume ' . g:u_hopt                       . g:u_sbuf
