@@ -2511,3 +2511,8 @@ endfunction
 nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
 xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
 
+" 選択範囲をHTML化してヤンクする
+command! -range=% -bar ClipHTML
+      \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
+cnoreabbrev CH ClipHTML
+
