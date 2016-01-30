@@ -1411,6 +1411,15 @@ command! PutCurrentFunc
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
 
+" バッファをHTML形式に変換(2html.vim) {{{
+
+" 選択範囲をHTML変換してヤンクする
+command! -range=% -bar ClipHTML
+      \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
+cnoreabbrev CH ClipHTML
+
+"}}}
+
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
@@ -2472,42 +2481,4 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
-
-" operator + motion + function (マッピング用スクリプト本体)
-function! ExeFuncWithOperation(type, ...) "{{{
-  let l:selectionTmp = &selection
-  let &selection = 'inclusive'
-
-  if a:0
-    execute 'normal! gv'
-  elseif a:type == 'line'
-    execute 'normal! `[V`]'
-  else
-    execute 'normal! `[v`]'
-  endif
-  call feedkeys(g:MyOperator, 'n') | call g:MyFunction()
-
-  let &selection = l:selectionTmp
-endfunction "}}}
-
-" operator + motion + function (マッピング用スクリプトのインターフェース)
-function! ExeFuncWithOperationPre(operator, funcName, ...) "{{{
-  let g:MyOperator = a:operator
-  let g:MyFunction = function(a:funcName)
-  if a:0
-    call ExeFuncWithOperation(visualmode(), 1)
-  else
-    set operatorfunc=ExeFuncWithOperation
-    call feedkeys('g@', 'n')
-  endif
-endfunction "}}}
-
-" もっとすぐにskkしたい
-nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
-xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
-
-" 選択範囲をHTML化してヤンクする
-command! -range=% -bar ClipHTML
-      \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
-cnoreabbrev CH ClipHTML
 
