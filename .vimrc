@@ -779,6 +779,9 @@ if neobundle#is_installed('scratch.vim')
   call s:AddMyCMap('^sc$',  'Scratch')
   call s:AddMyCMap('^scp$', 'ScratchPreview')
 endif
+if neobundle#is_installed('TweetVim')
+  call s:AddMyCMap('^tvs$', 'TweetVimSearch')
+endif
 
 " " 開いたファイルと同じ場所へ移動する
 " " → startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
