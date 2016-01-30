@@ -659,9 +659,6 @@ endif
 "-----------------------------------------------------------------------------
 " Search {{{
 
-" very magic
-nnoremap / /\v<Left><Left>
-
 setglobal ignorecase  " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
 setglobal smartcase   " 大文字小文字の両方が含まれている場合は, 区別する
 setglobal wrapscan    " 検索時に最後まで行ったら最初に戻る
@@ -1859,8 +1856,10 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1, 'pattern' : '\v<Left><Left>'})
-  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1, 'pattern' : '\v<Left><Left>'})
+  let g:incsearch#magic = '\v'
+
+  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
 
 endif "}}}
 
