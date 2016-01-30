@@ -550,8 +550,8 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 "-----------------------------------------------------------------------------
 " View {{{
 
-if filereadable(expand('~/vimfiles/colors/Tomorrow-Night.vim'))
-  colorscheme Tomorrow-Night
+if filereadable(expand('~/vimfiles/colors/badwolf.vim'))
+  colorscheme badwolf
 endif
 
 if has('gui_running')
