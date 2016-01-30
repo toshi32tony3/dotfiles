@@ -510,7 +510,7 @@ cnoremap <C-n> <Down>
 autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmqBM
 
 " gqで使うtextwidthを設定
-autocmd MyAutoCmd BufEnter * setlocal textwidth=80
+autocmd MyAutoCmd BufEnter * setlocal textwidth=78
 
 " autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
@@ -840,36 +840,36 @@ nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
 if filereadable(expand('~/localfiles/template/local.rc.vim'))
 
   function! s:SetSrcDir() "{{{
-    let g:local_rc#src_dir         = g:local_rc#src_list[g:local_rc#src_index]
-    let g:local_rc#current_src_dir = g:local_rc#base_dir . '\' . g:local_rc#src_dir
-    let g:local_rc#ctags_dir       = g:local_rc#current_src_dir . '\.tags'
+    let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
+    let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
+    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.tags'
   endfunction "}}}
 
   function! s:SetTags() "{{{
     " tagsをセット
     set tags=
-    for l:item in g:local_rc#ctags_list
+    for l:item in g:local_rc_ctags_list
       if l:item == '' | break | endif
-      let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
+      let &tags = &tags . ',' . g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item]
     endfor
     " 1文字目の','を削除
     if &tags != '' | let &tags = &tags[1 :] | endif
     " GTAGSROOTの登録
     " → GNU GLOBALのタグはプロジェクトルートで生成する
-    let $GTAGSROOT = g:local_rc#current_src_dir
+    let $GTAGSROOT = g:local_rc_current_src_dir
   endfunction "}}}
 
   function! s:SetPathList() "{{{
     set path=
     " 起点なしのpath登録
-    for l:item in g:local_rc#other_dir_path_list
+    for l:item in g:local_rc_other_dir_path_list
       if l:item == '' | break | endif
       let &path = &path . ',' . l:item
     endfor
-    " g:local_rc#current_src_dirを起点にしたpath登録
-    for l:item in g:local_rc#current_src_dir_path_list
+    " g:local_rc_current_src_dirを起点にしたpath登録
+    for l:item in g:local_rc_current_src_dir_path_list
       if l:item == '' | break | endif
-      let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
+      let &path = &path . ',' . g:local_rc_current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
     if &path != '' | let &path = &path[1 :] | endif
@@ -878,16 +878,16 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetCDPathList() "{{{
     set cdpath=
     " 起点なしのcdpath登録
-    for l:item in g:local_rc#other_dir_cdpath_list
+    for l:item in g:local_rc_other_dir_cdpath_list
       if l:item == '' | break | endif
       let &cdpath = &cdpath . ',' . l:item
     endfor
-    let &cdpath = &cdpath . ',' . g:local_rc#base_dir
-    let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir
-    " g:local_rc#current_src_dirを起点にしたcdpath登録
-    for l:item in g:local_rc#current_src_dir_cdpath_list
+    let &cdpath = &cdpath . ',' . g:local_rc_base_dir
+    let &cdpath = &cdpath . ',' . g:local_rc_current_src_dir
+    " g:local_rc_current_src_dirを起点にしたcdpath登録
+    for l:item in g:local_rc_current_src_dir_cdpath_list
       if l:item == '' | break | endif
-      let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
+      let &cdpath = &cdpath . ',' . g:local_rc_current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
     if &cdpath != '' | let &cdpath = &cdpath[1 :] | endif
@@ -903,9 +903,9 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
-    let g:local_rc#src_index += 1
-    if  g:local_rc#src_index >= len(g:local_rc#src_list)
-      let g:local_rc#src_index = 0
+    let g:local_rc_src_index += 1
+    if  g:local_rc_src_index >= len(g:local_rc_src_list)
+      let g:local_rc_src_index = 0
     endif
     call s:SetSrcDir()
     call s:SetTags()
@@ -913,24 +913,24 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     call s:SetCDPathList()
     call g:SetEnvironmentVariables()
     " ソースコード切り替え後, ソースディレクトリ名を出力
-    echo 'switch source to: ' . g:local_rc#src_dir
+    echo 'switch source to: ' . g:local_rc_src_dir
   endfunction "}}}
   nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
 
   " ctagsをアップデート
   function! s:UpdateCtags() "{{{
     if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
-    if !isdirectory(g:local_rc#ctags_dir)
-      call    mkdir(g:local_rc#ctags_dir)
+    if !isdirectory(g:local_rc_ctags_dir)
+      call    mkdir(g:local_rc_ctags_dir)
     endif
-    for l:item in g:local_rc#ctags_list
+    for l:item in g:local_rc_ctags_list
       if l:item == '' | break | endif
-      if !has_key(g:local_rc#ctags_name_list, l:item) | continue | endif
+      if !has_key(g:local_rc_ctags_name_list, l:item) | continue | endif
       let l:updateCommand =
             \ 'ctags -f ' .
-            \ g:local_rc#current_src_dir . '\.tags\' . g:local_rc#ctags_name_list[l:item] .
+            \ g:local_rc_current_src_dir . '\.tags\' . g:local_rc_ctags_name_list[l:item] .
             \ ' -R ' .
-            \ g:local_rc#current_src_dir . '\' . l:item
+            \ g:local_rc_current_src_dir . '\' . l:item
       if has('win32')
         " 処理中かどうかわかるように/minを使う
         silent execute '!start /min ' . l:updateCommand
@@ -2086,7 +2086,7 @@ if neobundle#tap('vim-startify')
 
 endif "}}}
 
-" 検索やリスト表示の拡張(unite.vim) {{{
+" 検索やリスト表示を拡張(unite.vim) {{{
 if neobundle#tap('unite.vim')
 
   let g:unite_force_overwrite_statusline = 1
