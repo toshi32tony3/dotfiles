@@ -817,6 +817,9 @@ function! s:TabDiff(...) "{{{
 endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
+" cから始まるマッピングをすると最初のcがoperatorと認識されないので<nowait>する
+nnoremap <nowait> cc cc
+
 "}}}
 "-----------------------------------------------------------------------------
 " tags, path {{{
@@ -1569,7 +1572,6 @@ if neobundle#tap('eskk.vim')
     " disable skk.vim
     " → Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
-
   endif
 
   let g:eskk#directory = '~/.cache/eskk'
@@ -1596,17 +1598,15 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " for Lazy
-  imap        <C-j> <Plug>(eskk:enable)
+  imap        <C-j>  <Plug>(eskk:enable)
+  nmap        <C-j> i<Plug>(eskk:enable)
   cmap <expr> <C-j> eskk#toggle()
 
   " すぐにskkしたい
-  nmap <Leader>i i<Plug>(eskk:enable)
-  nmap <Leader>a a<Plug>(eskk:enable)
-  nmap <A-i>     I<Plug>(eskk:enable)
-  nmap <A-a>     A<Plug>(eskk:enable)
-
-  " <C-o>はjumplist戻るなので潰せない。Oは我慢
-  nmap <A-o>     o<Plug>(eskk:enable)
+  nmap <A-i> I<Plug>(eskk:enable)
+  nmap <A-a> A<Plug>(eskk:enable)
+  nmap <A-c> C<Plug>(eskk:enable)
+  nmap <A-o> O<Plug>(eskk:enable)
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
@@ -1899,10 +1899,10 @@ if neobundle#tap('vim-anzu')
 
   " " 検索開始時にジャンプせず, その場でanzu-modeに移行する
   " if neobundle#is_installed('vim-asterisk')
-  "   nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)<Plug>(anzu-mode)
-  "   nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)<Plug>(anzu-mode)
-  "   nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(_ModSearchHistory)<Plug>(anzu-mode)
-  "   nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(_ModSearchHistory)<Plug>(anzu-mode)
+  "   nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-mode)
+  "   nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-mode)
+  "   nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-mode)
+  "   nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-mode)
   " else
   "   nmap * *<Plug>(anzu-mode)
   " endif
@@ -2103,7 +2103,7 @@ if neobundle#tap('unite.vim')
   let g:u_nins = '-no-start-insert '
   let g:u_nspl = '-no-split '
   let g:u_hopt =    '-split -horizontal -winheight=20 '
-  let g:u_vopt =    '-split -vertical -winwidth=90 '
+  let g:u_vopt =    '-split -vertical   -winwidth=90 '
 
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
   let g:u_opt_bu = 'Unite '       . g:u_hopt . g:u_nins
@@ -2318,12 +2318,7 @@ endif "}}}
 if neobundle#tap('TweetVim')
 
   let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
-
-  function! s:TweetVimSettings()
-    nnoremap <buffer> <C-CR>     :<C-u>TweetVimSay<CR>
-    nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
-  endfunction
-  autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
+  autocmd MyAutoCmd FileType tweetvim nnoremap <buffer> s :<C-u>TweetVimSay<CR>
 
 endif "}}}
 
@@ -2479,7 +2474,7 @@ endif "}}}
 "-----------------------------------------------------------------------------
 
 " operator + motion + function (マッピング用スクリプト本体)
-function! ExeFuncWithOperation(type, ...)
+function! ExeFuncWithOperation(type, ...) "{{{
   let l:selectionTmp = &selection
   let &selection = 'inclusive'
 
@@ -2493,19 +2488,19 @@ function! ExeFuncWithOperation(type, ...)
   call feedkeys(g:MyOperator, 'n') | call g:MyFunction()
 
   let &selection = l:selectionTmp
-endfunction
+endfunction "}}}
 
 " operator + motion + function (マッピング用スクリプトのインターフェース)
-function! ExeFuncWithOperationPre(operator, function, ...)
+function! ExeFuncWithOperationPre(operator, funcName, ...) "{{{
   let g:MyOperator = a:operator
-  let g:MyFunction = function(a:function)
+  let g:MyFunction = function(a:funcName)
   if a:0
     call ExeFuncWithOperation(visualmode(), 1)
   else
     set operatorfunc=ExeFuncWithOperation
     call feedkeys('g@', 'n')
   endif
-endfunction
+endfunction "}}}
 
 " もっとすぐにskkしたい
 nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
