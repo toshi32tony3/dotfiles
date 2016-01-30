@@ -510,7 +510,7 @@ cnoremap <C-n> <Down>
 autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmqBM
 
 " gqで使うtextwidthを設定
-autocmd MyAutoCmd BufEnter * setlocal textwidth=80
+autocmd MyAutoCmd BufEnter * setlocal textwidth=78
 
 " autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
@@ -817,6 +817,9 @@ function! s:TabDiff(...) "{{{
 endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
+" cから始まるマッピングをすると最初のcがoperatorと認識されないので<nowait>する
+nnoremap <nowait> cc cc
+
 "}}}
 "-----------------------------------------------------------------------------
 " tags, path {{{
@@ -837,36 +840,36 @@ nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
 if filereadable(expand('~/localfiles/template/local.rc.vim'))
 
   function! s:SetSrcDir() "{{{
-    let g:local_rc#src_dir         = g:local_rc#src_list[g:local_rc#src_index]
-    let g:local_rc#current_src_dir = g:local_rc#base_dir . '\' . g:local_rc#src_dir
-    let g:local_rc#ctags_dir       = g:local_rc#current_src_dir . '\.tags'
+    let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
+    let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
+    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.tags'
   endfunction "}}}
 
   function! s:SetTags() "{{{
     " tagsをセット
     set tags=
-    for l:item in g:local_rc#ctags_list
+    for l:item in g:local_rc_ctags_list
       if l:item == '' | break | endif
-      let &tags = &tags . ',' . g:local_rc#ctags_dir . '\' . g:local_rc#ctags_name_list[l:item]
+      let &tags = &tags . ',' . g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item]
     endfor
     " 1文字目の','を削除
     if &tags != '' | let &tags = &tags[1 :] | endif
     " GTAGSROOTの登録
     " → GNU GLOBALのタグはプロジェクトルートで生成する
-    let $GTAGSROOT = g:local_rc#current_src_dir
+    let $GTAGSROOT = g:local_rc_current_src_dir
   endfunction "}}}
 
   function! s:SetPathList() "{{{
     set path=
     " 起点なしのpath登録
-    for l:item in g:local_rc#other_dir_path_list
+    for l:item in g:local_rc_other_dir_path_list
       if l:item == '' | break | endif
       let &path = &path . ',' . l:item
     endfor
-    " g:local_rc#current_src_dirを起点にしたpath登録
-    for l:item in g:local_rc#current_src_dir_path_list
+    " g:local_rc_current_src_dirを起点にしたpath登録
+    for l:item in g:local_rc_current_src_dir_path_list
       if l:item == '' | break | endif
-      let &path = &path . ',' . g:local_rc#current_src_dir . '\' . l:item
+      let &path = &path . ',' . g:local_rc_current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
     if &path != '' | let &path = &path[1 :] | endif
@@ -875,16 +878,16 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetCDPathList() "{{{
     set cdpath=
     " 起点なしのcdpath登録
-    for l:item in g:local_rc#other_dir_cdpath_list
+    for l:item in g:local_rc_other_dir_cdpath_list
       if l:item == '' | break | endif
       let &cdpath = &cdpath . ',' . l:item
     endfor
-    let &cdpath = &cdpath . ',' . g:local_rc#base_dir
-    let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir
-    " g:local_rc#current_src_dirを起点にしたcdpath登録
-    for l:item in g:local_rc#current_src_dir_cdpath_list
+    let &cdpath = &cdpath . ',' . g:local_rc_base_dir
+    let &cdpath = &cdpath . ',' . g:local_rc_current_src_dir
+    " g:local_rc_current_src_dirを起点にしたcdpath登録
+    for l:item in g:local_rc_current_src_dir_cdpath_list
       if l:item == '' | break | endif
-      let &cdpath = &cdpath . ',' . g:local_rc#current_src_dir . '\' . l:item
+      let &cdpath = &cdpath . ',' . g:local_rc_current_src_dir . '\' . l:item
     endfor
     " 1文字目の','を削除
     if &cdpath != '' | let &cdpath = &cdpath[1 :] | endif
@@ -900,9 +903,9 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
-    let g:local_rc#src_index += 1
-    if  g:local_rc#src_index >= len(g:local_rc#src_list)
-      let g:local_rc#src_index = 0
+    let g:local_rc_src_index += 1
+    if  g:local_rc_src_index >= len(g:local_rc_src_list)
+      let g:local_rc_src_index = 0
     endif
     call s:SetSrcDir()
     call s:SetTags()
@@ -910,24 +913,24 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     call s:SetCDPathList()
     call g:SetEnvironmentVariables()
     " ソースコード切り替え後, ソースディレクトリ名を出力
-    echo 'switch source to: ' . g:local_rc#src_dir
+    echo 'switch source to: ' . g:local_rc_src_dir
   endfunction "}}}
   nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
 
   " ctagsをアップデート
   function! s:UpdateCtags() "{{{
     if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
-    if !isdirectory(g:local_rc#ctags_dir)
-      call    mkdir(g:local_rc#ctags_dir)
+    if !isdirectory(g:local_rc_ctags_dir)
+      call    mkdir(g:local_rc_ctags_dir)
     endif
-    for l:item in g:local_rc#ctags_list
+    for l:item in g:local_rc_ctags_list
       if l:item == '' | break | endif
-      if !has_key(g:local_rc#ctags_name_list, l:item) | continue | endif
+      if !has_key(g:local_rc_ctags_name_list, l:item) | continue | endif
       let l:updateCommand =
             \ 'ctags -f ' .
-            \ g:local_rc#current_src_dir . '\.tags\' . g:local_rc#ctags_name_list[l:item] .
+            \ g:local_rc_current_src_dir . '\.tags\' . g:local_rc_ctags_name_list[l:item] .
             \ ' -R ' .
-            \ g:local_rc#current_src_dir . '\' . l:item
+            \ g:local_rc_current_src_dir . '\' . l:item
       if has('win32')
         " 処理中かどうかわかるように/minを使う
         silent execute '!start /min ' . l:updateCommand
@@ -1408,6 +1411,15 @@ command! PutCurrentFunc
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
 
+" バッファをHTML形式に変換(2html.vim) {{{
+
+" 選択範囲をHTML変換してヤンクする
+command! -range=% -bar ClipHTML
+      \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
+cnoreabbrev CH ClipHTML
+
+"}}}
+
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
@@ -1569,7 +1581,6 @@ if neobundle#tap('eskk.vim')
     " disable skk.vim
     " → Helpを見るためにskk.vim自体は入れておきたい
     let g:plugin_skk_disable = 1
-
   endif
 
   let g:eskk#directory = '~/.cache/eskk'
@@ -1596,17 +1607,15 @@ if neobundle#tap('eskk.vim')
   let g:eskk#rom_input_style = 'msime'
 
   " for Lazy
-  imap        <C-j> <Plug>(eskk:enable)
+  imap        <C-j>  <Plug>(eskk:enable)
+  nmap        <C-j> i<Plug>(eskk:enable)
   cmap <expr> <C-j> eskk#toggle()
 
   " すぐにskkしたい
-  nmap <Leader>i i<Plug>(eskk:enable)
-  nmap <Leader>a a<Plug>(eskk:enable)
-  nmap <A-i>     I<Plug>(eskk:enable)
-  nmap <A-a>     A<Plug>(eskk:enable)
-
-  " <C-o>はjumplist戻るなので潰せない。Oは我慢
-  nmap <A-o>     o<Plug>(eskk:enable)
+  nmap <A-i> I<Plug>(eskk:enable)
+  nmap <A-a> A<Plug>(eskk:enable)
+  nmap <A-c> C<Plug>(eskk:enable)
+  nmap <A-o> O<Plug>(eskk:enable)
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
@@ -1899,10 +1908,10 @@ if neobundle#tap('vim-anzu')
 
   " " 検索開始時にジャンプせず, その場でanzu-modeに移行する
   " if neobundle#is_installed('vim-asterisk')
-  "   nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(_ModSearchHistory)<Plug>(anzu-mode)
-  "   nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(_ModSearchHistory)<Plug>(anzu-mode)
-  "   nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(_ModSearchHistory)<Plug>(anzu-mode)
-  "   nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(_ModSearchHistory)<Plug>(anzu-mode)
+  "   nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-mode)
+  "   nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-mode)
+  "   nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-mode)
+  "   nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-mode)
   " else
   "   nmap * *<Plug>(anzu-mode)
   " endif
@@ -2077,7 +2086,7 @@ if neobundle#tap('vim-startify')
 
 endif "}}}
 
-" 検索やリスト表示の拡張(unite.vim) {{{
+" 検索やリスト表示を拡張(unite.vim) {{{
 if neobundle#tap('unite.vim')
 
   let g:unite_force_overwrite_statusline = 1
@@ -2103,7 +2112,7 @@ if neobundle#tap('unite.vim')
   let g:u_nins = '-no-start-insert '
   let g:u_nspl = '-no-split '
   let g:u_hopt =    '-split -horizontal -winheight=20 '
-  let g:u_vopt =    '-split -vertical -winwidth=90 '
+  let g:u_vopt =    '-split -vertical   -winwidth=90 '
 
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
   let g:u_opt_bu = 'Unite '       . g:u_hopt . g:u_nins
@@ -2318,12 +2327,7 @@ endif "}}}
 if neobundle#tap('TweetVim')
 
   let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
-
-  function! s:TweetVimSettings()
-    nnoremap <buffer> <C-CR>     :<C-u>TweetVimSay<CR>
-    nmap     <buffer> <Leader>rt <Plug>(tweetvim_action_retweet)
-  endfunction
-  autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
+  autocmd MyAutoCmd FileType tweetvim nnoremap <buffer> s :<C-u>TweetVimSay<CR>
 
 endif "}}}
 
@@ -2477,42 +2481,4 @@ endif "}}}
 
 "}}}
 "-----------------------------------------------------------------------------
-
-" operator + motion + function (マッピング用スクリプト本体)
-function! ExeFuncWithOperation(type, ...)
-  let l:selectionTmp = &selection
-  let &selection = 'inclusive'
-
-  if a:0
-    execute 'normal! gv'
-  elseif a:type == 'line'
-    execute 'normal! `[V`]'
-  else
-    execute 'normal! `[v`]'
-  endif
-  call feedkeys(g:MyOperator, 'n') | call g:MyFunction()
-
-  let &selection = l:selectionTmp
-endfunction
-
-" operator + motion + function (マッピング用スクリプトのインターフェース)
-function! ExeFuncWithOperationPre(operator, function, ...)
-  let g:MyOperator = a:operator
-  let g:MyFunction = function(a:function)
-  if a:0
-    call ExeFuncWithOperation(visualmode(), 1)
-  else
-    set operatorfunc=ExeFuncWithOperation
-    call feedkeys('g@', 'n')
-  endif
-endfunction
-
-" もっとすぐにskkしたい
-nmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable')<CR>
-xmap <Leader>c :<C-u>call ExeFuncWithOperationPre('c', 'eskk#enable', 1)<CR>
-
-" 選択範囲をHTML化してヤンクする
-command! -range=% -bar ClipHTML
-      \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
-cnoreabbrev CH ClipHTML
 
