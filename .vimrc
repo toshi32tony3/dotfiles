@@ -1872,12 +1872,10 @@ if neobundle#tap('vim-asterisk')
   " star-search対象を選択レジスタに入れる
   function! s:ClipCword(data) "{{{
     let     l:currentMode  = mode(1)
-    if      l:currentMode == 'n'
+    if      l:currentMode == 'n' ||
+          \ l:currentMode == 'no'
       let @* = a:data
       return ''
-    elseif  l:currentMode == 'no'
-      let @* = a:data
-      return "\<Esc>"
     elseif  l:currentMode ==# 'v' ||
           \ l:currentMode ==# 'V' ||
           \ l:currentMode ==  "\<C-v>"
