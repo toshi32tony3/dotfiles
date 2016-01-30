@@ -550,13 +550,6 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 "-----------------------------------------------------------------------------
 " View {{{
 
-" 現在のカーソル位置をわかりやすくする
-autocmd MyAutoCmd ColorScheme * highlight Cursor guifg=White guibg=Red
-
-" 検索中のフォーカス位置をわかりやすくする
-autocmd MyAutoCmd ColorScheme * highlight IncSearch
-      \ term=NONE cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
-
 if filereadable(expand('~/vimfiles/colors/Tomorrow-Night.vim'))
   colorscheme Tomorrow-Night
 endif
