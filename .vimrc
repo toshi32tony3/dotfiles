@@ -661,11 +661,11 @@ endif
 "-----------------------------------------------------------------------------
 " Search {{{
 
-setglobal ignorecase  " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
-setglobal smartcase   " 大文字小文字の両方が含まれている場合は, 区別する
-setglobal wrapscan    " 検索時に最後まで行ったら最初に戻る
-setglobal noincsearch " インクリメンタルサーチしない
-setglobal hlsearch    " マッチしたテキストをハイライト
+setglobal ignorecase " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
+setglobal smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
+setglobal wrapscan   " 検索時に最後まで行ったら最初に戻る
+setglobal incsearch  " インクリメンタルサーチ
+setglobal hlsearch   " マッチしたテキストをハイライト
 
 " grep/vimgrep結果が0件の場合, Quickfixを開かない
 autocmd MyAutoCmd QuickfixCmdPost grep,vimgrep if len(getqflist()) != 0 | copen | endif
