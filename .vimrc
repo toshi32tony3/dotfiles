@@ -1120,8 +1120,7 @@ function! s:OnCursorMove() "{{{
   if  l:timespan <= s:throttleTimeSpan | return | endif
 
   " CursorMoved!!
-  autocmd   MyAutoCmd User MyCursorMoved :
-  doautocmd MyAutoCmd User MyCursorMoved
+  if exists('#MyCursorMoved') | doautocmd MyAutoCmd User MyCursorMoved | endif
 
   " lastCursorMoveTimeを更新
   let b:lastCursorMoveTime = l:now
@@ -1130,8 +1129,7 @@ function! s:OnCursorMove() "{{{
   if b:lastVisitedLine == line('.') | return | endif
 
   " LineChanged!!
-  autocmd   MyAutoCmd User MyLineChanged :
-  doautocmd MyAutoCmd User MyLineChanged
+  if exists('#MyLineChanged') | doautocmd MyAutoCmd User MyLineChanged | endif
 
   " lastVisitedLineを更新
   let b:lastVisitedLine = line('.')
