@@ -653,7 +653,7 @@ function! s:SaveWindow()
         \ ]
   call writefile(s:options, s:saveWinposFile)
 endfunction
-if filereadable(s:saveWinposFile)
+if has('vim_starting') && filereadable(s:saveWinposFile)
   execute 'source ' s:saveWinposFile
 endif
 
