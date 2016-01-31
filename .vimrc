@@ -226,8 +226,6 @@ NeoBundleLazy 'thinca/vim-ambicmd'
 "-------------------------------------------------------------------
 " view {{{
 
-NeoBundle 'chriskempson/vim-tomorrow-theme'
-
 NeoBundle 'cocopon/lightline-hybrid.vim'
 NeoBundle 'itchyny/lightline.vim'
 
@@ -365,6 +363,9 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {
       \   'on_map' : [['ni', '<Plug>']],
       \ }
 
+NeoBundleLazy 'cocopon/colorswatch.vim', {
+      \   'on_cmd' : 'ColorSwatchGenerate',
+      \ }
 "}}}
 "-------------------------------------------------------------------
 " web / markdown {{{
@@ -549,6 +550,10 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 "-----------------------------------------------------------------------------
 " View {{{
 
+if filereadable(expand('~/vimfiles/colors/badwolf.vim'))
+  colorscheme badwolf
+endif
+
 if has('gui_running')
   " Ricty for Powerline
   setglobal guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
@@ -648,7 +653,7 @@ function! s:SaveWindow()
         \ ]
   call writefile(s:options, s:saveWinposFile)
 endfunction
-if filereadable(s:saveWinposFile)
+if has('vim_starting') && filereadable(s:saveWinposFile)
   execute 'source ' s:saveWinposFile
 endif
 
@@ -656,14 +661,11 @@ endif
 "-----------------------------------------------------------------------------
 " Search {{{
 
-" very magic
-nnoremap / /\v<Left><Left>
-
-setglobal ignorecase  " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
-setglobal smartcase   " 大文字小文字の両方が含まれている場合は, 区別する
-setglobal wrapscan    " 検索時に最後まで行ったら最初に戻る
-setglobal noincsearch " インクリメンタルサーチしない
-setglobal hlsearch    " マッチしたテキストをハイライト
+setglobal ignorecase " 検索時に大文字小文字を区別しない。区別したい時は\Cを付ける
+setglobal smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
+setglobal wrapscan   " 検索時に最後まで行ったら最初に戻る
+setglobal incsearch  " インクリメンタルサーチ
+setglobal hlsearch   " マッチしたテキストをハイライト
 
 " grep/vimgrep結果が0件の場合, Quickfixを開かない
 autocmd MyAutoCmd QuickfixCmdPost grep,vimgrep if len(getqflist()) != 0 | copen | endif
@@ -776,6 +778,9 @@ call s:AddMyCMap( '^cm$', 'ClearMessage')
 if neobundle#is_installed('scratch.vim')
   call s:AddMyCMap('^sc$',  'Scratch')
   call s:AddMyCMap('^scp$', 'ScratchPreview')
+endif
+if neobundle#is_installed('TweetVim')
+  call s:AddMyCMap('^tvs$', 'TweetVimSearch')
 endif
 
 " " 開いたファイルと同じ場所へ移動する
@@ -1115,8 +1120,7 @@ function! s:OnCursorMove() "{{{
   if  l:timespan <= s:throttleTimeSpan | return | endif
 
   " CursorMoved!!
-  autocmd   MyAutoCmd User MyCursorMoved :
-  doautocmd MyAutoCmd User MyCursorMoved
+  if exists('#MyCursorMoved') | doautocmd MyAutoCmd User MyCursorMoved | endif
 
   " lastCursorMoveTimeを更新
   let b:lastCursorMoveTime = l:now
@@ -1125,8 +1129,7 @@ function! s:OnCursorMove() "{{{
   if b:lastVisitedLine == line('.') | return | endif
 
   " LineChanged!!
-  autocmd   MyAutoCmd User MyLineChanged :
-  doautocmd MyAutoCmd User MyLineChanged
+  if exists('#MyLineChanged') | doautocmd MyAutoCmd User MyLineChanged | endif
 
   " lastVisitedLineを更新
   let b:lastVisitedLine = line('.')
@@ -1654,20 +1657,6 @@ if neobundle#tap('vim-ambicmd')
 
 endif "}}}
 
-" My favorite colorscheme(vim-tomorrow-theme) {{{
-if neobundle#tap('vim-tomorrow-theme')
-
-  " 現在のカーソル位置をわかりやすくする
-  autocmd MyAutoCmd ColorScheme * highlight Cursor guifg=White guibg=Red
-
-  " 検索中のフォーカス位置をわかりやすくする
-  autocmd MyAutoCmd ColorScheme * highlight IncSearch
-        \ term=NONE cterm=NONE gui=NONE guifg=#1d1f21 guibg=#f0c674
-
-  colorscheme Tomorrow-Night
-
-endif "}}}
-
 " カッコいいステータスラインを使う(lightline.vim) {{{
 if neobundle#tap('lightline.vim')
 
@@ -1856,8 +1845,8 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1, 'pattern' : '\v<Left><Left>'})
-  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1, 'pattern' : '\v<Left><Left>'})
+  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
 
 endif "}}}
 
@@ -1870,12 +1859,10 @@ if neobundle#tap('vim-asterisk')
   " star-search対象を選択レジスタに入れる
   function! s:ClipCword(data) "{{{
     let     l:currentMode  = mode(1)
-    if      l:currentMode == 'n'
+    if      l:currentMode == 'n' ||
+          \ l:currentMode == 'no'
       let @* = a:data
       return ''
-    elseif  l:currentMode == 'no'
-      let @* = a:data
-      return "\<Esc>"
     elseif  l:currentMode ==# 'v' ||
           \ l:currentMode ==# 'V' ||
           \ l:currentMode ==  "\<C-v>"
@@ -2315,6 +2302,11 @@ if neobundle#tap('dicwin-vim')
 
 endif "}}}
 
+" ハイライトパターンの一覧をバッファに出力(colorswatch.vim) "{{{
+if neobundle#tap('colorswatch.vim')
+
+endif "}}}
+
 " Vimからブラウザを開く(open-browser.vim) {{{
 if neobundle#tap('open-browser.vim')
 
@@ -2327,8 +2319,10 @@ endif "}}}
 if neobundle#tap('TweetVim')
 
   let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
-  autocmd MyAutoCmd FileType tweetvim nnoremap <buffer> s :<C-u>TweetVimSay<CR>
-
+  function! s:TweetVimSettings()
+    nnoremap <buffer> s :<C-u>TweetVimSay<CR>
+  endfunction
+  autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
 endif "}}}
 
 " VimからLingrを見る(J6uil.vim) {{{
