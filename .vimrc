@@ -226,6 +226,9 @@ NeoBundleLazy 'thinca/vim-ambicmd'
 "-------------------------------------------------------------------
 " view {{{
 
+" 本家 : 'sjl/badwolf'
+NeoBundle 'toshi32tony3/badwolf'
+
 NeoBundle 'cocopon/lightline-hybrid.vim'
 NeoBundle 'itchyny/lightline.vim'
 
@@ -363,9 +366,6 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {
       \   'on_map' : [['ni', '<Plug>']],
       \ }
 
-NeoBundleLazy 'cocopon/colorswatch.vim', {
-      \   'on_cmd' : 'ColorSwatchGenerate',
-      \ }
 "}}}
 "-------------------------------------------------------------------
 " web / markdown {{{
@@ -387,10 +387,6 @@ NeoBundleLazy 'basyura/J6uil.vim', {
 NeoBundleLazy 'beckorz/previm', {
       \   'on_ft' : 'markdown',
       \ }
-
-" NeoBundleLazy 'kurocode25/mdforvim', {
-"       \   'on_cmd' : ['MdPreview', 'MdConvert'],
-"       \ }
 
 " 本家 : 'plasticboy/vim-markdown'
 NeoBundleLazy 'rcmdnk/vim-markdown', {
@@ -550,7 +546,7 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 "-----------------------------------------------------------------------------
 " View {{{
 
-if filereadable(expand('~/vimfiles/colors/badwolf.vim'))
+if neobundle#is_installed('badwolf')
   colorscheme badwolf
 endif
 
@@ -2301,11 +2297,6 @@ if neobundle#tap('dicwin-vim')
     endfunction
     autocmd MyAutoCmd FileType dicwin call s:DicwinSettings()
   endif
-
-endif "}}}
-
-" ハイライトパターンの一覧をバッファに出力(colorswatch.vim) "{{{
-if neobundle#tap('colorswatch.vim')
 
 endif "}}}
 
