@@ -552,7 +552,7 @@ endif
 
 if has('gui_running')
   " Ricty for Powerline
-  setglobal guifont=Ricty\ for\ Powerline:h12:cSHIFTJIS
+  let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
 
   " 行間隔[pixel]の設定(default 1 for Win32 GUI)
   setglobal linespace=0
