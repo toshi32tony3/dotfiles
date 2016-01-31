@@ -226,6 +226,9 @@ NeoBundleLazy 'thinca/vim-ambicmd'
 "-------------------------------------------------------------------
 " view {{{
 
+" 本家 : 'sjl/badwolf'
+NeoBundle 'toshi32tony3/badwolf'
+
 NeoBundle 'cocopon/lightline-hybrid.vim'
 NeoBundle 'itchyny/lightline.vim'
 
@@ -550,7 +553,7 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 "-----------------------------------------------------------------------------
 " View {{{
 
-if filereadable(expand('~/vimfiles/colors/badwolf.vim'))
+if neobundle#is_installed('badwolf')
   colorscheme badwolf
 endif
 
