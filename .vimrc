@@ -214,7 +214,7 @@ NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
       \   'depends' : ['Shougo/neocomplete.vim', 'kana/vim-operator-user'],
-      \   'on_map'  : [['nxi', '<Plug>', '<Plug>(operator-eskk-c)']],
+      \   'on_map'  : [['nxi', '<Plug>']],
       \ }
 NeoBundleLazy 'tyru/skkdict.vim', {
       \   'on_ft'   : 'skkdict',
@@ -1448,13 +1448,13 @@ if neobundle#tap('vim-signify')
     xmap ac <Plug>(signify-motion-outer-visual)
 
     " 使わないコマンドを削除する
-    delcommand SignifyEnable
-    delcommand SignifyDisable
-    delcommand SignifyDebug
-    delcommand SignifyDebugDiff
-    delcommand SignifyDebugUnknown
-    delcommand SignifyFold
-    delcommand SignifyRefresh
+    if exists(':SignifyEnable')       | delcommand SignifyEnable       | endif
+    if exists(':SignifyDisable')      | delcommand SignifyDisable      | endif
+    if exists(':SignifyDebug')        | delcommand SignifyDebug        | endif
+    if exists(':SignifyDebugDiff')    | delcommand SignifyDebugDiff    | endif
+    if exists(':SignifyDebugUnknown') | delcommand SignifyDebugUnknown | endif
+    if exists(':SignifyFold')         | delcommand SignifyFold         | endif
+    if exists(':SignifyRefresh')      | delcommand SignifyRefresh      | endif
 
   endfunction
 
@@ -1942,10 +1942,10 @@ if neobundle#tap('vim-signature')
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
-    delcommand SignatureToggleSigns
-    delcommand SignatureRefresh
-    delcommand SignatureListMarks
-    delcommand SignatureListMarkers
+    if exists(':SignatureToggleSigns') | delcommand SignatureToggleSigns | endif
+    if exists(':SignatureRefresh')     | delcommand SignatureRefresh     | endif
+    if exists(':SignatureListMarks')   | delcommand SignatureListMarks   | endif
+    if exists(':SignatureListMarkers') | delcommand SignatureListMarkers | endif
 
   endfunction
 
@@ -2064,8 +2064,8 @@ if neobundle#tap('vim-startify')
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
-    delcommand StartifyDebug
-    delcommand SClose
+    if exists(':StartifyDebug') | delcommand StartifyDebug | endif
+    if exists(':SClose')        | delcommand SClose        | endif
 
   endfunction
 
@@ -2271,8 +2271,8 @@ if neobundle#tap('scratch.vim')
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
-    delcommand ScratchInsert
-    delcommand ScratchSelection
+    if exists(':ScratchInsert')    | delcommand ScratchInsert    | endif
+    if exists(':ScratchSelection') | delcommand ScratchSelection | endif
 
   endfunction
 
