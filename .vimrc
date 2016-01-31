@@ -2226,9 +2226,6 @@ if neobundle#tap('vimfiler.vim')
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
 
-  " カレントディレクトリを開く
-  nnoremap ,c :<C-u>VimFilerCurrentDir<CR>
-
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
@@ -2236,9 +2233,6 @@ if neobundle#tap('vimfiler.vim')
 
     " grepはUniteを使うので潰しておく
     nnoremap <buffer> gr <Nop>
-
-    " カレントディレクトリを開く
-    nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
