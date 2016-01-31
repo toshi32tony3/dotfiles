@@ -366,9 +366,6 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {
       \   'on_map' : [['ni', '<Plug>']],
       \ }
 
-NeoBundleLazy 'cocopon/colorswatch.vim', {
-      \   'on_cmd' : 'ColorSwatchGenerate',
-      \ }
 "}}}
 "-------------------------------------------------------------------
 " web / markdown {{{
@@ -2300,11 +2297,6 @@ if neobundle#tap('dicwin-vim')
     endfunction
     autocmd MyAutoCmd FileType dicwin call s:DicwinSettings()
   endif
-
-endif "}}}
-
-" ハイライトパターンの一覧をバッファに出力(colorswatch.vim) "{{{
-if neobundle#tap('colorswatch.vim')
 
 endif "}}}
 
