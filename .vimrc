@@ -391,10 +391,6 @@ NeoBundleLazy 'beckorz/previm', {
       \   'on_ft' : 'markdown',
       \ }
 
-" NeoBundleLazy 'kurocode25/mdforvim', {
-"       \   'on_cmd' : ['MdPreview', 'MdConvert'],
-"       \ }
-
 " 本家 : 'plasticboy/vim-markdown'
 NeoBundleLazy 'rcmdnk/vim-markdown', {
       \   'on_ft' : 'markdown',
