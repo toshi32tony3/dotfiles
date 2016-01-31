@@ -214,7 +214,7 @@ NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
 NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
       \   'depends' : ['Shougo/neocomplete.vim', 'kana/vim-operator-user'],
-      \   'on_map'  : [['nxi', '<Plug>', '<Plug>(operator-eskk-c)']],
+      \   'on_map'  : [['nxi', '<Plug>']],
       \ }
 NeoBundleLazy 'tyru/skkdict.vim', {
       \   'on_ft'   : 'skkdict',
