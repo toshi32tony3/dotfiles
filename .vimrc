@@ -1116,7 +1116,8 @@ function! s:OnCursorMove() "{{{
   if  l:timespan <= s:throttleTimeSpan | return | endif
 
   " CursorMoved!!
-  if exists('#MyCursorMoved') | doautocmd MyAutoCmd User MyCursorMoved | endif
+  autocmd   MyAutoCmd User MyCursorMoved :
+  doautocmd MyAutoCmd User MyCursorMoved
 
   " lastCursorMoveTimeを更新
   let b:lastCursorMoveTime = l:now
@@ -1125,7 +1126,8 @@ function! s:OnCursorMove() "{{{
   if b:lastVisitedLine == line('.') | return | endif
 
   " LineChanged!!
-  if exists('#MyLineChanged') | doautocmd MyAutoCmd User MyLineChanged | endif
+  autocmd   MyAutoCmd User MyLineChanged :
+  doautocmd MyAutoCmd User MyLineChanged
 
   " lastVisitedLineを更新
   let b:lastVisitedLine = line('.')
@@ -2226,9 +2228,6 @@ if neobundle#tap('vimfiler.vim')
   let g:vimfiler_force_overwrite_statusline = 0
   let g:vimfiler_safe_mode_by_default = 0
 
-  " カレントディレクトリを開く
-  nnoremap ,c :<C-u>VimFilerCurrentDir<CR>
-
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
@@ -2237,8 +2236,11 @@ if neobundle#tap('vimfiler.vim')
     " grepはUniteを使うので潰しておく
     nnoremap <buffer> gr <Nop>
 
-    " カレントディレクトリを開く
-    nnoremap <buffer> ,c :<C-u>VimFilerCurrentDir<CR>
+    " ソート用マッピングを変えたい
+    if neobundle#is_installed('vim-sneak')
+      map <buffer>         S <Plug>Sneak_S
+      map <buffer> <Leader>S <Plug>(vimfiler_select_sort_type)
+    endif
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
