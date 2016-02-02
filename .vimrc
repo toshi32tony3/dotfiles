@@ -2233,6 +2233,12 @@ if neobundle#tap('vimfiler.vim')
 
     " grepはUniteを使うので潰しておく
     nnoremap <buffer> gr <Nop>
+
+    " ソート用マッピングを変えたい
+    if neobundle#is_installed('vim-sneak')
+      map <buffer>         S <Plug>Sneak_S
+      map <buffer> <Leader>S <Plug>(vimfiler_select_sort_type)
+    endif
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
