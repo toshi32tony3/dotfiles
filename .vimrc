@@ -123,14 +123,13 @@ setglobal shortmess=aoOotTWI
 " → 大きい値にするとカーソル移動時に必ず再描画されるようになる
 " → コードを読む時は大きく, 編集する時は小さくすると良いかも
 set scrolloff=100
-let s:scrolloffOn = 1
+if !exists('s:scrolloffOn') | let s:scrolloffOn = 1 | endif
 function! s:ToggleScrollOffSet()
-  if s:scrolloffOn == 1
-    set scrolloff=0   scrolloff?
-    let s:scrolloffOn = 0
-  else
+  let s:scrolloffOn = (s:scrolloffOn + 1) % 2
+  if  s:scrolloffOn
     set scrolloff=100 scrolloff?
-    let s:scrolloffOn = 1
+  else
+    set scrolloff=0   scrolloff?
   endif
 endfunction
 nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
@@ -592,14 +591,13 @@ setglobal listchars=tab:>-,trail:-,eol:\
 if has('kaoriya')
 
   " 透明度をスイッチ
-  let s:transparencyOn = 0
+  if !exists('s:transparencyOn') | let s:transparencyOn = 0 | endif
   function! s:ToggleTransParency()
-    if s:transparencyOn == 1
-      set transparency=255 transparency?
-      let s:transparencyOn = 0
-    else
+    let s:transparencyOn = (s:transparencyOn + 1) % 2
+    if  s:transparencyOn
       set transparency=220 transparency?
-      let s:transparencyOn = 1
+    else
+      set transparency=255 transparency?
     endif
   endfunction
   nnoremap <silent> <F12> :<C-u>call <SID>ToggleTransParency()<CR>
@@ -1828,14 +1826,13 @@ endif "}}}
 " フルスクリーンモード(scrnmode.vim) {{{
 if has('kaoriya')
 
-  let s:fullscreenOn = 0
+  if !exists('s:fullscreenOn') | let s:fullscreenOn = 0 | endif
   function! s:ToggleScreenMode()
-    if s:fullscreenOn
-      execute 'ScreenMode 0'
-      let s:fullscreenOn = 0
-    else
+    let s:fullscreenOn = (s:fullscreenOn + 1) % 2
+    if  s:fullscreenOn
       execute 'ScreenMode 6'
-      let s:fullscreenOn = 1
+    else
+      execute 'ScreenMode 0'
     endif
   endfunction
   nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
