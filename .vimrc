@@ -1615,7 +1615,6 @@ if neobundle#tap('eskk.vim')
   " すぐにskkしたい
   nmap <A-i> I<Plug>(eskk:enable)
   nmap <A-a> A<Plug>(eskk:enable)
-  nmap <A-c> C<Plug>(eskk:enable)
   nmap <A-o> O<Plug>(eskk:enable)
 
   function! s:EskkInitialPreSettings()
@@ -2013,7 +2012,7 @@ if neobundle#tap('caw.vim')
     endif
   endfunction
 
-  map co <Plug>(operator-caw)
+  map <A-c> <Plug>(operator-caw)
 
 endif "}}}
 
