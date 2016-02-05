@@ -816,9 +816,6 @@ function! s:TabDiff(...) "{{{
 endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
-" cから始まるマッピングをすると最初のcがoperatorと認識されないので<nowait>する
-nnoremap <nowait> cc cc
-
 "}}}
 "-----------------------------------------------------------------------------
 " tags, path {{{
@@ -970,13 +967,13 @@ nnoremap Q q
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
-" " <C-@>  : 直前に挿入したテキストをもう一度挿入し, ノーマルモードに戻る
-" " <C-g>u : アンドゥ単位を区切る
-" inoremap <C-@> <C-g>u<C-@>
+" <C-g>u : アンドゥ単位を区切る
+inoremap <C-@> <C-g>u<C-@>
+inoremap <C-a> <C-g>u<C-a>
 
-" <C-@>は割りと暴発する＆あまり用途が見当たらないので, <Esc>に置き替え
-inoremap <C-@> <Esc>
-noremap  <C-@> <Esc>
+" " <C-@>は割りと暴発する＆あまり用途が見当たらないので, <Esc>に置き替え
+" inoremap <C-@> <Esc>
+" noremap  <C-@> <Esc>
 
 " :quitのショートカットは潰す
 nnoremap <C-w><C-q> <Nop>
