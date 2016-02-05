@@ -296,7 +296,6 @@ NeoBundleLazy 'osyo-manga/vim-operator-search', {
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>']],
-      \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
@@ -371,6 +370,7 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {
 
 NeoBundleLazy 'tyru/open-browser.vim', {
       \   'on_map' : '<Plug>(',
+      \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 
 NeoBundleLazy 'basyura/twibill.vim'
