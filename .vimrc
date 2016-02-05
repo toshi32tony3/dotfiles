@@ -296,7 +296,6 @@ NeoBundleLazy 'osyo-manga/vim-operator-search', {
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>']],
-      \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
@@ -371,6 +370,7 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {
 
 NeoBundleLazy 'tyru/open-browser.vim', {
       \   'on_map' : '<Plug>(',
+      \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 
 NeoBundleLazy 'basyura/twibill.vim'
@@ -1615,7 +1615,6 @@ if neobundle#tap('eskk.vim')
   " すぐにskkしたい
   nmap <A-i> I<Plug>(eskk:enable)
   nmap <A-a> A<Plug>(eskk:enable)
-  nmap <A-c> C<Plug>(eskk:enable)
   nmap <A-o> O<Plug>(eskk:enable)
 
   function! s:EskkInitialPreSettings()
@@ -2013,7 +2012,7 @@ if neobundle#tap('caw.vim')
     endif
   endfunction
 
-  map co <Plug>(operator-caw)
+  map <A-c> <Plug>(operator-caw)
 
 endif "}}}
 
