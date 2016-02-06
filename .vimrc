@@ -250,10 +250,7 @@ NeoBundleLazy 'haya14busa/vim-asterisk', {
       \   'on_map' : '<Plug>',
       \ }
 
-" 本家 : 'deris/vim-shot-f'
-NeoBundle 'toshi32tony3/vim-shot-f', {
-      \   'rev'    : 'develop',
-      \ }
+NeoBundle 'deris/vim-shot-f'
 NeoBundle 'justinmk/vim-sneak'
 
 NeoBundle 'kshenoy/vim-signature'
