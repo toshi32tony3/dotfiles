@@ -1879,20 +1879,6 @@ endif "}}}
 " 何番目の検索対象か／検索対象の総数を表示(vim-anzu) {{{
 if neobundle#tap('vim-anzu')
 
-  " " 検索対象横にechoする。視線移動は減るが結構見づらくなるので慣れが必要
-  " nmap n <Plug>(anzu-mode-n)
-  " nmap N <Plug>(anzu-mode-N)
-
-  " " 検索開始時にジャンプせず, その場でanzu-modeに移行する
-  " if neobundle#is_installed('vim-asterisk')
-  "   nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-mode)
-  "   nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-mode)
-  "   nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-mode)
-  "   nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-mode)
-  " else
-  "   nmap * *<Plug>(anzu-mode)
-  " endif
-
   " コマンド結果出力画面にecho
   nmap n <Plug>(anzu-n-with-echo)
   nmap N <Plug>(anzu-N-with-echo)
