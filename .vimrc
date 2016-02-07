@@ -188,6 +188,7 @@ NeoBundleLazy 'cohama/agit.vim', {
       \   'on_cmd' : ['Agit', 'AgitFile'],
       \ }
 NeoBundleLazy 'lambdalisue/vim-gita', {
+      \   'rev'              : 'alpha-3',
       \   'external_command' : 'git',
       \   'on_cmd'           : 'Gita',
       \ }
@@ -250,10 +251,7 @@ NeoBundleLazy 'haya14busa/vim-asterisk', {
       \   'on_map' : '<Plug>',
       \ }
 
-" 本家 : 'deris/vim-shot-f'
-NeoBundle 'toshi32tony3/vim-shot-f', {
-      \   'rev'    : 'develop',
-      \ }
+NeoBundle 'deris/vim-shot-f'
 NeoBundle 'justinmk/vim-sneak'
 
 NeoBundle 'kshenoy/vim-signature'
@@ -816,9 +814,6 @@ function! s:TabDiff(...) "{{{
 endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
-" cから始まるマッピングをすると最初のcがoperatorと認識されないので<nowait>する
-nnoremap <nowait> cc cc
-
 "}}}
 "-----------------------------------------------------------------------------
 " tags, path {{{
@@ -970,13 +965,13 @@ nnoremap Q q
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
-" " <C-@>  : 直前に挿入したテキストをもう一度挿入し, ノーマルモードに戻る
-" " <C-g>u : アンドゥ単位を区切る
-" inoremap <C-@> <C-g>u<C-@>
+" <C-g>u : アンドゥ単位を区切る
+inoremap <C-@> <C-g>u<C-@>
+inoremap <C-a> <C-g>u<C-a>
 
-" <C-@>は割りと暴発する＆あまり用途が見当たらないので, <Esc>に置き替え
-inoremap <C-@> <Esc>
-noremap  <C-@> <Esc>
+" " <C-@>は割りと暴発する＆あまり用途が見当たらないので, <Esc>に置き替え
+" inoremap <C-@> <Esc>
+" noremap  <C-@> <Esc>
 
 " :quitのショートカットは潰す
 nnoremap <C-w><C-q> <Nop>
@@ -1114,8 +1109,7 @@ function! s:OnCursorMove() "{{{
   if  l:timespan <= s:throttleTimeSpan | return | endif
 
   " CursorMoved!!
-  autocmd   MyAutoCmd User MyCursorMoved :
-  doautocmd MyAutoCmd User MyCursorMoved
+  if exists('#User#MyCursorMoved') | doautocmd User MyCursorMoved | endif
 
   " lastCursorMoveTimeを更新
   let b:lastCursorMoveTime = l:now
@@ -1124,8 +1118,7 @@ function! s:OnCursorMove() "{{{
   if b:lastVisitedLine == line('.') | return | endif
 
   " LineChanged!!
-  autocmd   MyAutoCmd User MyLineChanged :
-  doautocmd MyAutoCmd User MyLineChanged
+  if exists('#User#MyLineChanged') | doautocmd User MyLineChanged | endif
 
   " lastVisitedLineを更新
   let b:lastVisitedLine = line('.')
@@ -1884,20 +1877,6 @@ endif "}}}
 
 " 何番目の検索対象か／検索対象の総数を表示(vim-anzu) {{{
 if neobundle#tap('vim-anzu')
-
-  " " 検索対象横にechoする。視線移動は減るが結構見づらくなるので慣れが必要
-  " nmap n <Plug>(anzu-mode-n)
-  " nmap N <Plug>(anzu-mode-N)
-
-  " " 検索開始時にジャンプせず, その場でanzu-modeに移行する
-  " if neobundle#is_installed('vim-asterisk')
-  "   nmap *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-mode)
-  "   nmap #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-mode)
-  "   nmap g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-mode)
-  "   nmap g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-mode)
-  " else
-  "   nmap * *<Plug>(anzu-mode)
-  " endif
 
   " コマンド結果出力画面にecho
   nmap n <Plug>(anzu-n-with-echo)
