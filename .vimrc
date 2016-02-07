@@ -39,9 +39,7 @@ function! s:regenerateFirstBuffer(path)
 endfunction
 autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
-" Vim起動時間を計測
-" → あくまで目安なので注意。実際のVimの起動時間は(表示値+0.5秒程度)になる
-" → gvim --startuptime startuptime.txt
+" Vim起動時間を計測(実際のVimの起動時間は表示値+0.5秒程度)
 if has('vim_starting') && has('reltime')
   let s:startuptime = reltime()
   autocmd MyAutoCmd VimEnter *
@@ -50,48 +48,29 @@ if has('vim_starting') && has('reltime')
         \ | echomsg 'startuptime: ' . reltimestr(s:startuptime)
 endif
 
-" " ファイル書き込み時の文字コード。空の場合, encodingの値を使う
-" " → デフォルト値が空であるため, encodingと同じ値にしたい場合は設定不要
+" " 書き込み時の文字エンコーディング(encodingと同じ値にしたい場合は設定不要)
 " setglobal fileencoding=utf-8
 
-" ファイル読み込み時の変換候補
-" → 左から順に判定するので2byte文字が無いファイルだと最初の候補が選択される？
-"    utf-8以外を左側に持ってきた時にうまく判定できないことがあったので要検証
-" → とりあえずKaoriya版GVimのguessを使おう
-if has('kaoriya')
-  setglobal fileencodings=guess
-else
-  setglobal fileencodings=utf-8,cp932,euc-jp
-endif
+" 読み込み時の文字エンコーディング候補
+setglobal fileencodings=cp932,euc-jp,utf-8
 
-" 文字コードを指定してファイルを開き直す
+" 文字エンコーディングを指定してファイルを開き直す
 nnoremap <Leader>en :<C-u>e ++encoding=
 
-" 改行コードを指定してファイルを開き直す
+"           改行コードを指定してファイルを開き直す
 nnoremap <Leader>ff :<C-u>e ++fileformat=
 
-" バックアップ, スワップファイルの設定
-" → ネットワーク上ファイルの編集時に重くなる？ので作らない
-" → 生成先をローカルに指定していたからかも。要検証
+" スワップファイルは作らない
 setglobal noswapfile
-setglobal nobackup
-setglobal nowritebackup
 
-" ファイルの書き込みをしてバックアップが作られるときの設定(作らないけども)
-" yes  : 元ファイルをコピー  してバックアップにする＆更新を元ファイルに書き込む
-" no   : 元ファイルをリネームしてバックアップにする＆更新を新ファイルに書き込む
-" auto : noが使えるならno, 無理ならyes (noの方が処理が速い)
+" ファイル書き込み時にバックアップファイルを生成する(デフォルトの設定と同じ)
+setglobal nobackup
+setglobal writebackup
+
+" 元ファイルをコピーしてバックアップにする&更新を元ファイルに書き込む
 setglobal backupcopy=yes
 
 " Vim生成物の生成先ディレクトリ指定
-let s:saveSwapDir = expand('~/vimfiles/swap')
-if !isdirectory(s:saveSwapDir)   | call mkdir(s:saveSwapDir)   | endif
-let &g:dir = s:saveSwapDir
-
-let s:saveBackupDir = expand('~/vimfiles/backup')
-if !isdirectory(s:saveBackupDir) | call mkdir(s:saveBackupDir) | endif
-let &g:backupdir = s:saveBackupDir
-
 let s:saveUndoDir = expand('~/vimfiles/undo')
 if !isdirectory(s:saveUndoDir)   | call mkdir(s:saveUndoDir)   | endif
 if has('persistent_undo')
@@ -119,11 +98,8 @@ setglobal autoread
 " メッセージ省略設定
 setglobal shortmess=aoOotTWI
 
-" カーソル上下に表示する最小の行数
-" → 大きい値にするとカーソル移動時に必ず再描画されるようになる
-" → コードを読む時は大きく, 編集する時は小さくすると良いかも
-set scrolloff=100
-if !exists('s:scrolloffOn') | let s:scrolloffOn = 1 | endif
+" カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
+if !exists('s:scrolloffOn') | set scrolloff=100 | let s:scrolloffOn = 1 | endif
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
@@ -180,12 +156,15 @@ NeoBundleLazy 'mhinz/vim-signify', {'on_cmd' : 'SignifyStart'}
 
 NeoBundle 'tpope/vim-fugitive'
 
-NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
+" BufReadPreが定義されていないとdoautocmdでエラーメッセージが出る
+autocmd MyAutoCmd BufReadPre   * :
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'              : 'alpha-3',
       \   'external_command' : 'git',
       \   'on_cmd'           : 'Gita',
       \ }
+
+NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 
 "}}}
 "-------------------------------------------------------------------
@@ -323,9 +302,7 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
 "-------------------------------------------------------------------
 " quickfix / special buffer {{{
 
-NeoBundleLazy 'thinca/vim-qfreplace', {
-      \   'on_cmd' : 'Qfreplace',
-      \ }
+NeoBundleLazy 'thinca/vim-qfreplace', {'on_cmd' : 'Qfreplace'}
 
 NeoBundleLazy 'mtth/scratch.vim', {
       \   'on_map' : '<Plug>',
@@ -333,17 +310,15 @@ NeoBundleLazy 'mtth/scratch.vim', {
       \ }
 
 " 本家 : 'koron/dicwin-vim'
-NeoBundleLazy 'toshi32tony3/dicwin-vim', {
-      \   'on_map' : [['ni', '<Plug>']],
-      \ }
+NeoBundleLazy 'toshi32tony3/dicwin-vim', {'on_map' : [['ni', '<Plug>']]}
 
 "}}}
 "-------------------------------------------------------------------
 " web / markdown {{{
 
 NeoBundleLazy 'tyru/open-browser.vim', {
-      \   'on_map' : '<Plug>(',
-      \   'on_cmd'  : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
+      \   'on_map' : '<Plug>(open',
+      \   'on_cmd' : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
       \ }
 
 NeoBundleLazy 'basyura/twibill.vim'
@@ -351,26 +326,16 @@ NeoBundleLazy 'basyura/TweetVim', {
       \   'depends' : ['basyura/twibill.vim',  'tyru/open-browser.vim'],
       \   'on_cmd'  : ['TweetVimHomeTimeline', 'TweetVimSearch'],
       \ }
-NeoBundleLazy 'basyura/J6uil.vim', {
-      \   'on_cmd' : 'J6uil',
-      \ }
+NeoBundleLazy 'basyura/J6uil.vim', {'on_cmd' : 'J6uil'}
 
 " 本家 : 'kannokanno/previm'
-NeoBundleLazy 'beckorz/previm', {
-      \   'on_ft' : 'markdown',
-      \ }
+NeoBundleLazy 'beckorz/previm', {'on_ft' : 'markdown'}
 
 " 本家 : 'plasticboy/vim-markdown'
-NeoBundleLazy 'rcmdnk/vim-markdown', {
-      \   'on_ft' : 'markdown',
-      \ }
-NeoBundleLazy 'glidenote/memolist.vim', {
-      \   'on_cmd' : 'MemoNew',
-      \ }
+NeoBundleLazy 'rcmdnk/vim-markdown',    {'on_ft'  : 'markdown'}
+NeoBundleLazy 'glidenote/memolist.vim', {'on_cmd' : 'MemoNew' }
 
-NeoBundle 'lambdalisue/vim-gista', {
-      \   'on_cmd' : 'Gista',
-      \ }
+NeoBundle 'lambdalisue/vim-gista', {'on_cmd' : 'Gista'}
 
 "}}}
 "-------------------------------------------------------------------
@@ -379,17 +344,13 @@ NeoBundle 'lambdalisue/vim-gista', {
 " 本家 : 'bronson/vim-trailing-whitespace'
 NeoBundle 'toshi32tony3/vim-trailing-whitespace'
 
-NeoBundleLazy 'junegunn/vim-easy-align', {
-      \   'on_cmd' : 'EasyAlign',
-      \ }
+NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 
 "}}}
 "-------------------------------------------------------------------
 " quickrun {{{
 
-NeoBundleLazy 'thinca/vim-quickrun', {
-      \   'on_cmd' : 'QuickRun',
-      \ }
+NeoBundleLazy 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
 " " 本家 : 'jceb/vim-hier'
 " NeoBundle 'pocke/vim-hier'
 
@@ -523,7 +484,7 @@ if neobundle#is_installed('badwolf')
 endif
 
 if has('gui_running')
-  " Ricty for Powerline
+  " Windowsのフォントは「Ricty for Powerline」&「MacTypePortable」が良い
   let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
 
   " 行間隔[pixel]の設定(default 1 for Win32 GUI)
@@ -553,7 +514,7 @@ setglobal colorcolumn=81   " 81列目に線を表示
 
 setglobal number         " 行番号を表示
 setglobal relativenumber " 行番号を相対表示
-nnoremap <silent> <F10> :<C-u>set relativenumber!<Space>relativenumber?<CR>
+nnoremap <silent> <F10> :<C-u>set relativenumber! relativenumber?<CR>
 
 " 不可視文字を可視化
 setglobal list
@@ -653,9 +614,6 @@ endif
 " キー入力タイムアウトはあると邪魔だし, 待つ意味も無い気がする
 setglobal notimeout
 
-" vimrcをリロード
-nnoremap ,r :<C-u>source $MYVIMRC<CR>
-
 " make後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
@@ -668,14 +626,8 @@ autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
 " j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
-nnoremap <silent> j  gj
-xnoremap <silent> j  gj
-nnoremap <silent> k  gk
-xnoremap <silent> k  gk
-nnoremap <silent> gj j
-xnoremap <silent> gj j
-nnoremap <silent> gk k
-xnoremap <silent> gk k
+noremap <silent> j gj
+noremap <silent> k gk
 
 " :cdのディレクトリ名の補完に'cdpath'を使うようにする
 " http://whileimautomaton.net/2007/09/24141900
@@ -751,9 +703,8 @@ if neobundle#is_installed('TweetVim')
 endif
 
 " " 開いたファイルと同じ場所へ移動する
-" " → startify/vimfiler/:LCD/:CDで十分なのでコメントアウト
+" " → startify/vimfiler/:LCD/:CDで十分
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
-
 " " 最後のカーソル位置を記憶していたらジャンプ
 " " → Gdiff時に不便なことがあったのでコメントアウト
 " autocmd MyAutoCmd BufRead * silent execute 'normal! `"'
@@ -944,10 +895,6 @@ nnoremap ZQ <Nop>
 inoremap <C-@> <C-g>u<C-@>
 inoremap <C-a> <C-g>u<C-a>
 
-" " <C-@>は割りと暴発する＆あまり用途が見当たらないので, <Esc>に置き替え
-" inoremap <C-@> <Esc>
-" noremap  <C-@> <Esc>
-
 " :quitのショートカットは潰す
 nnoremap <C-w><C-q> <Nop>
 nnoremap <C-w>q     <Nop>
@@ -961,57 +908,28 @@ noremap  <MiddleMouse> <Nop>
 inoremap <MiddleMouse> <Nop>
 
 " 挿入モードでカーソルキーを使うとUndo単位が区切られて困るので潰す
-inoremap <Left>  <Nop>
 inoremap <Down>  <Nop>
 inoremap <Up>    <Nop>
-inoremap <Right> <Nop>
 
-" Shift or Ctrl or Alt + カーソルキーはコマンドモードでのみ使用する
-" → と思ったが, とりあえず潰しておいて, 一部再利用するマッピングを行う
-inoremap <S-Left>  <Nop>
-inoremap <S-Down>  <Nop>
-inoremap <S-Up>    <Nop>
-inoremap <S-Right> <Nop>
-inoremap <C-Left>  <Nop>
-inoremap <C-Down>  <Nop>
-inoremap <C-Up>    <Nop>
-inoremap <C-Right> <Nop>
-inoremap <A-Left>  <Nop>
-inoremap <A-Down>  <Nop>
-inoremap <A-Up>    <Nop>
-inoremap <A-Right> <Nop>
-noremap  <Left>    <Nop>
-noremap  <Down>    <Nop>
-noremap  <Up>      <Nop>
-noremap  <Right>   <Nop>
-noremap  <S-Left>  <Nop>
-noremap  <S-Down>  <Nop>
-noremap  <S-Up>    <Nop>
-noremap  <S-Right> <Nop>
-noremap  <C-Left>  <Nop>
-noremap  <C-Down>  <Nop>
-noremap  <C-Up>    <Nop>
-noremap  <C-Right> <Nop>
-noremap  <A-Left>  <Nop>
-noremap  <A-Down>  <Nop>
-noremap  <A-Up>    <Nop>
-noremap  <A-Right> <Nop>
+" Undo単位を区切らない(<C-g>Uは行移動を伴わない場合のみ使える)
+inoremap <Left>  <C-g>U<Left>
+inoremap <Right> <C-g>U<Right>
 
-" ただ潰すのは勿体無いので,         カーソルキーでウィンドウ間を移動
+" カーソルキーでウィンドウ間を移動
 nnoremap <Left>  <C-w>h
 nnoremap <Down>  <C-w>j
 nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
-" ただ潰すのは勿体無いので, Shift + カーソルキーでbprevious/bnext
+" Shift + カーソルキーでbprevious/bnext
 nnoremap <S-Left>  :bprevious<CR>
 nnoremap <S-Right> :bnext<CR>
 
-" ただ潰すのは勿体無いので,  Ctrl + カーソルキーでcprevious/cnext
+"  Ctrl + カーソルキーでcprevious/cnext
 nnoremap <C-Left>  :cprevious<CR>
 nnoremap <C-Right> :cnext<CR>
 
-" ただ潰すのは勿体無いので,   Alt + カーソルキーでlprevious/lnext
+"   Alt + カーソルキーでlprevious/lnext
 nnoremap <A-Left>  :lprevious<CR>
 nnoremap <A-Right> :lnext<CR>
 
@@ -1028,7 +946,7 @@ function! s:PutDateTime() "{{{
 endfunction "}}}
 command! PutDateTime call s:PutDateTime()
 
-" 区切り線+タイムスタンプの挿入
+" 区切り線&タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
   let l:tmp = @"
   let @" = '='
@@ -1048,10 +966,10 @@ command! PutMemoFormat call s:PutMemoFormat()
 " :messageで表示される履歴を削除
 " → 空文字で埋めているだけ。:ClipCommandOutput messageすると202行になる
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! ClearMessage  for s:n in range(250) | echomsg '' | endfor
+command! ClearMessage  for n in range(250) | echomsg '' | endfor
 
 " :jumplistを空にする
-command! ClearJumpList for s:n in range(250) | mark '     | endfor
+command! ClearJumpList for n in range(250) | mark '     | endfor
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
@@ -1059,10 +977,10 @@ let s:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
   " normalかvisualの時のみ判定
   let     l:currentMode  = mode(1)
-  if      l:currentMode !=  'n' &&
-        \ l:currentMode != 'no' &&
-        \ l:currentMode !=# 'v' &&
-        \ l:currentMode !=# 'V' &&
+  if      l:currentMode !=  'n'  &&
+        \ l:currentMode !=  'no' &&
+        \ l:currentMode !=# 'v'  &&
+        \ l:currentMode !=# 'V'  &&
         \ l:currentMode !=  "\<C-v>"
     return
   endif
@@ -1398,9 +1316,7 @@ if neobundle#tap('vim-signify')
   " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
   " → SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
   if has('vim_starting')
-    command! -bar SignifyStart
-          \ | SignifyToggle
-          \ | SignifyToggle
+    command! -bar SignifyStart SignifyToggle | SignifyToggle
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
@@ -1526,7 +1442,8 @@ if neobundle#tap('neosnippet.vim')
     imap <C-s> <Plug>(neosnippet_start_unite_snippet)
   endif
 
-  " smap対策(http://d.hatena.ne.jp/thinca/20090526/1243267812)
+  " smap対策
+  " http://d.hatena.ne.jp/thinca/20090526/1243267812
   function! s:neosnippetSettings()
     smapclear
     smapclear <buffer>
