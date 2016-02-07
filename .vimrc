@@ -176,17 +176,11 @@ NeoBundle 'Shougo/vimproc.vim', {
 "-------------------------------------------------------------------
 " Version Control System {{{
 
-NeoBundleLazy 'mhinz/vim-signify', {
-      \   'on_cmd' : 'SignifyStart',
-      \ }
+NeoBundleLazy 'mhinz/vim-signify', {'on_cmd' : 'SignifyStart'}
 
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'idanarye/vim-merginal', {
-      \   'depends' : 'tpope/vim-fugitive',
-      \ }
-NeoBundleLazy 'cohama/agit.vim', {
-      \   'on_cmd' : ['Agit', 'AgitFile'],
-      \ }
+
+NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'              : 'alpha-3',
       \   'external_command' : 'git',
@@ -202,23 +196,19 @@ NeoBundleLazy 'Shougo/neocomplete.vim', {
       \     'Shougo/neosnippet.vim',
       \     'toshi32tony3/neosnippet-snippets',
       \   ],
-      \   'on_i' : 1,
+      \   'on_i'    : 1,
       \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
-      \   'depends'  : 'toshi32tony3/neosnippet-snippets',
-      \   'on_i'     : 1,
-      \   'on_ft'    : 'neosnippet',
-      \   'on_unite' : ['neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
+      \   'depends' : 'toshi32tony3/neosnippet-snippets',
+      \   'on_i'    : 1,
+      \   'on_ft'   : 'neosnippet',
       \ }
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
-NeoBundleLazy 'tyru/skk.vim'
 NeoBundleLazy 'tyru/eskk.vim', {
-      \   'depends' : ['Shougo/neocomplete.vim', 'kana/vim-operator-user'],
-      \   'on_map'  : [['nxi', '<Plug>']],
+      \   'depends' : 'Shougo/neocomplete.vim',
+      \   'on_map'  : [['nic', '<Plug>']],
       \ }
-NeoBundleLazy 'tyru/skkdict.vim', {
-      \   'on_ft'   : 'skkdict',
-      \ }
+NeoBundleLazy 'tyru/skkdict.vim', {'on_ft' : 'skkdict'}
 
 NeoBundleLazy 'thinca/vim-ambicmd'
 
@@ -244,12 +234,8 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 " 遅延読み込みが追い付かないことがあるのでLazyしない
 NeoBundle 'haya14busa/incsearch.vim'
 
-NeoBundleLazy 'osyo-manga/vim-anzu', {
-      \   'on_map' : '<Plug>',
-      \ }
-NeoBundleLazy 'haya14busa/vim-asterisk', {
-      \   'on_map' : '<Plug>',
-      \ }
+NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
+NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
 NeoBundle 'deris/vim-shot-f'
 NeoBundle 'justinmk/vim-sneak'
@@ -288,7 +274,7 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'osyo-manga/vim-operator-search', {
-      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-function', 'kana/vim-textobj-indent'],
+      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-function'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
@@ -317,26 +303,15 @@ NeoBundle 'lambdalisue/vim-unified-diff'
 
 NeoBundle 'mhinz/vim-startify'
 
-NeoBundleLazy 'Shougo/unite.vim', {
-      \   'on_cmd' : 'Unite',
-      \ }
+NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 
 " 遅延読み込みすると候補収集されないので, Vim起動直後に読み込む
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
-NeoBundleLazy 'hewes/unite-gtags', {
-      \   'depends'  : 'Shougo/unite.vim',
-      \   'on_unite' : ['gtags/ref', 'gtags/def'],
-      \ }
-NeoBundleLazy 'tacroe/unite-mark', {
-      \   'depends'  : 'Shougo/unite.vim',
-      \   'on_unite' : 'mark',
-      \ }
-NeoBundleLazy 'Shougo/unite-outline', {
-      \   'depends'  : 'Shougo/unite.vim',
-      \   'on_unite' : 'outline',
-      \ }
+NeoBundle 'hewes/unite-gtags',    {'depends' : 'Shougo/unite.vim'}
+NeoBundle 'tacroe/unite-mark',    {'depends' : 'Shougo/unite.vim'}
+NeoBundle 'Shougo/unite-outline', {'depends' : 'Shougo/unite.vim'}
 
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : 'Shougo/unite.vim',
@@ -1571,25 +1546,17 @@ if neobundle#tap('eskk.vim')
     setglobal imdisable
   endif
 
-  if neobundle#is_installed('skk.vim')
-    " disable skk.vim
-    " → Helpを見るためにskk.vim自体は入れておきたい
-    let g:plugin_skk_disable = 1
-  endif
-
   let g:eskk#directory = '~/.cache/eskk'
   let g:eskk#dictionary = {
         \   'path'    : '~/dotfiles/.skk-jisyo',
         \   'sorted'  : 0,
         \   'encoding': 'utf-8',
         \ }
-  if filereadable(expand('~/vimfiles/dict/SKK-JISYO.L'))
-    let g:eskk#large_dictionary = {
-          \   'path'    : '~/vimfiles/dict/SKK-JISYO.L',
-          \   'sorted'  : 1,
-          \   'encoding': 'euc-jp',
-          \ }
-  endif
+  let g:eskk#large_dictionary = {
+        \   'path'    : '~/vimfiles/dict/SKK-JISYO.L',
+        \   'sorted'  : 1,
+        \   'encoding': 'euc-jp',
+        \ }
 
   let g:eskk#show_annotation = 1
   let g:eskk#tab_select_completion = 1
@@ -1600,12 +1567,10 @@ if neobundle#tap('eskk.vim')
   let g:eskk#egg_like_newline_completion = 1
   let g:eskk#rom_input_style = 'msime'
 
-  " for Lazy
-  imap        <C-j>  <Plug>(eskk:enable)
-  nmap        <C-j> i<Plug>(eskk:enable)
-  cmap <expr> <C-j> eskk#toggle()
-
   " すぐにskkしたい
+  imap <C-j>  <Plug>(eskk:enable)
+  nmap <C-j> i<Plug>(eskk:enable)
+  cmap <C-j>  <Plug>(eskk:toggle)
   nmap <A-i> I<Plug>(eskk:enable)
   nmap <A-a> A<Plug>(eskk:enable)
   nmap <A-o> O<Plug>(eskk:enable)
