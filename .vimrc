@@ -188,6 +188,7 @@ NeoBundleLazy 'cohama/agit.vim', {
       \   'on_cmd' : ['Agit', 'AgitFile'],
       \ }
 NeoBundleLazy 'lambdalisue/vim-gita', {
+      \   'rev'              : 'alpha-3',
       \   'external_command' : 'git',
       \   'on_cmd'           : 'Gita',
       \ }
