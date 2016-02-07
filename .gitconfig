@@ -2,7 +2,7 @@
   name = toshi32tony3
   email = toshi32tony3@gmail.com
 [core]
-  autocrlf = true
+  autocrlf = false
   editor = gvim
   quotepath = false
   preloadindex = true
@@ -27,3 +27,4 @@
 [credential]
   helper = manager
   interactive = never
+
