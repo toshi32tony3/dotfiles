@@ -1538,6 +1538,9 @@ if neobundle#tap('lightline.vim')
     let g:lightline.colorscheme = 'hybrid'
   endif
 
+  " COMMANDに遷移するタイミングが微妙なので, COMMANDでもNORMALと表示させる
+  let g:lightline.mode_map = {'c' : 'NORMAL'}
+
   let g:lightline.separator    = {
         \   'left'  : "\u2B80",
         \   'right' : "\u2B82",
