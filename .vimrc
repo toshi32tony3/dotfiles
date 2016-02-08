@@ -157,7 +157,7 @@ NeoBundleLazy 'mhinz/vim-signify', {'on_cmd' : 'SignifyStart'}
 NeoBundle 'tpope/vim-fugitive'
 
 " BufReadPreが定義されていないとdoautocmdでエラーメッセージが出る
-autocmd MyAutoCmd BufReadPre   * :
+autocmd MyAutoCmd BufReadPre * :
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'              : 'alpha-3',
       \   'external_command' : 'git',
@@ -966,10 +966,10 @@ command! PutMemoFormat call s:PutMemoFormat()
 " :messageで表示される履歴を削除
 " → 空文字で埋めているだけ。:ClipCommandOutput messageすると202行になる
 " http://d.hatena.ne.jp/osyo-manga/20130502/1367499610
-command! ClearMessage  for n in range(250) | echomsg '' | endfor
+command! ClearMessage  for s:n in range(250) | echomsg '' | endfor
 
 " :jumplistを空にする
-command! ClearJumpList for n in range(250) | mark '     | endfor
+command! ClearJumpList for s:n in range(250) | mark '     | endfor
 
 " キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
@@ -1537,6 +1537,9 @@ if neobundle#tap('lightline.vim')
   if neobundle#is_installed('lightline-hybrid.vim')
     let g:lightline.colorscheme = 'hybrid'
   endif
+
+  " COMMANDに遷移するタイミングが微妙なので, COMMANDでもNORMALと表示させる
+  let g:lightline.mode_map = {'c' : 'NORMAL'}
 
   let g:lightline.separator    = {
         \   'left'  : "\u2B80",
