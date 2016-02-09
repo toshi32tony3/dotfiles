@@ -52,7 +52,11 @@ endif
 " setglobal fileencoding=utf-8
 
 " 読み込み時の文字エンコーディング候補
-setglobal fileencodings=cp932,euc-jp,utf-8
+if has('kaoriya')
+  setglobal fileencodings=guess
+else
+  setglobal fileencodings=cp932,euc-jp,utf-8
+endif
 
 " 文字エンコーディングを指定してファイルを開き直す
 nnoremap <Leader>en :<C-u>e ++encoding=
@@ -541,6 +545,13 @@ endif
 " foldmarkerを使って折り畳みを作成する
 setglobal foldmethod=marker
 
+" cの時はsytanxを使って折り畳みを作成する
+autocmd MyAutoCmd FileType c setlocal foldmethod=syntax | setlocal foldnestmax=1
+
+" foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
+" → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
+setglobal foldnestmax=2
+
 " 基本的にはfoldmarkerに余計なものを付けない
 setglobal commentstring=%s
 
@@ -549,10 +560,6 @@ autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " 画面左端に折り畳み状態, レベルを表示する列を1列設ける
 setglobal foldcolumn=1
-
-" foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
-" → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
-setglobal foldnestmax=2
 
 " Default: fillchars=vert:\|,fold:-
 " foldを指定すると折り畳み行がウィンドウ幅まで指定した文字でfillされる
@@ -1993,12 +2000,12 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>fg ':<C-u>' . g:u_opt_fg . 'file_rec/git'     . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
   nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
-  nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'         . '<CR>'
+  nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'
   nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
   nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:.'       . '<CR>'
-  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'       . '<CR>'
+  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'
   nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
