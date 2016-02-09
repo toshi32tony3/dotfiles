@@ -541,6 +541,13 @@ endif
 " foldmarkerを使って折り畳みを作成する
 setglobal foldmethod=marker
 
+" cの時はsytanxを使って折り畳みを作成する
+autocmd MyAutoCmd FileType c setlocal foldmethod=syntax | setlocal foldnestmax=1
+
+" foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
+" → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
+setglobal foldnestmax=2
+
 " 基本的にはfoldmarkerに余計なものを付けない
 setglobal commentstring=%s
 
@@ -549,10 +556,6 @@ autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " 画面左端に折り畳み状態, レベルを表示する列を1列設ける
 setglobal foldcolumn=1
-
-" foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
-" → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
-setglobal foldnestmax=2
 
 " Default: fillchars=vert:\|,fold:-
 " foldを指定すると折り畳み行がウィンドウ幅まで指定した文字でfillされる
