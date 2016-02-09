@@ -52,7 +52,11 @@ endif
 " setglobal fileencoding=utf-8
 
 " 読み込み時の文字エンコーディング候補
-setglobal fileencodings=cp932,euc-jp,utf-8
+if has('kaoriya')
+  setglobal fileencodings=guess
+else
+  setglobal fileencodings=cp932,euc-jp,utf-8
+endif
 
 " 文字エンコーディングを指定してファイルを開き直す
 nnoremap <Leader>en :<C-u>e ++encoding=
