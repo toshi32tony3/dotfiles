@@ -1311,7 +1311,7 @@ command! PutCurrentFunc
 " 選択範囲をHTML変換してヤンクする
 command! -range=% -bar ClipHTML
       \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
-cnoreabbrev CH ClipHTML
+cnoreabbrev ch ClipHTML
 
 "}}}
 
