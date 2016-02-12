@@ -546,7 +546,10 @@ endif
 setglobal foldmethod=marker
 
 " cの時はsytanxを使って折り畳みを作成する
-autocmd MyAutoCmd FileType c setlocal foldmethod=syntax | setlocal foldnestmax=1
+autocmd MyAutoCmd FileType c
+      \   setlocal foldmethod=syntax
+      \ | setlocal foldnestmax=1
+      \ | setlocal nofoldenable
 
 " foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
 " → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
