@@ -1320,13 +1320,10 @@ if neobundle#tap('vim-signify')
 
   let g:signify_vcs_list = ['git', 'cvs']
   let g:signify_disable_by_default = 1
-  let g:signify_update_on_bufenter = 0
-  let g:signify_update_on_focusgained = 1
 
-  " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
-  " → SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
+  " Lazy状態からSignifyEnableする時は何故か2連発しないと有効化されない
   if has('vim_starting')
-    command! -bar SignifyStart SignifyToggle | SignifyToggle
+    command! -bar SignifyStart SignifyEnable | SignifyEnable
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
@@ -1342,7 +1339,7 @@ if neobundle#tap('vim-signify')
     xmap ac <Plug>(signify-motion-outer-visual)
 
     " 使わないコマンドを削除する
-    if exists(':SignifyEnable')       | delcommand SignifyEnable       | endif
+    if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
     if exists(':SignifyDisable')      | delcommand SignifyDisable      | endif
     if exists(':SignifyDebug')        | delcommand SignifyDebug        | endif
     if exists(':SignifyDebugDiff')    | delcommand SignifyDebugDiff    | endif
