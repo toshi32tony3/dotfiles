@@ -546,7 +546,10 @@ endif
 setglobal foldmethod=marker
 
 " cの時はsytanxを使って折り畳みを作成する
-autocmd MyAutoCmd FileType c setlocal foldmethod=syntax | setlocal foldnestmax=1
+autocmd MyAutoCmd FileType c
+      \   setlocal foldmethod=syntax
+      \ | setlocal foldnestmax=1
+      \ | setlocal nofoldenable
 
 " foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
 " → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
@@ -1308,7 +1311,7 @@ command! PutCurrentFunc
 " 選択範囲をHTML変換してヤンクする
 command! -range=% -bar ClipHTML
       \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
-cnoreabbrev CH ClipHTML
+cnoreabbrev ch ClipHTML
 
 "}}}
 
@@ -1317,13 +1320,10 @@ if neobundle#tap('vim-signify')
 
   let g:signify_vcs_list = ['git', 'cvs']
   let g:signify_disable_by_default = 1
-  let g:signify_update_on_bufenter = 0
-  let g:signify_update_on_focusgained = 1
 
-  " Lazy状態からSignifyToggleすると一発目がオフ扱いになるようなので2連発
-  " → SignifyEnableでも2連発する必要があったので, 読み込み時の都合かも
+  " Lazy状態からSignifyEnableする時は何故か2連発しないと有効化されない
   if has('vim_starting')
-    command! -bar SignifyStart SignifyToggle | SignifyToggle
+    command! -bar SignifyStart SignifyEnable | SignifyEnable
   endif
 
   function! neobundle#hooks.on_post_source(bundle)
@@ -1339,7 +1339,7 @@ if neobundle#tap('vim-signify')
     xmap ac <Plug>(signify-motion-outer-visual)
 
     " 使わないコマンドを削除する
-    if exists(':SignifyEnable')       | delcommand SignifyEnable       | endif
+    if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
     if exists(':SignifyDisable')      | delcommand SignifyDisable      | endif
     if exists(':SignifyDebug')        | delcommand SignifyDebug        | endif
     if exists(':SignifyDebugDiff')    | delcommand SignifyDebugDiff    | endif
