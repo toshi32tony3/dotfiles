@@ -347,9 +347,9 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 " quickrun {{{
 
 NeoBundleLazy 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
+
 " " 本家 : 'jceb/vim-hier'
 " NeoBundle 'pocke/vim-hier'
-
 " NeoBundle 'osyo-manga/shabadou.vim'
 " NeoBundle 'osyo-manga/vim-watchdogs'
 
