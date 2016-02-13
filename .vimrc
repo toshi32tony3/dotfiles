@@ -160,8 +160,6 @@ NeoBundleLazy 'mhinz/vim-signify', {'on_cmd' : 'SignifyStart'}
 
 NeoBundle 'tpope/vim-fugitive'
 
-" BufReadPreが定義されていないとdoautocmdでエラーメッセージが出る
-autocmd MyAutoCmd BufReadPre * :
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'              : 'alpha-3',
       \   'external_command' : 'git',
