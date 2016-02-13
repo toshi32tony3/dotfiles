@@ -704,6 +704,18 @@ if neobundle#is_installed('TweetVim')
   call s:AddMyCMap('^tvs$', 'TweetVimSearch')
 endif
 
+if neobundle#is_installed('vim-gita')
+  call s:AddMyCMap('^gi$', 'Gita')
+  call s:AddMyCMap('^gap$', 'Gita add --patch --split')
+  call s:AddMyCMap('^gbl$', 'Gita blame')
+  call s:AddMyCMap('^gbr$', 'Gita branch')
+  call s:AddMyCMap('^gch$', 'Gita checkout')
+  call s:AddMyCMap('^gco$', 'Gita commit')
+  call s:AddMyCMap('^gdi$', 'Gita diff')
+  call s:AddMyCMap('^gls$', 'Gita ls')
+  call s:AddMyCMap('^gpu$', 'Gita push')
+  call s:AddMyCMap('^gst$', 'Gita status')
+endif
 " " 開いたファイルと同じ場所へ移動する
 " " → startify/vimfiler/:LCD/:CDで十分
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
@@ -1361,10 +1373,8 @@ endif "}}}
 " VimからGitを使う(編集, コマンド実行, vim-gita) {{{
 if neobundle#tap('vim-gita')
 
-  function! neobundle#hooks.on_post_source(bundle)
-    " 使わないコマンドを削除する
-    if exists(':GitaClear') | delcommand GitaClear | endif
-  endfunction
+  autocmd MyAutoCmd BufWinEnter gita:* setlocal nofoldenable
+
 endif "}}}
 
 " 入力補完(neocomplete.vim) {{{
