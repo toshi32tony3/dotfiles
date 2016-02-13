@@ -156,7 +156,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 "-------------------------------------------------------------------
 " Version Control System {{{
 
-NeoBundleLazy 'mhinz/vim-signify', {'on_cmd' : 'SignifyStart'}
+NeoBundle 'mhinz/vim-signify'
 
 NeoBundle 'tpope/vim-fugitive'
 
@@ -1319,23 +1319,13 @@ if neobundle#tap('vim-signify')
   let g:signify_vcs_list = ['git', 'cvs']
   let g:signify_disable_by_default = 1
 
-  " Lazy状態からSignifyEnableする時は何故か2連発しないと有効化されない
-  if has('vim_starting')
-    command! -bar SignifyStart SignifyEnable | SignifyEnable
-  endif
+  " Hunk text object
+  omap ic <Plug>(signify-motion-inner-pending)
+  xmap ic <Plug>(signify-motion-inner-visual)
+  omap ac <Plug>(signify-motion-outer-pending)
+  xmap ac <Plug>(signify-motion-outer-visual)
 
   function! neobundle#hooks.on_post_source(bundle)
-    " ↑で定義しているSignifyStartを使うまでautoloadは読み込まれない。
-    " そのため, on_post_sourceでマッピングする
-    nmap ]c <Plug>(signify-next-hunk)zz
-    nmap [c <Plug>(signify-prev-hunk)zz
-
-    " Hunk text object
-    omap ic <Plug>(signify-motion-inner-pending)
-    xmap ic <Plug>(signify-motion-inner-visual)
-    omap ac <Plug>(signify-motion-outer-pending)
-    xmap ac <Plug>(signify-motion-outer-visual)
-
     " 使わないコマンドを削除する
     if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
     if exists(':SignifyDisable')      | delcommand SignifyDisable      | endif
