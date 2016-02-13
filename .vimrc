@@ -713,7 +713,8 @@ if neobundle#is_installed('vim-gita')
   call s:AddMyCMap('^gco$', 'Gita commit')
   call s:AddMyCMap('^gdi$', 'Gita diff')
   call s:AddMyCMap('^gls$', 'Gita ls')
-  call s:AddMyCMap('^gpu$', 'Gita push')
+  call s:AddMyCMap('^gpl$', 'Gita pull')
+  call s:AddMyCMap('^gps$', 'Gita push')
   call s:AddMyCMap('^gst$', 'Gita status')
 endif
 " " 開いたファイルと同じ場所へ移動する
