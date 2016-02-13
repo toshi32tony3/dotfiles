@@ -1329,7 +1329,6 @@ if neobundle#tap('vim-signify')
     if exists(':SignifyDebugUnknown') | delcommand SignifyDebugUnknown | endif
     if exists(':SignifyFold')         | delcommand SignifyFold         | endif
     if exists(':SignifyRefresh')      | delcommand SignifyRefresh      | endif
-
   endfunction
 
 endif "}}}
@@ -1363,6 +1362,10 @@ endif "}}}
 " VimからGitを使う(編集, コマンド実行, vim-gita) {{{
 if neobundle#tap('vim-gita')
 
+  function! neobundle#hooks.on_post_source(bundle)
+    " 使わないコマンドを削除する
+    if exists(':GitaClear') | delcommand GitaClear | endif
+  endfunction
 endif "}}}
 
 " 入力補完(neocomplete.vim) {{{
@@ -1798,7 +1801,6 @@ if neobundle#tap('vim-signature')
     if exists(':SignatureRefresh')     | delcommand SignatureRefresh     | endif
     if exists(':SignatureListMarks')   | delcommand SignatureListMarks   | endif
     if exists(':SignatureListMarkers') | delcommand SignatureListMarkers | endif
-
   endfunction
 
 endif "}}}
@@ -1918,7 +1920,6 @@ if neobundle#tap('vim-startify')
     " 使わないコマンドを削除する
     if exists(':StartifyDebug') | delcommand StartifyDebug | endif
     if exists(':SClose')        | delcommand SClose        | endif
-
   endfunction
 
 endif "}}}
@@ -2125,7 +2126,6 @@ if neobundle#tap('scratch.vim')
     " 使わないコマンドを削除する
     if exists(':ScratchInsert')    | delcommand ScratchInsert    | endif
     if exists(':ScratchSelection') | delcommand ScratchSelection | endif
-
   endfunction
 
 endif "}}}
