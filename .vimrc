@@ -147,7 +147,7 @@ NeoBundleLazy 'vim-jp/vimdoc-ja'
 setglobal helplang=ja
 
 " ヴィむぷろしー
-NeoBundle 'Shougo/vimproc.vim', {
+NeoBundleLazy 'Shougo/vimproc.vim', {
       \   'build' : {
       \     'windows' : 'tools\\update-dll-mingw',
       \   },
@@ -207,8 +207,7 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 "-------------------------------------------------------------------
 " move {{{
 
-" 遅延読み込みが追い付かないことがあるのでLazyしない
-NeoBundle 'haya14busa/incsearch.vim'
+NeoBundleLazy 'haya14busa/incsearch.vim'
 
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
