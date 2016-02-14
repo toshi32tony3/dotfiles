@@ -37,10 +37,7 @@ autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 " Vim起動時間を計測(実際のVimの起動時間は表示値+0.5秒程度)
 if has('vim_starting') && has('reltime')
   let s:startuptime = reltime()
-  autocmd MyAutoCmd VimEnter *
-        \   let s:startuptime = reltime(s:startuptime)
-        \ | redraw
-        \ | echomsg 'startuptime: ' . reltimestr(s:startuptime)
+  autocmd MyAutoCmd VimEnter * echomsg 'startuptime: ' . reltimestr(reltime(s:startuptime))
 endif
 
 " " 書き込み時の文字エンコーディング(encodingと同じ値にしたい場合は設定不要)
