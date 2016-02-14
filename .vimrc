@@ -1345,18 +1345,6 @@ if neobundle#tap('vim-signify')
 
 endif "}}}
 
-" VimからGitを使う(編集, コマンド実行, vim-fugitive) {{{
-if neobundle#tap('vim-fugitive')
-
-  autocmd MyAutoCmd FileType gitcommit setlocal nofoldenable
-
-endif "}}}
-
-" VimからGitを使う(ブランチ管理, vim-merginal) {{{
-if neobundle#tap('vim-merginal')
-
-endif "}}}
-
 " VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
