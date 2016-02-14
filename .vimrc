@@ -675,7 +675,6 @@ endif
 if neobundle#is_installed('TweetVim')
   call s:AddMyCMap('^tvs$', 'TweetVimSearch')
 endif
-
 if neobundle#is_installed('vim-gita')
   call s:AddMyCMap('^gi$', 'Gita')
   call s:AddMyCMap('^gap$', 'Gita add --patch --split')
@@ -689,6 +688,7 @@ if neobundle#is_installed('vim-gita')
   call s:AddMyCMap('^gps$', 'Gita push')
   call s:AddMyCMap('^gst$', 'Gita status')
 endif
+
 " " 開いたファイルと同じ場所へ移動する
 " " → startify/vimfiler/:LCD/:CDで十分
 " autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
@@ -1511,7 +1511,7 @@ if neobundle#tap('lightline.vim')
   let g:lightline.active = {
         \   'left'  : [
         \     ['mode'],
-        \     ['skk-mode', 'fugitive', 'filename', 'currentfunc'],
+        \     ['skk-mode', 'git', 'filename', 'currentfunc'],
         \   ],
         \   'right' : [
         \     ['lineinfo'],
@@ -1523,12 +1523,12 @@ if neobundle#tap('lightline.vim')
   let g:lightline.component_function = {
         \   'mode'         : 'MyMode',
         \   'skk-mode'     : 'MySKKMode',
-        \   'fugitive'     : 'MyFugitive',
-        \   'filename'     : 'MyFilename',
+        \   'git'          : 'MyGit',
+        \   'filename'     : 'MyFileName',
         \   'currentfunc'  : 'MyCurrentFunc',
-        \   'fileformat'   : 'MyFileformat',
-        \   'fileencoding' : 'MyFileencoding',
-        \   'filetype'     : 'MyFiletype',
+        \   'fileformat'   : 'MyFileFormat',
+        \   'fileencoding' : 'MyFileEncoding',
+        \   'filetype'     : 'MyFileType',
         \ }
 
   function! MyMode()
@@ -1573,12 +1573,21 @@ if neobundle#tap('lightline.vim')
     return winwidth(0) < 30 ? '' : l:CurrentMode
   endfunction
 
-  function! MyFugitive()
-    if !neobundle#is_installed('vim-fugitive') || &filetype == 'vimfiler'
-      return ''
-    endif
-    let l:_ = fugitive#head()
-    return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
+  function! MyGit()
+    return ''
+
+    " if !neobundle#is_installed('vim-fugitive') || &filetype == 'vimfiler'
+    "   return ''
+    " endif
+    " let l:_ = fugitive#head()
+    " return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
+  endfunction
+
+  function! MyFileName()
+    return (expand('%:t') == '' || expand('%:t') == '.') ? '[No Name]' :
+          \ expand('%:t') . ( &readonly   ? "\<Space>\u2B64" : '')
+          \               . (!&modifiable ? "\<Space>-"      :
+          \                   &modified   ? "\<Space>+"      : '')
   endfunction
 
   function! MyCurrentFunc()
@@ -1589,15 +1598,15 @@ if neobundle#tap('lightline.vim')
     endif
   endfunction
 
-  function! MyFileformat()
+  function! MyFileFormat()
     return winwidth(0) < 70 ? '' : &fileformat
   endfunction
 
-  function! MyFileencoding()
+  function! MyFileEncoding()
     return winwidth(0) < 70 ? '' : strlen(&fileencoding) ? &fileencoding : &encoding
   endfunction
 
-  function! MyFiletype()
+  function! MyFileType()
     return winwidth(0) < 70 ? '' : strlen(&filetype) ? &filetype : 'no ft'
   endfunction
 
