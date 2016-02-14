@@ -460,6 +460,7 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 " View {{{
 
 if neobundle#is_installed('badwolf')
+  autocmd MyAutoCmd colorscheme badwolf highlight link SignifySignDelete DiffAdd
   colorscheme badwolf
 endif
 
