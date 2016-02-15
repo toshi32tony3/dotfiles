@@ -150,7 +150,7 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 " まだ早いかもしれないけれど, 乗り換え準備
-NeoBundle 'tpope/vim-fugitive'
+NeoBundleLazy 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 
