@@ -156,25 +156,15 @@ NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 
 "}}}
 "-------------------------------------------------------------------
-" completion {{{
+" simplify input {{{
 
-NeoBundleLazy 'Shougo/neocomplete.vim', {
-      \   'depends' : [
-      \     'Shougo/neosnippet.vim',
-      \     'toshi32tony3/neosnippet-snippets',
-      \   ],
-      \   'on_i'    : 1,
-      \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
       \   'depends' : 'toshi32tony3/neosnippet-snippets',
       \   'on_i'    : 1,
       \   'on_ft'   : 'neosnippet',
       \ }
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
-NeoBundleLazy 'tyru/eskk.vim', {
-      \   'depends' : 'Shougo/neocomplete.vim',
-      \   'on_map'  : [['nic', '<Plug>']],
-      \ }
+NeoBundleLazy 'tyru/eskk.vim', {'on_map' : [['nic', '<Plug>']]}
 NeoBundleLazy 'tyru/skkdict.vim', {'on_ft' : 'skkdict'}
 
 NeoBundleLazy 'thinca/vim-ambicmd'
@@ -1344,57 +1334,6 @@ if neobundle#tap('vim-gita')
 
 endif "}}}
 
-" 入力補完(neocomplete.vim) {{{
-if neobundle#tap('neocomplete.vim')
-
-  let g:neocomplete#use_vimproc = 1
-  let g:neocomplete#enable_at_startup = 1
-  let g:neocomplete#enable_smart_case = 1
-  let g:neocomplete#auto_completion_start_length = 2
-  let g:neocomplete#min_keyword_length = 3
-  let g:neocomplete#enable_auto_delimiter = 1
-  let g:neocomplete#skip_auto_completion_time = '0.2'
-  let g:neocomplete#enable_auto_close_preview = 1
-
-  " 使用する補完の種類を指定
-  if !exists('g:neocomplete#sources')
-    let g:neocomplete#sources = {}
-  endif
-
-  if neobundle#is_installed('neosnippet.vim')
-    " use for neosnippet and eskk only
-    let g:neocomplete#sources._ = ['neosnippet']
-  else
-    " use for eskk only
-    let g:neocomplete#sources._ = []
-  endif
-
-  if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-  endif
-
-  " 日本語を補完候補として取得しない
-  let g:neocomplete#keyword_patterns._ = '\h\w*'
-
-  if !neobundle#is_installed('neosnippet.vim')
-    inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
-    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  endif
-
-  inoremap <expr> <C-g> neocomplete#undo_completion()
-  inoremap <expr> <C-l> neocomplete#complete_common_string()
-
-  function! neobundle#hooks.on_post_source(bundle)
-    " Lockされた状態からスタートしたい
-    NeoCompleteLock
-
-    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
-    " 使ってプラグインの読み込み完了フラグを立てることにした
-    let s:IsNeoCompleteLoaded = 1
-  endfunction
-
-endif "}}}
-
 " コードスニペットによる入力補助(neosnippet.vim) {{{
 if neobundle#tap('neosnippet.vim')
 
@@ -1542,41 +1481,10 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
-    " 使ってプラグインの読み込み完了フラグを立てることにした
-    " → 一応neobundle#is_sourced()を使っても問題無く動くことは確認した
-    if !exists('s:IsNeoCompleteLoaded') || !exists('s:IsEskkLoaded')
+    if !neobundle#is_sourced('eskk.vim')
       return ''
     endif
-
-    " 初回の処理
-    if !exists('b:LastMode') | let b:LastMode = '' | endif
-
-    let l:CurrentMode = eskk#statusline()
-    if  l:CurrentMode == b:LastMode
-      return winwidth(0) < 30 ? '' : l:CurrentMode
-    endif
-
-    " normal → skk : 必要ならunlock
-    if b:LastMode == ''
-      if neocomplete#get_current_neocomplete().lock == 1
-        NeoCompleteUnlock
-      else
-        let b:IsAlreadyUnlocked = 1
-      endif
-    " skk → normal : 必要ならlock
-    else
-      if !exists('b:IsAlreadyUnlocked')
-        NeoCompleteLock
-      else
-        unlet b:IsAlreadyUnlocked
-      endif
-    endif
-
-    " 直前のモード情報を更新
-    let b:LastMode = l:CurrentMode
-
-    return winwidth(0) < 30 ? '' : l:CurrentMode
+    return winwidth(0) < 30 ? '' : eskk#statusline()
   endfunction
 
   function! MyGit()
