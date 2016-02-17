@@ -908,17 +908,23 @@ nnoremap <Down>  <C-w>j
 nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
-" Shift + カーソルキーでbprevious/bnext
+" Shift + カーソルキーでbprevious/bnextまたはtabnext/tabprevious
 nnoremap <S-Left>  :bprevious<CR>
 nnoremap <S-Right> :bnext<CR>
+nnoremap <S-Up>    :tabnext<CR>
+nnoremap <S-Down>  :tabprevious<CR>
 
-"  Ctrl + カーソルキーでcprevious/cnext
+"  Ctrl + カーソルキーでcprevious/cnextまたはlprevious/lnext
 nnoremap <C-Left>  :cprevious<CR>
 nnoremap <C-Right> :cnext<CR>
+nnoremap <C-Up>    :lprevious<CR>
+nnoremap <C-Down>  :lnext<CR>
 
-"   Alt + カーソルキーでlprevious/lnext
-nnoremap <A-Left>  :lprevious<CR>
-nnoremap <A-Right> :lnext<CR>
+if neobundle#is_installed('unite.vim')
+  " Alt + カーソルキーで:UniteNext, :UnitePrevious
+  nnoremap <silent> <A-Left>  :UniteNext<CR>
+  nnoremap <silent> <A-Right> :UnitePrevious<CR>
+endif
 
 "}}}
 "-----------------------------------------------------------------------------
