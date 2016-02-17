@@ -312,7 +312,7 @@ NeoBundleLazy 'beckorz/previm', {'on_ft' : 'markdown'}
 NeoBundleLazy 'rcmdnk/vim-markdown',    {'on_ft'  : 'markdown'}
 NeoBundleLazy 'glidenote/memolist.vim', {'on_cmd' : 'MemoNew' }
 
-NeoBundle 'lambdalisue/vim-gista', {'on_cmd' : 'Gista'}
+NeoBundleLazy 'lambdalisue/vim-gista', {'on_cmd' : 'Gista'}
 
 "}}}
 "-------------------------------------------------------------------
@@ -1383,9 +1383,10 @@ if neobundle#tap('eskk.vim')
         \   'encoding': 'euc-jp',
         \ }
 
-  let g:eskk#show_annotation = 1
-  let g:eskk#tab_select_completion = 1
-  let g:eskk#start_completion_length = 2
+  " " neocompleteを使わない場合は設定不要
+  " let g:eskk#show_annotation = 1
+  " let g:eskk#tab_select_completion = 1
+  " let g:eskk#start_completion_length = 2
 
   " http://tyru.hatenablog.com/entry/20101214/vim_de_skk
   let g:eskk#egg_like_newline = 1
@@ -1718,7 +1719,6 @@ if neobundle#tap('caw.vim')
       call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
     endif
   endfunction
-
   map <A-c> <Plug>(operator-caw)
 
 endif "}}}
@@ -2053,8 +2053,7 @@ if neobundle#tap('vim-markdown')
   " let g:vim_markdown_folding_disabled = 1
 
   " 折り畳みを1段階閉じた状態で開く
-  " → autocmd FileTypeでfoldlevelstartを変えても意味がないぽい
-  " → foldlevelをいじる
+  " → foldlevelstartを変えても意味がないっぽいのでfoldlevelをいじる
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
