@@ -251,7 +251,7 @@ NeoBundle 'tpope/vim-surround'
 "-------------------------------------------------------------------
 " vimdiff {{{
 
-NeoBundle 'lambdalisue/vim-unified-diff'
+NeoBundleLazy 'lambdalisue/vim-unified-diff'
 
 "}}}
 "-------------------------------------------------------------------
@@ -1740,6 +1740,8 @@ endif "}}}
 
 " vimdiffに別のDiffアルゴリズムを適用する(vim-unified-diff) {{{
 if neobundle#tap('vim-unified-diff')
+
+  setglobal diffexpr=unified_diff#diffexpr()
 
 endif "}}}
 
