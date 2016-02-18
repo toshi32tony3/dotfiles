@@ -156,25 +156,15 @@ NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 
 "}}}
 "-------------------------------------------------------------------
-" completion {{{
+" simplify input {{{
 
-NeoBundleLazy 'Shougo/neocomplete.vim', {
-      \   'depends' : [
-      \     'Shougo/neosnippet.vim',
-      \     'toshi32tony3/neosnippet-snippets',
-      \   ],
-      \   'on_i'    : 1,
-      \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
       \   'depends' : 'toshi32tony3/neosnippet-snippets',
       \   'on_i'    : 1,
       \   'on_ft'   : 'neosnippet',
       \ }
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
-NeoBundleLazy 'tyru/eskk.vim', {
-      \   'depends' : 'Shougo/neocomplete.vim',
-      \   'on_map'  : [['nic', '<Plug>']],
-      \ }
+NeoBundleLazy 'tyru/eskk.vim', {'on_map' : [['nic', '<Plug>']]}
 NeoBundleLazy 'tyru/skkdict.vim', {'on_ft' : 'skkdict'}
 
 NeoBundleLazy 'thinca/vim-ambicmd'
@@ -261,7 +251,7 @@ NeoBundle 'tpope/vim-surround'
 "-------------------------------------------------------------------
 " vimdiff {{{
 
-NeoBundle 'lambdalisue/vim-unified-diff'
+NeoBundleLazy 'lambdalisue/vim-unified-diff'
 
 "}}}
 "-------------------------------------------------------------------
@@ -322,7 +312,7 @@ NeoBundleLazy 'beckorz/previm', {'on_ft' : 'markdown'}
 NeoBundleLazy 'rcmdnk/vim-markdown',    {'on_ft'  : 'markdown'}
 NeoBundleLazy 'glidenote/memolist.vim', {'on_cmd' : 'MemoNew' }
 
-NeoBundle 'lambdalisue/vim-gista', {'on_cmd' : 'Gista'}
+NeoBundleLazy 'lambdalisue/vim-gista', {'on_cmd' : 'Gista'}
 
 "}}}
 "-------------------------------------------------------------------
@@ -403,9 +393,8 @@ setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追�
 setglobal complete=.,w,b,u,U
 
 " 補完オプション(completeopt)
-" menuone : 対象が一つでもポップアップを表示
 " longest : 候補の共通部分だけを挿入
-setglobal completeopt=menuone,longest
+setglobal completeopt=longest
 
 setglobal noinfercase  " 補完時にマッチした単語をそのまま挿入
 setglobal pumheight=10 " 補完候補は一度に10個まで表示
@@ -908,17 +897,23 @@ nnoremap <Down>  <C-w>j
 nnoremap <Up>    <C-w>k
 nnoremap <Right> <C-w>l
 
-" Shift + カーソルキーでbprevious/bnext
+" Shift + カーソルキーでbprevious/bnextまたはtabnext/tabprevious
 nnoremap <S-Left>  :bprevious<CR>
 nnoremap <S-Right> :bnext<CR>
+nnoremap <S-Up>    :tabnext<CR>
+nnoremap <S-Down>  :tabprevious<CR>
 
-"  Ctrl + カーソルキーでcprevious/cnext
+"  Ctrl + カーソルキーでcprevious/cnextまたはlprevious/lnext
 nnoremap <C-Left>  :cprevious<CR>
 nnoremap <C-Right> :cnext<CR>
+nnoremap <C-Up>    :lprevious<CR>
+nnoremap <C-Down>  :lnext<CR>
 
-"   Alt + カーソルキーでlprevious/lnext
-nnoremap <A-Left>  :lprevious<CR>
-nnoremap <A-Right> :lnext<CR>
+if neobundle#is_installed('unite.vim')
+  " Alt + カーソルキーでUnitePrevious/UniteNext
+  nnoremap <silent> <A-Left>  :UnitePrevious<CR>
+  nnoremap <silent> <A-Right> :UniteNext<CR>
+endif
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -1338,57 +1333,6 @@ if neobundle#tap('vim-gita')
 
 endif "}}}
 
-" 入力補完(neocomplete.vim) {{{
-if neobundle#tap('neocomplete.vim')
-
-  let g:neocomplete#use_vimproc = 1
-  let g:neocomplete#enable_at_startup = 1
-  let g:neocomplete#enable_smart_case = 1
-  let g:neocomplete#auto_completion_start_length = 2
-  let g:neocomplete#min_keyword_length = 3
-  let g:neocomplete#enable_auto_delimiter = 1
-  let g:neocomplete#skip_auto_completion_time = '0.2'
-  let g:neocomplete#enable_auto_close_preview = 1
-
-  " 使用する補完の種類を指定
-  if !exists('g:neocomplete#sources')
-    let g:neocomplete#sources = {}
-  endif
-
-  if neobundle#is_installed('neosnippet.vim')
-    " use for neosnippet and eskk only
-    let g:neocomplete#sources._ = ['neosnippet']
-  else
-    " use for eskk only
-    let g:neocomplete#sources._ = []
-  endif
-
-  if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-  endif
-
-  " 日本語を補完候補として取得しない
-  let g:neocomplete#keyword_patterns._ = '\h\w*'
-
-  if !neobundle#is_installed('neosnippet.vim')
-    inoremap <expr>   <TAB> pumvisible() ? "\<C-n>" :   "\<TAB>"
-    inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  endif
-
-  inoremap <expr> <C-g> neocomplete#undo_completion()
-  inoremap <expr> <C-l> neocomplete#complete_common_string()
-
-  function! neobundle#hooks.on_post_source(bundle)
-    " Lockされた状態からスタートしたい
-    NeoCompleteLock
-
-    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
-    " 使ってプラグインの読み込み完了フラグを立てることにした
-    let s:IsNeoCompleteLoaded = 1
-  endfunction
-
-endif "}}}
-
 " コードスニペットによる入力補助(neosnippet.vim) {{{
 if neobundle#tap('neosnippet.vim')
 
@@ -1438,9 +1382,10 @@ if neobundle#tap('eskk.vim')
         \   'encoding': 'euc-jp',
         \ }
 
-  let g:eskk#show_annotation = 1
-  let g:eskk#tab_select_completion = 1
-  let g:eskk#start_completion_length = 2
+  " " neocompleteを使わない場合は設定不要
+  " let g:eskk#show_annotation = 1
+  " let g:eskk#tab_select_completion = 1
+  " let g:eskk#start_completion_length = 2
 
   " http://tyru.hatenablog.com/entry/20101214/vim_de_skk
   let g:eskk#egg_like_newline = 1
@@ -1536,41 +1481,10 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
-    " 使ってプラグインの読み込み完了フラグを立てることにした
-    " → 一応neobundle#is_sourced()を使っても問題無く動くことは確認した
-    if !exists('s:IsNeoCompleteLoaded') || !exists('s:IsEskkLoaded')
+    if !neobundle#is_sourced('eskk.vim')
       return ''
     endif
-
-    " 初回の処理
-    if !exists('b:LastMode') | let b:LastMode = '' | endif
-
-    let l:CurrentMode = eskk#statusline()
-    if  l:CurrentMode == b:LastMode
-      return winwidth(0) < 30 ? '' : l:CurrentMode
-    endif
-
-    " normal → skk : 必要ならunlock
-    if b:LastMode == ''
-      if neocomplete#get_current_neocomplete().lock == 1
-        NeoCompleteUnlock
-      else
-        let b:IsAlreadyUnlocked = 1
-      endif
-    " skk → normal : 必要ならlock
-    else
-      if !exists('b:IsAlreadyUnlocked')
-        NeoCompleteLock
-      else
-        unlet b:IsAlreadyUnlocked
-      endif
-    endif
-
-    " 直前のモード情報を更新
-    let b:LastMode = l:CurrentMode
-
-    return winwidth(0) < 30 ? '' : l:CurrentMode
+    return winwidth(0) < 30 ? '' : eskk#statusline()
   endfunction
 
   function! MyGit()
@@ -1804,7 +1718,6 @@ if neobundle#tap('caw.vim')
       call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
     endif
   endfunction
-
   map <A-c> <Plug>(operator-caw)
 
 endif "}}}
@@ -1827,6 +1740,8 @@ endif "}}}
 
 " vimdiffに別のDiffアルゴリズムを適用する(vim-unified-diff) {{{
 if neobundle#tap('vim-unified-diff')
+
+  setglobal diffexpr=unified_diff#diffexpr()
 
 endif "}}}
 
@@ -1979,6 +1894,8 @@ endif "}}}
 
 " for unite-file_mru {{{
 if neobundle#tap('neomru.vim')
+
+  let g:neomru#do_validate = 0
 
 endif "}}}
 
@@ -2139,8 +2056,7 @@ if neobundle#tap('vim-markdown')
   " let g:vim_markdown_folding_disabled = 1
 
   " 折り畳みを1段階閉じた状態で開く
-  " → autocmd FileTypeでfoldlevelstartを変えても意味がないぽい
-  " → foldlevelをいじる
+  " → foldlevelstartを変えても意味がないっぽいのでfoldlevelをいじる
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
