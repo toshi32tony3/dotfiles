@@ -393,8 +393,8 @@ setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追�
 setglobal complete=.,w,b,u,U
 
 " 補完オプション(completeopt)
-" longest : 候補の共通部分だけを挿入
-setglobal completeopt=longest
+" menuone : 対象が一つでもポップアップを表示
+setglobal completeopt=menuone
 
 setglobal noinfercase  " 補完時にマッチした単語をそのまま挿入
 setglobal pumheight=10 " 補完候補は一度に10個まで表示
