@@ -1948,6 +1948,7 @@ if neobundle#tap('vimshell.vim')
     nnoremap <buffer> <C-l> zt
   endfunction
   autocmd MyAutoCmd FileType vimshell call s:VimShellSettings()
+
 endif "}}}
 
 " Vim上で動くファイラ(vimfiler.vim) {{{
