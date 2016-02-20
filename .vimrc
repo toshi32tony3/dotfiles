@@ -155,7 +155,7 @@ NeoBundle 'mhinz/vim-signify'
 " まだ早いかもしれないけれど, 乗り換え準備
 NeoBundleLazy 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
-NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
+NeoBundleLazy 'cohama/agit.vim',      {'on_cmd' : ['Agit', 'AgitFile']}
 
 "}}}
 "-------------------------------------------------------------------
@@ -167,7 +167,8 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
       \   'on_ft'   : 'neosnippet',
       \ }
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
-NeoBundleLazy 'tyru/eskk.vim', {'on_map' : [['nic', '<Plug>']]}
+
+NeoBundleLazy 'tyru/eskk.vim',    {'on_map' : [['nic', '<Plug>']]}
 NeoBundleLazy 'tyru/skkdict.vim', {'on_ft' : 'skkdict'}
 
 NeoBundleLazy 'thinca/vim-ambicmd'
@@ -240,6 +241,7 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
+
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
       \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
