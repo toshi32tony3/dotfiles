@@ -272,9 +272,13 @@ NeoBundle 'hewes/unite-gtags',    {'depends' : 'Shougo/unite.vim'}
 NeoBundle 'tacroe/unite-mark',    {'depends' : 'Shougo/unite.vim'}
 NeoBundle 'Shougo/unite-outline', {'depends' : 'Shougo/unite.vim'}
 
+NeoBundleLazy 'Shougo/vimshell.vim', {
+      \   'depends' : 'Shougo/unite.vim',
+      \   'on_path' : '.*',
+      \ }
+
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : 'Shougo/unite.vim',
-      \   'on_cmd'  : 'VimFilerCurrentDir',
       \   'on_path' : '.*',
       \ }
 
@@ -1926,6 +1930,24 @@ endif "}}}
 " for unite-outline {{{
 if neobundle#tap('unite-outline')
 
+endif "}}}
+
+" Vim上で動くシェル (vimshell.vim) {{{
+if neobundle#tap('vimshell.vim')
+
+  " 動的プロンプトの設定
+  let g:vimshell_prompt_expr = 'fnamemodify(getcwd(), ":~") . "> "'
+  let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
+
+  " 横分割大きめで開く
+  let g:vimshell_popup_height = 70
+
+  " vimshellのマッピングを一部変更
+  function! s:VimShellSettings()
+    " <C-l>を普通のシェルのclearと同じ挙動にしたい
+    nnoremap <buffer> <C-l> zt
+  endfunction
+  autocmd MyAutoCmd FileType vimshell call s:VimShellSettings()
 endif "}}}
 
 " Vim上で動くファイラ(vimfiler.vim) {{{
