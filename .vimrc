@@ -1946,6 +1946,10 @@ if neobundle#tap('vimshell.vim')
   function! s:VimShellSettings()
     " <C-l>を普通のシェルのclearと同じ挙動にしたい
     nnoremap <buffer> <C-l> zt
+
+    " neocompleteに依存しない通常の汎用補完を使う
+    inoremap <buffer> <C-n> <C-n>
+    inoremap <buffer> <C-p> <C-p>
   endfunction
   autocmd MyAutoCmd FileType vimshell call s:VimShellSettings()
 
