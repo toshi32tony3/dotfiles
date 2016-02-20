@@ -1944,7 +1944,7 @@ if neobundle#tap('vimshell.vim')
 
   " vimshellのマッピングを一部変更
   function! s:VimShellSettings()
-    " <C-l>を普通のシェルのclearと同じ挙動にしたい
+    " <C-l>を普通のシェルのclearと同じ挙動にする
     nnoremap <buffer> <C-l> zt
 
     " neocompleteに依存しない通常の汎用補完を使う
