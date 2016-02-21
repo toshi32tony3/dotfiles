@@ -33,7 +33,7 @@ autocmd MyAutoCmd VimEnter * cd $HOME
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
   if argc() >= 1 | bdelete | execute 'edit ' . a:path
-  else           | new     | execute "normal! \<C-w>\<C-w>" | bdelete | endif
+  else           | new     | execute 'wincmd w' | bdelete | endif
 endfunction
 autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
