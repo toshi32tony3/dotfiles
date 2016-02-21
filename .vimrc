@@ -27,10 +27,13 @@ function! s:SID()
   return matchstr(expand('<sfile>'), '<SNR>\d_')
 endfunction
 
+" 初期ディレクトリを$HOMEにする
+autocmd MyAutoCmd VimEnter * cd $HOME
+
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
   if argc() >= 1 | bdelete | execute 'edit ' . a:path
-  else           | new     | execute "normal! \<C-w>\<C-w>" | bdelete | endif
+  else           | new     | execute 'wincmd w' | bdelete | endif
 endfunction
 autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
@@ -94,7 +97,7 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
-if !exists('s:scrolloffOn') | set scrolloff=100 | let s:scrolloffOn = 1 | endif
+if !exists('s:scrolloffOn') | set scrolloff=0 | let s:scrolloffOn = 0 | endif
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
@@ -152,7 +155,7 @@ NeoBundle 'mhinz/vim-signify'
 " まだ早いかもしれないけれど, 乗り換え準備
 NeoBundleLazy 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
-NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
+NeoBundleLazy 'cohama/agit.vim',      {'on_cmd' : ['Agit', 'AgitFile']}
 
 "}}}
 "-------------------------------------------------------------------
@@ -164,7 +167,8 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
       \   'on_ft'   : 'neosnippet',
       \ }
 NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
-NeoBundleLazy 'tyru/eskk.vim', {'on_map' : [['nic', '<Plug>']]}
+
+NeoBundleLazy 'tyru/eskk.vim',    {'on_map' : [['nic', '<Plug>']]}
 NeoBundleLazy 'tyru/skkdict.vim', {'on_ft' : 'skkdict'}
 
 NeoBundleLazy 'thinca/vim-ambicmd'
@@ -237,6 +241,7 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
+
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
       \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
@@ -269,9 +274,13 @@ NeoBundle 'hewes/unite-gtags',    {'depends' : 'Shougo/unite.vim'}
 NeoBundle 'tacroe/unite-mark',    {'depends' : 'Shougo/unite.vim'}
 NeoBundle 'Shougo/unite-outline', {'depends' : 'Shougo/unite.vim'}
 
+NeoBundleLazy 'Shougo/vimshell.vim', {
+      \   'depends' : 'Shougo/unite.vim',
+      \   'on_path' : '.*',
+      \ }
+
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : 'Shougo/unite.vim',
-      \   'on_cmd'  : 'VimFilerCurrentDir',
       \   'on_path' : '.*',
       \ }
 
@@ -1925,13 +1934,42 @@ if neobundle#tap('unite-outline')
 
 endif "}}}
 
+" Vim上で動くシェル (vimshell.vim) {{{
+if neobundle#tap('vimshell.vim')
+
+  " 動的プロンプトの設定
+  let g:vimshell_prompt_expr = 'fnamemodify(getcwd(), ":~") . "> "'
+  let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
+
+  " 横分割大きめで開く
+  let g:vimshell_popup_height = 70
+
+  " vimshellのマッピングを一部変更
+  function! s:VimShellSettings()
+    " <C-l>を普通のシェルのclearと同じ挙動にする
+    nnoremap <buffer> <C-l> zt
+
+    " neocompleteに依存しない通常の汎用補完を使う
+    inoremap <buffer> <C-n> <C-n>
+    inoremap <buffer> <C-p> <C-p>
+  endfunction
+  autocmd MyAutoCmd FileType vimshell call s:VimShellSettings()
+
+endif "}}}
+
 " Vim上で動くファイラ(vimfiler.vim) {{{
 if neobundle#tap('vimfiler.vim')
 
   let g:vimfiler_as_default_explorer = 1
-  let g:vimfiler_enable_auto_cd = 1
   let g:vimfiler_force_overwrite_statusline = 0
-  let g:vimfiler_safe_mode_by_default = 0
+
+  function! neobundle#hooks.on_post_source(bundle)
+    call vimfiler#custom#profile('default', 'context', {
+          \   'auto_cd' : 1,
+          \   'parent'  : 0,
+          \   'safe'    : 0,
+          \ })
+  endfunction
 
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
