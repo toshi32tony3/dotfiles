@@ -33,7 +33,7 @@ autocmd MyAutoCmd VimEnter * cd $HOME
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
   if argc() >= 1 | bdelete | execute 'edit ' . a:path
-  else           | new     | execute 'wincmd w' | bdelete | endif
+  else           | new     | execute 'wincmd w'       | bdelete | endif
 endfunction
 autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
@@ -70,7 +70,7 @@ setglobal backupcopy=yes
 
 " Vim生成物の生成先ディレクトリ指定
 let s:saveUndoDir = expand('~/vimfiles/undo')
-if !isdirectory(s:saveUndoDir)   | call mkdir(s:saveUndoDir)   | endif
+if !isdirectory(s:saveUndoDir) | call mkdir(s:saveUndoDir) | endif
 if has('persistent_undo')
   let &g:undodir = s:saveUndoDir
   setglobal undofile
@@ -747,7 +747,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetSrcDir() "{{{
     let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
     let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
-    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.tags'
+    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.ctags'
   endfunction "}}}
 
   function! s:SetTags() "{{{
@@ -833,7 +833,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       if !has_key(g:local_rc_ctags_name_list, l:item) | continue | endif
       let l:updateCommand =
             \ 'ctags -f ' .
-            \ g:local_rc_current_src_dir . '\.tags\' . g:local_rc_ctags_name_list[l:item] .
+            \ g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item] .
             \ ' -R ' .
             \ g:local_rc_current_src_dir . '\' . l:item
       if has('win32')
