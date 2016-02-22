@@ -33,7 +33,7 @@ autocmd MyAutoCmd VimEnter * cd $HOME
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
   if argc() >= 1 | bdelete | execute 'edit ' . a:path
-  else           | new     | execute 'wincmd w' | bdelete | endif
+  else           | new     | execute 'wincmd w'       | bdelete | endif
 endfunction
 autocmd MyAutoCmd VimEnter * call s:regenerateFirstBuffer(expand('%:p'))
 
@@ -70,7 +70,7 @@ setglobal backupcopy=yes
 
 " Vim生成物の生成先ディレクトリ指定
 let s:saveUndoDir = expand('~/vimfiles/undo')
-if !isdirectory(s:saveUndoDir)   | call mkdir(s:saveUndoDir)   | endif
+if !isdirectory(s:saveUndoDir) | call mkdir(s:saveUndoDir) | endif
 if has('persistent_undo')
   let &g:undodir = s:saveUndoDir
   setglobal undofile
