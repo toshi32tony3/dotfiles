@@ -1499,6 +1499,13 @@ if neobundle#tap('lightline.vim')
   function! MyGit()
     return ''
 
+    " " 重い...
+    " if !neobundle#is_installed('vim-gita')
+    "   return ''
+    " endif
+    " let l:_ = gita#statusline#format('%lb')
+    " return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
+
     " if !neobundle#is_installed('vim-fugitive') || &filetype == 'vimfiler'
     "   return ''
     " endif
