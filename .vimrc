@@ -825,6 +825,8 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   " ctagsをアップデート
   function! s:UpdateCtags() "{{{
     if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
+    " ディレクトリを削除してから再生成
+    " call delete(g:local_rc_ctags_dir, 'rf')
     if !isdirectory(g:local_rc_ctags_dir)
       call    mkdir(g:local_rc_ctags_dir)
     endif
