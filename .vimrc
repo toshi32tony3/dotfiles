@@ -27,9 +27,6 @@ function! s:SID()
   return matchstr(expand('<sfile>'), '<SNR>\d_')
 endfunction
 
-" 初期ディレクトリを$HOMEにする
-autocmd MyAutoCmd VimEnter * cd $HOME
-
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
   if argc() >= 1 | bdelete | execute 'edit ' . a:path
@@ -805,6 +802,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
         \ | call SetEnvironmentVariables()
+        \ | execute 'cd ' . g:local_rc_src_dir
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
