@@ -150,7 +150,7 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 " まだ早いかもしれないけれど, 乗り換え準備
-NeoBundleLazy 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
 NeoBundleLazy 'cohama/agit.vim',      {'on_cmd' : ['Agit', 'AgitFile']}
 
@@ -1497,7 +1497,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyGit()
-    return ''
+    " return ''
 
     " " 重い...
     " if !neobundle#is_installed('vim-gita')
@@ -1506,11 +1506,11 @@ if neobundle#tap('lightline.vim')
     " let l:_ = gita#statusline#format('%lb')
     " return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
 
-    " if !neobundle#is_installed('vim-fugitive') || &filetype == 'vimfiler'
-    "   return ''
-    " endif
-    " let l:_ = fugitive#head()
-    " return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
+    if !neobundle#is_installed('vim-fugitive')
+      return ''
+    endif
+    let l:_ = fugitive#head()
+    return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
   endfunction
 
   function! MyFileName()
