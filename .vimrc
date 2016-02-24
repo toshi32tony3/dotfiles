@@ -1299,8 +1299,11 @@ cnoreabbrev ch ClipHTML
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
-  let g:signify_vcs_list = ['git', 'cvs']
-  let g:signify_disable_by_default = 1
+  " use git only
+  let g:signify_vcs_list = ['git']
+
+  " let g:signify_vcs_list = ['git', 'cvs']
+  " let g:signify_disable_by_default = 1
 
   " Hunk text object
   omap ic <Plug>(signify-motion-inner-pending)
@@ -1310,8 +1313,9 @@ if neobundle#tap('vim-signify')
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
-    if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
+    if exists(':SignifyEnable')       | delcommand SignifyEnable       | endif
     if exists(':SignifyDisable')      | delcommand SignifyDisable      | endif
+    " if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
     if exists(':SignifyDebug')        | delcommand SignifyDebug        | endif
     if exists(':SignifyDebugDiff')    | delcommand SignifyDebugDiff    | endif
     if exists(':SignifyDebugUnknown') | delcommand SignifyDebugUnknown | endif
