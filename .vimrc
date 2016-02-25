@@ -27,9 +27,6 @@ function! s:SID()
   return matchstr(expand('<sfile>'), '<SNR>\d_')
 endfunction
 
-" 初期ディレクトリを$HOMEにする
-autocmd MyAutoCmd VimEnter * cd $HOME
-
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
   if argc() >= 1 | bdelete | execute 'edit ' . a:path
@@ -153,7 +150,7 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 " まだ早いかもしれないけれど, 乗り換え準備
-NeoBundleLazy 'tpope/vim-fugitive'
+NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
 NeoBundleLazy 'cohama/agit.vim',      {'on_cmd' : ['Agit', 'AgitFile']}
 
@@ -805,6 +802,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
         \ | call SetEnvironmentVariables()
+        \ | execute 'cd ' . g:local_rc_src_dir
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
@@ -1301,8 +1299,11 @@ cnoreabbrev ch ClipHTML
 " VCSの差分をVimのsignで表示(vim-signify) {{{
 if neobundle#tap('vim-signify')
 
-  let g:signify_vcs_list = ['git', 'cvs']
-  let g:signify_disable_by_default = 1
+  " use git only
+  let g:signify_vcs_list = ['git']
+
+  " let g:signify_vcs_list = ['git', 'cvs']
+  " let g:signify_disable_by_default = 1
 
   " Hunk text object
   omap ic <Plug>(signify-motion-inner-pending)
@@ -1312,8 +1313,9 @@ if neobundle#tap('vim-signify')
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
-    if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
+    if exists(':SignifyEnable')       | delcommand SignifyEnable       | endif
     if exists(':SignifyDisable')      | delcommand SignifyDisable      | endif
+    " if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
     if exists(':SignifyDebug')        | delcommand SignifyDebug        | endif
     if exists(':SignifyDebugDiff')    | delcommand SignifyDebugDiff    | endif
     if exists(':SignifyDebugUnknown') | delcommand SignifyDebugUnknown | endif
@@ -1499,7 +1501,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyGit()
-    return ''
+    " return ''
 
     " " 重い...
     " if !neobundle#is_installed('vim-gita')
@@ -1508,11 +1510,11 @@ if neobundle#tap('lightline.vim')
     " let l:_ = gita#statusline#format('%lb')
     " return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
 
-    " if !neobundle#is_installed('vim-fugitive') || &filetype == 'vimfiler'
-    "   return ''
-    " endif
-    " let l:_ = fugitive#head()
-    " return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
+    if !neobundle#is_installed('vim-fugitive')
+      return ''
+    endif
+    let l:_ = fugitive#head()
+    return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
   endfunction
 
   function! MyFileName()
