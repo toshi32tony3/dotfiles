@@ -1328,6 +1328,7 @@ endif "}}}
 " VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
+  let g:agit_enable_auto_show_commit = 0
   let g:agit_max_log_lines = 50
 
   function! s:AgitSettings()
