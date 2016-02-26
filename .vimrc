@@ -802,7 +802,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
         \ | call SetEnvironmentVariables()
-        \ | execute 'cd ' . g:local_rc_src_dir
+        \ | if isdirectory(g:local_rc_current_src_dir) | execute 'cd ' . g:local_rc_current_src_dir | endif
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
