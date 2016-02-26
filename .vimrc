@@ -678,6 +678,7 @@ if neobundle#is_installed('vim-gita')
   call s:AddMyCMap('^gch$', 'Gita checkout')
   call s:AddMyCMap('^gco$', 'Gita commit')
   call s:AddMyCMap('^gdi$', 'Gita diff')
+  call s:AddMyCMap('^gds$', 'Gita diff-ls')
   call s:AddMyCMap('^gls$', 'Gita ls')
   call s:AddMyCMap('^gpl$', 'Gita pull')
   call s:AddMyCMap('^gps$', 'Gita push')
@@ -802,7 +803,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
         \ | call SetEnvironmentVariables()
-        \ | execute 'cd ' . g:local_rc_src_dir
+        \ | if isdirectory(g:local_rc_current_src_dir) | execute 'cd ' . g:local_rc_current_src_dir | endif
 
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
@@ -1328,6 +1329,7 @@ endif "}}}
 " VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
+  let g:agit_enable_auto_show_commit = 0
   let g:agit_max_log_lines = 50
 
   function! s:AgitSettings()
