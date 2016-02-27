@@ -1186,6 +1186,11 @@ nnoremap <silent> [f :<C-u>call search(g:cFuncUsePattern, 'bs')<CR>
 nnoremap <silent> ]F :<C-u>call search(g:cFuncDefPattern, 's')<CR>
 nnoremap <silent> [F :<C-u>call search(g:cFuncDefPattern, 'bs')<CR>
 
+" ブラケットの前の単語にジャンプ
+let g:bracketPattern = '\v\zs<\a+>\ze\('
+nnoremap <silent> ]b :<C-u>call search(g:bracketPattern, 's')<CR>
+nnoremap <silent> [b :<C-u>call search(g:bracketPattern, 'bs')<CR>
+
 " Cの関数名取得
 let s:currentFunc = ''
 function! s:GetCurrentFuncC() "{{{
