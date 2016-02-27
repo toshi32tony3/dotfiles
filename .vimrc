@@ -1178,57 +1178,12 @@ autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
-function! s:JumpFuncNameCForward() "{{{
-  if &filetype != 'c' | return | endif
-
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  let l:lastLine  = line('.')
-  keepjumps normal! ]]
-
-  " 検索対象が居なければViewを戻して処理終了
-  if line('.') == line('$') | call winrestview(l:savedView) | return | endif
-
-  call search('(', 'b')
-  keepjumps normal! b
-
-  " 行移動していたら処理終了
-  if l:lastLine != line('.') | return  | endif
-
-  " 行移動していなければ, 開始位置がCの関数名上だったということ
-  " → 下方向検索するには, ]]を2回使う必要がある
-  keepjumps normal! ]]
-  keepjumps normal! ]]
-
-  " 検索対象が居なければViewを戻して処理終了
-  if line('.') == line('$') | call winrestview(l:savedView) | return | endif
-
-  call search('(', 'b')
-  keepjumps normal! b
-endfunction " }}}
-function! s:JumpFuncNameCBackward() "{{{
-  if &filetype != 'c' | return | endif
-
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  " カーソルがある行の1列目の文字が { ならば [[ は不要 " for match }
-  if getline('.')[0] != '{'                            " for match }
-    keepjumps normal! [[
-
-    " 検索対象が居なければViewを戻して処理終了
-    if line('.') == 1 | call winrestview(l:savedView) | return | endif
-  endif
-
-  call search('(', 'b')
-  keepjumps normal! b
-endfunction " }}}
-let g:cFuncPattern = '\v<\a+\u+\l+\w+>\ze\('
-nnoremap <silent> ]f :<C-u>call search(g:cFuncPattern)<CR>
-nnoremap <silent> [f :<C-u>call search(g:cFuncPattern, 'b')<CR>
-nnoremap <silent> ]F :<C-u>call <SID>JumpFuncNameCForward()<CR>
-nnoremap <silent> [F :<C-u>call <SID>JumpFuncNameCBackward()<CR>
+let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
+let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
+nnoremap <silent> ]f :<C-u>call search(g:cFuncUsePattern, 's')<CR>
+nnoremap <silent> [f :<C-u>call search(g:cFuncUsePattern, 'bs')<CR>
+nnoremap <silent> ]F :<C-u>call search(g:cFuncDefPattern, 's')<CR>
+nnoremap <silent> [F :<C-u>call search(g:cFuncDefPattern, 'bs')<CR>
 
 " Cの関数名取得
 let s:currentFunc = ''
