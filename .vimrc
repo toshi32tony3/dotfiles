@@ -248,6 +248,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \ }
 
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
 
 "}}}
 "-------------------------------------------------------------------
@@ -1723,6 +1724,11 @@ endif "}}}
 
 " 囲む / 囲まなくする / 別の何かで囲む(vim-surround) {{{
 if neobundle#tap('vim-surround')
+
+endif "}}}
+
+" もっと繰り返し可能にする(vim-repeat) {{{
+if neobundle#tap('vim-repeat')
 
 endif "}}}
 
