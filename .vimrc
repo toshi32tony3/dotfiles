@@ -1224,8 +1224,11 @@ function! s:JumpFuncNameCBackward() "{{{
   call search('(', 'b')
   keepjumps normal! b
 endfunction " }}}
-nnoremap <silent> ]f :<C-u>call <SID>JumpFuncNameCForward()<CR>
-nnoremap <silent> [f :<C-u>call <SID>JumpFuncNameCBackward()<CR>
+let g:cFuncPattern = '\v<\a+\u+\l+\w+>\ze\('
+nnoremap <silent> ]f :<C-u>call search(g:cFuncPattern)<CR>
+nnoremap <silent> [f :<C-u>call search(g:cFuncPattern, 'b')<CR>
+nnoremap <silent> ]F :<C-u>call <SID>JumpFuncNameCForward()<CR>
+nnoremap <silent> [F :<C-u>call <SID>JumpFuncNameCBackward()<CR>
 
 " Cの関数名取得
 let s:currentFunc = ''
