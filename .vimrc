@@ -1584,8 +1584,8 @@ endif "}}}
 " incsearch.vimを更にパワーアップ(incsearch-index.vim) {{{
 if neobundle#tap('incsearch-index.vim')
 
-  map / <Plug>(incsearch-index-/)
-  map ? <Plug>(incsearch-index-?)
+  map g/ <Plug>(incsearch-index-/)
+  map g? <Plug>(incsearch-index-?)
 
 endif "}}}
 
