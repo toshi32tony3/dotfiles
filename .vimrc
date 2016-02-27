@@ -149,8 +149,7 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 
 NeoBundle 'mhinz/vim-signify'
 
-" まだ早いかもしれないけれど, 乗り換え準備
-NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'itchyny/vim-gitbranch'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
 NeoBundleLazy 'cohama/agit.vim',      {'on_cmd' : ['Agit', 'AgitFile']}
 
@@ -190,6 +189,7 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 " move {{{
 
 NeoBundleLazy 'haya14busa/incsearch.vim'
+NeoBundle 'haya14busa/incsearch-index.vim', {'depends' : 'haya14busa/incsearch.vim'}
 
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
@@ -634,7 +634,8 @@ command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
-  call add(s:MyCMapEntries, [a:originalPattern, a:alternateName])
+  execute 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
+  call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
 endfunction "}}}
 
 " リストに登録されている   : 登録されたコマンド名を返す
@@ -652,37 +653,39 @@ function! s:MyCMap(cmdline) "{{{
 endfunction "}}}
 cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
 
-" リストへの変換候補登録(My Command)
-call s:AddMyCMap( '^cd$',  'CD')
-call s:AddMyCMap('^lcd$', 'LCD')
-call s:AddMyCMap( '^CD$',  'cd')
-call s:AddMyCMap('^LCD$', 'lcd')
-call s:AddMyCMap('^cfd$', 'ClipFileDir')
-call s:AddMyCMap( '^uc$', 'UpdateCtags')
-call s:AddMyCMap( '^pd$', 'PutDateTime')
-call s:AddMyCMap( '^cm$', 'ClearMessage')
+if has('vim_starting')
+  " リストへの変換候補登録(My Command)
+  call s:AddMyCMap( 'cd',  'CD')
+  call s:AddMyCMap('lcd', 'LCD')
+  call s:AddMyCMap( 'CD',  'cd')
+  call s:AddMyCMap('LCD', 'lcd')
+  call s:AddMyCMap('cfd', 'ClipFileDir')
+  call s:AddMyCMap( 'uc', 'UpdateCtags')
+  call s:AddMyCMap( 'pd', 'PutDateTime')
+  call s:AddMyCMap( 'cm', 'ClearMessage')
 
-" リストへの変換候補登録(Plugin's command)
-if neobundle#is_installed('scratch.vim')
-  call s:AddMyCMap('^sc$',  'Scratch')
-  call s:AddMyCMap('^scp$', 'ScratchPreview')
-endif
-if neobundle#is_installed('TweetVim')
-  call s:AddMyCMap('^tvs$', 'TweetVimSearch')
-endif
-if neobundle#is_installed('vim-gita')
-  call s:AddMyCMap('^gi$', 'Gita')
-  call s:AddMyCMap('^gap$', 'Gita add --patch --split')
-  call s:AddMyCMap('^gbl$', 'Gita blame')
-  call s:AddMyCMap('^gbr$', 'Gita branch')
-  call s:AddMyCMap('^gch$', 'Gita checkout')
-  call s:AddMyCMap('^gco$', 'Gita commit')
-  call s:AddMyCMap('^gdi$', 'Gita diff')
-  call s:AddMyCMap('^gds$', 'Gita diff-ls')
-  call s:AddMyCMap('^gls$', 'Gita ls')
-  call s:AddMyCMap('^gpl$', 'Gita pull')
-  call s:AddMyCMap('^gps$', 'Gita push')
-  call s:AddMyCMap('^gst$', 'Gita status')
+  " リストへの変換候補登録(Plugin's command)
+  if neobundle#is_installed('scratch.vim')
+    call s:AddMyCMap('sc',  'Scratch')
+    call s:AddMyCMap('scp', 'ScratchPreview')
+  endif
+  if neobundle#is_installed('TweetVim')
+    call s:AddMyCMap('tvs', 'TweetVimSearch')
+  endif
+  if neobundle#is_installed('vim-gita')
+    call s:AddMyCMap('gi', 'Gita')
+    call s:AddMyCMap('gap', 'Gita add --patch --split')
+    call s:AddMyCMap('gbl', 'Gita blame')
+    call s:AddMyCMap('gbr', 'Gita branch')
+    call s:AddMyCMap('gch', 'Gita checkout')
+    call s:AddMyCMap('gco', 'Gita commit')
+    call s:AddMyCMap('gdi', 'Gita diff')
+    call s:AddMyCMap('gds', 'Gita diff-ls')
+    call s:AddMyCMap('gls', 'Gita ls')
+    call s:AddMyCMap('gpl', 'Gita pull')
+    call s:AddMyCMap('gps', 'Gita push')
+    call s:AddMyCMap('gst', 'Gita status')
+  endif
 endif
 
 " " 開いたファイルと同じ場所へ移動する
@@ -1503,19 +1506,10 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyGit()
-    " return ''
-
-    " " 重い...
-    " if !neobundle#is_installed('vim-gita')
-    "   return ''
-    " endif
-    " let l:_ = gita#statusline#format('%lb')
-    " return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
-
-    if !neobundle#is_installed('vim-fugitive')
+    if !neobundle#is_installed('vim-gitbranch')
       return ''
     endif
-    let l:_ = fugitive#head()
+    let l:_ = gitbranch#name()
     return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
   endfunction
 
@@ -1585,8 +1579,16 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
-  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
+  " noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  " noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
+
+endif "}}}
+
+" incsearch.vimを更にパワーアップ(incsearch-index.vim) {{{
+if neobundle#tap('incsearch-index.vim')
+
+  map g/ <Plug>(incsearch-index-/)
+  map g? <Plug>(incsearch-index-?)
 
 endif "}}}
 
