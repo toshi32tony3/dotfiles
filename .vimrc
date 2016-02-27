@@ -189,6 +189,7 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 " move {{{
 
 NeoBundleLazy 'haya14busa/incsearch.vim'
+NeoBundle 'haya14busa/incsearch-index.vim', {'depends' : 'haya14busa/incsearch.vim'}
 
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
@@ -1575,8 +1576,16 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
-  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
+  " noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  " noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
+
+endif "}}}
+
+" incsearch.vimを更にパワーアップ(incsearch-index.vim) {{{
+if neobundle#tap('incsearch-index.vim')
+
+  map / <Plug>(incsearch-index-/)
+  map ? <Plug>(incsearch-index-?)
 
 endif "}}}
 
