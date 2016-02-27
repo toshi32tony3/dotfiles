@@ -1294,6 +1294,18 @@ if neobundle#tap('vim-signify')
 
 endif "}}}
 
+" VimからGitを使う(カレントブランチを表示) {{{
+if neobundle#tap('vim-gitbranch')
+
+endif "}}}
+
+" VimからGitを使う(編集, コマンド実行, vim-gita) {{{
+if neobundle#tap('vim-gita')
+
+  autocmd MyAutoCmd BufWinEnter gita:* setlocal nofoldenable
+
+endif "}}}
+
 " VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
@@ -1306,13 +1318,6 @@ if neobundle#tap('agit.vim')
   endfunction
   autocmd MyAutoCmd FileType agit          call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
-
-endif "}}}
-
-" VimからGitを使う(編集, コマンド実行, vim-gita) {{{
-if neobundle#tap('vim-gita')
-
-  autocmd MyAutoCmd BufWinEnter gita:* setlocal nofoldenable
 
 endif "}}}
 
