@@ -248,6 +248,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \ }
 
 NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-repeat'
 
 "}}}
 "-------------------------------------------------------------------
@@ -799,15 +800,6 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     if &cdpath != '' | let &cdpath = &cdpath[1 :] | endif
   endfunction "}}}
 
-  " 初回のtags, path設定
-  autocmd MyAutoCmd VimEnter *
-        \   call s:SetSrcDir()
-        \ | call s:SetTags()
-        \ | call s:SetPathList()
-        \ | call s:SetCDPathList()
-        \ | call SetEnvironmentVariables()
-        \ | if isdirectory(g:local_rc_current_src_dir) | execute 'cd ' . g:local_rc_current_src_dir | endif
-
   " ソースコードをスイッチ
   function! s:SwitchSource() "{{{
     let g:local_rc_src_index += 1
@@ -823,6 +815,27 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     echo 'switch source to: ' . g:local_rc_src_dir
   endfunction "}}}
   nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
+
+  " カレントのソースディレクトリにcd
+  function! s:ChangeToCurrentSourceDirectory() "{{{
+    if isdirectory(g:local_rc_current_src_dir)
+      execute 'cd ' . g:local_rc_current_src_dir
+      if exists('g:IsLoadedChangeToCurrentSourceDirectory')
+        echo 'change directory to current source: ' . g:local_rc_current_src_dir
+      endif
+    endif
+    let g:IsLoadedChangeToCurrentSourceDirectory = 1
+  endfunction "}}}
+  command! ChangeToCurrentSourceDirectory call s:ChangeToCurrentSourceDirectory()
+
+  " 初回のtags, path設定/ディレクトリ移動
+  autocmd MyAutoCmd VimEnter *
+        \   call s:SetSrcDir()
+        \ | call s:SetTags()
+        \ | call s:SetPathList()
+        \ | call s:SetCDPathList()
+        \ | call SetEnvironmentVariables()
+        \ | call s:ChangeToCurrentSourceDirectory()
 
   " ctagsをアップデート
   function! s:UpdateCtags() "{{{
@@ -881,7 +894,8 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
 " <C-g>u : アンドゥ単位を区切る
-inoremap <C-@> <C-g>u<C-@>
+" <C-@>は良く誤爆するので潰す
+" inoremap <C-@> <C-g>u<C-@>
 inoremap <C-a> <C-g>u<C-a>
 
 " :quitのショートカットは潰す
@@ -897,8 +911,8 @@ noremap  <MiddleMouse> <Nop>
 inoremap <MiddleMouse> <Nop>
 
 " 挿入モードでカーソルキーを使うとUndo単位が区切られて困るので潰す
-inoremap <Down>  <Nop>
-inoremap <Up>    <Nop>
+inoremap <Down> <Nop>
+inoremap <Up>   <Nop>
 
 " Undo単位を区切らない(<C-g>Uは行移動を伴わない場合のみ使える)
 inoremap <Left>  <C-g>U<Left>
@@ -1178,54 +1192,17 @@ autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 
 " Cの関数名にジャンプ
-function! s:JumpFuncNameCForward() "{{{
-  if &filetype != 'c' | return | endif
+let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
+let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
+nnoremap <silent> ]f :<C-u>call search(g:cFuncUsePattern, 's')<CR>
+nnoremap <silent> [f :<C-u>call search(g:cFuncUsePattern, 'bs')<CR>
+nnoremap <silent> ]F :<C-u>call search(g:cFuncDefPattern, 's')<CR>
+nnoremap <silent> [F :<C-u>call search(g:cFuncDefPattern, 'bs')<CR>
 
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  let l:lastLine  = line('.')
-  keepjumps normal! ]]
-
-  " 検索対象が居なければViewを戻して処理終了
-  if line('.') == line('$') | call winrestview(l:savedView) | return | endif
-
-  call search('(', 'b')
-  keepjumps normal! b
-
-  " 行移動していたら処理終了
-  if l:lastLine != line('.') | return  | endif
-
-  " 行移動していなければ, 開始位置がCの関数名上だったということ
-  " → 下方向検索するには, ]]を2回使う必要がある
-  keepjumps normal! ]]
-  keepjumps normal! ]]
-
-  " 検索対象が居なければViewを戻して処理終了
-  if line('.') == line('$') | call winrestview(l:savedView) | return | endif
-
-  call search('(', 'b')
-  keepjumps normal! b
-endfunction " }}}
-function! s:JumpFuncNameCBackward() "{{{
-  if &filetype != 'c' | return | endif
-
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  " カーソルがある行の1列目の文字が { ならば [[ は不要 " for match }
-  if getline('.')[0] != '{'                            " for match }
-    keepjumps normal! [[
-
-    " 検索対象が居なければViewを戻して処理終了
-    if line('.') == 1 | call winrestview(l:savedView) | return | endif
-  endif
-
-  call search('(', 'b')
-  keepjumps normal! b
-endfunction " }}}
-nnoremap <silent> ]f :<C-u>call <SID>JumpFuncNameCForward()<CR>
-nnoremap <silent> [f :<C-u>call <SID>JumpFuncNameCBackward()<CR>
+" ブラケットの前の単語にジャンプ
+let g:bracketPattern = '\v\zs<\a+>\ze\('
+nnoremap <silent> ]b :<C-u>call search(g:bracketPattern, 's')<CR>
+nnoremap <silent> [b :<C-u>call search(g:bracketPattern, 'bs')<CR>
 
 " Cの関数名取得
 let s:currentFunc = ''
@@ -1329,6 +1306,18 @@ if neobundle#tap('vim-signify')
 
 endif "}}}
 
+" VimからGitを使う(カレントブランチを表示) {{{
+if neobundle#tap('vim-gitbranch')
+
+endif "}}}
+
+" VimからGitを使う(編集, コマンド実行, vim-gita) {{{
+if neobundle#tap('vim-gita')
+
+  autocmd MyAutoCmd BufWinEnter gita:* setlocal nofoldenable
+
+endif "}}}
+
 " VimからGitを使う(コミットツリー表示, 管理, agit.vim) {{{
 if neobundle#tap('agit.vim')
 
@@ -1341,13 +1330,6 @@ if neobundle#tap('agit.vim')
   endfunction
   autocmd MyAutoCmd FileType agit          call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
-
-endif "}}}
-
-" VimからGitを使う(編集, コマンド実行, vim-gita) {{{
-if neobundle#tap('vim-gita')
-
-  autocmd MyAutoCmd BufWinEnter gita:* setlocal nofoldenable
 
 endif "}}}
 
@@ -1579,8 +1561,8 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  " noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
-  " noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
+  noremap <silent> <expr> z/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  noremap <silent> <expr> z? incsearch#go({'command' : '?', 'is_stay' : 1})
 
 endif "}}}
 
@@ -1759,6 +1741,11 @@ endif "}}}
 
 " 囲む / 囲まなくする / 別の何かで囲む(vim-surround) {{{
 if neobundle#tap('vim-surround')
+
+endif "}}}
+
+" もっと繰り返し可能にする(vim-repeat) {{{
+if neobundle#tap('vim-repeat')
 
 endif "}}}
 
