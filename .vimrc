@@ -817,16 +817,16 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
 
   " カレントのソースディレクトリにcd
-  function! s:ChangeToSourceDirectory() "{{{
+  function! s:ChangeToCurrentSourceDirectory() "{{{
     if isdirectory(g:local_rc_current_src_dir)
       execute 'cd ' . g:local_rc_current_src_dir
-      if exists('g:IsLoadedChangeToSourceDirectory')
-        echo 'change directory to: ' . g:local_rc_current_src_dir
+      if exists('g:IsLoadedChangeToCurrentSourceDirectory')
+        echo 'change directory to current source: ' . g:local_rc_current_src_dir
       endif
     endif
-    let g:IsLoadedChangeToSourceDirectory = 1
+    let g:IsLoadedChangeToCurrentSourceDirectory = 1
   endfunction "}}}
-  command! ChangeToSourceDirectory call s:ChangeToSourceDirectory()
+  command! ChangeToCurrentSourceDirectory call s:ChangeToCurrentSourceDirectory()
 
   " 初回のtags, path設定/ディレクトリ移動
   autocmd MyAutoCmd VimEnter *
@@ -835,7 +835,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
         \ | call SetEnvironmentVariables()
-        \ | call s:ChangeToSourceDirectory()
+        \ | call s:ChangeToCurrentSourceDirectory()
 
   " ctagsをアップデート
   function! s:UpdateCtags() "{{{
