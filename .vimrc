@@ -881,7 +881,8 @@ nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
 " <C-g>u : アンドゥ単位を区切る
-inoremap <C-@> <C-g>u<C-@>
+" <C-@>は良く誤爆するので潰す
+" inoremap <C-@> <C-g>u<C-@>
 inoremap <C-a> <C-g>u<C-a>
 
 " :quitのショートカットは潰す
@@ -897,8 +898,8 @@ noremap  <MiddleMouse> <Nop>
 inoremap <MiddleMouse> <Nop>
 
 " 挿入モードでカーソルキーを使うとUndo単位が区切られて困るので潰す
-inoremap <Down>  <Nop>
-inoremap <Up>    <Nop>
+inoremap <Down> <Nop>
+inoremap <Up>   <Nop>
 
 " Undo単位を区切らない(<C-g>Uは行移動を伴わない場合のみ使える)
 inoremap <Left>  <C-g>U<Left>
