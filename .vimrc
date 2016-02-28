@@ -2133,12 +2133,12 @@ if neobundle#tap('vim-easy-align')
         \   '/' : {
         \     'pattern'         : '//\+\|/\*\|\*/',
         \     'delimiter_align' : 'l',
-        \     'ignore_groups'   : ['!Comment']
+        \     'ignore_groups'   : ['!Comment'],
         \   },
         \   'h' : {
         \     'pattern'         : '\v\/\*#%(\s{4})+|#\*\/',
         \     'delimiter_align' : 'l',
-        \     'ignore_groups'   : ['!Comment']
+        \     'ignore_groups'   : ['!Comment'],
         \   },
         \ }
 
