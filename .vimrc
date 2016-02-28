@@ -2129,6 +2129,19 @@ endif "}}}
 " テキスト整形を簡易化(vim-easy-align) {{{
 if neobundle#tap('vim-easy-align')
 
+  let g:easy_align_delimiters = {
+        \   '/' : {
+        \     'pattern'         : '//\+\|/\*\|\*/',
+        \     'delimiter_align' : 'l',
+        \     'ignore_groups'   : ['!Comment']
+        \   },
+        \   'h' : {
+        \     'pattern'         : '\v\/\*#%(\s{4})+|#\*\/',
+        \     'delimiter_align' : 'l',
+        \     'ignore_groups'   : ['!Comment']
+        \   },
+        \ }
+
   xnoremap <CR> :EasyAlign<CR>
 
 endif "}}}
