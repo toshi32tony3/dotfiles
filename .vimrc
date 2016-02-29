@@ -1814,6 +1814,7 @@ if neobundle#tap('unite.vim')
   let g:u_nqui = '-no-quit '
   let g:u_nsyn = '-no-sync '
   let g:u_prev = '-auto-preview '
+  let g:u_imme = '-immediately '
   let g:u_fbuf = '-buffer-name=file-buffer '
   let g:u_sbuf = '-buffer-name=search-buffer '
   let g:u_nins = '-no-start-insert '
@@ -1824,7 +1825,7 @@ if neobundle#tap('unite.vim')
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
   let g:u_opt_bu = 'Unite '       . g:u_hopt . g:u_nins
   let g:u_opt_bo = 'Unite '       . g:u_hopt
-  let g:u_opt_de = 'Unite '       . g:u_hopt
+  let g:u_opt_de = 'Unite '       . g:u_hopt            . g:u_imme
   let g:u_opt_dm = 'Unite '       . g:u_hopt
   let g:u_opt_fb = 'UniteResume ' . g:u_hopt                       . g:u_fbuf
   let g:u_opt_fg = 'Unite '       . g:u_hopt
