@@ -255,6 +255,7 @@ NeoBundle 'tpope/vim-repeat'
 " vimdiff {{{
 
 NeoBundleLazy 'lambdalisue/vim-unified-diff'
+NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 
 "}}}
 "-------------------------------------------------------------------
@@ -1753,6 +1754,11 @@ endif "}}}
 if neobundle#tap('vim-unified-diff')
 
   setglobal diffexpr=unified_diff#diffexpr()
+
+endif "}}}
+
+" 指定した行をVimDiff(linediff.vim) {{{
+if neobundle#tap('linediff.vim')
 
 endif "}}}
 
