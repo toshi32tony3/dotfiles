@@ -94,7 +94,7 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
-if !exists('s:scrolloffOn') | set scrolloff=0 | let s:scrolloffOn = 0 | endif
+if !exists('s:scrolloffOn') | set scrolloff=100 | let s:scrolloffOn = 1 | endif
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
