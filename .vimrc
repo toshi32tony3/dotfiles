@@ -94,7 +94,7 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
-if !exists('s:scrolloffOn') | set scrolloff=0 | let s:scrolloffOn = 0 | endif
+if !exists('s:scrolloffOn') | set scrolloff=100 | let s:scrolloffOn = 1 | endif
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
@@ -255,6 +255,7 @@ NeoBundle 'tpope/vim-repeat'
 " vimdiff {{{
 
 NeoBundleLazy 'lambdalisue/vim-unified-diff'
+NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 
 "}}}
 "-------------------------------------------------------------------
@@ -654,39 +655,37 @@ function! s:MyCMap(cmdline) "{{{
 endfunction "}}}
 cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
 
-if has('vim_starting')
-  " リストへの変換候補登録(My Command)
-  call s:AddMyCMap( 'cd',  'CD')
-  call s:AddMyCMap('lcd', 'LCD')
-  call s:AddMyCMap( 'CD',  'cd')
-  call s:AddMyCMap('LCD', 'lcd')
-  call s:AddMyCMap('cfd', 'ClipFileDir')
-  call s:AddMyCMap( 'uc', 'UpdateCtags')
-  call s:AddMyCMap( 'pd', 'PutDateTime')
-  call s:AddMyCMap( 'cm', 'ClearMessage')
+" リストへの変換候補登録(My Command)
+call s:AddMyCMap( 'cd',  'CD')
+call s:AddMyCMap('lcd', 'LCD')
+call s:AddMyCMap( 'CD',  'cd')
+call s:AddMyCMap('LCD', 'lcd')
+call s:AddMyCMap('cfd', 'ClipFileDir')
+call s:AddMyCMap( 'uc', 'UpdateCtags')
+call s:AddMyCMap( 'pd', 'PutDateTime')
+call s:AddMyCMap( 'cm', 'ClearMessage')
 
-  " リストへの変換候補登録(Plugin's command)
-  if neobundle#is_installed('scratch.vim')
-    call s:AddMyCMap('sc',  'Scratch')
-    call s:AddMyCMap('scp', 'ScratchPreview')
-  endif
-  if neobundle#is_installed('TweetVim')
-    call s:AddMyCMap('tvs', 'TweetVimSearch')
-  endif
-  if neobundle#is_installed('vim-gita')
-    call s:AddMyCMap('gi', 'Gita')
-    call s:AddMyCMap('gap', 'Gita add --patch --split')
-    call s:AddMyCMap('gbl', 'Gita blame')
-    call s:AddMyCMap('gbr', 'Gita branch')
-    call s:AddMyCMap('gch', 'Gita checkout')
-    call s:AddMyCMap('gco', 'Gita commit')
-    call s:AddMyCMap('gdi', 'Gita diff')
-    call s:AddMyCMap('gds', 'Gita diff-ls')
-    call s:AddMyCMap('gls', 'Gita ls')
-    call s:AddMyCMap('gpl', 'Gita pull')
-    call s:AddMyCMap('gps', 'Gita push')
-    call s:AddMyCMap('gst', 'Gita status')
-  endif
+" リストへの変換候補登録(Plugin's command)
+if neobundle#is_installed('scratch.vim')
+  call s:AddMyCMap('sc',  'Scratch')
+  call s:AddMyCMap('scp', 'ScratchPreview')
+endif
+if neobundle#is_installed('TweetVim')
+  call s:AddMyCMap('tvs', 'TweetVimSearch')
+endif
+if neobundle#is_installed('vim-gita')
+  call s:AddMyCMap('gi', 'Gita')
+  call s:AddMyCMap('gap', 'Gita add --patch --split')
+  call s:AddMyCMap('gbl', 'Gita blame')
+  call s:AddMyCMap('gbr', 'Gita branch')
+  call s:AddMyCMap('gch', 'Gita checkout')
+  call s:AddMyCMap('gco', 'Gita commit')
+  call s:AddMyCMap('gdi', 'Gita diff')
+  call s:AddMyCMap('gds', 'Gita diff-ls')
+  call s:AddMyCMap('gls', 'Gita ls')
+  call s:AddMyCMap('gpl', 'Gita pull')
+  call s:AddMyCMap('gps', 'Gita push')
+  call s:AddMyCMap('gst', 'Gita status')
 endif
 
 " " 開いたファイルと同じ場所へ移動する
@@ -1200,7 +1199,7 @@ nnoremap <silent> ]F :<C-u>call search(g:cFuncDefPattern, 's')<CR>
 nnoremap <silent> [F :<C-u>call search(g:cFuncDefPattern, 'bs')<CR>
 
 " ブラケットの前の単語にジャンプ
-let g:bracketPattern = '\v\zs<\a+>\ze\('
+let g:bracketPattern = '\v\zs<\w+>\ze\('
 nnoremap <silent> ]b :<C-u>call search(g:bracketPattern, 's')<CR>
 nnoremap <silent> [b :<C-u>call search(g:bracketPattern, 'bs')<CR>
 
@@ -1756,6 +1755,11 @@ if neobundle#tap('vim-unified-diff')
 
 endif "}}}
 
+" 指定した行をVimDiff(linediff.vim) {{{
+if neobundle#tap('linediff.vim')
+
+endif "}}}
+
 " Vimにスタート画面を用意(vim-startify) {{{
 if neobundle#tap('vim-startify')
 
@@ -1808,6 +1812,7 @@ if neobundle#tap('unite.vim')
   let g:u_nqui = '-no-quit '
   let g:u_nsyn = '-no-sync '
   let g:u_prev = '-auto-preview '
+  let g:u_imme = '-immediately '
   let g:u_fbuf = '-buffer-name=file-buffer '
   let g:u_sbuf = '-buffer-name=search-buffer '
   let g:u_nins = '-no-start-insert '
@@ -1818,7 +1823,7 @@ if neobundle#tap('unite.vim')
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
   let g:u_opt_bu = 'Unite '       . g:u_hopt . g:u_nins
   let g:u_opt_bo = 'Unite '       . g:u_hopt
-  let g:u_opt_de = 'Unite '       . g:u_hopt
+  let g:u_opt_de = 'Unite '       . g:u_hopt            . g:u_imme
   let g:u_opt_dm = 'Unite '       . g:u_hopt
   let g:u_opt_fb = 'UniteResume ' . g:u_hopt                       . g:u_fbuf
   let g:u_opt_fg = 'Unite '       . g:u_hopt
@@ -2133,12 +2138,12 @@ if neobundle#tap('vim-easy-align')
         \   '/' : {
         \     'pattern'         : '//\+\|/\*\|\*/',
         \     'delimiter_align' : 'l',
-        \     'ignore_groups'   : ['!Comment']
+        \     'ignore_groups'   : ['!Comment'],
         \   },
         \   'h' : {
         \     'pattern'         : '\v\/\*#%(\s{4})+|#\*\/',
         \     'delimiter_align' : 'l',
-        \     'ignore_groups'   : ['!Comment']
+        \     'ignore_groups'   : ['!Comment'],
         \   },
         \ }
 
