@@ -149,9 +149,13 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 
 NeoBundle 'mhinz/vim-signify'
 
-NeoBundle 'itchyny/vim-gitbranch'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
-NeoBundleLazy 'cohama/agit.vim',      {'on_cmd' : ['Agit', 'AgitFile']}
+
+" vim-gitaと依存関係は無いが一緒にロードしたい
+NeoBundleLazy 'cohama/agit.vim', {
+      \   'depends' : 'lambdalisue/vim-gita',
+      \   'on_cmd' : ['Agit', 'AgitFile']
+      \ }
 
 "}}}
 "-------------------------------------------------------------------
@@ -1305,11 +1309,6 @@ if neobundle#tap('vim-signify')
 
 endif "}}}
 
-" VimからGitを使う(カレントブランチを表示) {{{
-if neobundle#tap('vim-gitbranch')
-
-endif "}}}
-
 " VimからGitを使う(編集, コマンド実行, vim-gita) {{{
 if neobundle#tap('vim-gita')
 
@@ -1487,10 +1486,10 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyGit()
-    if !neobundle#is_installed('vim-gitbranch')
+    if !neobundle#is_sourced('vim-gita')
       return ''
     endif
-    let l:_ = gitbranch#name()
+    let l:_ = gita#statusline#format('%lb')
     return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
   endfunction
 
