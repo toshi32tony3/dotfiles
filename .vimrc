@@ -150,7 +150,12 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
-NeoBundleLazy 'cohama/agit.vim',      {'on_cmd' : ['Agit', 'AgitFile']}
+
+" vim-gitaと依存関係は無いが一緒にロードしたい
+NeoBundleLazy 'cohama/agit.vim', {
+      \   'depends' : 'lambdalisue/vim-gita',
+      \   'on_cmd' : ['Agit', 'AgitFile']
+      \ }
 
 "}}}
 "-------------------------------------------------------------------
