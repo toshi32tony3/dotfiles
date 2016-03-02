@@ -900,6 +900,7 @@ nnoremap ZQ <Nop>
 " <C-g>u : アンドゥ単位を区切る
 " <C-@>は良く誤爆するので潰す
 " inoremap <C-@> <C-g>u<C-@>
+inoremap <C-@> <Esc>
 inoremap <C-a> <C-g>u<C-a>
 
 " :quitのショートカットは潰す
