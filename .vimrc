@@ -1856,7 +1856,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
   nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
-  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:.'       . '<CR>'
+  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:/'       . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'
   nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
