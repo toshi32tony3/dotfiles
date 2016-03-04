@@ -149,6 +149,7 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 
 NeoBundle 'mhinz/vim-signify'
 
+NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
 
 " vim-gitaと依存関係は無いが一緒にロードしたい
@@ -899,6 +900,7 @@ nnoremap ZQ <Nop>
 " <C-g>u : アンドゥ単位を区切る
 " <C-@>は良く誤爆するので潰す
 " inoremap <C-@> <C-g>u<C-@>
+inoremap <C-@> <Esc>
 inoremap <C-a> <C-g>u<C-a>
 
 " :quitのショートカットは潰す
@@ -1855,7 +1857,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
   nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
-  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:.'       . '<CR>'
+  nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:/'       . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'
   nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
