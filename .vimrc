@@ -124,14 +124,20 @@ if has('vim_starting')
     setglobal nocompatible " Vi互換モードをオフ(Vimの拡張機能を有効化)
   endif
   " neobundle.vimでプラグインを管理する
-  setglobal runtimepath+=~/.vim/bundle/neobundle.vim/
+  " →どーしてもNeoBundleCleanを使いたいので小細工してみる
+  if   isdirectory(expand('~/.vim/bundle/neobundle.vim_673be4e/'))
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim_673be4e/
+  else
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim/
+  endif
 endif
 
 " contains filetype off
 call neobundle#begin(expand('~/.vim/bundle'))
 
 " NeoBundle自体の更新をチェックする
-NeoBundleFetch 'Shougo/neobundle.vim'
+" →どーしてもNeoBundleCleanを使いたいので実質更新チェックしない書き方にしている
+NeoBundleFetch 'Shougo/neobundle.vim', {'rev' : '673be4e'}
 
 " 日本語ヘルプを卒業したいが, なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
