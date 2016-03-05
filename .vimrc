@@ -94,13 +94,13 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
-if !exists('s:scrolloffOn') | set scrolloff=100 | let s:scrolloffOn = 1 | endif
+autocmd MyAutoCmd VimEnter * let &g:scrolloff = (&lines / 2) | let s:scrolloffOn = 1
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
-    set scrolloff=100 scrolloff?
+    let &g:scrolloff = (&lines / 2)
   else
-    set scrolloff=0   scrolloff?
+    let &g:scrolloff = 0
   endif
 endfunction
 nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
