@@ -125,10 +125,10 @@ if has('vim_starting')
   endif
   " neobundle.vimでプラグインを管理する
   " →どーしてもNeoBundleCleanを使いたいので小細工してみる
-  if   isdirectory(expand('~/.vim/bundle/neobundle.vim_673be4e/'))
-    setglobal runtimepath+=~/.vim/bundle/neobundle.vim_673be4e/
+  if   isdirectory(expand('~/.vim/bundle/neobundle.vim_673be4e'))
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim_673be4e
   else
-    setglobal runtimepath+=~/.vim/bundle/neobundle.vim/
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim
   endif
 endif
 
