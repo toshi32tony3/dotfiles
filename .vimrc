@@ -694,7 +694,6 @@ if neobundle#is_installed('vim-gita')
   call s:AddMyCMap('gpl', 'Gita pull')
   call s:AddMyCMap('gps', 'Gita push')
   call s:AddMyCMap('gre', 'Gita reset')
-  call s:AddMyCMap('grs', 'Gita reset --soft')
   call s:AddMyCMap('gst', 'Gita status')
 endif
 
