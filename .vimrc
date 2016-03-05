@@ -160,7 +160,7 @@ NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
 " vim-gitaと依存関係は無いが一緒に読み込みたい
 NeoBundleLazy 'cohama/agit.vim', {
       \   'depends' : 'lambdalisue/vim-gita',
-      \   'on_cmd' : ['Agit', 'AgitFile']
+      \   'on_cmd' : ['Agit', 'AgitFile'],
       \ }
 
 "}}}
