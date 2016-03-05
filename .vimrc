@@ -98,9 +98,9 @@ autocmd MyAutoCmd VimEnter * let &g:scrolloff = (&lines / 2) | let s:scrolloffOn
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
-    let &g:scrolloff = (&lines / 2)
+    let &g:scrolloff = (&lines / 2) | set scrolloff?
   else
-    let &g:scrolloff = 0
+    let &g:scrolloff = 0            | set scrolloff?
   endif
 endfunction
 nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
