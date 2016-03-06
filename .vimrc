@@ -1563,6 +1563,9 @@ if has('kaoriya')
     else
       execute 'ScreenMode 0'
     endif
+    " 画面サイズ変更に合わせてscrolloffを調整する
+    call s:ToggleScrollOffSet()
+    call s:ToggleScrollOffSet()
   endfunction
   nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
 
