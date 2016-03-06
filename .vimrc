@@ -1629,9 +1629,9 @@ endif "}}}
 " 何番目の検索対象か／検索対象の総数を表示(vim-anzu) {{{
 if neobundle#tap('vim-anzu')
 
-  " コマンド結果出力画面にecho
-  nmap n <Plug>(anzu-n-with-echo)
-  nmap N <Plug>(anzu-N-with-echo)
+  " コマンド結果出力画面にecho, 飛び先がfoldされてたら見えるところまで開く
+  nmap n <Plug>(anzu-n-with-echo)zv
+  nmap N <Plug>(anzu-N-with-echo)zv
 
 endif "}}}
 
