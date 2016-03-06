@@ -94,13 +94,13 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
-if !exists('s:scrolloffOn') | set scrolloff=100 | let s:scrolloffOn = 1 | endif
+autocmd MyAutoCmd VimEnter * let &g:scrolloff = (winheight(0) / 2) | let s:scrolloffOn = 1
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
-    set scrolloff=100 scrolloff?
+    let &g:scrolloff = (winheight(0) / 2) | set scrolloff?
   else
-    set scrolloff=0   scrolloff?
+    let &g:scrolloff = 0                  | set scrolloff?
   endif
 endfunction
 nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
@@ -124,14 +124,20 @@ if has('vim_starting')
     setglobal nocompatible " Vi互換モードをオフ(Vimの拡張機能を有効化)
   endif
   " neobundle.vimでプラグインを管理する
-  setglobal runtimepath+=~/.vim/bundle/neobundle.vim/
+  " →どーしてもNeoBundleCleanを使いたいので小細工してみる
+  if   isdirectory(expand('~/.vim/bundle/neobundle.vim_673be4e'))
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim_673be4e
+  else
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim
+  endif
 endif
 
 " contains filetype off
 call neobundle#begin(expand('~/.vim/bundle'))
 
 " NeoBundle自体の更新をチェックする
-NeoBundleFetch 'Shougo/neobundle.vim'
+" →どーしてもNeoBundleCleanを使いたいので実質更新チェックしない書き方にしている
+NeoBundleFetch 'Shougo/neobundle.vim', {'rev' : '673be4e'}
 
 " 日本語ヘルプを卒業したいが, なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
@@ -149,13 +155,12 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 
 NeoBundle 'mhinz/vim-signify'
 
-NeoBundle 'tpope/vim-fugitive'
 NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
 
-" vim-gitaと依存関係は無いが一緒にロードしたい
+" vim-gitaと依存関係は無いが一緒に読み込みたい
 NeoBundleLazy 'cohama/agit.vim', {
       \   'depends' : 'lambdalisue/vim-gita',
-      \   'on_cmd' : ['Agit', 'AgitFile']
+      \   'on_cmd' : ['Agit', 'AgitFile'],
       \ }
 
 "}}}
@@ -679,17 +684,23 @@ if neobundle#is_installed('TweetVim')
   call s:AddMyCMap('tvs', 'TweetVimSearch')
 endif
 if neobundle#is_installed('vim-gita')
-  call s:AddMyCMap('gi', 'Gita')
+  call s:AddMyCMap( 'gb', 'Gita!')
+  call s:AddMyCMap( 'gi', 'Gita')
+  call s:AddMyCMap( 'ga', 'Gita add %')
   call s:AddMyCMap('gap', 'Gita add --patch --split')
   call s:AddMyCMap('gbl', 'Gita blame')
   call s:AddMyCMap('gbr', 'Gita branch')
   call s:AddMyCMap('gch', 'Gita checkout')
+  call s:AddMyCMap('gca', 'Gita commit --amend')
   call s:AddMyCMap('gco', 'Gita commit')
   call s:AddMyCMap('gdi', 'Gita diff')
-  call s:AddMyCMap('gds', 'Gita diff-ls')
+  call s:AddMyCMap('gds', 'Gita diff --split')
+  call s:AddMyCMap('gdl', 'Gita diff-ls')
   call s:AddMyCMap('gls', 'Gita ls')
   call s:AddMyCMap('gpl', 'Gita pull')
   call s:AddMyCMap('gps', 'Gita push')
+  call s:AddMyCMap('gre', 'Gita reset')
+  call s:AddMyCMap('grp', 'Gita reset --patch --split')
   call s:AddMyCMap('gst', 'Gita status')
 endif
 
@@ -845,7 +856,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:UpdateCtags() "{{{
     if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
     " ディレクトリを削除してから再生成
-    " call delete(g:local_rc_ctags_dir, 'rf')
+    call delete(g:local_rc_ctags_dir, 'rf')
     if !isdirectory(g:local_rc_ctags_dir)
       call    mkdir(g:local_rc_ctags_dir)
     endif
