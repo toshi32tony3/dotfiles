@@ -917,6 +917,10 @@ nnoremap ZQ <Nop>
 inoremap <C-@> <Esc>
 inoremap <C-a> <C-g>u<C-a>
 
+" アンドゥ単位を区切りつつ, <C-w>, <C-u>を使う
+inoremap <C-w> <C-g>u<C-w>
+inoremap <C-u> <C-g>u<C-u>
+
 " :quitのショートカットは潰す
 nnoremap <C-w><C-q> <Nop>
 nnoremap <C-w>q     <Nop>
