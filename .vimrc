@@ -94,7 +94,10 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
-autocmd MyAutoCmd VimEnter * let &g:scrolloff = (winheight(0) / 2) | let s:scrolloffOn = 1
+if !exists('s:scrolloffOn')
+  set scrolloff=100
+  let s:scrolloffOn = 1
+endif
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
@@ -626,7 +629,7 @@ function! s:LCD(...) "{{{
     execute 'lcd ' . a:1
   endif
   echo 'change directory to: ' .
-        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
+        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
 endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? LCD call s:LCD(<f-args>)
 
@@ -639,14 +642,15 @@ function! s:CD(...) "{{{
     execute 'cd ' . a:1
   endif
   echo 'change directory to: ' .
-        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
+        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
 endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
 
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
-  execute 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
+  let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
+  execute substitute(g:abbrev, '|', '<bar>', 'g')
   call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
 endfunction "}}}
 
@@ -687,6 +691,7 @@ if neobundle#is_installed('vim-gita')
   call s:AddMyCMap( 'gb', 'Gita!')
   call s:AddMyCMap( 'gi', 'Gita')
   call s:AddMyCMap( 'ga', 'Gita add %')
+  call s:AddMyCMap('gac', 'Gita add % | Gita commit')
   call s:AddMyCMap('gap', 'Gita add --patch --split')
   call s:AddMyCMap('gbl', 'Gita blame')
   call s:AddMyCMap('gbr', 'Gita branch')
@@ -718,6 +723,9 @@ endif
 " setglobal viewdir=~/vimfiles/view
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
+
+" バッファ選択を簡易化
+nnoremap <A-b> :<C-u>ls<CR>:buffer<Space>
 
 " タブ複製
 nnoremap ,t :<C-u>tab split<CR>
@@ -913,6 +921,10 @@ nnoremap ZQ <Nop>
 " inoremap <C-@> <C-g>u<C-@>
 inoremap <C-@> <Esc>
 inoremap <C-a> <C-g>u<C-a>
+
+" アンドゥ単位を区切りつつ, <C-w>, <C-u>を使う
+inoremap <C-w> <C-g>u<C-w>
+inoremap <C-u> <C-g>u<C-u>
 
 " :quitのショートカットは潰す
 nnoremap <C-w><C-q> <Nop>
@@ -1312,7 +1324,6 @@ if neobundle#tap('vim-signify')
     " 使わないコマンドを削除する
     if exists(':SignifyEnable')       | delcommand SignifyEnable       | endif
     if exists(':SignifyDisable')      | delcommand SignifyDisable      | endif
-    " if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
     if exists(':SignifyDebug')        | delcommand SignifyDebug        | endif
     if exists(':SignifyDebugDiff')    | delcommand SignifyDebugDiff    | endif
     if exists(':SignifyDebugUnknown') | delcommand SignifyDebugUnknown | endif
@@ -1564,6 +1575,9 @@ if has('kaoriya')
     else
       execute 'ScreenMode 0'
     endif
+    " 画面サイズ変更に合わせてscrolloffを調整する
+    silent call s:ToggleScrollOffSet()
+    silent call s:ToggleScrollOffSet()
   endfunction
   nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
 
@@ -1624,9 +1638,9 @@ endif "}}}
 " 何番目の検索対象か／検索対象の総数を表示(vim-anzu) {{{
 if neobundle#tap('vim-anzu')
 
-  " コマンド結果出力画面にecho
-  nmap n <Plug>(anzu-n-with-echo)
-  nmap N <Plug>(anzu-N-with-echo)
+  " コマンド結果出力画面にecho, 飛び先がfoldされてたら見えるところまで開く
+  nmap n <Plug>(anzu-n-with-echo)zv
+  nmap N <Plug>(anzu-N-with-echo)zv
 
 endif "}}}
 
@@ -1710,8 +1724,7 @@ endif "}}}
 " Web検索オペレータ(vim-operator-openbrowser) {{{
 if neobundle#tap('vim-operator-openbrowser')
 
-  nmap <A-l> <Plug>(operator-openbrowser)
-  xmap <A-l> <Plug>(operator-openbrowser)
+  map <A-l> <Plug>(operator-openbrowser)
 
 endif "}}}
 
@@ -1742,8 +1755,7 @@ endif "}}}
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  nmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
-  xmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
+  map <A-h> <Plug>(operator-quickhl-manual-this-motion)
 
   " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
   nmap <A-h><A-h> <Plug>(quickhl-manual-this)
