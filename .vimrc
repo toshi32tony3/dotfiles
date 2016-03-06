@@ -722,6 +722,9 @@ endif
 " autocmd MyAutoCmd BufWritePost ?* mkview
 " autocmd MyAutoCmd BufReadPost  ?* loadview
 
+" バッファ選択を簡易化
+nnoremap <A-b> :<C-u>ls<CR>:buffer<Space>
+
 " タブ複製
 nnoremap ,t :<C-u>tab split<CR>
 
