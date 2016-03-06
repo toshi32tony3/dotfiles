@@ -1312,7 +1312,6 @@ if neobundle#tap('vim-signify')
     " 使わないコマンドを削除する
     if exists(':SignifyEnable')       | delcommand SignifyEnable       | endif
     if exists(':SignifyDisable')      | delcommand SignifyDisable      | endif
-    " if exists(':SignifyToggle')       | delcommand SignifyToggle       | endif
     if exists(':SignifyDebug')        | delcommand SignifyDebug        | endif
     if exists(':SignifyDebugDiff')    | delcommand SignifyDebugDiff    | endif
     if exists(':SignifyDebugUnknown') | delcommand SignifyDebugUnknown | endif
@@ -1710,8 +1709,7 @@ endif "}}}
 " Web検索オペレータ(vim-operator-openbrowser) {{{
 if neobundle#tap('vim-operator-openbrowser')
 
-  nmap <A-l> <Plug>(operator-openbrowser)
-  xmap <A-l> <Plug>(operator-openbrowser)
+  map <A-l> <Plug>(operator-openbrowser)
 
 endif "}}}
 
@@ -1742,8 +1740,7 @@ endif "}}}
 " 自由にテキストハイライト(vim-quickhl) {{{
 if neobundle#tap('vim-quickhl')
 
-  nmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
-  xmap <A-h> <Plug>(operator-quickhl-manual-this-motion)
+  map <A-h> <Plug>(operator-quickhl-manual-this-motion)
 
   " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
   nmap <A-h><A-h> <Plug>(quickhl-manual-this)
