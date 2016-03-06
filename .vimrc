@@ -629,7 +629,7 @@ function! s:LCD(...) "{{{
     execute 'lcd ' . a:1
   endif
   echo 'change directory to: ' .
-        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
+        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
 endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? LCD call s:LCD(<f-args>)
 
@@ -642,14 +642,15 @@ function! s:CD(...) "{{{
     execute 'cd ' . a:1
   endif
   echo 'change directory to: ' .
-        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\','g'), '~', 'g')
+        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
 endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
 
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
-  execute 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
+  let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
+  execute substitute(g:abbrev, '|', '<bar>', 'g')
   call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
 endfunction "}}}
 
@@ -690,6 +691,7 @@ if neobundle#is_installed('vim-gita')
   call s:AddMyCMap( 'gb', 'Gita!')
   call s:AddMyCMap( 'gi', 'Gita')
   call s:AddMyCMap( 'ga', 'Gita add %')
+  call s:AddMyCMap('gac', 'Gita add % | Gita commit')
   call s:AddMyCMap('gap', 'Gita add --patch --split')
   call s:AddMyCMap('gbl', 'Gita blame')
   call s:AddMyCMap('gbr', 'Gita branch')
