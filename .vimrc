@@ -158,11 +158,14 @@ NeoBundleLazy 'Shougo/vimproc.vim', {
 
 NeoBundle 'mhinz/vim-signify'
 
-NeoBundleLazy 'lambdalisue/vim-gita', {'rev' : 'alpha-3', 'on_cmd' : 'Gita'}
+" agit.vimと一緒に読み込む
+NeoBundleLazy 'lambdalisue/vim-gita', {
+      \ 'rev'       : 'alpha-3',
+      \ 'on_source' : 'agit.vim',
+      \ 'on_cmd'    : 'Gita',
+      \ }
 
-" vim-gitaと依存関係は無いが一緒に読み込みたい
 NeoBundleLazy 'cohama/agit.vim', {
-      \   'depends' : 'lambdalisue/vim-gita',
       \   'on_cmd' : ['Agit', 'AgitFile'],
       \ }
 
@@ -202,13 +205,12 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 " move {{{
 
 NeoBundleLazy 'haya14busa/incsearch.vim'
-NeoBundle 'haya14busa/incsearch-index.vim', {'depends' : 'haya14busa/incsearch.vim'}
 
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
-NeoBundle 'deris/vim-shot-f'
-NeoBundle 'justinmk/vim-sneak'
+NeoBundleLazy 'deris/vim-shot-f',   {'on_map' : '<Plug>'}
+NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
 
 NeoBundle 'kshenoy/vim-signature'
 
@@ -282,9 +284,9 @@ NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
-NeoBundle 'hewes/unite-gtags',    {'depends' : 'Shougo/unite.vim'}
-NeoBundle 'tacroe/unite-mark',    {'depends' : 'Shougo/unite.vim'}
-NeoBundle 'Shougo/unite-outline', {'depends' : 'Shougo/unite.vim'}
+NeoBundleLazy 'hewes/unite-gtags',    {'on_source' : 'unite.vim'}
+NeoBundleLazy 'tacroe/unite-mark',    {'on_source' : 'unite.vim'}
+NeoBundleLazy 'Shougo/unite-outline', {'on_source' : 'unite.vim'}
 
 NeoBundleLazy 'Shougo/vimshell.vim', {
       \   'depends' : 'Shougo/unite.vim',
@@ -1586,16 +1588,8 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  noremap <silent> <expr> z/ incsearch#go({'command' : '/', 'is_stay' : 1})
-  noremap <silent> <expr> z? incsearch#go({'command' : '?', 'is_stay' : 1})
-
-endif "}}}
-
-" incsearch.vimを更にパワーアップ(incsearch-index.vim) {{{
-if neobundle#tap('incsearch-index.vim')
-
-  map g/ <Plug>(incsearch-index-/)
-  map g? <Plug>(incsearch-index-?)
+  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
 
 endif "}}}
 
@@ -1647,6 +1641,11 @@ endif "}}}
 " f検索を便利に(vim-shot-f) {{{
 if neobundle#tap('vim-shot-f')
 
+  map f <Plug>(shot-f-f)
+  map F <Plug>(shot-f-F)
+  map t <Plug>(shot-f-t)
+  map T <Plug>(shot-f-T)
+
 endif "}}}
 
 " f検索の2文字版(vim-sneak) {{{
@@ -1657,6 +1656,9 @@ if neobundle#tap('vim-sneak')
 
   " smartcase
   let g:sneak#use_ic_scs = 1
+
+  map s <Plug>Sneak_s
+  map S <Plug>Sneak_S
 
 endif "}}}
 
