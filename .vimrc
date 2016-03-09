@@ -1346,7 +1346,7 @@ endif "}}}
 if neobundle#tap('agit.vim')
 
   let g:agit_enable_auto_show_commit = 0
-  let g:agit_max_log_lines = 50
+  let g:agit_max_log_lines = 200
 
   function! s:AgitSettings()
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
