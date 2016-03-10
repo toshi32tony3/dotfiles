@@ -60,7 +60,9 @@ nnoremap <Leader>ff :<C-u>e ++fileformat=
 setglobal noswapfile
 
 " ファイル書き込み時にバックアップファイルを生成する(デフォルトの設定と同じ)
-setglobal nobackup writebackup
+" →どうしてもネットワーク上ファイルの書き込みが遅くなってしまう...
+" setglobal nobackup writebackup
+setglobal nobackup nowritebackup
 
 " 元ファイルをコピーしてバックアップにする&更新を元ファイルに書き込む
 setglobal backupcopy=yes
@@ -1312,9 +1314,9 @@ if neobundle#tap('vim-signify')
 
   " use git only
   let g:signify_vcs_list = ['git']
+  let g:signify_skip_filetype = {'vimfiler' : 1}
 
   " let g:signify_vcs_list = ['git', 'cvs']
-  " let g:signify_disable_by_default = 1
 
   " Hunk text object
   omap ic <Plug>(signify-motion-inner-pending)
