@@ -709,9 +709,6 @@ if neobundle#is_installed('vim-gita')
   call s:AddMyCMap('gst', 'Gita status')
 endif
 
-" " 開いたファイルと同じ場所へ移動する
-" " → startify/vimfiler/:LCD/:CDで十分
-" autocmd MyAutoCmd BufEnter * execute 'lcd ' fnameescape(expand('%:p:h'))
 " " 最後のカーソル位置を記憶していたらジャンプ
 " " → Gdiff時に不便なことがあったのでコメントアウト
 " autocmd MyAutoCmd BufRead * silent execute 'normal! `"'
