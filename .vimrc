@@ -967,8 +967,8 @@ nnoremap <C-Right> :cnext<CR>
 nnoremap <C-Up>    :lprevious<CR>
 nnoremap <C-Down>  :lnext<CR>
 
+"   Alt + カーソルキーでUnitePrevious/UniteNext
 if neobundle#is_installed('unite.vim')
-  " Alt + カーソルキーでUnitePrevious/UniteNext
   nnoremap <silent> <A-Left>  :UnitePrevious<CR>
   nnoremap <silent> <A-Right> :UniteNext<CR>
 endif
