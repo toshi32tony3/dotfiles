@@ -96,16 +96,13 @@ setglobal autoread
 setglobal shortmess=aoOotTWI
 
 " カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
-if !exists('s:scrolloffOn')
-  set scrolloff=100
-  let s:scrolloffOn = 1
-endif
+if !exists('s:scrolloffOn') | set scrolloff=100 | let s:scrolloffOn = 1 | endif
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
   if  s:scrolloffOn
-    let &g:scrolloff = (winheight(0) / 2) | set scrolloff?
+    set scrolloff=100 | set scrolloff?
   else
-    let &g:scrolloff = 0                  | set scrolloff?
+    set scrolloff=0   | set scrolloff?
   endif
 endfunction
 nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
@@ -1591,9 +1588,6 @@ if has('kaoriya')
     else
       execute 'ScreenMode 0'
     endif
-    " 画面サイズ変更に合わせてscrolloffを調整する
-    silent call s:ToggleScrollOffSet()
-    silent call s:ToggleScrollOffSet()
   endfunction
   nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
 
