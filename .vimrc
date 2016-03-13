@@ -550,40 +550,24 @@ noremap <silent> k gk
 
 " :cdのディレクトリ名の補完に'cdpath'を使うようにする
 " http://whileimautomaton.net/2007/09/24141900
-function! s:CommandCompleteCDPath(arglead, cmdline, cursorpos) "{{{
+function! s:CommandCompleteCDPath(argLead, cmdLine, cursorPos) "{{{
   let l:pattern = substitute($HOME, '\\', '\\\\','g')
-  return split(substitute(globpath(&cdpath, a:arglead . '*/'), l:pattern, '~', 'g'), "\n")
+  return split(substitute(globpath(&cdpath, a:argLead . '*/'), l:pattern, '~', 'g'), "\n")
 endfunction "}}}
-
-" 引数なし : 現在開いているファイルのディレクトリに移動
-" 引数あり : 指定したディレクトリに移動
-function! s:LCD(...) "{{{
-  if a:0 == 0
-    execute 'lcd ' . expand('%:p:h')
-  else
-    execute 'lcd ' . a:1
-  endif
-  echo 'change directory to: ' .
-        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
-endfunction "}}}
-command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? LCD call s:LCD(<f-args>)
 
 " 引数なし : 現在開いているファイルのディレクトリに移動
 " 引数あり : 指定したディレクトリに移動
 function! s:CD(...) "{{{
-  if a:0 == 0
-    execute 'cd ' . expand('%:p:h')
-  else
-    execute 'cd ' . a:1
-  endif
-  echo 'change directory to: ' .
-        \ substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
+  if a:0 == 0 | execute 'cd ' . expand('%:p:h')
+  else        | execute 'cd ' . a:1             | endif
+  echo substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
 endfunction "}}}
 command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
 
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
+  if !exists(':' . split(a:alternateName, "\<Space>")[0]) | return | endif
   let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
   execute substitute(g:abbrev, '|', '<bar>', 'g')
   call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
@@ -591,9 +575,9 @@ endfunction "}}}
 
 " リストに登録されている   : 登録されたコマンド名を返す
 " リストに登録されていない : vim-ambicmdで変換を試みる
-function! s:MyCMap(cmdline) "{{{
+function! s:MyCMap(cmdLine) "{{{
   for [originalPattern, alternateName] in s:MyCMapEntries
-    if a:cmdline =~# originalPattern
+    if a:cmdLine =~# originalPattern
       return "\<C-u>" . alternateName . "\<Space>"
     endif
   endfor
@@ -606,42 +590,33 @@ cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
 
 " リストへの変換候補登録(My Command)
 call s:AddMyCMap( 'cd',  'CD')
-call s:AddMyCMap('lcd', 'LCD')
 call s:AddMyCMap( 'CD',  'cd')
-call s:AddMyCMap('LCD', 'lcd')
-call s:AddMyCMap('cfd', 'ClipFileDir')
-call s:AddMyCMap( 'uc', 'UpdateCtags')
-call s:AddMyCMap( 'pd', 'PutDateTime')
 call s:AddMyCMap( 'cm', 'ClearMessage')
+call s:AddMyCMap( 'pd', 'PutDateTime')
+call s:AddMyCMap( 'uc', 'UpdateCtags')
+call s:AddMyCMap('cfd', 'ClipFileDir')
 
 " リストへの変換候補登録(Plugin's command)
-if neobundle#is_installed('scratch.vim')
-  call s:AddMyCMap('sc',  'Scratch')
-  call s:AddMyCMap('scp', 'ScratchPreview')
-endif
-if neobundle#is_installed('TweetVim')
-  call s:AddMyCMap('tvs', 'TweetVimSearch')
-endif
-if neobundle#is_installed('vim-gita')
-  call s:AddMyCMap( 'gi', 'Gita')
-  call s:AddMyCMap( 'gb', 'Gita!')
-  call s:AddMyCMap( 'ga', 'Gita add %')
-  call s:AddMyCMap( 'gc', 'Gita commit')
-  call s:AddMyCMap('gap', 'Gita add --patch --split')
-  call s:AddMyCMap('gbl', 'Gita blame')
-  call s:AddMyCMap('gbr', 'Gita branch')
-  call s:AddMyCMap('gch', 'Gita checkout')
-  call s:AddMyCMap('gca', 'Gita commit --amend')
-  call s:AddMyCMap('gdi', 'Gita diff')
-  call s:AddMyCMap('gds', 'Gita diff --split')
-  call s:AddMyCMap('gdl', 'Gita diff-ls')
-  call s:AddMyCMap('gls', 'Gita ls')
-  call s:AddMyCMap('gpl', 'Gita pull')
-  call s:AddMyCMap('gps', 'Gita push')
-  call s:AddMyCMap('gre', 'Gita reset')
-  call s:AddMyCMap('grp', 'Gita reset --patch --split')
-  call s:AddMyCMap('gst', 'Gita status')
-endif
+call s:AddMyCMap('sc',  'Scratch')
+call s:AddMyCMap('scp', 'ScratchPreview')
+call s:AddMyCMap('tvs', 'TweetVimSearch')
+call s:AddMyCMap( 'gi', 'Gita')
+call s:AddMyCMap( 'ga', 'Gita add %')
+call s:AddMyCMap( 'gc', 'Gita commit')
+call s:AddMyCMap('gap', 'Gita add --patch --split')
+call s:AddMyCMap('gbl', 'Gita blame')
+call s:AddMyCMap('gbr', 'Gita branch')
+call s:AddMyCMap('gch', 'Gita checkout')
+call s:AddMyCMap('gca', 'Gita commit --amend')
+call s:AddMyCMap('gdi', 'Gita diff')
+call s:AddMyCMap('gds', 'Gita diff --split')
+call s:AddMyCMap('gdl', 'Gita diff-ls')
+call s:AddMyCMap('gls', 'Gita ls')
+call s:AddMyCMap('gpl', 'Gita pull')
+call s:AddMyCMap('gps', 'Gita push')
+call s:AddMyCMap('gre', 'Gita reset')
+call s:AddMyCMap('grp', 'Gita reset --patch --split')
+call s:AddMyCMap('gst', 'Gita status')
 
 " " 最後のカーソル位置を記憶していたらジャンプ
 " " → Gdiff時に不便なことがあったのでコメントアウト
