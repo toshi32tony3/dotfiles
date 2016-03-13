@@ -924,12 +924,9 @@ command! ClearJumpList for s:n in range(250) | mark '     | endfor
 let s:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
   " normalかvisualの時のみ判定
-  let     l:currentMode  = mode(1)
-  if      l:currentMode !=  'n'  &&
-        \ l:currentMode !=  'no' &&
-        \ l:currentMode !=# 'v'  &&
-        \ l:currentMode !=# 'V'  &&
-        \ l:currentMode !=  "\<C-v>"
+  let     l:mode  = mode(1)
+  if      l:mode !=  'n' && l:mode !=  'no' &&
+        \ l:mode !=# 'v' && l:mode !=# 'V'  && l:mode != "\<C-v>"
     return
   endif
 
@@ -1493,14 +1490,11 @@ if neobundle#tap('vim-asterisk')
 
   " star-search対象を選択レジスタに入れる
   function! s:ClipCword(data) "{{{
-    let     l:currentMode  = mode(1)
-    if      l:currentMode == 'n' ||
-          \ l:currentMode == 'no'
+    let     l:mode  = mode(1)
+    if      l:mode == 'n' || l:mode == 'no'
       let @* = a:data
       return ''
-    elseif  l:currentMode ==# 'v' ||
-          \ l:currentMode ==# 'V' ||
-          \ l:currentMode ==  "\<C-v>"
+    elseif  l:mode ==# 'v' || l:mode ==# 'V' || l:mode == "\<C-v>"
       return "\<Esc>gvygv"
     endif
     return ''
