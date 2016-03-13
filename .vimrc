@@ -1316,14 +1316,14 @@ if neobundle#tap('eskk.vim')
 
   let g:eskk#directory = '~/.cache/eskk'
   let g:eskk#dictionary = {
-        \   'path'    : '~/dotfiles/.skk-jisyo',
-        \   'sorted'  : 0,
-        \   'encoding': 'utf-8',
+        \   'path'     : '~/dotfiles/.skk-jisyo',
+        \   'sorted'   : 0,
+        \   'encoding' : 'utf-8',
         \ }
   let g:eskk#large_dictionary = {
-        \   'path'    : '~/vimfiles/dict/SKK-JISYO.L',
-        \   'sorted'  : 1,
-        \   'encoding': 'euc-jp',
+        \   'path'     : '~/vimfiles/dict/SKK-JISYO.L',
+        \   'sorted'   : 1,
+        \   'encoding' : 'euc-jp',
         \ }
 
   " " neocompleteを使わない場合は設定不要
@@ -1358,17 +1358,6 @@ if neobundle#tap('eskk.vim')
     call eskk#register_mode_table('hira', t)
   endfunction
   autocmd MyAutoCmd User eskk-initialize-pre call s:EskkInitialPreSettings()
-
-  function! neobundle#hooks.on_post_source(bundle)
-    " wake up!
-    " → 1発目の処理がeskk#statusline()だと不都合なので, eskk#toggle()を2連発
-    call eskk#toggle()
-    call eskk#toggle()
-
-    " 処理順を明確にするため, neobundle#hooks.on_post_source()を
-    " 使ってプラグインの読み込み完了フラグを立てることにした
-    let s:IsEskkLoaded = 1
-  endfunction
 
 endif "}}}
 
@@ -1432,9 +1421,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyGit()
-    if !neobundle#is_sourced('vim-gita')
-      return ''
-    endif
+    if !neobundle#is_sourced('vim-gita') | return '' | endif
     let l:_ = gita#statusline#format('%lb')
     return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
   endfunction
@@ -1472,14 +1459,10 @@ endif "}}}
 if neobundle#tap('vim-fontzoom')
 
   nnoremap ,f :<C-u>Fontzoom!<CR>
-
-  " for Lazy
-  let g:fontzoom_no_default_key_mappings = 1
   nmap + <Plug>(fontzoom-larger)
   nmap - <Plug>(fontzoom-smaller)
 
-  " vim-fontzoomには, 以下のデフォルトキーマッピングが設定されている
-  " → しかし, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい。残念。
+  " 残念だが, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
   " → https://github.com/vim-jp/issues/issues/73
   nmap <C-ScrollWheelUp>   <Plug>(fontzoom-larger)
   nmap <C-ScrollWheelDown> <Plug>(fontzoom-smaller)
@@ -1492,11 +1475,8 @@ if has('kaoriya')
   if !exists('s:fullscreenOn') | let s:fullscreenOn = 0 | endif
   function! s:ToggleScreenMode()
     let s:fullscreenOn = (s:fullscreenOn + 1) % 2
-    if  s:fullscreenOn
-      execute 'ScreenMode 6'
-    else
-      execute 'ScreenMode 0'
-    endif
+    if  s:fullscreenOn | execute 'ScreenMode 6'
+    else               | execute 'ScreenMode 0' | endif
   endfunction
   nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
 
@@ -1532,17 +1512,10 @@ if neobundle#tap('vim-asterisk')
   endfunction "}}}
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
-  if neobundle#is_installed('vim-anzu')
-    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
-    map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-    map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
-  else
-    map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)
-    map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)
-    map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)
-    map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)
-  endif
+  map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+  map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
+  map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+  map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
 
 endif "}}}
 
@@ -1582,13 +1555,8 @@ endif "}}}
 " Vimのマーク機能を使いやすく(vim-signature) {{{
 if neobundle#tap('vim-signature')
 
-  " " お試しとして, グローバルマークだけ使うようにしてみる
-  " " → viminfoに直接書き込まれるためか, マークの削除が反映されないことが多々
-  " let g:SignatureIncludeMarks = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-  " _viminfoファイルからグローバルマークの削除を行う
-  " → Unix系だと「~/.viminfo」, Windowsだと「~/_viminfo」を対象とする
-  " → Windowsでは_viminfoが書き込み禁止になり削除失敗するので無効化する
+  " viminfoからグローバルマークを削除する設定
+  " → Windowsではviminfoが書き込み禁止になり削除失敗するので無効化する
   let g:SignatureForceRemoveGlobal = 0
 
   " これだけあれば十分
@@ -1826,7 +1794,6 @@ if neobundle#tap('unite.vim')
     " unite.vimのデフォルトコンテキストを設定する
     " http://d.hatena.ne.jp/osyo-manga/20140627
     " → なんだかんだ非同期で処理させる必要は無い気がする
-    " → emptyの時にメッセージ通知を出せるか調べる
     call unite#custom#profile('default', 'context', {
           \   'no_empty'         : 1,
           \   'no_quit'          : 0,
@@ -1952,8 +1919,6 @@ if neobundle#tap('scratch.vim')
   let g:scratch_filetype = 'scratch'
   let g:scratch_height = 10
 
-  " for Lazy
-  let g:scratch_no_mappings = 1
   nmap gs <Plug>(scratch-insert-reuse)
   xmap gs <Plug>(scratch-selection-reuse)
   nmap gS <Plug>(scratch-insert-clear)
@@ -1976,9 +1941,9 @@ endif "}}}
 if neobundle#tap('dicwin-vim')
 
   let g:dicwin_no_default_mappings = 1
-  nmap <A-k>      <Nop>
+  nnoremap <A-k>  <Nop>
+  inoremap <A-k>  <Nop>
   nmap <A-k><A-k> <Plug>(dicwin-cword)
-  imap <A-k>      <Nop>
   imap <A-k><A-k> <Plug>(dicwin-cword-i)
   nmap <A-k>c     <Plug>(dicwin-close)
   imap <A-k>c     <Plug>(dicwin-close-i)
@@ -2055,8 +2020,6 @@ if neobundle#tap('memolist.vim')
   let g:memolist_path = '~/memo'
   let g:memolist_memo_suffix = 'md'
   let g:memolist_prompt_tags = 1
-
-  " カテゴリまで決めるの面倒なので...
   let g:memolist_prompt_categories = 0
 
   " markdownテンプレートを指定
