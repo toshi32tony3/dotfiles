@@ -924,7 +924,7 @@ command! ClearMessage  for s:n in range(250) | echomsg '' | endfor
 " :jumplistを空にする
 command! ClearJumpList for s:n in range(250) | mark '     | endfor
 
-" キーリピート時のCursorMoved autocmdを無効にする, 行移動を検出する
+" 指定時間毎に発火するCursorMoved / LineChangedを追加
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
 let s:throttleTimeSpan = 200
 function! s:OnCursorMove() "{{{
