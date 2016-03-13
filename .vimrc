@@ -1969,7 +1969,7 @@ if neobundle#tap('unite-outline')
 
 endif "}}}
 
-" Vim上で動くシェル (vimshell.vim) {{{
+" Vim上で動くシェル(vimshell.vim) {{{
 if neobundle#tap('vimshell.vim')
 
   " 動的プロンプトの設定
