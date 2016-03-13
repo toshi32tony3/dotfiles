@@ -1139,20 +1139,20 @@ autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
 let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
 nnoremap <silent> ]f :<C-u>for i in range(v:count1) <bar>
-      \        call search(g:cFuncUsePattern, 's')  <bar> endfor<CR>
+      \ call search(g:cFuncUsePattern, 's')         <bar> endfor<CR>
 nnoremap <silent> [f :<C-u>for i in range(v:count1) <bar>
-      \        call search(g:cFuncUsePattern, 'bs') <bar> endfor<CR>
+      \ call search(g:cFuncUsePattern, 'bs')        <bar> endfor<CR>
 nnoremap <silent> ]F :<C-u>for i in range(v:count1) <bar>
-      \        call search(g:cFuncDefPattern, 's')  <bar> endfor<CR>
+      \ call search(g:cFuncDefPattern, 's')         <bar> endfor<CR>
 nnoremap <silent> [F :<C-u>for i in range(v:count1) <bar>
-      \        call search(g:cFuncDefPattern, 'bs') <bar> endfor<CR>
+      \ call search(g:cFuncDefPattern, 'bs')        <bar> endfor<CR>
 
 " ブラケットの前の単語にジャンプ
 let g:bracketPattern = '\v\zs<\w+>\ze\('
 nnoremap <silent> ]b :<C-u>for i in range(v:count1) <bar>
-      \         call search(g:bracketPattern, 's')  <bar> endfor<CR>
+      \ call search(g:bracketPattern, 's')          <bar> endfor<CR>
 nnoremap <silent> [b :<C-u>for i in range(v:count1) <bar>
-      \         call search(g:bracketPattern, 'bs') <bar> endfor<CR>
+      \ call search(g:bracketPattern, 'bs')         <bar> endfor<CR>
 
 " Cの関数名取得
 let s:currentFunc = ''
