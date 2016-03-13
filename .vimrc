@@ -316,11 +316,6 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 
 NeoBundleLazy 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
 
-" " 本家 : 'jceb/vim-hier'
-" NeoBundle 'pocke/vim-hier'
-" NeoBundle 'osyo-manga/shabadou.vim'
-" NeoBundle 'osyo-manga/vim-watchdogs'
-
 "}}}
 "-------------------------------------------------------------------
 
@@ -2104,34 +2099,6 @@ if neobundle#tap('vim-quickrun')
   noremap <Leader>qq :<C-u>QuickRun -hook/time/enable 1
   noremap <Leader>qt :<C-u>QuickRun -hook/time/enable 1 -type<Space>
   noremap <Leader>qa :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
-
-endif "}}}
-
-" Quickfixに表示されている行を強調表示(vim-hier) {{{
-if neobundle#tap('vim-hier')
-
-endif "}}}
-
-" quickrun-hook集(shabadou.vim) {{{
-if neobundle#tap('shabadou.vim')
-
-endif "}}}
-
-" Vimで自動構文チェック(vim-watchdogs) {{{
-if neobundle#tap('vim-watchdogs')
-  " Caution: 裏で実行した結果を反映しているのか, 入力待ち系の処理があると固まる
-
-  let g:watchdogs_check_BufWritePost_enable = 1
-  let g:watchdogs_check_BufWritePost_enables = {
-        \   'c'    : 1,
-        \   'ruby' : 1,
-        \ }
-
-  if neobundle#is_installed('vim-quickrun')
-    " quickrun_configにwatchdogs.vimの設定を追加
-    call watchdogs#setup(g:quickrun_config)
-
-  endif
 
 endif "}}}
 
