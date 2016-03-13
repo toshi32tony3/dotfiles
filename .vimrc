@@ -17,13 +17,11 @@ noremap [Leader]<Space>       <Nop>
 map             <LocalLeader> [Leader]
 noremap [Leader]<LocalLeader> <Nop>
 
-" vimrc内全体で使うaugroupを定義
-augroup MyAutoCmd
+augroup MyAutoCmd " vimrc内全体で使うaugroupを定義
   autocmd!
 augroup END
 
-" SID取得関数を定義
-function! s:SID()
+function! s:SID() " SID取得関数を定義
   return matchstr(expand('<sfile>'), '<SNR>\d_')
 endfunction
 
@@ -44,72 +42,44 @@ endif
 " setglobal fileencoding=utf-8
 
 " 読み込み時の文字エンコーディング候補
-if has('kaoriya')
-  setglobal fileencodings=guess
-else
-  setglobal fileencodings=cp932,euc-jp,utf-8
-endif
+if has('kaoriya') | setglobal fileencodings=guess
+else              | setglobal fileencodings=cp932,euc-jp,utf-8 | endif
 
-" 文字エンコーディングを指定してファイルを開き直す
+" 文字エンコーディング/改行コードを指定してファイルを開き直す
 nnoremap <Leader>en :<C-u>e ++encoding=
-
-"           改行コードを指定してファイルを開き直す
 nnoremap <Leader>ff :<C-u>e ++fileformat=
 
-" スワップファイルは作らない
-setglobal noswapfile
-
-" ファイル書き込み時にバックアップファイルを生成する(デフォルトの設定と同じ)
-" →どうしてもネットワーク上ファイルの書き込みが遅くなってしまう...
-" setglobal nobackup writebackup
-setglobal nobackup nowritebackup
-
-" 元ファイルをコピーしてバックアップにする&更新を元ファイルに書き込む
-setglobal backupcopy=yes
+" ネットワーク上ファイルの書き込みが遅くなるので, いろいろ作らない
+setglobal nobackup nowritebackup noswapfile
 
 " Vim生成物の生成先ディレクトリ指定
 let s:saveUndoDir = expand('~/vimfiles/undo')
 if !isdirectory(s:saveUndoDir) | call mkdir(s:saveUndoDir) | endif
-if has('persistent_undo')
+if has('persistent_undo') |
   let &g:undodir = s:saveUndoDir
   setglobal undofile
 endif
 
 " Windowsは_viminfo, 他は.viminfoとする
-if has('win32') || has('win64')
-  setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
-else
-  setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo
-endif
+if has('win32') | setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
+else            | setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo | endif
 
-setglobal nospell          " デフォルトではスペルチェックしない
-setglobal spelllang=en,cjk " 日本語はスペルチェックから除外
-setglobal spellfile=~/dotfiles/en.utf-8.add
-
-" コマンドと検索の履歴は多めに保持できるようにしておく
-setglobal history=1000
-
-" 開いているファイルがVimの外部で変更された時, 自動的に読み直す
-setglobal autoread
-
-" メッセージ省略設定
-setglobal shortmess=aoOotTWI
+" デフォルトではスペルチェックしない
+setglobal nospell spelllang=en,cjk spellfile=~/dotfiles/en.utf-8.add
+setglobal history=1000       " コマンドと検索の履歴は多めに保持できるようにする
+setglobal autoread           " ファイルが外部で変更された時, 自動的に読み直す
+setglobal shortmess=aoOotTWI " メッセージ省略設定
 
 " カーソル上下に表示する最小の行数(大きい値:カーソル移動時に必ず画面再描画)
 if !exists('s:scrolloffOn') | set scrolloff=100 | let s:scrolloffOn = 1 | endif
 function! s:ToggleScrollOffSet()
   let s:scrolloffOn = (s:scrolloffOn + 1) % 2
-  if  s:scrolloffOn
-    set scrolloff=100 | set scrolloff?
-  else
-    set scrolloff=0   | set scrolloff?
-  endif
+  if  s:scrolloffOn | set scrolloff=100 | set scrolloff?
+  else              | set scrolloff=0   | set scrolloff? | endif
 endfunction
 nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
 
-" vimdiff用オプション
-" filler   : 埋め合わせ行を表示する
-" vertical : 縦分割する
+" vimdiff用オプション(filler : 埋め合わせ行を表示する / vertical : 縦分割する)
 setglobal diffopt=filler,vertical
 
 "}}}
@@ -133,12 +103,10 @@ if has('vim_starting')
     setglobal runtimepath+=~/.vim/bundle/neobundle.vim
   endif
 endif
-
-" contains filetype off
 call neobundle#begin(expand('~/.vim/bundle'))
 
 " NeoBundle自体の更新をチェックする
-" →どーしてもNeoBundleCleanを使いたいので実質更新チェックしない書き方にしている
+" →どーしてもNeoBundleCleanを使いたいので更新チェックしない
 NeoBundleFetch 'Shougo/neobundle.vim', {'rev' : '673be4e'}
 
 " 日本語ヘルプを卒業したいが, なかなかできない
@@ -159,14 +127,11 @@ NeoBundle 'mhinz/vim-signify'
 
 " agit.vimと一緒に読み込む
 NeoBundleLazy 'lambdalisue/vim-gita', {
-      \ 'rev'       : 'alpha-3',
-      \ 'on_source' : 'agit.vim',
-      \ 'on_cmd'    : 'Gita',
+      \   'rev'       : 'alpha-3',
+      \   'on_source' : 'agit.vim',
+      \   'on_cmd'    : 'Gita',
       \ }
-
-NeoBundleLazy 'cohama/agit.vim', {
-      \   'on_cmd' : ['Agit', 'AgitFile'],
-      \ }
+NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 
 "}}}
 "-------------------------------------------------------------------
@@ -317,7 +282,7 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {'on_map' : [['ni', '<Plug>']]}
 
 NeoBundleLazy 'tyru/open-browser.vim', {
       \   'on_map' : '<Plug>(open',
-      \   'on_cmd' : ['OpenBrowser', 'OpenBrowserSearch', 'OpenBrowserSmartSearch'],
+      \   'on_cmd' : ['OpenBrowserSearch'],
       \ }
 
 NeoBundleLazy 'basyura/twibill.vim'
@@ -413,13 +378,7 @@ setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追�
 " d : current and included files for defined name or macro
 "     → インクルードファイルが多いと時間がかかるので汎用補完に含めない
 setglobal complete=.,w,b,u,U
-
-" 補完オプション(completeopt)
-" menuone : 対象が一つでもポップアップを表示
-setglobal completeopt=menuone
-
-setglobal noinfercase  " 補完時にマッチした単語をそのまま挿入
-setglobal pumheight=10 " 補完候補は一度に10個まで表示
+setglobal completeopt=menuone noinfercase pumheight=10
 
 " コマンドライン補完設定
 setglobal wildmenu wildmode=full
@@ -428,18 +387,18 @@ setglobal wildmenu wildmode=full
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
+" 自動整形設定(formatoptions)
+" Default: formatoptions=tcq
+" c : textwidthを使ってコメントを自動折返 + コメント行を継続
 " j : 行連結時にコメントリーダーを削除
 " l : insertモードの自動改行を無効化
 " m : 整形時, 255よりも大きいマルチバイト文字間でも改行する
 " q : gqでコメント行を整形
+" t : textwidthを使ってテキストを自動折返
 " B : 行連結時に, マルチバイト文字の前後に空白を挿入しない
 " M : 行連結時に, マルチバイト文字同士の間に空白を挿入しない
-autocmd MyAutoCmd BufEnter * setlocal formatoptions=jlmqBM
-
-" gqで使うtextwidthを設定
+autocmd MyAutoCmd BufEnter * setlocal formatoptions=cjlmqBM
 autocmd MyAutoCmd BufEnter * setlocal textwidth=78
-
-" autoindentをオフ
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
 " インデントを入れるキーのリストを調整(コロン, 行頭の#でインデントしない)
@@ -476,15 +435,11 @@ if neobundle#is_installed('badwolf')
 endif
 
 if has('gui_running')
-  " Windowsのフォントは「Ricty for Powerline」&「MacTypePortable」が良い
+  " Windowsは「Ricty for Powerline」&「MacTypePortable」で良い
   let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
 
-  setglobal linespace=0 " 行間隔[pixel]の設定(default 1 for Win32 GUI)
-
-  " M : メニュー・ツールバー領域を削除する
-  " c : ポップアップダイアログを使用しない
-  setglobal guioptions=Mc
-
+  setglobal linespace=0          " 行間隔[pixel]の設定(default 1 for Win32 GUI)
+  setglobal guioptions=Mc        " M : メニュー削除 / c : ポップアップを使わない
   setglobal guicursor=a:blinkon0 " カーソルを点滅させない
   setglobal nomousefocus         " マウス移動でフォーカスを自動的に切り替えない
   setglobal mousehide            " 入力時にマウスポインタを隠す
@@ -494,23 +449,22 @@ if has('kaoriya') && has('win32')
   setglobal ambiwidth=auto
 endif
 
-setglobal mouse=a          " マウス機能有効
-setglobal showcmd          " 入力中のキーを画面右下に表示
-setglobal cmdheight=2      " コマンド行は2行がちょうど良い
-setglobal showtabline=2    " 常にタブ行を表示する
-setglobal laststatus=2     " 常にステータス行を表示する
-setglobal wrap             " 長いテキストを折り返す
-setglobal display=lastline " 長いテキストを省略しない
-setglobal colorcolumn=81   " 81列目に線を表示
-
+setglobal mouse=a               " マウス機能有効
+setglobal showcmd               " 入力中のキーを画面右下に表示
+setglobal cmdheight=2           " コマンド行は2行がちょうど良い
+setglobal showtabline=2         " 常にタブ行を表示する
+setglobal laststatus=2          " 常にステータス行を表示する
+setglobal wrap                  " 長いテキストを折り返す
+setglobal display=lastline      " 長いテキストを省略しない
+setglobal colorcolumn=81        " 81列目に線を表示
 setglobal number relativenumber " 行番号を相対表示
 nnoremap <silent> <F10> :<C-u>set relativenumber! relativenumber?<CR>
 
 " 不可視文字の設定
 setglobal list listchars=tab:>-,trail:-,eol:\
 
+" 透明度をスイッチ
 if has('kaoriya')
-  " 透明度をスイッチ
   if !exists('s:transparencyOn') | let s:transparencyOn = 0 | endif
   function! s:ToggleTransParency()
     let s:transparencyOn = (s:transparencyOn + 1) % 2
@@ -520,38 +474,20 @@ if has('kaoriya')
   nnoremap <silent> <F12> :<C-u>call <SID>ToggleTransParency()<CR>
 endif
 
-" foldmarkerを使って折り畳みを作成する
-setglobal foldmethod=marker
-
-" cの時はsytanxを使って折り畳みを作成する
-autocmd MyAutoCmd FileType c
-      \   setlocal foldmethod=syntax
-      \ | setlocal foldnestmax=1
-      \ | setlocal nofoldenable
-
-" foldmethodがindent, syntaxの時に生成する折り畳みの深さの最大値
-" → marker以外使わない気がするので, 余計な負荷がかからないように小さくしておく
-setglobal foldnestmax=2
-
-" 基本的にはfoldmarkerに余計なものを付けない
-setglobal commentstring=%s
+setglobal foldcolumn=1      " 折り畳みレベルを表示する列を1列設ける
+setglobal foldmethod=marker " foldmarkerを使って折り畳みを作成する
+setglobal foldlevelstart=0  " 折り畳みを全て閉じた状態でファイルを開く
+setglobal foldnestmax=2     " 折り畳みを自動生成する時の折り畳み深さの最大値
+setglobal commentstring=%s  " 基本的にはfoldmarkerに余計なものを付けない
+setglobal fillchars=vert:\| " 区切りを埋める文字の設定
+nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 
 " filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
-
-" 画面左端に折り畳み状態, レベルを表示する列を1列設ける
-setglobal foldcolumn=1
-
-" Default: fillchars=vert:\|,fold:-
-" foldを指定すると折り畳み行がウィンドウ幅まで指定した文字でfillされる
-" → fill不要なので, fillcharsからfoldを削除
-setglobal fillchars=vert:\|
-
-" ファイルを開いた時点では折り畳みを全て閉じた状態で開く
-setglobal foldlevelstart=0
-
-" 折りたたみ機能をON/OFF
-nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
+autocmd MyAutoCmd FileType c
+      \   setlocal foldmethod=syntax " cの時はsytanxを使って折り畳みを作成する
+      \ | setlocal foldnestmax=1     " cの時は折り畳み深さの最大値を1にする
+      \ | setlocal nofoldenable      " cの時はデフォルト折り畳み無効とする
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
@@ -603,8 +539,6 @@ setglobal notimeout
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
-" → buftypeがnofileかつ特定のfiletypeの追加を試みたが,
-"    暴発する度にfiletypeを追加することになるのでやめた
 autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit | endif
 
 " 検索テキストハイライトを消す
