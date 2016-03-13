@@ -589,15 +589,15 @@ endfunction "}}}
 cnoremap <expr> <Space> <SID>MyCMap(getcmdline())
 
 " リストへの変換候補登録(My Command)
-call s:AddMyCMap( 'cd',  'CD')
-call s:AddMyCMap( 'CD',  'cd')
+call s:AddMyCMap( 'cd', 'CD')
+call s:AddMyCMap( 'CD', 'cd')
 call s:AddMyCMap( 'cm', 'ClearMessage')
 call s:AddMyCMap( 'pd', 'PutDateTime')
 call s:AddMyCMap( 'uc', 'UpdateCtags')
 call s:AddMyCMap('cfd', 'ClipFileDir')
 
 " リストへの変換候補登録(Plugin's command)
-call s:AddMyCMap('sc',  'Scratch')
+call s:AddMyCMap( 'sc', 'Scratch')
 call s:AddMyCMap('scp', 'ScratchPreview')
 call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
