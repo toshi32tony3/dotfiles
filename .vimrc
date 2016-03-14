@@ -480,9 +480,9 @@ nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 " filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 autocmd MyAutoCmd FileType c
-      \   setlocal foldmethod=syntax " cの時はsytanxを使って折り畳みを作成する
-      \ | setlocal foldnestmax=1     " cの時は折り畳み深さの最大値を1にする
-      \ | setlocal nofoldenable      " cの時はデフォルト折り畳み無効とする
+      \   setlocal foldmethod=syntax
+      \ | setlocal foldnestmax=1
+      \ | setlocal nofoldenable
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
