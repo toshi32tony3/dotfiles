@@ -1668,6 +1668,9 @@ if neobundle#tap('vim-startify')
   let g:startify_session_dir = '~/vimfiles/session'
   let g:startify_session_delete_buffers = 1
 
+  " " ランダム表示ヘッダどうしようかな...
+  " let g:startify_custom_header = []
+
   " ブックマークの設定はローカル設定ファイルに記述する
   " see: ~/localfiles/template/local.rc.vim
   " let g:startify_bookmarks = [
