@@ -114,7 +114,7 @@ NeoBundleLazy 'vim-jp/vimdoc-ja'
 setglobal helplang=ja
 
 " ヴィむぷろしー
-NeoBundleLazy 'Shougo/vimproc.vim', {
+NeoBundle 'Shougo/vimproc.vim', {
       \   'build' : {
       \     'windows' : 'tools\\update-dll-mingw',
       \   },
