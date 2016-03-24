@@ -1770,7 +1770,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>mp ':<C-u>' . g:u_opt_mp . 'mapping'          . '<CR>'
   nnoremap <expr> <Leader>nl ':<C-u>' . g:u_opt_nl . 'neobundle/lazy'   . '<CR>'
   nnoremap <expr> <Leader>nu ':<C-u>' . g:u_opt_nu . 'neobundle/update'
-  nnoremap <expr> <Leader>ol ':<C-u>' . g:u_opt_ol . 'outline'          . '<CR>'
+  nnoremap <expr> <Leader>ol ':<C-u>' . g:u_opt_ol . 'outline:!'        . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>' . g:u_opt_op . 'output'           . '<CR>'
   nnoremap <expr> <Leader>sb ':<C-u>' . g:u_opt_sb                      . '<CR>'
 
