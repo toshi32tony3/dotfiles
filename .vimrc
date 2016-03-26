@@ -1045,25 +1045,6 @@ command! EchoCurrentFold echo s:GetCurrentFold()
 autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 
-" Cの関数名にジャンプ
-let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
-let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
-nnoremap <silent> ]f :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:cFuncUsePattern, 's')         <bar> endfor<CR>
-nnoremap <silent> [f :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:cFuncUsePattern, 'bs')        <bar> endfor<CR>
-nnoremap <silent> ]F :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:cFuncDefPattern, 's')         <bar> endfor<CR>
-nnoremap <silent> [F :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:cFuncDefPattern, 'bs')        <bar> endfor<CR>
-
-" ブラケットの前の単語にジャンプ
-let g:bracketPattern = '\v\zs<\w+>\ze\('
-nnoremap <silent> ]b :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:bracketPattern, 's')          <bar> endfor<CR>
-nnoremap <silent> [b :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:bracketPattern, 'bs')         <bar> endfor<CR>
-
 " Cの関数名取得
 let s:currentFunc = ''
 function! s:GetCurrentFuncC() "{{{
@@ -1645,6 +1626,56 @@ endif "}}}
 
 " もっと繰り返し可能にする(vim-repeat) {{{
 if neobundle#tap('vim-repeat')
+
+  " Make the given command repeatable using repeat.vim
+  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
+  command! -nargs=* Repeatable call s:Repeatable(<q-args>)
+  function! s:Repeatable(cmd)
+    execute a:cmd
+    call repeat#set(':Repeatable ' . a:cmd . "\<CR>")
+  endfunction
+
+  " Quickly make a macro and use it with "."
+  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
+  let s:simple_macro_active = 0
+  nnoremap <silent> <A-m> :call <SID>SimpleMacro()<CR>
+  nnoremap <silent> <Plug>(_RepeatSimpleMacro) :<C-u>call repeat#wrap('@m', v:count1)<CR>
+  function! s:SimpleMacro()
+    let s:simple_macro_active = (s:simple_macro_active + 1) % 2
+    if  s:simple_macro_active
+      echo 'call SimpleMacro()'
+      call feedkeys('qm', 'n')
+    else
+      normal! q
+      let @m = @m[0:-3] " remove trailing <A-m>
+      call repeat#set("\<Plug>(_RepeatSimpleMacro)", 1)
+    endif
+  endfunction
+
+  " Cの関数名にジャンプ
+  let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
+  let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
+  nnoremap <silent> <Plug>(_JumpCFuncUsePatternForward)  :<C-u>call search(g:cFuncUsePattern,  's')<CR>
+  nnoremap <silent> <Plug>(_JumpCFuncUsePatternBackward) :<C-u>call search(g:cFuncUsePattern, 'bs')<CR>
+  nnoremap <silent> <Plug>(_JumpCFuncDefPatternForward)  :<C-u>call search(g:cFuncDefPattern,  's')<CR>
+  nnoremap <silent> <Plug>(_JumpCFuncDefPatternBackward) :<C-u>call search(g:cFuncDefPattern, 'bs')<CR>
+  nnoremap <silent> ]f :<C-u>call search(g:cFuncUsePattern,  's') <bar>
+        \                    call repeat#set("\<Plug>(_JumpCFuncUsePatternForward)",  1)<CR>
+  nnoremap <silent> [f :<C-u>call search(g:cFuncUsePattern, 'bs') <bar>
+        \                    call repeat#set("\<Plug>(_JumpCFuncUsePatternBackward)", 1)<CR>
+  nnoremap <silent> ]F :<C-u>call search(g:cFuncDefPattern,  's') <bar>
+        \                    call repeat#set("\<Plug>(_JumpCFuncDefPatternForward)",  1)<CR>
+  nnoremap <silent> [F :<C-u>call search(g:cFuncDefPattern, 'bs') <bar>
+        \                    call repeat#set("\<Plug>(_JumpCFuncDefPatternBackward)", 1)<CR>
+
+  " ブラケットの前の単語にジャンプ
+  let g:bracketPattern = '\v\zs<\w+>\ze\('
+  nnoremap <silent> <Plug>(_JumpBracketPatternForward)  :<C-u>call search(g:bracketPattern,  's')<CR>
+  nnoremap <silent> <Plug>(_JumpBracketPatternBackward) :<C-u>call search(g:bracketPattern, 'bs')<CR>
+  nnoremap <silent> ]b :<C-u>call search(g:bracketPattern,  's') <bar>
+        \                    call repeat#set("\<Plug>(_JumpBracketPatternForward)",  1)<CR>
+  nnoremap <silent> [b :<C-u>call search(g:bracketPattern, 'bs') <bar>
+        \                    call repeat#set("\<Plug>(_JumpBracketPatternBackward)", 1)<CR>
 
 endif "}}}
 
