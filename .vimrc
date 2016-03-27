@@ -1643,6 +1643,12 @@ if neobundle#tap('vim-repeat')
     endfor
   endfunction
 
+  " 変更リストを辿る
+  noremap <silent> <Plug>(_JumpOlderChange) :<C-u>call repeat#wrap('g;', v:count1)<CR>
+  noremap <silent> <Plug>(_JumpNewerChange) :<C-u>call repeat#wrap('g,', v:count1)<CR>
+  nnoremap <silent> g; :<C-u>execute "normal! g;" <bar> call repeat#set("\<Plug>(_JumpOlderChange)", 1)<CR>
+  nnoremap <silent> g, :<C-u>execute "normal! g," <bar> call repeat#set("\<Plug>(_JumpNewerChange)", 1)<CR>
+
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
   let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
