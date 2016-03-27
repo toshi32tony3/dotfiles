@@ -1588,18 +1588,15 @@ endif "}}}
 " コメントアウト/コメントアウト解除(caw.vim) {{{
 if neobundle#tap('caw.vim')
 
-  let g:caw_no_default_keymappings = 1
-
   " caw.vimをオペレータとして使う
-  " https://github.com/rhysd/dogfiles/blob/master/vimrc
+  " https://github.com/tyru/caw.vim/issues/20
   function! s:OperatorCawCommentToggle(motionWise)
     if a:motionWise == 'char'
       execute "normal `[v`]\<Plug>(caw:wrap:toggle)"
     else
-      execute "normal `[V`]\<Plug>(caw:i:toggle)"
+      execute "normal `[V`]\<Plug>(caw:tildepos:toggle)"
     endif
   endfunction
-
   function! neobundle#hooks.on_source(bundle)
     if neobundle#is_installed('vim-operator-user')
       call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
