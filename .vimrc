@@ -129,7 +129,7 @@ NeoBundle 'mhinz/vim-signify'
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'       : 'alpha-3',
       \   'on_source' : 'agit.vim',
-      \   'on_cmd'    : 'Gita',
+      \   'on_cmd'    : ['Gita', 'GitaBar'],
       \ }
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 
@@ -220,7 +220,7 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
 
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
-      \   'on_map'  : [['nx', '<Plug>(operator-caw)']],
+      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator-caw-wrap-toggle)']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
@@ -1045,25 +1045,6 @@ command! EchoCurrentFold echo s:GetCurrentFold()
 autocmd MyAutoCmd User MyLineChanged let s:currentFold = s:GetCurrentFold()
 autocmd MyAutoCmd BufEnter *         let s:currentFold = s:GetCurrentFold()
 
-" Cの関数名にジャンプ
-let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
-let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
-nnoremap <silent> ]f :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:cFuncUsePattern, 's')         <bar> endfor<CR>
-nnoremap <silent> [f :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:cFuncUsePattern, 'bs')        <bar> endfor<CR>
-nnoremap <silent> ]F :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:cFuncDefPattern, 's')         <bar> endfor<CR>
-nnoremap <silent> [F :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:cFuncDefPattern, 'bs')        <bar> endfor<CR>
-
-" ブラケットの前の単語にジャンプ
-let g:bracketPattern = '\v\zs<\w+>\ze\('
-nnoremap <silent> ]b :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:bracketPattern, 's')          <bar> endfor<CR>
-nnoremap <silent> [b :<C-u>for i in range(v:count1) <bar>
-      \ call search(g:bracketPattern, 'bs')         <bar> endfor<CR>
-
 " Cの関数名取得
 let s:currentFunc = ''
 function! s:GetCurrentFuncC() "{{{
@@ -1179,19 +1160,19 @@ call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
 call s:AddMyCMap( 'ga', 'Gita add %')
 call s:AddMyCMap( 'gc', 'Gita commit')
-call s:AddMyCMap('gap', 'Gita add --patch --split')
+call s:AddMyCMap( 'gp', 'Gita patch -2')
+call s:AddMyCMap('gac', 'GitaBar add % | GitaBar commit')
 call s:AddMyCMap('gbl', 'Gita blame')
 call s:AddMyCMap('gbr', 'Gita branch')
 call s:AddMyCMap('gch', 'Gita checkout')
 call s:AddMyCMap('gca', 'Gita commit --amend')
 call s:AddMyCMap('gdi', 'Gita diff')
-call s:AddMyCMap('gds', 'Gita diff --split')
 call s:AddMyCMap('gdl', 'Gita diff-ls')
 call s:AddMyCMap('gls', 'Gita ls')
+call s:AddMyCMap('gp3', 'Gita patch -3')
 call s:AddMyCMap('gpl', 'Gita pull')
 call s:AddMyCMap('gps', 'Gita push')
 call s:AddMyCMap('gre', 'Gita reset')
-call s:AddMyCMap('grp', 'Gita reset --patch --split')
 call s:AddMyCMap('gst', 'Gita status')
 
 " " 最後のカーソル位置を記憶していたらジャンプ
@@ -1406,9 +1387,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    if !neobundle#is_sourced('eskk.vim')
-      return ''
-    endif
+    if !neobundle#is_sourced('eskk.vim') | return '' | endif
     return winwidth(0) < 30 ? '' : eskk#statusline()
   endfunction
 
@@ -1607,24 +1586,8 @@ endif "}}}
 " コメントアウト/コメントアウト解除(caw.vim) {{{
 if neobundle#tap('caw.vim')
 
-  let g:caw_no_default_keymappings = 1
-
-  " caw.vimをオペレータとして使う
-  " https://github.com/rhysd/dogfiles/blob/master/vimrc
-  function! s:OperatorCawCommentToggle(motionWise)
-    if a:motionWise == 'char'
-      execute "normal `[v`]\<Plug>(caw:wrap:toggle)"
-    else
-      execute "normal `[V`]\<Plug>(caw:i:toggle)"
-    endif
-  endfunction
-
-  function! neobundle#hooks.on_source(bundle)
-    if neobundle#is_installed('vim-operator-user')
-      call operator#user#define('caw', s:SID() . 'OperatorCawCommentToggle')
-    endif
-  endfunction
-  map <A-c> <Plug>(operator-caw)
+  map gc    <Plug>(caw:prefix)
+  map <A-c> <Plug>(operator-caw-wrap-toggle)
 
 endif "}}}
 
@@ -1645,6 +1608,73 @@ endif "}}}
 
 " もっと繰り返し可能にする(vim-repeat) {{{
 if neobundle#tap('vim-repeat')
+
+  " Make the given command repeatable using repeat.vim
+  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
+  command! -nargs=+ Repeatable call s:Repeatable(<q-args>)
+  function! s:Repeatable(cmd)
+    execute a:cmd
+    call repeat#set(':Repeatable ' . a:cmd . "\<CR>")
+  endfunction
+
+  " Quickly make a macro and use it with "."
+  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
+  let s:simple_macro_active = 0
+  nnoremap <silent> <A-m> :call <SID>SimpleMacro()<CR>
+  nnoremap <silent> <Plug>(_RepeatSimpleMacro) :<C-u>call repeat#wrap('@m', v:count1)<CR>
+  function! s:SimpleMacro()
+    let s:simple_macro_active = (s:simple_macro_active + 1) % 2
+    if  s:simple_macro_active
+      echo 'call SimpleMacro()'
+      call feedkeys('qm', 'n')
+    else
+      normal! q
+      let @m = @m[0:-3] " remove trailing <A-m>
+      call repeat#set("\<Plug>(_RepeatSimpleMacro)", 1)
+    endif
+  endfunction
+
+  " 変更リストを辿る
+  noremap <silent> <Plug>(_JumpOlderChange) :<C-u>call repeat#wrap('g;', v:count1)<CR>
+  noremap <silent> <Plug>(_JumpNewerChange) :<C-u>call repeat#wrap('g,', v:count1)<CR>
+  nnoremap <silent> g; :<C-u>execute 'normal! ' . v:count1 . 'g;' <bar>
+        \ call repeat#set("\<Plug>(_JumpOlderChange)", 1)<CR>
+  nnoremap <silent> g, :<C-u>execute 'normal! ' . v:count1 . 'g,' <bar>
+        \ call repeat#set("\<Plug>(_JumpNewerChange)", 1)<CR>
+
+  " 関数呼び出しをカウント指定可能にする
+  function! s:CountableFunc(func)
+    for i in range(v:count1)
+      execute "call " . a:func
+    endfor
+  endfunction
+
+  " Cの関数名にジャンプ
+  let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
+  let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
+  noremap <silent> <Plug>(_JumpCFuncUsePatternForward)
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")<CR>
+  noremap <silent> <Plug>(_JumpCFuncUsePatternBackward)
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")<CR>
+  nnoremap <silent> ]f
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")
+        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternForward)",  1)<CR>
+  nnoremap <silent> [f
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")
+        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternBackward)", 1)<CR>
+
+  " ブラケットの前の単語にジャンプ
+  let g:bracketPattern = '\v\zs<\w+>\ze\('
+  noremap <silent> <Plug>(_JumpBracketPatternForward)
+        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")<CR>
+  noremap <silent> <Plug>(_JumpBracketPatternBackward)
+        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")<CR>
+  nnoremap <silent> ]b
+        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")
+        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternForward)",  1)<CR>
+  nnoremap <silent> [b
+        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")
+        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternBackward)", 1)<CR>
 
 endif "}}}
 
