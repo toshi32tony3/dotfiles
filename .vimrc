@@ -1652,24 +1652,39 @@ if neobundle#tap('vim-repeat')
     endif
   endfunction
 
+  " 関数呼び出しをカウント指定可能にする
+  function! s:CountableFunc(func)
+    for i in range(v:count1)
+      execute "call " . a:func
+    endfor
+  endfunction
+
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
   let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
-  command! -bar JumpCFuncUsePatternForward  call search(g:cFuncUsePattern,  's')
-  command! -bar JumpCFuncUsePatternBackward call search(g:cFuncUsePattern, 'bs')
-  command! -bar JumpCFuncDefPatternForward  call search(g:cFuncUsePattern,  's')
-  command! -bar JumpCFuncDefPatternBackward call search(g:cFuncUsePattern, 'bs')
-  nnoremap <silent> ]f :<C-u>Repeatable JumpCFuncUsePatternForward<CR>
-  nnoremap <silent> [f :<C-u>Repeatable JumpCFuncUsePatternBackward<CR>
-  nnoremap <silent> ]F :<C-u>Repeatable JumpCFuncDefPatternForward<CR>
-  nnoremap <silent> [F :<C-u>Repeatable JumpCFuncDefPatternBackward<CR>
+  nnoremap <silent> <Plug>(_JumpCFuncUsePatternForward)
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")<CR>
+  nnoremap <silent> <Plug>(_JumpCFuncUsePatternBackward)
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")<CR>
+  nnoremap <silent> ]f
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")
+        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternForward)",  1)<CR>
+  nnoremap <silent> [f
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")
+        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternBackward)", 1)<CR>
 
   " ブラケットの前の単語にジャンプ
   let g:bracketPattern = '\v\zs<\w+>\ze\('
-  command! -bar JumpBracketPatternForward  call search(g:bracketPattern,  's')
-  command! -bar JumpBracketPatternBackward call search(g:bracketPattern, 'bs')
-  nnoremap <silent> ]b :<C-u>Repeatable JumpBracketPatternForward<CR>
-  nnoremap <silent> [b :<C-u>Repeatable JumpBracketPatternBackward<CR>
+  nnoremap <silent> <Plug>(_JumpBracketPatternForward)
+        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")<CR>
+  nnoremap <silent> <Plug>(_JumpBracketPatternBackward)
+        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")<CR>
+  nnoremap <silent> ]b
+        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")
+        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternForward)",  1)<CR>
+  nnoremap <silent> [b
+        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")
+        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternBackward)", 1)<CR>
 
 endif "}}}
 
