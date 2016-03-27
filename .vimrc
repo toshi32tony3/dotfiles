@@ -1637,8 +1637,10 @@ if neobundle#tap('vim-repeat')
   " 変更リストを辿る
   noremap <silent> <Plug>(_JumpOlderChange) :<C-u>call repeat#wrap('g;', v:count1)<CR>
   noremap <silent> <Plug>(_JumpNewerChange) :<C-u>call repeat#wrap('g,', v:count1)<CR>
-  nnoremap <silent> g; :<C-u>execute "normal! g;" <bar> call repeat#set("\<Plug>(_JumpOlderChange)", 1)<CR>
-  nnoremap <silent> g, :<C-u>execute "normal! g," <bar> call repeat#set("\<Plug>(_JumpNewerChange)", 1)<CR>
+  nnoremap <silent> g; :<C-u>execute 'normal! ' . v:count1 . 'g;' <bar>
+        \ call repeat#set("\<Plug>(_JumpOlderChange)", 1)<CR>
+  nnoremap <silent> g, :<C-u>execute 'normal! ' . v:count1 . 'g,' <bar>
+        \ call repeat#set("\<Plug>(_JumpNewerChange)", 1)<CR>
 
   " 関数呼び出しをカウント指定可能にする
   function! s:CountableFunc(func)
