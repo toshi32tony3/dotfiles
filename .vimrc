@@ -1656,13 +1656,6 @@ if neobundle#tap('vim-repeat')
     endfor
   endfunction
 
-  " 関数呼び出しをカウント指定可能にする
-  function! s:CountableFunc(func)
-    for i in range(v:count1)
-      execute "call " . a:func
-    endfor
-  endfunction
-
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
   let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
