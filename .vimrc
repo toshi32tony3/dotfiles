@@ -129,7 +129,7 @@ NeoBundle 'mhinz/vim-signify'
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'       : 'alpha-3',
       \   'on_source' : 'agit.vim',
-      \   'on_cmd'    : 'Gita',
+      \   'on_cmd'    : ['Gita', 'GitaBar'],
       \ }
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 
@@ -1160,19 +1160,19 @@ call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
 call s:AddMyCMap( 'ga', 'Gita add %')
 call s:AddMyCMap( 'gc', 'Gita commit')
-call s:AddMyCMap('gap', 'Gita add --patch --split')
+call s:AddMyCMap( 'gp', 'Gita patch -2')
+call s:AddMyCMap('gac', 'GitaBar add % | GitaBar commit')
 call s:AddMyCMap('gbl', 'Gita blame')
 call s:AddMyCMap('gbr', 'Gita branch')
 call s:AddMyCMap('gch', 'Gita checkout')
 call s:AddMyCMap('gca', 'Gita commit --amend')
 call s:AddMyCMap('gdi', 'Gita diff')
-call s:AddMyCMap('gds', 'Gita diff --split')
 call s:AddMyCMap('gdl', 'Gita diff-ls')
 call s:AddMyCMap('gls', 'Gita ls')
+call s:AddMyCMap('gp3', 'Gita patch -3')
 call s:AddMyCMap('gpl', 'Gita pull')
 call s:AddMyCMap('gps', 'Gita push')
 call s:AddMyCMap('gre', 'Gita reset')
-call s:AddMyCMap('grp', 'Gita reset --patch --split')
 call s:AddMyCMap('gst', 'Gita status')
 
 " " 最後のカーソル位置を記憶していたらジャンプ
