@@ -1629,7 +1629,7 @@ if neobundle#tap('vim-repeat')
 
   " Make the given command repeatable using repeat.vim
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
-  command! -nargs=* Repeatable call s:Repeatable(<q-args>)
+  command! -nargs=+ Repeatable call s:Repeatable(<q-args>)
   function! s:Repeatable(cmd)
     execute a:cmd
     call repeat#set(':Repeatable ' . a:cmd . "\<CR>")
