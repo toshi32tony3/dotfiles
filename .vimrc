@@ -1661,30 +1661,17 @@ if neobundle#tap('vim-repeat')
 
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
+  nmap <expr> ]f '/' . g:cFuncUsePattern . "\<CR>"
+  nmap <expr> [f '?' . g:cFuncUsePattern . "\<CR>"
+
   let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
-  nnoremap <silent> <Plug>(_JumpCFuncUsePatternForward)
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")<CR>
-  nnoremap <silent> <Plug>(_JumpCFuncUsePatternBackward)
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")<CR>
-  nnoremap <silent> ]f
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternForward)",  1)<CR>
-  nnoremap <silent> [f
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternBackward)", 1)<CR>
+  noremap <expr> ]F '/' . g:cFuncDefPattern . "\<CR>"
+  noremap <expr> [F '?' . g:cFuncDefPattern . "\<CR>"
 
   " ブラケットの前の単語にジャンプ
   let g:bracketPattern = '\v\zs<\w+>\ze\('
-  nnoremap <silent> <Plug>(_JumpBracketPatternForward)
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")<CR>
-  nnoremap <silent> <Plug>(_JumpBracketPatternBackward)
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")<CR>
-  nnoremap <silent> ]b
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")
-        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternForward)",  1)<CR>
-  nnoremap <silent> [b
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")
-        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternBackward)", 1)<CR>
+  noremap <expr> ]b '/' . g:bracketPattern. "\<CR>"
+  noremap <expr> [b '?' . g:bracketPattern. "\<CR>"
 
 endif "}}}
 
