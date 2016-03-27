@@ -218,9 +218,10 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 
-NeoBundleLazy 'tyru/caw.vim', {
+" 本家 : 'tyru/caw.vim'
+NeoBundleLazy 'toshi32tony3/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
-      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator-caw)']],
+      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator-caw_wrap_toggle)']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
@@ -1587,7 +1588,7 @@ endif "}}}
 if neobundle#tap('caw.vim')
 
   map gc    <Plug>(caw:prefix)
-  map <A-c> <Plug>(operator-caw)
+  map <A-c> <Plug>(operator-caw_wrap_toggle)
 
 endif "}}}
 
