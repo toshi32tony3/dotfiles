@@ -1635,18 +1635,18 @@ if neobundle#tap('vim-repeat')
     endif
   endfunction
 
+  " 変更リストを辿る
+  noremap <silent> <Plug>(_JumpOlderChange) :<C-u>call repeat#wrap('g;', v:count1)<CR>
+  noremap <silent> <Plug>(_JumpNewerChange) :<C-u>call repeat#wrap('g,', v:count1)<CR>
+  nnoremap <silent> g; :<C-u>execute "normal! g;" <bar> call repeat#set("\<Plug>(_JumpOlderChange)", 1)<CR>
+  nnoremap <silent> g, :<C-u>execute "normal! g," <bar> call repeat#set("\<Plug>(_JumpNewerChange)", 1)<CR>
+
   " 関数呼び出しをカウント指定可能にする
   function! s:CountableFunc(func)
     for i in range(v:count1)
       execute "call " . a:func
     endfor
   endfunction
-
-  " 変更リストを辿る
-  noremap <silent> <Plug>(_JumpOlderChange) :<C-u>call repeat#wrap('g;', v:count1)<CR>
-  noremap <silent> <Plug>(_JumpNewerChange) :<C-u>call repeat#wrap('g,', v:count1)<CR>
-  nnoremap <silent> g; :<C-u>execute "normal! g;" <bar> call repeat#set("\<Plug>(_JumpOlderChange)", 1)<CR>
-  nnoremap <silent> g, :<C-u>execute "normal! g," <bar> call repeat#set("\<Plug>(_JumpNewerChange)", 1)<CR>
 
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
