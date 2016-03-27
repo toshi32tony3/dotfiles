@@ -1387,9 +1387,7 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MySKKMode()
-    if !neobundle#is_sourced('eskk.vim')
-      return ''
-    endif
+    if !neobundle#is_sourced('eskk.vim') | return '' | endif
     return winwidth(0) < 30 ? '' : eskk#statusline()
   endfunction
 
