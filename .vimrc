@@ -1662,6 +1662,12 @@ if neobundle#tap('vim-repeat')
   nnoremap <silent> [f
         \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")
         \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternBackward)", 1)<CR>
+  nnoremap <silent> ]F
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncDefPattern,  's')")
+        \ <bar> call repeat#set("\<Plug>(_JumpCFuncDefPatternForward)",  1)<CR>
+  nnoremap <silent> [F
+        \ :<C-u>call <SID>CountableFunc("search(g:cFuncDefPattern, 'bs')")
+        \ <bar> call repeat#set("\<Plug>(_JumpCFuncDefPatternBackward)", 1)<CR>
 
   " ブラケットの前の単語にジャンプ
   let g:bracketPattern = '\v\zs<\w+>\ze\('
