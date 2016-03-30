@@ -220,7 +220,7 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
 
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
-      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator-caw-wrap-toggle)']],
+      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
       \ }
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
