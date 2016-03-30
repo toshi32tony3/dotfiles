@@ -1133,7 +1133,8 @@ command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
-  if !exists(':' . split(a:alternateName, "\<Space>")[0]) | return | endif
+  let l:separator = stridx(a:alternateName, '!') == -1 ? "\<Space>" : '!'
+  if !exists(':' . split(a:alternateName, l:separator)[0]) | return | endif
   let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
   execute substitute(g:abbrev, '|', '<bar>', 'g')
   call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
