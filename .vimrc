@@ -488,7 +488,7 @@ nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 
 " filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
-autocmd MyAutoCmd FileType c
+autocmd MyAutoCmd FileType c,markdown
       \   setlocal foldmethod=syntax
       \ | setlocal foldnestmax=1
       \ | setlocal nofoldenable
