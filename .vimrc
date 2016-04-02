@@ -1617,9 +1617,6 @@ endif "}}}
 " もっと繰り返し可能にする(vim-repeat) {{{
 if neobundle#tap('vim-repeat')
 
-  " undoかallじゃないとvim-repeat側で勝手にzvを入れてしまうのでallにしておく
-  setglobal foldopen=all
-
   " Make the given command repeatable using repeat.vim
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
   command! -nargs=+ Repeatable call s:Repeatable(<q-args>)
