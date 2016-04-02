@@ -424,8 +424,7 @@ command! ClipFileName let @* = expand('%:t')   | echo 'clipped: ' . @*
 command! ClipFileDir  let @* = expand('%:p:h') | echo 'clipped: ' . @*
 function! s:ClipCommandOutput(cmd)
   redir @*> | silent execute a:cmd | redir END
-  " 先頭の改行文字を取り除く
-  if len(@*) != 0 | let @* = @*[1 :] | endif
+  if len(@*) != 0 | let @* = @*[1 :] | endif " 先頭の改行文字を取り除く
 endfunction
 command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<f-args>)
 
