@@ -217,11 +217,11 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
       \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
       \ }
+
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
       \ }
@@ -1637,7 +1637,7 @@ if neobundle#tap('vim-repeat')
       call feedkeys('qm', 'n')
     else
       normal! q
-      let @m = @m[0:-3] " remove trailing <A-m>
+      let @m = @m[0 : -3] " remove trailing <A-m>
       call repeat#set("\<Plug>(_RepeatSimpleMacro)", 1)
     endif
   endfunction
