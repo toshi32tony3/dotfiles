@@ -321,6 +321,8 @@ NeoBundleLazy 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
 "-------------------------------------------------------------------
 " debug {{{
 
+NeoBundleLazy 'tyru/restart.vim', {'on_cmd' : 'Restart'}
+
 " NeoBundle 'vim-scripts/genutils'
 " NeoBundle 'albfan/vim-breakpts'
 
@@ -2132,6 +2134,11 @@ if neobundle#tap('vim-quickrun')
   noremap <Leader>qq :<C-u>QuickRun -hook/time/enable 1
   noremap <Leader>qt :<C-u>QuickRun -hook/time/enable 1 -type<Space>
   noremap <Leader>qa :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
+
+endif "}}}
+
+" GVimの再起動を簡易化(restart.vim) {{{
+if neobundle#tap('restart.vim')
 
 endif "}}}
 
