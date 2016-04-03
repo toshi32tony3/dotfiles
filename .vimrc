@@ -227,7 +227,8 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \ }
 
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-repeat'
+" 本家 : 'tpope/vim-repeat'
+NeoBundle 'toshi32tony3/vim-repeat'
 
 "}}}
 "-------------------------------------------------------------------
