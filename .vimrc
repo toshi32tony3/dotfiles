@@ -217,17 +217,18 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
       \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
       \ }
+
 NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
       \ }
 
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'tpope/vim-repeat'
+" 本家 : 'tpope/vim-repeat'
+NeoBundle 'toshi32tony3/vim-repeat'
 
 "}}}
 "-------------------------------------------------------------------
@@ -299,8 +300,6 @@ NeoBundleLazy 'beckorz/previm', {'on_ft' : 'markdown'}
 NeoBundleLazy 'rcmdnk/vim-markdown',    {'on_ft'  : 'markdown'}
 NeoBundleLazy 'glidenote/memolist.vim', {'on_cmd' : 'MemoNew' }
 
-NeoBundleLazy 'lambdalisue/vim-gista', {'on_cmd' : 'Gista'}
-
 "}}}
 "-------------------------------------------------------------------
 " formatter {{{
@@ -320,10 +319,11 @@ NeoBundleLazy 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
 "-------------------------------------------------------------------
 " debug {{{
 
+NeoBundleLazy 'tyru/restart.vim', {'on_cmd' : 'Restart'}
+
+NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
 " NeoBundle 'vim-scripts/genutils'
 " NeoBundle 'albfan/vim-breakpts'
-
-" NeoBundle 'haya14busa/vim-debagger'
 
 "}}}
 "-------------------------------------------------------------------
@@ -365,9 +365,8 @@ setglobal showmatch                  " 対応する括弧などの入力時に�
 setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
-" 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
-" → 矢印は(→)を使おう
-setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
+" " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
+" setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
 
 " 汎用補完設定(complete)
 " Default: complete=.,w,b,u,t,i
@@ -424,8 +423,7 @@ command! ClipFileName let @* = expand('%:t')   | echo 'clipped: ' . @*
 command! ClipFileDir  let @* = expand('%:p:h') | echo 'clipped: ' . @*
 function! s:ClipCommandOutput(cmd)
   redir @*> | silent execute a:cmd | redir END
-  " 先頭の改行文字を取り除く
-  if len(@*) != 0 | let @* = @*[1 :] | endif
+  if len(@*) != 0 | let @* = @*[1 :] | endif " 先頭の改行文字を取り除く
 endfunction
 command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<f-args>)
 
@@ -434,7 +432,6 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 " View {{{
 
 if neobundle#is_installed('badwolf')
-  autocmd MyAutoCmd colorscheme badwolf highlight link SignifySignDelete DiffAdd
   colorscheme badwolf
 endif
 
@@ -461,6 +458,7 @@ setglobal laststatus=2          " 常にステータス行を表示する
 setglobal wrap                  " 長いテキストを折り返す
 setglobal display=lastline      " 長いテキストを省略しない
 setglobal colorcolumn=81        " 81列目に線を表示
+setglobal noequalalways         " ウィンドウの自動リサイズをしない
 setglobal number relativenumber " 行番号を相対表示
 nnoremap <silent> <F10> :<C-u>set relativenumber! relativenumber?<CR>
 
@@ -555,11 +553,11 @@ noremap <silent> k gk
 " scrollbind無しで全ウィンドウ同時スクロール
 nnoremap <silent> <A-e> :<C-u>
       \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \  execute "normal! \<C-e\><Left><C-h><C-e>" <bar> wincmd w <bar>
+      \  execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
       \ endfor <bar> endfor<CR>
 nnoremap <silent> <A-y> :<C-u>
       \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \  execute "normal! \<C-y\><Left><C-h><C-e>" <bar> wincmd w <bar>
+      \  execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
       \ endfor <bar> endfor<CR>
 
 " バッファ選択を簡易化
@@ -814,27 +812,15 @@ endif
 
 " タイムスタンプの挿入
 function! s:PutDateTime() "{{{
-  let l:tmp = @"
-  let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""P
-  let @" = l:tmp
+  execute "normal! i\<C-r>=strftime('%Y/%m/%d(%a) %H:%M')\<CR>"
 endfunction "}}}
 command! PutDateTime call s:PutDateTime()
 
 " 区切り線&タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
-  let l:tmp = @"
-  let @" = '='
-  normal! 080""Po
-  let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""P
-  let @" = '{'
-  normal! $l3""p
-  let @" = '}'
-  normal! o
-  normal! 03""P
-  normal! ko
-  let @" = l:tmp
+  execute "normal! 80gI=\<Esc>o"
+  execute "normal! i\<C-r>=strftime('%Y/%m/%d(%a) %H:%M')\<CR>"
+  execute "normal! $l3a{\<Esc>o\<CR>\<Esc>3i}\<Esc>k0"
 endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
@@ -1170,7 +1156,6 @@ call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
 call s:AddMyCMap( 'ga', 'Gita add %')
 call s:AddMyCMap( 'gc', 'Gita commit')
-call s:AddMyCMap( 'gp', 'Gita patch -2')
 call s:AddMyCMap('gac', 'GitaBar add % | GitaBar commit')
 call s:AddMyCMap('gbl', 'Gita blame')
 call s:AddMyCMap('gbr', 'Gita branch')
@@ -1179,6 +1164,7 @@ call s:AddMyCMap('gca', 'Gita commit --amend')
 call s:AddMyCMap('gdi', 'Gita diff')
 call s:AddMyCMap('gdl', 'Gita diff-ls')
 call s:AddMyCMap('gls', 'Gita ls')
+call s:AddMyCMap('gp2', 'Gita patch -2')
 call s:AddMyCMap('gp3', 'Gita patch -3')
 call s:AddMyCMap('gpl', 'Gita pull')
 call s:AddMyCMap('gps', 'Gita push')
@@ -1619,13 +1605,13 @@ endif "}}}
 " もっと繰り返し可能にする(vim-repeat) {{{
 if neobundle#tap('vim-repeat')
 
-  " Make the given command repeatable using repeat.vim
-  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
-  command! -nargs=+ Repeatable call s:Repeatable(<q-args>)
-  function! s:Repeatable(cmd)
-    execute a:cmd
-    call repeat#set(':Repeatable ' . a:cmd . "\<CR>")
-  endfunction
+  " " Make the given command repeatable using repeat.vim
+  " " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
+  " command! -nargs=+ Repeatable call s:Repeatable(<q-args>)
+  " function! s:Repeatable(cmd)
+  "   execute a:cmd
+  "   call repeat#set(':Repeatable ' . a:cmd . "\<CR>")
+  " endfunction
 
   " Quickly make a macro and use it with "."
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
@@ -1639,7 +1625,9 @@ if neobundle#tap('vim-repeat')
       call feedkeys('qm', 'n')
     else
       normal! q
-      let @m = @m[0:-3] " remove trailing <A-m>
+      " remove trailing <A-m>, <C-o>
+      let @m = @m[0 : -3]
+      let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
       call repeat#set("\<Plug>(_RepeatSimpleMacro)", 1)
     endif
   endfunction
@@ -2142,6 +2130,11 @@ if neobundle#tap('vim-quickrun')
   noremap <Leader>qq :<C-u>QuickRun -hook/time/enable 1
   noremap <Leader>qt :<C-u>QuickRun -hook/time/enable 1 -type<Space>
   noremap <Leader>qa :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
+
+endif "}}}
+
+" GVimの再起動を簡易化(restart.vim) {{{
+if neobundle#tap('restart.vim')
 
 endif "}}}
 
