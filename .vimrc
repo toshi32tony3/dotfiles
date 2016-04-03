@@ -1627,6 +1627,8 @@ if neobundle#tap('vim-repeat')
     else
       normal! q
       let @m = @m[0 : -3] " remove trailing <A-m>
+      let @m = stridx(@m, "\<C-o>") == -1 ? @m
+            \                             : @m[0 : -2] " remove trailing <C-o>
       call repeat#set("\<Plug>(_RepeatSimpleMacro)", 1)
     endif
   endfunction
