@@ -461,6 +461,7 @@ setglobal laststatus=2          " 常にステータス行を表示する
 setglobal wrap                  " 長いテキストを折り返す
 setglobal display=lastline      " 長いテキストを省略しない
 setglobal colorcolumn=81        " 81列目に線を表示
+setglobal noequalalways         " ウィンドウの自動リサイズをしない
 setglobal number relativenumber " 行番号を相対表示
 nnoremap <silent> <F10> :<C-u>set relativenumber! relativenumber?<CR>
 
