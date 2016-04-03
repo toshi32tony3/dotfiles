@@ -321,7 +321,7 @@ NeoBundleLazy 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
 
 NeoBundleLazy 'tyru/restart.vim', {'on_cmd' : 'Restart'}
 
-NeoBundle 'haya14busa/vim-debugger'
+NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
 " NeoBundle 'vim-scripts/genutils'
 " NeoBundle 'albfan/vim-breakpts'
 
