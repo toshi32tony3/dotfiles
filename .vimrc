@@ -1626,11 +1626,10 @@ if neobundle#tap('vim-repeat')
       call feedkeys('qm', 'n')
     else
       normal! q
-      let @m = @m[0 : -3] " remove trailing <A-m>
-      let @m = stridx(@m, "\<C-o>") == -1 ? @m
-            \                             : @m[0 : -2] " remove trailing <C-o>
-      let @m = stridx(@m, "\<Esc>") == -1 ? @m
-            \                             : @m[0 : -2] " remove trailing <Esc>
+      " remove trailing <A-m>, <C-o>, <Esc>
+      let @m = @m[0 : -3]
+      let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
+      let @m = stridx(@m, "\<Esc>") == (len(@m) - 1) ? @m[0 : -2] : @m
       call repeat#set("\<Plug>(_RepeatSimpleMacro)", 1)
     endif
   endfunction
