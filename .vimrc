@@ -365,7 +365,7 @@ setglobal showmatch                  " 対応する括弧などの入力時に�
 setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
-" 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
+" " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
 " setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
 
 " 汎用補完設定(complete)
