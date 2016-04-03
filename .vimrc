@@ -2141,9 +2141,3 @@ endif "}}}
 "}}}
 "-----------------------------------------------------------------------------
 
-" set shellslash
-"
-" let g:hoge = 0
-" autocmd MyAutoCmd BufWriteCmd gita:*   let g:hoge += 1 | echom 'hoge:' . g:hoge
-" autocmd MyAutoCmd BufWriteCmd gita:*/* let g:hoge += 1 | echom 'hoge:' . g:hoge
-
