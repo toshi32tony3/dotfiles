@@ -300,8 +300,6 @@ NeoBundleLazy 'beckorz/previm', {'on_ft' : 'markdown'}
 NeoBundleLazy 'rcmdnk/vim-markdown',    {'on_ft'  : 'markdown'}
 NeoBundleLazy 'glidenote/memolist.vim', {'on_cmd' : 'MemoNew' }
 
-NeoBundleLazy 'lambdalisue/vim-gista', {'on_cmd' : 'Gista'}
-
 "}}}
 "-------------------------------------------------------------------
 " formatter {{{
@@ -323,10 +321,9 @@ NeoBundleLazy 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
 
 NeoBundleLazy 'tyru/restart.vim', {'on_cmd' : 'Restart'}
 
+NeoBundle 'haya14busa/vim-debugger'
 " NeoBundle 'vim-scripts/genutils'
 " NeoBundle 'albfan/vim-breakpts'
-
-NeoBundle 'haya14busa/vim-debugger'
 
 "}}}
 "-------------------------------------------------------------------
