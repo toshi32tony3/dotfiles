@@ -813,27 +813,15 @@ endif
 
 " タイムスタンプの挿入
 function! s:PutDateTime() "{{{
-  let l:tmp = @"
-  let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""P
-  let @" = l:tmp
+  execute "normal! i\<C-r>=strftime('%Y/%m/%d(%a) %H:%M')\<CR>"
 endfunction "}}}
 command! PutDateTime call s:PutDateTime()
 
 " 区切り線&タイムスタンプの挿入
 function! s:PutMemoFormat() "{{{
-  let l:tmp = @"
-  let @" = '='
-  normal! 080""Po
-  let @" = strftime('%Y/%m/%d(%a) %H:%M')
-  normal! ""P
-  let @" = '{'
-  normal! $l3""p
-  let @" = '}'
-  normal! o
-  normal! 03""P
-  normal! ko
-  let @" = l:tmp
+  execute "normal! 80gI=\<Esc>o"
+  execute "normal! i\<C-r>=strftime('%Y/%m/%d(%a) %H:%M')\<CR>"
+  execute "normal! $l3a{\<Esc>o\<CR>\<Esc>3i}\<Esc>k0"
 endfunction "}}}
 command! PutMemoFormat call s:PutMemoFormat()
 
