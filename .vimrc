@@ -553,11 +553,11 @@ noremap <silent> k gk
 " scrollbind無しで全ウィンドウ同時スクロール
 nnoremap <silent> <A-e> :<C-u>
       \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \  execute "normal! \<C-e\><Left><C-h><C-e>" <bar> wincmd w <bar>
+      \  execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
       \ endfor <bar> endfor<CR>
 nnoremap <silent> <A-y> :<C-u>
       \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \  execute "normal! \<C-y\><Left><C-h><C-e>" <bar> wincmd w <bar>
+      \  execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
       \ endfor <bar> endfor<CR>
 
 " バッファ選択を簡易化
