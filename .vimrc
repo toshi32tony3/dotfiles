@@ -46,7 +46,7 @@ if has('kaoriya') | setglobal fileencodings=guess
 else              | setglobal fileencodings=cp932,euc-jp,utf-8 | endif
 
 " 文字エンコーディング/改行コードを指定してファイルを開き直す
-nnoremap <Leader>en :<C-u>e ++encoding=
+nnoremap <Leader>en :<C-u>e ++bad=keep ++encoding=
 nnoremap <Leader>ff :<C-u>e ++fileformat=
 
 " ネットワーク上ファイルの書き込みが遅くなるので, いろいろ作らない
