@@ -114,12 +114,14 @@ NeoBundle 'Shougo/vimproc.vim', {
 
 NeoBundle 'mhinz/vim-signify'
 
+NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'       : 'alpha-3',
       \   'on_source' : 'agit.vim',
-      \   'on_cmd'    : ['Gita', 'GitaBar'],
+      \   'on_cmd'    : 'Gita',
       \ }
-NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
+command! -nargs=* -range -bang -bar -complete=customlist,gita#command#complete
+      \ GitaBar call gita#command#command(<q-bang>, [<line1>, <line2>], <q-args>)
 
 "}}}
 "-------------------------------------------------------------------
@@ -1123,7 +1125,7 @@ call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
 call s:AddMyCMap( 'ga', 'Gita add %')
 call s:AddMyCMap( 'gc', 'Gita commit')
-call s:AddMyCMap('gac', 'GitaBar add % | GitaBar commit')
+call s:AddMyCMap('gac', 'GitaBar add % | Gita commit')
 call s:AddMyCMap('gbl', 'Gita blame')
 call s:AddMyCMap('gbr', 'Gita branch')
 call s:AddMyCMap('gch', 'Gita chaperone')
