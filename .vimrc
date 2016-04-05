@@ -21,10 +21,6 @@ augroup MyAutoCmd " vimrc内全体で使うaugroupを定義
   autocmd!
 augroup END
 
-function! s:SID() " SID取得関数を定義
-  return matchstr(expand('<sfile>'), '<SNR>\d_')
-endfunction
-
 " setglobalがVim起動直後に生成されるバッファに適用されない件の対策
 function! s:regenerateFirstBuffer(path)
   if argc() >= 1 | bdelete | execute 'edit ' . a:path
@@ -46,7 +42,7 @@ if has('kaoriya') | setglobal fileencodings=guess
 else              | setglobal fileencodings=cp932,euc-jp,utf-8 | endif
 
 " 文字エンコーディング/改行コードを指定してファイルを開き直す
-nnoremap <Leader>en :<C-u>e ++encoding=
+nnoremap <Leader>en :<C-u>e ++bad=keep ++encoding=
 nnoremap <Leader>ff :<C-u>e ++fileformat=
 
 " ネットワーク上ファイルの書き込みが遅くなるので, いろいろ作らない
@@ -59,10 +55,6 @@ if has('persistent_undo') |
   let &g:undodir = s:saveUndoDir
   setglobal undofile
 endif
-
-" Windowsは_viminfo, 他は.viminfoとする
-if has('win32') | setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/_viminfo
-else            | setglobal viminfo='30,<50,s100,h,rA:,rB:,n~/.viminfo | endif
 
 " デフォルトではスペルチェックしない
 setglobal nospell spelllang=en,cjk spellfile=~/dotfiles/en.utf-8.add
@@ -92,11 +84,8 @@ filetype plugin indent off
 " 実は必要のないset nocompatible
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if has('vim_starting')
-  if &compatible
-    setglobal nocompatible " Vi互換モードをオフ(Vimの拡張機能を有効化)
-  endif
-  " neobundle.vimでプラグインを管理する
-  " →どーしてもNeoBundleCleanを使いたいので小細工してみる
+  if &compatible | setglobal nocompatible | endif
+  " neobundle.vimでプラグインを管理する(NeoBundleCleanを使うために小細工)
   if   isdirectory(expand('~/.vim/bundle/neobundle.vim_673be4e'))
     setglobal runtimepath+=~/.vim/bundle/neobundle.vim_673be4e
   else
@@ -105,8 +94,7 @@ if has('vim_starting')
 endif
 call neobundle#begin(expand('~/.vim/bundle'))
 
-" NeoBundle自体の更新をチェックする
-" →どーしてもNeoBundleCleanを使いたいので更新チェックしない
+" NeoBundleCleanを使うために小細工
 NeoBundleFetch 'Shougo/neobundle.vim', {'rev' : '673be4e'}
 
 " 日本語ヘルプを卒業したいが, なかなかできない
@@ -117,15 +105,15 @@ setglobal helplang=ja
 NeoBundle 'Shougo/vimproc.vim', {
       \   'build' : {
       \     'windows' : 'tools\\update-dll-mingw',
+      \     'linux'   : 'make',
       \   },
       \ }
 
 "-------------------------------------------------------------------
-" Version Control System {{{
+" VCS {{{
 
 NeoBundle 'mhinz/vim-signify'
 
-" agit.vimと一緒に読み込む
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'       : 'alpha-3',
       \   'on_source' : 'agit.vim',
@@ -135,7 +123,7 @@ NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 
 "}}}
 "-------------------------------------------------------------------
-" simplify input {{{
+" input {{{
 
 NeoBundleLazy 'Shougo/neosnippet.vim', {
       \   'depends' : 'toshi32tony3/neosnippet-snippets',
@@ -265,7 +253,7 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
 
 "}}}
 "-------------------------------------------------------------------
-" quickfix / special buffer {{{
+" special buffer {{{
 
 NeoBundleLazy 'thinca/vim-qfreplace', {'on_cmd' : 'Qfreplace'}
 
@@ -311,19 +299,11 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 
 "}}}
 "-------------------------------------------------------------------
-" quickrun {{{
-
-NeoBundleLazy 'thinca/vim-quickrun', {'on_cmd' : 'QuickRun'}
-
-"}}}
-"-------------------------------------------------------------------
 " debug {{{
 
-NeoBundleLazy 'tyru/restart.vim', {'on_cmd' : 'Restart'}
-
+NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
+NeoBundleLazy 'tyru/restart.vim',        {'on_cmd' : 'Restart'}
 NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
-" NeoBundle 'vim-scripts/genutils'
-" NeoBundle 'albfan/vim-breakpts'
 
 "}}}
 "-------------------------------------------------------------------
@@ -405,7 +385,6 @@ autocmd MyAutoCmd BufEnter * setlocal textwidth=78
 autocmd MyAutoCmd BufEnter * setlocal noautoindent
 
 " インデントを入れるキーのリストを調整(コロン, 行頭の#でインデントしない)
-" https://gist.github.com/myokota/8b6040da5a3d8b029be0
 autocmd MyAutoCmd BufEnter * setlocal indk-=:
 autocmd MyAutoCmd BufEnter * setlocal indk-=0#
 autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
@@ -519,13 +498,9 @@ setglobal wrapscan   " 検索時に最後まで行ったら最初に戻る
 setglobal incsearch  " インクリメンタルサーチ
 setglobal hlsearch   " マッチしたテキストをハイライト
 
-" grep/vimgrep結果が0件の場合, Quickfixを開かない
-autocmd MyAutoCmd QuickfixCmdPost grep,vimgrep if len(getqflist()) != 0 | copen | endif
-
+" 逆方向migemo検索g?を有効化して再マッピング
 if has('kaoriya') && has('migemo')
-  setglobal migemo " 逆方向migemo検索g?を有効化
-
-  " kaoriya版のmigemo searchを再マッピング
+  setglobal migemo
   noremap m/ g/
   noremap m? g?
 endif
@@ -537,7 +512,7 @@ endif
 " キー入力タイムアウトはあると邪魔だし, 待つ意味も無い気がする
 setglobal notimeout
 
-" make後, 自動でQuickfixウィンドウを開く
+" :make実行後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
@@ -546,24 +521,20 @@ autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
-" j/kによる移動を折り返されたテキストでも自然に振る舞うようにする
-noremap <silent> j gj
-noremap <silent> k gk
-
 " scrollbind無しで全ウィンドウ同時スクロール
 nnoremap <silent> <A-e> :<C-u>
       \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \  execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
+      \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
       \ endfor <bar> endfor<CR>
 nnoremap <silent> <A-y> :<C-u>
       \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \  execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
+      \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
       \ endfor <bar> endfor<CR>
 
 " バッファ選択を簡易化
 nnoremap <A-b> :<C-u>ls<CR>:buffer<Space>
 
-" タブ複製
+" タブ複製を簡易化
 nnoremap ,t :<C-u>tab split<CR>
 
 " 新規タブでgf
@@ -620,8 +591,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     endfor
     " 1文字目の','を削除
     if &tags != '' | let &tags = &tags[1 :] | endif
-    " GTAGSROOTの登録
-    " → GNU GLOBALのタグはプロジェクトルートで生成する
+    " GTAGSROOTの登録(GNU GLOBALのタグはプロジェクトルートで生成する)
     let $GTAGSROOT = g:local_rc_current_src_dir
   endfunction "}}}
 
@@ -1091,10 +1061,7 @@ function! s:PutCurrentFunc(funcName) "{{{
     echo 'There is no function nearby cursor.'
     return
   endif
-  let l:tmp = @"
-  let @" = a:funcName
-  normal! ""P
-  let @" = l:tmp
+  execute 'normal! i' . a:funcName
 endfunction "}}}
 command! PutCurrentFunc
       \ let s:currentFunc = s:GetCurrentFuncC() |
@@ -1159,11 +1126,12 @@ call s:AddMyCMap( 'gc', 'Gita commit')
 call s:AddMyCMap('gac', 'GitaBar add % | GitaBar commit')
 call s:AddMyCMap('gbl', 'Gita blame')
 call s:AddMyCMap('gbr', 'Gita branch')
-call s:AddMyCMap('gch', 'Gita checkout')
+call s:AddMyCMap('gch', 'Gita chaperone')
+call s:AddMyCMap('gco', 'Gita checkout')
 call s:AddMyCMap('gca', 'Gita commit --amend')
 call s:AddMyCMap('gdi', 'Gita diff')
 call s:AddMyCMap('gdl', 'Gita diff-ls')
-call s:AddMyCMap('gls', 'Gita ls')
+call s:AddMyCMap('glf', 'Gita ls-files')
 call s:AddMyCMap('gp2', 'Gita patch -2')
 call s:AddMyCMap('gp3', 'Gita patch -3')
 call s:AddMyCMap('gpl', 'Gita pull')
@@ -1202,8 +1170,6 @@ if neobundle#tap('vim-signify')
   " use git only
   let g:signify_vcs_list = ['git']
   let g:signify_skip_filetype = {'vimfiler' : 1}
-
-  " let g:signify_vcs_list = ['git', 'cvs']
 
   " Hunk text object
   omap ic <Plug>(signify-motion-inner-pending)
@@ -1305,13 +1271,9 @@ if neobundle#tap('eskk.vim')
   let g:eskk#egg_like_newline_completion = 1
   let g:eskk#rom_input_style = 'msime'
 
-  " すぐにskkしたい
-  imap <C-j>  <Plug>(eskk:enable)
+  imap <C-j>  <Plug>(eskk:toggle)
   nmap <C-j> i<Plug>(eskk:enable)
   cmap <C-j>  <Plug>(eskk:toggle)
-  nmap <A-i> I<Plug>(eskk:enable)
-  nmap <A-a> A<Plug>(eskk:enable)
-  nmap <A-o> O<Plug>(eskk:enable)
 
   function! s:EskkInitialPreSettings()
     let t = eskk#table#new('rom_to_hira*', 'rom_to_hira')
@@ -1516,7 +1478,7 @@ if neobundle#tap('vim-sneak')
 
 endif "}}}
 
-" Vimのマーク機能を使いやすく(vim-signature) {{{
+" Vimのマーク機能を使いやすくする(vim-signature) {{{
 if neobundle#tap('vim-signature')
 
   " viminfoからグローバルマークを削除する設定
@@ -2069,11 +2031,6 @@ if neobundle#tap('vim-easy-align')
   let g:easy_align_delimiters = {
         \   '/' : {
         \     'pattern'         : '//\+\|/\*\|\*/',
-        \     'delimiter_align' : 'l',
-        \     'ignore_groups'   : ['!Comment'],
-        \   },
-        \   'h' : {
-        \     'pattern'         : '\v\/\*#%(\s{4})+|#\*\/',
         \     'delimiter_align' : 'l',
         \     'ignore_groups'   : ['!Comment'],
         \   },
