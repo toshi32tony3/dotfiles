@@ -225,7 +225,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \ }
 
 NeoBundle 'tpope/vim-surround'
-NeoBundle 'kana/vim-repeat'
+NeoBundle 'toshi32tony3/vim-repeat'
 
 "}}}
 "-------------------------------------------------------------------
@@ -1564,16 +1564,6 @@ endif "}}}
 " もっと繰り返し可能にする(vim-repeat) {{{
 if neobundle#tap('vim-repeat')
 
-  " Make the given command repeatable using repeat.vim
-  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
-  command! -nargs=+ -count Repeatable call s:Repeatable(<q-args>)
-  function! s:Repeatable(cmd)
-    for i in range(v:count1)
-      execute a:cmd
-    endfor
-    call repeat#set(':Repeatable ' . a:cmd . "\<CR>", 1)
-  endfunction
-
   " Quickly make a macro and use it with "."
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
   let s:simple_macro_active = 0
@@ -1592,61 +1582,42 @@ if neobundle#tap('vim-repeat')
     endif
   endfunction
 
+  " Make the given command repeatable using repeat.vim
+  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
+  command! -nargs=+ -count Repeatable call s:Repeatable(<q-args>)
+  function! s:Repeatable(cmd)
+    for i in range(v:count1)
+      execute a:cmd
+    endfor
+    call repeat#set(':Repeatable ' . a:cmd . "\<CR>", 1)
+  endfunction
+
   " 変更リストを辿る
-  nnoremap <silent> g; :<C-u>silent! execute 'normal! ' . v:count1 . 'g;zv' <bar>
-        \ call repeat#set('g;zv', v:count1)<CR>
-  nnoremap <silent> g, :<C-u>silent! execute 'normal! ' . v:count1 . 'g,zv' <bar>
-        \ call repeat#set('g,zv', v:count1)<CR>
-
-  " 任意のキーストロークをリピート可能にする
-  function! s:CountableKeys(keys)
-    for i in range(v:count1)
-      execute "normal " . a:keys
-    endfor
-    call repeat#set(a:keys, v:count1)
-  endfunction
-
-  " 任意の関数を繰り返しカウント指定可能にする
-  function! s:CountableFunc(func)
-    for i in range(v:count1)
-      execute "call " . a:func
-    endfor
-  endfunction
+  nnoremap <silent> g; :<C-u>Repeatable silent! execute 'normal! g;zvzz'<CR>
+  nnoremap <silent> g, :<C-u>Repeatable silent! execute 'normal! g,zvzz'<CR>
 
   " scrollbind無しで全ウィンドウ同時スクロール
-  nnoremap <silent> <Plug>(_ScrollDownAllWindows)
-        \ :<C-u>for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
+  nnoremap <silent> <A-e> :Repeatable
+        \ for i in range(winnr('$')) <bar>
         \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
-        \ endfor <bar> endfor<CR>
-  nnoremap <silent> <Plug>(_ScrollUpAllWindows)
-        \ :<C-u>for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
+        \ endfor<CR>
+  nnoremap <silent> <A-y> :Repeatable
+        \ for i in range(winnr('$')) <bar>
         \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
-        \ endfor <bar> endfor<CR>
-  nnoremap <silent> <A-e>
-        \ :<C-u>call <SID>CountableKeys("\<Plug>(_ScrollDownAllWindows)")<CR>
-  nnoremap <silent> <A-y>
-        \ :<C-u>call <SID>CountableKeys("\<Plug>(_ScrollUpAllWindows)")<CR>
+        \ endfor<CR>
 
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
   let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
-  noremap <silent> <Plug>(_JumpCFuncUsePatternForward)
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")<CR>
-  noremap <silent> <Plug>(_JumpCFuncUsePatternBackward)
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")<CR>
-  nmap <silent> ]f :<C-u>call <SID>CountableKeys("\<Plug>(_JumpCFuncUsePatternForward)")<CR>
-  nmap <silent> [f :<C-u>call <SID>CountableKeys("\<Plug>(_JumpCFuncUsePatternBackward)")<CR>
-  nmap <silent> ]F :<C-u>call <SID>CountableKeys("\<Plug>(_JumpCFuncDefPatternForward)")<CR>
-  nmap <silent> [F :<C-u>call <SID>CountableKeys("\<Plug>(_JumpCFuncDefPatternBackward)")<CR>
+  nnoremap <silent> ]f :<C-u>Repeatable call search(g:cFuncUsePattern,  's')<CR>
+  nnoremap <silent> [f :<C-u>Repeatable call search(g:cFuncUsePattern, 'bs')<CR>
+  nnoremap <silent> ]F :<C-u>Repeatable call search(g:cFuncDefPattern,  's')<CR>
+  nnoremap <silent> [F :<C-u>Repeatable call search(g:cFuncDefPattern, 'bs')<CR>
 
   " ブラケットの前の単語にジャンプ
   let g:bracketPattern = '\v\zs<\w+>\ze\('
-  noremap <silent> <Plug>(_JumpBracketPatternForward)
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")<CR>
-  noremap <silent> <Plug>(_JumpBracketPatternBackward)
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")<CR>
-  nmap <silent> ]b :<C-u>call <SID>CountableKeys("\<Plug>(_JumpBracketPatternForward)")<CR>
-  nmap <silent> [b :<C-u>call <SID>CountableKeys("\<Plug>(_JumpBracketPatternBackward)")<CR>
+  nnoremap <silent> ]b :<C-u>Repeatable call search(g:bracketPattern,  's')<CR>
+  nnoremap <silent> [b :<C-u>Repeatable call search(g:bracketPattern, 'bs')<CR>
 
 endif "}}}
 
