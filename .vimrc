@@ -180,13 +180,13 @@ NeoBundleLazy 'kana/vim-textobj-function', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [['xo', 'if', 'af', 'iF', 'aF']],
       \ }
-NeoBundleLazy 'sgur/vim-textobj-parameter', {
-      \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [['xo', 'i,', 'a,']],
-      \ }
 NeoBundleLazy 'kana/vim-textobj-indent', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [['xo', 'ii', 'ai', 'iI', 'aI']],
+      \ }
+NeoBundleLazy 'sgur/vim-textobj-parameter', {
+      \   'depends' : 'kana/vim-textobj-user',
+      \   'on_map'  : [['xo', 'i,', 'a,']],
       \ }
 
 "}}}
@@ -200,7 +200,11 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'osyo-manga/vim-operator-search', {
-      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-function'],
+      \   'depends' : [
+      \     'kana/vim-operator-user',
+      \     'kana/vim-textobj-function',
+      \     'kana/vim-textobj-indent',
+      \   ],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
