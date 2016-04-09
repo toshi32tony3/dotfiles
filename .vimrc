@@ -1596,10 +1596,10 @@ if neobundle#tap('vim-repeat')
   endfunction
 
   " 変更リストを辿る
-  nnoremap <silent> g; :<C-u>silent! execute 'normal! ' . v:count1 . 'g;' <bar>
-        \ call repeat#set('g;', v:count1)<CR>
-  nnoremap <silent> g, :<C-u>silent! execute 'normal! ' . v:count1 . 'g,' <bar>
-        \ call repeat#set('g,', v:count1)<CR>
+  nnoremap <silent> g; :<C-u>silent! execute 'normal! ' . v:count1 . 'g;zv' <bar>
+        \ call repeat#set('g;zv', v:count1)<CR>
+  nnoremap <silent> g, :<C-u>silent! execute 'normal! ' . v:count1 . 'g,zv' <bar>
+        \ call repeat#set('g,zv', v:count1)<CR>
 
   " 関数呼び出しをカウント指定可能にする
   function! s:CountableFunc(func)
