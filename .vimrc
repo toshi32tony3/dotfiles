@@ -307,7 +307,6 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 " debug {{{
 
 NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
-NeoBundleLazy 'tyru/restart.vim',        {'on_cmd' : 'Restart'}
 NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
 
 "}}}
@@ -2071,11 +2070,6 @@ if neobundle#tap('vim-quickrun')
   noremap <Leader>qq :<C-u>QuickRun -hook/time/enable 1
   noremap <Leader>qt :<C-u>QuickRun -hook/time/enable 1 -type<Space>
   noremap <Leader>qa :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
-
-endif "}}}
-
-" GVimの再起動を簡易化(restart.vim) {{{
-if neobundle#tap('restart.vim')
 
 endif "}}}
 
