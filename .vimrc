@@ -1140,18 +1140,8 @@ call s:AddMyCMap('gps', 'Gita push')
 call s:AddMyCMap('gre', 'Gita reset')
 call s:AddMyCMap('gst', 'Gita status')
 
-" 最後のカーソル位置を記憶していたらジャンプ
-" → Gdiff時に不便なことがあったのでコメントアウト
-" → vim-gitaでも同様の問題が起きるかわからないのでコメント外しておく
-autocmd MyAutoCmd BufRead * silent execute 'normal! `"zv'
-
-" " 保存時にViewの状態を保存し, 読み込み時にViewの状態を前回の状態に戻す
-" " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
-" " → プラグインの挙動とぶつかることもあるらしいので使わない
-" " → https://github.com/Shougo/vimproc.vim/issues/116
-" setglobal viewdir=~/vimfiles/view
-" autocmd MyAutoCmd BufWritePost ?* mkview
-" autocmd MyAutoCmd BufReadPost  ?* loadview
+" 最後のカーソル位置にジャンプ
+autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 
 "}}}
 "-----------------------------------------------------------------------------
