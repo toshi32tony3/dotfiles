@@ -529,16 +529,6 @@ autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
 
-" scrollbind無しで全ウィンドウ同時スクロール
-nnoremap <silent> <A-e> :<C-u>
-      \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
-      \ endfor <bar> endfor<CR>
-nnoremap <silent> <A-y> :<C-u>
-      \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
-      \ endfor <bar> endfor<CR>
-
 " バッファ選択を簡易化
 nnoremap <A-b> :<C-u>ls<CR>:buffer<Space>
 
@@ -1608,12 +1598,35 @@ if neobundle#tap('vim-repeat')
   nnoremap <silent> g, :<C-u>silent! execute 'normal! ' . v:count1 . 'g,zv' <bar>
         \ call repeat#set('g,zv', v:count1)<CR>
 
+  " キーストロークをカウント指定可能にする
+  function! s:CountableKeys(keys)
+    for i in range(v:count1)
+      execute "normal " . a:keys
+    endfor
+  endfunction
+
   " 関数呼び出しをカウント指定可能にする
   function! s:CountableFunc(func)
     for i in range(v:count1)
       execute "call " . a:func
     endfor
   endfunction
+
+  " scrollbind無しで全ウィンドウ同時スクロール
+  nnoremap <silent> <Plug>(_ScrollDownAllWindows)
+        \ :<C-u>for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
+        \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
+        \ endfor <bar> endfor<CR>
+  nnoremap <silent> <Plug>(_ScrollUpAllWindows)
+        \ :<C-u>for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
+        \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
+        \ endfor <bar> endfor<CR>
+  nnoremap <silent> <A-e>
+        \ :<C-u>call <SID>CountableKeys("\<Plug>(_ScrollDownAllWindows)")
+        \ <bar> call repeat#set("\<Plug>(_ScrollDownAllWindows)",  1)<CR>
+  nnoremap <silent> <A-y>
+        \ :<C-u>call <SID>CountableKeys("\<Plug>(_ScrollUpAllWindows)")
+        \ <bar> call repeat#set("\<Plug>(_ScrollUpAllWindows)",    1)<CR>
 
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
