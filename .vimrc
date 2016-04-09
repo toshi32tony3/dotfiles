@@ -1598,14 +1598,14 @@ if neobundle#tap('vim-repeat')
   nnoremap <silent> g, :<C-u>silent! execute 'normal! ' . v:count1 . 'g,zv' <bar>
         \ call repeat#set('g,zv', v:count1)<CR>
 
-  " キーストロークをカウント指定可能にする
+  " 任意のキーストロークを繰り返しカウント指定可能にする
   function! s:CountableKeys(keys)
     for i in range(v:count1)
       execute "normal " . a:keys
     endfor
   endfunction
 
-  " 関数呼び出しをカウント指定可能にする
+  " 任意の関数を繰り返しカウント指定可能にする
   function! s:CountableFunc(func)
     for i in range(v:count1)
       execute "call " . a:func
