@@ -1570,7 +1570,7 @@ if neobundle#tap('vim-repeat')
     for i in range(v:count1)
       execute a:cmd
     endfor
-    call repeat#set(':Repeatable ' . a:cmd . "\<CR>", v:count1)
+    call repeat#set(':Repeatable ' . a:cmd . "\<CR>", 1)
   endfunction
 
   " Quickly make a macro and use it with "."
