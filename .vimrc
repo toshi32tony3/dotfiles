@@ -1569,13 +1569,15 @@ endif "}}}
 " もっと繰り返し可能にする(vim-repeat) {{{
 if neobundle#tap('vim-repeat')
 
-  " " Make the given command repeatable using repeat.vim
-  " " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
-  " command! -nargs=+ Repeatable call s:Repeatable(<q-args>)
-  " function! s:Repeatable(cmd)
-  "   execute a:cmd
-  "   call repeat#set(':Repeatable ' . a:cmd . "\<CR>")
-  " endfunction
+  " Make the given command repeatable using repeat.vim
+  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
+  command! -nargs=+ -count Repeatable call s:Repeatable(<q-args>)
+  function! s:Repeatable(cmd)
+    for i in range(v:count1)
+      execute a:cmd
+    endfor
+    call repeat#set(':Repeatable ' . a:cmd . "\<CR>", v:count1)
+  endfunction
 
   " Quickly make a macro and use it with "."
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
