@@ -217,8 +217,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \ }
 
 NeoBundle 'tpope/vim-surround'
-" 本家 : 'tpope/vim-repeat'
-NeoBundle 'toshi32tony3/vim-repeat'
+NeoBundle 'kana/vim-repeat'
 
 "}}}
 "-------------------------------------------------------------------
@@ -1581,7 +1580,6 @@ if neobundle#tap('vim-repeat')
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
   let s:simple_macro_active = 0
   nnoremap <silent> <A-m> :call <SID>SimpleMacro()<CR>
-  nnoremap <silent> <Plug>(_RepeatSimpleMacro) :<C-u>call repeat#wrap('@m', v:count1)<CR>
   function! s:SimpleMacro()
     let s:simple_macro_active = (s:simple_macro_active + 1) % 2
     if  s:simple_macro_active
@@ -1592,17 +1590,15 @@ if neobundle#tap('vim-repeat')
       " remove trailing <A-m>, <C-o>
       let @m = @m[0 : -3]
       let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
-      call repeat#set("\<Plug>(_RepeatSimpleMacro)", 1)
+      call repeat#set('@m', v:count1)
     endif
   endfunction
 
   " 変更リストを辿る
-  noremap <silent> <Plug>(_JumpOlderChange) :<C-u>silent! call repeat#wrap('g;', v:count1)<CR>
-  noremap <silent> <Plug>(_JumpNewerChange) :<C-u>silent! call repeat#wrap('g,', v:count1)<CR>
   nnoremap <silent> g; :<C-u>silent! execute 'normal! ' . v:count1 . 'g;' <bar>
-        \ call repeat#set("\<Plug>(_JumpOlderChange)", 1)<CR>
+        \ call repeat#set('g;', v:count1)<CR>
   nnoremap <silent> g, :<C-u>silent! execute 'normal! ' . v:count1 . 'g,' <bar>
-        \ call repeat#set("\<Plug>(_JumpNewerChange)", 1)<CR>
+        \ call repeat#set('g,', v:count1)<CR>
 
   " 関数呼び出しをカウント指定可能にする
   function! s:CountableFunc(func)
