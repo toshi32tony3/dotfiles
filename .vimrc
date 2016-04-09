@@ -211,6 +211,10 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
+NeoBundleLazy 'machakann/vim-operator-insert', {
+      \   'depends' : 'kana/vim-operator-user',
+      \   'on_map'  : [['nx', '<Plug>']],
+      \ }
 NeoBundleLazy 'toshi32tony3/caw.vim', {
       \   'depends' : ['kana/vim-operator-user'],
       \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
@@ -1533,6 +1537,14 @@ endif "}}}
 if neobundle#tap('vim-operator-openbrowser')
 
   map <A-l> <Plug>(operator-openbrowser)
+
+endif "}}}
+
+" 挿入オペレータ(vim-operator-insert) {{{
+if neobundle#tap('vim-operator-insert')
+
+  map <A-a> <Plug>(operator-insert-a)
+  map <A-i> <Plug>(operator-insert-i)
 
 endif "}}}
 
