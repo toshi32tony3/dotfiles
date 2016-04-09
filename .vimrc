@@ -208,7 +208,7 @@ NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'toshi32tony3/caw.vim', {
-      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
+      \   'depends' : ['kana/vim-operator-user'],
       \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
       \ }
 
