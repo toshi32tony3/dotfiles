@@ -1257,7 +1257,7 @@ if neobundle#tap('eskk.vim')
         \   'encoding' : 'euc-jp',
         \ }
 
-  " " neocompleteを使わない場合は設定不要
+  " " neocompleteを使わない場合, 以下の設定は不要
   " let g:eskk#show_annotation = 1
   " let g:eskk#tab_select_completion = 1
   " let g:eskk#start_completion_length = 2
@@ -1659,15 +1659,9 @@ if neobundle#tap('vim-startify')
   let g:startify_session_dir = '~/vimfiles/session'
   let g:startify_session_delete_buffers = 1
 
-  " " ランダム表示ヘッダどうしようかな...
-  " let g:startify_custom_header = []
-
   " ブックマークの設定はローカル設定ファイルに記述する
   " see: ~/localfiles/template/local.rc.vim
-  " let g:startify_bookmarks = [
-  "   \   '.',
-  "   \   '~\.vimrc',
-  "   \ ]
+  " let g:startify_bookmarks = ['.', '~\.vimrc']
 
   let g:startify_list_order = [
         \   ['My bookmarks:'          ], 'bookmarks',
@@ -1876,7 +1870,7 @@ if neobundle#tap('vimfiler.vim')
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
     nmap <buffer> <LocalLeader> <Leader>
 
-    " grepはUniteを使うので潰しておく
+    " uniteを使うのでgrepは潰しておく
     nnoremap <buffer> gr <Nop>
 
     " ソート用マッピングを変えたい
@@ -1987,12 +1981,7 @@ endif "}}}
 " markdownを使いやすくする(vim-markdown) {{{
 if neobundle#tap('vim-markdown')
 
-  " " markdownのfold機能を無効にする
-  " " → むしろ有効活用したい
-  " let g:vim_markdown_folding_disabled = 1
-
-  " 折り畳みを1段階閉じた状態で開く
-  " → foldlevelstartを変えても意味がないっぽいのでfoldlevelをいじる
+  " 折り畳みを1段階閉じて開く(foldlevelstartではダメぽいのでfoldlevelをいじる)
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
