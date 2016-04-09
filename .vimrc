@@ -1598,11 +1598,12 @@ if neobundle#tap('vim-repeat')
   nnoremap <silent> g, :<C-u>silent! execute 'normal! ' . v:count1 . 'g,zv' <bar>
         \ call repeat#set('g,zv', v:count1)<CR>
 
-  " 任意のキーストロークを繰り返しカウント指定可能にする
+  " 任意のキーストロークをリピート可能にする
   function! s:CountableKeys(keys)
     for i in range(v:count1)
       execute "normal " . a:keys
     endfor
+    call repeat#set(a:keys, v:count1)
   endfunction
 
   " 任意の関数を繰り返しカウント指定可能にする
@@ -1622,11 +1623,9 @@ if neobundle#tap('vim-repeat')
         \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
         \ endfor <bar> endfor<CR>
   nnoremap <silent> <A-e>
-        \ :<C-u>call <SID>CountableKeys("\<Plug>(_ScrollDownAllWindows)")
-        \ <bar> call repeat#set("\<Plug>(_ScrollDownAllWindows)",  1)<CR>
+        \ :<C-u>call <SID>CountableKeys("\<Plug>(_ScrollDownAllWindows)")<CR>
   nnoremap <silent> <A-y>
-        \ :<C-u>call <SID>CountableKeys("\<Plug>(_ScrollUpAllWindows)")
-        \ <bar> call repeat#set("\<Plug>(_ScrollUpAllWindows)",    1)<CR>
+        \ :<C-u>call <SID>CountableKeys("\<Plug>(_ScrollUpAllWindows)")<CR>
 
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
@@ -1635,18 +1634,10 @@ if neobundle#tap('vim-repeat')
         \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")<CR>
   noremap <silent> <Plug>(_JumpCFuncUsePatternBackward)
         \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")<CR>
-  nnoremap <silent> ]f
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternForward)",  1)<CR>
-  nnoremap <silent> [f
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternBackward)", 1)<CR>
-  nnoremap <silent> ]F
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncDefPattern,  's')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncDefPatternForward)",  1)<CR>
-  nnoremap <silent> [F
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncDefPattern, 'bs')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncDefPatternBackward)", 1)<CR>
+  nmap <silent> ]f :<C-u>call <SID>CountableKeys("\<Plug>(_JumpCFuncUsePatternForward)")<CR>
+  nmap <silent> [f :<C-u>call <SID>CountableKeys("\<Plug>(_JumpCFuncUsePatternBackward)")<CR>
+  nmap <silent> ]F :<C-u>call <SID>CountableKeys("\<Plug>(_JumpCFuncDefPatternForward)")<CR>
+  nmap <silent> [F :<C-u>call <SID>CountableKeys("\<Plug>(_JumpCFuncDefPatternBackward)")<CR>
 
   " ブラケットの前の単語にジャンプ
   let g:bracketPattern = '\v\zs<\w+>\ze\('
@@ -1654,12 +1645,8 @@ if neobundle#tap('vim-repeat')
         \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")<CR>
   noremap <silent> <Plug>(_JumpBracketPatternBackward)
         \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")<CR>
-  nnoremap <silent> ]b
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")
-        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternForward)",  1)<CR>
-  nnoremap <silent> [b
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")
-        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternBackward)", 1)<CR>
+  nmap <silent> ]b :<C-u>call <SID>CountableKeys("\<Plug>(_JumpBracketPatternForward)")<CR>
+  nmap <silent> [b :<C-u>call <SID>CountableKeys("\<Plug>(_JumpBracketPatternBackward)")<CR>
 
 endif "}}}
 
