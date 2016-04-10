@@ -116,7 +116,6 @@ NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 NeoBundleLazy 'lambdalisue/vim-gita', {
-      \   'rev'       : 'alpha-3',
       \   'on_source' : 'agit.vim',
       \   'on_cmd'    : 'Gita',
       \ }
@@ -180,13 +179,13 @@ NeoBundleLazy 'kana/vim-textobj-function', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [['xo', 'if', 'af', 'iF', 'aF']],
       \ }
-NeoBundleLazy 'sgur/vim-textobj-parameter', {
-      \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [['xo', 'i,', 'a,']],
-      \ }
 NeoBundleLazy 'kana/vim-textobj-indent', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [['xo', 'ii', 'ai', 'iI', 'aI']],
+      \ }
+NeoBundleLazy 'sgur/vim-textobj-parameter', {
+      \   'depends' : 'kana/vim-textobj-user',
+      \   'on_map'  : [['xo', 'i,', 'a,']],
       \ }
 
 "}}}
@@ -200,15 +199,23 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'osyo-manga/vim-operator-search', {
-      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-function'],
+      \   'depends' : [
+      \     'kana/vim-operator-user',
+      \     'kana/vim-textobj-function',
+      \     'kana/vim-textobj-indent',
+      \   ],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'sgur/vim-operator-openbrowser', {
       \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-NeoBundleLazy 'tyru/caw.vim', {
-      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-indent'],
+NeoBundleLazy 'machakann/vim-operator-insert', {
+      \   'depends' : 'kana/vim-operator-user',
+      \   'on_map'  : [['nx', '<Plug>']],
+      \ }
+NeoBundleLazy 'toshi32tony3/caw.vim', {
+      \   'depends' : ['kana/vim-operator-user'],
       \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
       \ }
 
@@ -217,7 +224,6 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \ }
 
 NeoBundle 'tpope/vim-surround'
-" 本家 : 'tpope/vim-repeat'
 NeoBundle 'toshi32tony3/vim-repeat'
 
 "}}}
@@ -304,7 +310,6 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 " debug {{{
 
 NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
-NeoBundleLazy 'tyru/restart.vim',        {'on_cmd' : 'Restart'}
 NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
 
 "}}}
@@ -522,16 +527,6 @@ autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit
 
 " 検索テキストハイライトを消す
 nnoremap <silent> <Esc> :<C-u>nohlsearch<CR>
-
-" scrollbind無しで全ウィンドウ同時スクロール
-nnoremap <silent> <A-e> :<C-u>
-      \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
-      \ endfor <bar> endfor<CR>
-nnoremap <silent> <A-y> :<C-u>
-      \ for i in range(v:count1) <bar> for j in range(winnr('$')) <bar>
-      \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
-      \ endfor <bar> endfor<CR>
 
 " バッファ選択を簡易化
 nnoremap <A-b> :<C-u>ls<CR>:buffer<Space>
@@ -1141,17 +1136,8 @@ call s:AddMyCMap('gps', 'Gita push')
 call s:AddMyCMap('gre', 'Gita reset')
 call s:AddMyCMap('gst', 'Gita status')
 
-" " 最後のカーソル位置を記憶していたらジャンプ
-" " → Gdiff時に不便なことがあったのでコメントアウト
-" autocmd MyAutoCmd BufRead * silent execute 'normal! `"'
-
-" " 保存時にViewの状態を保存し, 読み込み時にViewの状態を前回の状態に戻す
-" " http://ac-mopp.blogspot.jp/2012/10/vim-to.html
-" " → プラグインの挙動とぶつかることもあるらしいので使わない
-" " → https://github.com/Shougo/vimproc.vim/issues/116
-" setglobal viewdir=~/vimfiles/view
-" autocmd MyAutoCmd BufWritePost ?* mkview
-" autocmd MyAutoCmd BufReadPost  ?* loadview
+" 最後のカーソル位置にジャンプ
+autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 
 "}}}
 "-----------------------------------------------------------------------------
@@ -1263,7 +1249,7 @@ if neobundle#tap('eskk.vim')
         \   'encoding' : 'euc-jp',
         \ }
 
-  " " neocompleteを使わない場合は設定不要
+  " " neocompleteを使わない場合, 以下の設定は不要
   " let g:eskk#show_annotation = 1
   " let g:eskk#tab_select_completion = 1
   " let g:eskk#start_completion_length = 2
@@ -1543,6 +1529,14 @@ if neobundle#tap('vim-operator-openbrowser')
 
 endif "}}}
 
+" 挿入オペレータ(vim-operator-insert) {{{
+if neobundle#tap('vim-operator-insert')
+
+  map <A-a> <Plug>(operator-insert-a)
+  map <A-i> <Plug>(operator-insert-i)
+
+endif "}}}
+
 " コメントアウト/コメントアウト解除(caw.vim) {{{
 if neobundle#tap('caw.vim')
 
@@ -1569,19 +1563,10 @@ endif "}}}
 " もっと繰り返し可能にする(vim-repeat) {{{
 if neobundle#tap('vim-repeat')
 
-  " " Make the given command repeatable using repeat.vim
-  " " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
-  " command! -nargs=+ Repeatable call s:Repeatable(<q-args>)
-  " function! s:Repeatable(cmd)
-  "   execute a:cmd
-  "   call repeat#set(':Repeatable ' . a:cmd . "\<CR>")
-  " endfunction
-
   " Quickly make a macro and use it with "."
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
   let s:simple_macro_active = 0
   nnoremap <silent> <A-m> :call <SID>SimpleMacro()<CR>
-  nnoremap <silent> <Plug>(_RepeatSimpleMacro) :<C-u>call repeat#wrap('@m', v:count1)<CR>
   function! s:SimpleMacro()
     let s:simple_macro_active = (s:simple_macro_active + 1) % 2
     if  s:simple_macro_active
@@ -1592,57 +1577,46 @@ if neobundle#tap('vim-repeat')
       " remove trailing <A-m>, <C-o>
       let @m = @m[0 : -3]
       let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
-      call repeat#set("\<Plug>(_RepeatSimpleMacro)", 1)
+      call repeat#set('@m', v:count1)
     endif
   endfunction
 
-  " 変更リストを辿る
-  noremap <silent> <Plug>(_JumpOlderChange) :<C-u>silent! call repeat#wrap('g;', v:count1)<CR>
-  noremap <silent> <Plug>(_JumpNewerChange) :<C-u>silent! call repeat#wrap('g,', v:count1)<CR>
-  nnoremap <silent> g; :<C-u>silent! execute 'normal! ' . v:count1 . 'g;' <bar>
-        \ call repeat#set("\<Plug>(_JumpOlderChange)", 1)<CR>
-  nnoremap <silent> g, :<C-u>silent! execute 'normal! ' . v:count1 . 'g,' <bar>
-        \ call repeat#set("\<Plug>(_JumpNewerChange)", 1)<CR>
-
-  " 関数呼び出しをカウント指定可能にする
-  function! s:CountableFunc(func)
+  " Make the given command repeatable using repeat.vim
+  " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
+  command! -nargs=+ -count Repeatable call s:Repeatable(<q-args>)
+  function! s:Repeatable(cmd)
     for i in range(v:count1)
-      execute "call " . a:func
+      execute a:cmd
     endfor
+    call repeat#set(':Repeatable ' . a:cmd . "\<CR>", 1)
   endfunction
+
+  " 変更リストを辿る
+  nnoremap <silent> g; :<C-u>Repeatable silent! execute 'normal! g;zvzz'<CR>
+  nnoremap <silent> g, :<C-u>Repeatable silent! execute 'normal! g,zvzz'<CR>
+
+  " scrollbind無しで全ウィンドウ同時スクロール
+  nnoremap <silent> <A-e> :Repeatable
+        \ for i in range(winnr('$')) <bar>
+        \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
+        \ endfor<CR>
+  nnoremap <silent> <A-y> :Repeatable
+        \ for i in range(winnr('$')) <bar>
+        \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
+        \ endfor<CR>
 
   " Cの関数名にジャンプ
   let g:cFuncUsePattern = '\v\zs<\a+\u+\l+\w+>\ze\('
   let g:cFuncDefPattern = '\v(static\s+)?\a\s+\zs<\a+\u+\l+\w+>\ze\('
-  noremap <silent> <Plug>(_JumpCFuncUsePatternForward)
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")<CR>
-  noremap <silent> <Plug>(_JumpCFuncUsePatternBackward)
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")<CR>
-  nnoremap <silent> ]f
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern,  's')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternForward)",  1)<CR>
-  nnoremap <silent> [f
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncUsePattern, 'bs')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncUsePatternBackward)", 1)<CR>
-  nnoremap <silent> ]F
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncDefPattern,  's')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncDefPatternForward)",  1)<CR>
-  nnoremap <silent> [F
-        \ :<C-u>call <SID>CountableFunc("search(g:cFuncDefPattern, 'bs')")
-        \ <bar> call repeat#set("\<Plug>(_JumpCFuncDefPatternBackward)", 1)<CR>
+  nnoremap <silent> ]f :<C-u>Repeatable call search(g:cFuncUsePattern,  's')<CR>
+  nnoremap <silent> [f :<C-u>Repeatable call search(g:cFuncUsePattern, 'bs')<CR>
+  nnoremap <silent> ]F :<C-u>Repeatable call search(g:cFuncDefPattern,  's')<CR>
+  nnoremap <silent> [F :<C-u>Repeatable call search(g:cFuncDefPattern, 'bs')<CR>
 
   " ブラケットの前の単語にジャンプ
   let g:bracketPattern = '\v\zs<\w+>\ze\('
-  noremap <silent> <Plug>(_JumpBracketPatternForward)
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")<CR>
-  noremap <silent> <Plug>(_JumpBracketPatternBackward)
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")<CR>
-  nnoremap <silent> ]b
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern,  's')")
-        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternForward)",  1)<CR>
-  nnoremap <silent> [b
-        \ :<C-u>call <SID>CountableFunc("search(g:bracketPattern, 'bs')")
-        \ <bar> call repeat#set("\<Plug>(_JumpBracketPatternBackward)", 1)<CR>
+  nnoremap <silent> ]b :<C-u>Repeatable call search(g:bracketPattern,  's')<CR>
+  nnoremap <silent> [b :<C-u>Repeatable call search(g:bracketPattern, 'bs')<CR>
 
 endif "}}}
 
@@ -1666,15 +1640,9 @@ if neobundle#tap('vim-startify')
   let g:startify_session_dir = '~/vimfiles/session'
   let g:startify_session_delete_buffers = 1
 
-  " " ランダム表示ヘッダどうしようかな...
-  " let g:startify_custom_header = []
-
   " ブックマークの設定はローカル設定ファイルに記述する
   " see: ~/localfiles/template/local.rc.vim
-  " let g:startify_bookmarks = [
-  "   \   '.',
-  "   \   '~\.vimrc',
-  "   \ ]
+  " let g:startify_bookmarks = ['.', '~\.vimrc']
 
   let g:startify_list_order = [
         \   ['My bookmarks:'          ], 'bookmarks',
@@ -1883,7 +1851,7 @@ if neobundle#tap('vimfiler.vim')
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
     nmap <buffer> <LocalLeader> <Leader>
 
-    " grepはUniteを使うので潰しておく
+    " uniteを使うのでgrepは潰しておく
     nnoremap <buffer> gr <Nop>
 
     " ソート用マッピングを変えたい
@@ -1994,12 +1962,7 @@ endif "}}}
 " markdownを使いやすくする(vim-markdown) {{{
 if neobundle#tap('vim-markdown')
 
-  " " markdownのfold機能を無効にする
-  " " → むしろ有効活用したい
-  " let g:vim_markdown_folding_disabled = 1
-
-  " 折り畳みを1段階閉じた状態で開く
-  " → foldlevelstartを変えても意味がないっぽいのでfoldlevelをいじる
+  " 折り畳みを1段階閉じて開く(foldlevelstartではダメぽいのでfoldlevelをいじる)
   autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
 
 endif "}}}
@@ -2089,11 +2052,6 @@ if neobundle#tap('vim-quickrun')
   noremap <Leader>qq :<C-u>QuickRun -hook/time/enable 1
   noremap <Leader>qt :<C-u>QuickRun -hook/time/enable 1 -type<Space>
   noremap <Leader>qa :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
-
-endif "}}}
-
-" GVimの再起動を簡易化(restart.vim) {{{
-if neobundle#tap('restart.vim')
 
 endif "}}}
 
