@@ -215,6 +215,7 @@ NeoBundleLazy 'machakann/vim-operator-insert', {
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'toshi32tony3/caw.vim', {
+      \   'rev'     : 'fix_supporting_vim-repeat',
       \   'depends' : ['kana/vim-operator-user'],
       \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
       \ }
