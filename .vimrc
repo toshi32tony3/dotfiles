@@ -115,6 +115,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
+set shellslash
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'on_source' : 'agit.vim',
       \   'on_cmd'    : 'Gita',
