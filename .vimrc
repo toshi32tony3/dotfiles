@@ -1567,30 +1567,32 @@ if neobundle#tap('vim-repeat')
   " Quickly make a macro and use it with "."
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
   let s:simple_macro_active = 0
-  nnoremap <silent> <A-m> :call <SID>SimpleMacro()<CR>
-  function! s:SimpleMacro()
+  function! s:SimpleMacro(id, op)
+    if a:id !~# "\[a-z]" | echo 'you cannot use : ' . a:id | return | endif
+    if a:op !~# "\[0-2]" | echo 'invalid option : ' . a:op | return | endif
     let s:simple_macro_active = (s:simple_macro_active + 1) % 2
     if  s:simple_macro_active
       echo 'call SimpleMacro()'
-      call feedkeys('qm', 'n')
+      call feedkeys('q' . a:id, 'n')
     else
       normal! q
-      " remove trailing <A-m>, <C-o>
-      let @m = @m[0 : -3]
+      " remove trailing mapping key and <C-o>
+      let @m = @m[0 : (-1 * (a:op + 1))]
       let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
-      call repeat#set('@m', v:count1)
+      call repeat#set('@m', 1)
     endif
   endfunction
+  nnoremap <silent> <A-m> :call <SID>SimpleMacro('m', 2)<CR>
 
   " Make the given command repeatable using repeat.vim
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
-  command! -nargs=+ -count Repeatable call s:Repeatable(<q-args>)
   function! s:Repeatable(cmd)
     for i in range(v:count1)
       execute a:cmd
     endfor
     call repeat#set(':Repeatable ' . a:cmd . "\<CR>", 1)
   endfunction
+  command! -nargs=+ -count Repeatable call s:Repeatable(<q-args>)
 
   " 変更リストを辿る
   nnoremap <silent> g; :<C-u>Repeatable silent! execute 'normal! g;zvzz'<CR>
