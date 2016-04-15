@@ -115,6 +115,7 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
+set shellslash
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'on_source' : 'agit.vim',
       \   'on_cmd'    : 'Gita',
@@ -1119,16 +1120,16 @@ call s:AddMyCMap( 'sc', 'Scratch')
 call s:AddMyCMap('scp', 'ScratchPreview')
 call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
-call s:AddMyCMap( 'ga', 'Gita add %')
+call s:AddMyCMap( 'ga', 'Gita add % -f')
 call s:AddMyCMap( 'gc', 'Gita commit')
-call s:AddMyCMap('gac', 'GitaBar add % | Gita commit')
+call s:AddMyCMap('gac', 'GitaBar add % -f | Gita commit')
 call s:AddMyCMap('gbl', 'Gita blame')
 call s:AddMyCMap('gbr', 'Gita branch')
 call s:AddMyCMap('gch', 'Gita chaperone')
 call s:AddMyCMap('gco', 'Gita checkout')
 call s:AddMyCMap('gca', 'Gita commit --amend')
 call s:AddMyCMap('gdi', 'Gita diff')
-call s:AddMyCMap('gdl', 'Gita diff-ls')
+call s:AddMyCMap('gdl', 'Gita diff-ls master')
 call s:AddMyCMap('glf', 'Gita ls-files')
 call s:AddMyCMap('gp2', 'Gita patch -2')
 call s:AddMyCMap('gp3', 'Gita patch -3')
@@ -1190,7 +1191,6 @@ endif "}}}
 if neobundle#tap('agit.vim')
 
   let g:agit_enable_auto_show_commit = 0
-  let g:agit_max_log_lines = 200
 
   function! s:AgitSettings()
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
@@ -1567,30 +1567,32 @@ if neobundle#tap('vim-repeat')
   " Quickly make a macro and use it with "."
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/mappings.vim
   let s:simple_macro_active = 0
-  nnoremap <silent> <A-m> :call <SID>SimpleMacro()<CR>
-  function! s:SimpleMacro()
+  function! s:SimpleMacro(id, op)
+    if a:id !~# "\[a-z]" | echo 'you cannot use : ' . a:id | return | endif
+    if a:op !~# "\[0-2]" | echo 'invalid option : ' . a:op | return | endif
     let s:simple_macro_active = (s:simple_macro_active + 1) % 2
     if  s:simple_macro_active
       echo 'call SimpleMacro()'
-      call feedkeys('qm', 'n')
+      call feedkeys('q' . a:id, 'n')
     else
       normal! q
-      " remove trailing <A-m>, <C-o>
-      let @m = @m[0 : -3]
+      " remove trailing mapping key and <C-o>
+      let @m = @m[0 : (-1 * (a:op + 1))]
       let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
-      call repeat#set('@m', v:count1)
+      call repeat#set('@m', 1)
     endif
   endfunction
+  nnoremap <silent> <A-m> :call <SID>SimpleMacro('m', 2)<CR>
 
   " Make the given command repeatable using repeat.vim
   " https://github.com/AndrewRadev/Vimfiles/blob/master/startup/commands.vim
-  command! -nargs=+ -count Repeatable call s:Repeatable(<q-args>)
   function! s:Repeatable(cmd)
     for i in range(v:count1)
       execute a:cmd
     endfor
     call repeat#set(':Repeatable ' . a:cmd . "\<CR>", 1)
   endfunction
+  command! -nargs=+ -count Repeatable call s:Repeatable(<q-args>)
 
   " 変更リストを辿る
   nnoremap <silent> g; :<C-u>Repeatable silent! execute 'normal! g;zvzz'<CR>
