@@ -776,7 +776,7 @@ command! ClearJumpList for s:n in range(250) | mark '     | endfor
 
 " 指定時間毎に発火するCursorMoved / LineChangedを追加
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
-let s:throttleTimeSpan = 200
+let s:throttleTimeSpan = 250
 function! s:OnCursorMove() "{{{
   " normalかvisualの時のみ判定
   let     l:mode  = mode(1)
@@ -839,59 +839,42 @@ endfunction "}}}
 " NOTE: 1行, 1Foldまでとする
 " NOTE: 対応ファイルタイプ : vim/markdown
 function! s:GetFoldLevel() "{{{
-  " ------------------------------------------------------------
-  " 小細工
-  " ------------------------------------------------------------
   " foldlevelに大きめの値をセットして[z, ]zを使えるようにする
-  if &foldenable == 'nofoldenable'
-    setlocal foldlevel=10
-  endif
+  if &foldenable == 'nofoldenable' | setlocal foldlevel=10 | endif
 
-  " ------------------------------------------------------------
-  " 前処理
-  " ------------------------------------------------------------
+  let l:savedView = winsaveview() " Viewを保存
+  let l:belloffTmp = &l:belloff   " motionの失敗を前提にするのでbelloffを使う
+  let &l:belloff   = 'error'
+
   let l:foldLevel         = 0
   let l:currentLineNumber = line('.')
   let l:lastLineNumber    = l:currentLineNumber
 
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  " モーションの失敗を前提にしているのでbelloffを使う
-  let l:belloffTmp = &l:belloff
-  let &l:belloff   = 'error'
-
-  " ------------------------------------------------------------
-  " foldLevelをカウント
-  " ------------------------------------------------------------
   if &filetype == 'markdown'
     let l:pattern = '^#'
-
-    " markdownの場合, (現在の行 - 1)にfoldmarkerが含まれていれば, foldLevel+=1
-    let l:foldLevel += (match(getline((line('.') - 1)), l:pattern) >= 0) ? 1 : 0
   else
     let l:pattern = '{{{$' " for match }}}
   endif
 
+  " markdownの場合, (現在の行 - 1)にfoldmarkerが含まれていれば, foldLevel+=1
+  if &filetype == 'markdown' && getline((line('.') - 1)) =~# l:pattern
+    let l:foldLevel += 1
+  endif
+
   " 現在の行にfoldmarkerが含まれていれば, foldLevel+=1
-  let l:foldLevel += (match(getline('.'), l:pattern) >= 0) ? 1 : 0
+  let l:foldLevel += getline('.') =~# l:pattern ? 1 : 0
 
   " [zを使ってカーソルが移動していればfoldLevelをインクリメント
   while 1
     keepjumps normal! [z
     let l:currentLineNumber = line('.')
-    if l:lastLineNumber == l:currentLineNumber | break | endif
+    if  l:currentLineNumber == l:lastLineNumber | break | endif
     let l:foldLevel += 1
     let l:lastLineNumber = l:currentLineNumber
   endwhile
 
-  " ------------------------------------------------------------
-  " 後処理
-  " ------------------------------------------------------------
-  " 退避していたbelloffを戻す
+  " 退避していたbelloff / Viewを戻す
   let &l:belloff = l:belloffTmp
-
-  " Viewを復元
   call winrestview(l:savedView)
 
   return l:foldLevel
@@ -904,72 +887,44 @@ let s:currentFold = ''
 function! s:GetCurrentFold() "{{{
   if &filetype != 'vim' && &filetype != 'markdown' | return '' | endif
 
-  " ------------------------------------------------------------
-  " 前処理
-  " ------------------------------------------------------------
-  " foldlevel('.')はあてにならないことがあるので自作関数で求める
+  " foldlevel('.')はnofoldenable時にあてにならないので自作関数で求める
   let l:foldLevel = s:GetFoldLevel()
   if  l:foldLevel <= 0 | return '' | endif
 
-  " View/カーソル位置を保存
-  let l:savedView      = winsaveview()
-  let l:cursorPosition = getcurpos()
-
-  " モーションの失敗を前提にしているのでbelloffを使う
-  let l:belloffTmp = &l:belloff
+  let l:firstCurPos = getcurpos() " カーソル位置を保存
+  let l:savedView = winsaveview() " Viewを保存
+  let l:belloffTmp = &l:belloff   " motionの失敗を前提にするのでbelloffを使う
   let &l:belloff   = 'error'
 
-  " 走査回数の設定
-  let l:searchCounter = l:foldLevel
-
-  " 変数初期化
+  " カーソル位置のfoldListを取得
   let l:foldList = []
   let l:lastLineNumber = line('.')
-
-  " ------------------------------------------------------------
-  " カーソル位置のfoldListを取得
-  " ------------------------------------------------------------
-  while 1
-    if l:searchCounter <= 0 | break | endif
-
-    " 1段階親のところへ移動
+  let l:searchCounter = l:foldLevel
+  while 1 | if l:searchCounter <= 0 | break | endif
     keepjumps normal! [z
     let l:currentLineNumber = line('.')
-
-    " 移動していなければ, 移動前のカーソル行が子Fold開始位置だったということ
-    if l:lastLineNumber == l:currentLineNumber
+    if  l:currentLineNumber == l:lastLineNumber
       " カーソルを戻して子FoldをfoldListに追加
-      call setpos('.', l:cursorPosition)
-      let l:currentLine = (&filetype == 'markdown') &&
-            \             (match(getline('.'), '^#') == -1)
-            \           ? getline((line('.') - 1))
-            \           : getline('.')
+      call setpos('.', l:firstCurPos)
+      let l:currentLine = ((&filetype == 'markdown') && (getline('.') =~# '^#'))
+            \ ? getline((line('.') - 1))
+            \ : getline('.')
       let l:foldName = s:GetFoldName(l:currentLine)
-      if  l:foldName != ''
-        call add(l:foldList, l:foldName)
-      endif
+      if  l:foldName != '' | call add(l:foldList, l:foldName) | endif
     else
       let l:currentLine = (&filetype == 'markdown')
-            \           ? getline((line('.') - 1))
-            \           : getline('.')
+            \ ? getline((line('.') - 1))
+            \ : getline('.')
       " 親FoldをfoldListに追加
       let l:foldName = s:GetFoldName(l:currentLine)
-      if  l:foldName != ''
-        call insert(l:foldList, l:foldName, 0)
-      endif
+      if  l:foldName != '' | call insert(l:foldList, l:foldName, 0) | endif
     endif
-
     let l:lastLineNumber = l:currentLineNumber
     let l:searchCounter -= 1
   endwhile
 
-  " ------------------------------------------------------------
-  " 後処理
-  " ------------------------------------------------------------
-  " 退避していたbelloffを戻す
+  " 退避していたbelloff / Viewを戻す
   let &l:belloff = l:belloffTmp
-
-  " Viewを復元
   call winrestview(l:savedView)
 
   " ウィンドウ幅が十分ある場合, foldListを繋いで返す
@@ -987,29 +942,22 @@ let s:currentFunc = ''
 function! s:GetCurrentFuncC() "{{{
   if &filetype != 'c' | return '' | endif
 
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  " カーソルがある行の1列目の文字が { ならば [[ は不要
-  if getline('.')[0] != '{' " for match } }
-
-    " { よりも先に前方にセクション末尾 } がある場合, 関数定義の間なので検索不要
+  let l:savedView = winsaveview() " Viewを保存
+  if getline('.')[0] != '{' " [[が必要か判定
     keepjumps normal! []
-    let l:endBracketLine = line('.')
+    let l:endLine = line('.')
     call winrestview(l:savedView)
     keepjumps normal! [[
-    if line('.') < l:endBracketLine | call winrestview(l:savedView) | return '' | endif
-
-    " 検索対象が居なければViewを戻して処理終了
-    if line('.') == 1 | call winrestview(l:savedView) | return '' | endif
+    " 以下のいずれかなら[[は不要
+    " ・関数定義の間(セクション開始 '{' よりも前方にセクション末尾 '}' がある)
+    " ・検索対象が居ない
+    if line('.') < l:endLine | call winrestview(l:savedView) | return '' | endif
+    if line('.') == 1        | call winrestview(l:savedView) | return '' | endif
   endif
-
   call search('(', 'b')
   keepjumps normal! b
-  let l:funcName = expand('<cword>')
-
-  " Viewを復元
-  call winrestview(l:savedView)
+  let l:funcName = expand('<cword>') " 関数名を取得
+  call winrestview(l:savedView)      " Viewを戻す
 
   return l:funcName
 endfunction " }}}
@@ -1018,26 +966,16 @@ autocmd MyAutoCmd User MyLineChanged
 autocmd MyAutoCmd BufEnter *  let s:currentFunc = s:GetCurrentFuncC()
 
 function! s:ClipCurrentFunc(funcName) "{{{
-  if strlen(a:funcName) == 0
-    echo 'There is no function nearby cursor.'
-    return
-  endif
+  if strlen(a:funcName) == 0 | echo 'function is not found.' | return | endif
   let @* = a:funcName | echo 'clipped: ' . a:funcName
 endfunction "}}}
-command! ClipCurrentFunc
-      \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:ClipCurrentFunc(s:currentFunc)
+command! ClipCurrentFunc call s:ClipCurrentFunc(s:currentFunc)
 
 function! s:PutCurrentFunc(funcName) "{{{
-  if strlen(a:funcName) == 0
-    echo 'There is no function nearby cursor.'
-    return
-  endif
+  if strlen(a:funcName) == 0 | echo 'function is not found.' | return | endif
   execute 'normal! i' . a:funcName
 endfunction "}}}
-command! PutCurrentFunc
-      \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:PutCurrentFunc(s:currentFunc)
+command! PutCurrentFunc call s:PutCurrentFunc(s:currentFunc)
 
 " :cdのディレクトリ名の補完に'cdpath'を使うようにする
 " http://whileimautomaton.net/2007/09/24141900
