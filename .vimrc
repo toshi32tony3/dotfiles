@@ -167,22 +167,16 @@ NeoBundleLazy 'deris/vim-shot-f',   {'on_map' : '<Plug>'}
 NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
 
 NeoBundle 'kshenoy/vim-signature'
-
-NeoBundle 'tmhedberg/matchit'
+NeoBundle 'k-takata/matchit.vim'
 
 "}}}
 "-------------------------------------------------------------------
 " text-objects {{{
 
 NeoBundleLazy 'kana/vim-textobj-user'
-
 NeoBundleLazy 'kana/vim-textobj-function', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [['xo', 'if', 'af', 'iF', 'aF']],
-      \ }
-NeoBundleLazy 'kana/vim-textobj-indent', {
-      \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [['xo', 'ii', 'ai', 'iI', 'aI']],
       \ }
 NeoBundleLazy 'sgur/vim-textobj-parameter', {
       \   'depends' : 'kana/vim-textobj-user',
@@ -194,31 +188,17 @@ NeoBundleLazy 'sgur/vim-textobj-parameter', {
 " operator {{{
 
 NeoBundleLazy 'kana/vim-operator-user'
-
 NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'osyo-manga/vim-operator-search', {
-      \   'depends' : [
-      \     'kana/vim-operator-user',
-      \     'kana/vim-textobj-function',
-      \     'kana/vim-textobj-indent',
-      \   ],
+      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-function'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-NeoBundleLazy 'sgur/vim-operator-openbrowser', {
-      \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
-      \   'on_map'  : [['nx', '<Plug>']],
-      \ }
-NeoBundleLazy 'machakann/vim-operator-insert', {
-      \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : [['nx', '<Plug>']],
-      \ }
-NeoBundleLazy 'toshi32tony3/caw.vim', {
-      \   'rev'     : 'fix_supporting_vim-repeat',
+NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user'],
-      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
+      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator-caw-']],
       \ }
 
 NeoBundleLazy 't9md/vim-quickhl', {
@@ -284,11 +264,11 @@ NeoBundleLazy 'tyru/open-browser.vim', {
       \   'on_cmd' : ['OpenBrowserSearch'],
       \ }
 
-NeoBundleLazy 'basyura/twibill.vim'
-NeoBundleLazy 'basyura/TweetVim', {
-      \   'depends' : ['basyura/twibill.vim',  'tyru/open-browser.vim'],
-      \   'on_cmd'  : ['TweetVimHomeTimeline', 'TweetVimSearch'],
-      \ }
+" NeoBundleLazy 'basyura/twibill.vim'
+" NeoBundleLazy 'basyura/TweetVim', {
+"       \   'depends' : ['basyura/twibill.vim',  'tyru/open-browser.vim'],
+"       \   'on_cmd'  : ['TweetVimHomeTimeline', 'TweetVimSearch'],
+"       \ }
 NeoBundleLazy 'basyura/J6uil.vim', {'on_cmd' : 'J6uil'}
 
 " 本家 : 'kannokanno/previm'
@@ -311,8 +291,8 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 "-------------------------------------------------------------------
 " debug {{{
 
-NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
-NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
+" NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
+" NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
 
 "}}}
 "-------------------------------------------------------------------
@@ -418,10 +398,6 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 "}}}
 "-----------------------------------------------------------------------------
 " View {{{
-
-if neobundle#is_installed('badwolf')
-  colorscheme badwolf
-endif
 
 if has('gui_running')
   " Windowsは「Ricty for Powerline」&「MacTypePortable」で良い
@@ -1290,6 +1266,13 @@ if neobundle#tap('vim-ambicmd')
 
 endif "}}}
 
+" My favorite colorscheme(badwolf) {{{
+if neobundle#tap('badwolf')
+
+  colorscheme badwolf
+
+endif "}}}
+
 " カッコいいステータスラインを使う(lightline.vim) {{{
 if neobundle#tap('lightline.vim')
 
@@ -1489,8 +1472,8 @@ if neobundle#tap('vim-signature')
 
 endif "}}}
 
-" 対応するキーワードを増やす(matchit) {{{
-if neobundle#tap('matchit')
+" 対応するキーワードを増やす(matchit.vim) {{{
+if neobundle#tap('matchit.vim')
 
 endif "}}}
 
@@ -1501,11 +1484,6 @@ endif "}}}
 
 " パラメータを選択するテキストオブジェクト(vim-textobj-parameter) {{{
 if neobundle#tap('vim-textobj-parameter')
-
-endif "}}}
-
-" 同インデント範囲を選択するテキストオブジェクト(vim-textobj-indent) {{{
-if neobundle#tap('vim-textobj-indent')
 
 endif "}}}
 
@@ -1520,21 +1498,6 @@ endif "}}}
 if neobundle#tap('vim-operator-search')
 
   map <A-s> <Plug>(operator-search)
-
-endif "}}}
-
-" Web検索オペレータ(vim-operator-openbrowser) {{{
-if neobundle#tap('vim-operator-openbrowser')
-
-  map <A-l> <Plug>(operator-openbrowser)
-
-endif "}}}
-
-" 挿入オペレータ(vim-operator-insert) {{{
-if neobundle#tap('vim-operator-insert')
-
-  map <A-a> <Plug>(operator-insert-a)
-  map <A-i> <Plug>(operator-insert-i)
 
 endif "}}}
 
