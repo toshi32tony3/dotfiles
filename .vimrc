@@ -198,7 +198,7 @@ NeoBundleLazy 'osyo-manga/vim-operator-search', {
       \ }
 NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user'],
-      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator-caw-']],
+      \   'on_map'  : [['nx', '<Plug>']],
       \ }
 
 NeoBundleLazy 't9md/vim-quickhl', {
@@ -1438,7 +1438,7 @@ endif "}}}
 if neobundle#tap('caw.vim')
 
   map gc    <Plug>(caw:prefix)
-  map <A-c> <Plug>(operator-caw-wrap-toggle)
+  map <A-c> <Plug>(caw:wrap:toggle:operator)
 
 endif "}}}
 
