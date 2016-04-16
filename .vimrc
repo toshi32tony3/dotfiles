@@ -1598,6 +1598,12 @@ if neobundle#tap('vim-repeat')
   nnoremap <silent> g; :<C-u>Repeatable silent! execute 'normal! g;zvzz'<CR>
   nnoremap <silent> g, :<C-u>Repeatable silent! execute 'normal! g,zvzz'<CR>
 
+  " ]c, [cをdotrepeat可能にする
+  if neobundle#is_installed('vim-signify')
+    nnoremap <silent> [c :<C-u>Repeatable silent! execute "normal \<Plug>(signify-prev-hunk)"<CR>
+    nnoremap <silent> ]c :<C-u>Repeatable silent! execute "normal \<Plug>(signify-next-hunk)"<CR>
+  endif
+
   " scrollbind無しで全ウィンドウ同時スクロール
   nnoremap <silent> <A-e> :Repeatable
         \ for i in range(winnr('$')) <bar>
