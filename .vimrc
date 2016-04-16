@@ -322,7 +322,7 @@ endif
 " タブ幅, シフト幅, タブ使用有無の設定
 setglobal tabstop=2 shiftwidth=2 softtabstop=0 expandtab
 autocmd MyAutoCmd FileType c,cpp,make setlocal tabstop=4 shiftwidth=4
-autocmd MyAutoCmd FileType make       setlocal noexpandtab
+autocmd MyAutoCmd FileType       make setlocal noexpandtab
 
 setglobal nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
 setglobal virtualedit=all            " テキストが存在しない場所でも動きたい
@@ -355,7 +355,7 @@ setglobal completeopt=menuone noinfercase pumheight=10
 " コマンドライン補完設定
 setglobal wildmenu wildmode=full
 
-" <C-p>や<C-n>でもコマンド履歴のフィルタリングを有効にする
+" <C-p>や<C-n>でもコマンド履歴のフィルタリングを使えるようにする
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
@@ -400,7 +400,6 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 " View {{{
 
 if has('gui_running')
-  " Windowsは「Ricty for Powerline」&「MacTypePortable」で良い
   let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
 
   setglobal linespace=0          " 行間隔[pixel]の設定(default 1 for Win32 GUI)
@@ -481,11 +480,10 @@ setglobal ignorecase " 検索時に大文字小文字を区別しない。区別
 setglobal smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
 setglobal wrapscan   " 検索時に最後まで行ったら最初に戻る
 setglobal incsearch  " インクリメンタルサーチ
-setglobal hlsearch   " マッチしたテキストをハイライト
+setglobal hlsearch   " 検索結果をハイライト
 
-" 逆方向migemo検索g?を有効化して再マッピング
 if has('kaoriya') && has('migemo')
-  setglobal migemo
+  setglobal migemo " backward-migemo検索g?を有効化
   noremap m/ g/
   noremap m? g?
 endif
@@ -494,8 +492,7 @@ endif
 "-----------------------------------------------------------------------------
 " Simplify operation {{{
 
-" キー入力タイムアウトはあると邪魔だし, 待つ意味も無い気がする
-setglobal notimeout
+setglobal notimeout " キー入力タイムアウトは無くて良い気がする
 
 " :make実行後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
@@ -1372,7 +1369,6 @@ endif "}}}
 
 " フルスクリーンモード(scrnmode.vim) {{{
 if has('kaoriya')
-
   if !exists('s:fullscreenOn') | let s:fullscreenOn = 0 | endif
   function! s:ToggleScreenMode()
     let s:fullscreenOn = (s:fullscreenOn + 1) % 2
@@ -1380,7 +1376,6 @@ if has('kaoriya')
     else               | execute 'ScreenMode 0' | endif
   endfunction
   nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
-
 endif "}}}
 
 " incsearchをパワーアップ(incsearch.vim) {{{
@@ -1513,8 +1508,6 @@ endif "}}}
 if neobundle#tap('vim-quickhl')
 
   map <A-h> <Plug>(operator-quickhl-manual-this-motion)
-
-  " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
   nmap <A-h><A-h> <Plug>(quickhl-manual-this)
 
 endif "}}}
@@ -1638,7 +1631,6 @@ if neobundle#tap('unite.vim')
   let g:unite_force_overwrite_statusline = 1
   let g:unite_split_rule = 'botright'
 
-  " use pt
   " https://github.com/monochromegane/the_platinum_searcher
   if executable('pt')
     setglobal grepprg=pt\ --hidden\ --nogroup\ --nocolor\ --smart-case
@@ -1743,7 +1735,6 @@ if neobundle#tap('unite.vim')
     " ディレクトリが選択されたらvimfilerで開く
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory_mru',             'vimfiler')
-
   endfunction
 
 endif "}}}
@@ -1892,7 +1883,6 @@ endif "}}}
 " Vimからブラウザを開く(open-browser.vim) {{{
 if neobundle#tap('open-browser.vim')
 
-  " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
   nmap <A-l><A-l> <Plug>(openbrowser-smart-search)
 
 endif "}}}
@@ -1924,9 +1914,7 @@ endif "}}}
 " ファイルをブラウザで開く(previm) {{{
 if neobundle#tap('previm')
 
-  if has('win32')
-    let g:previm_open_cmd = 'start'
-  endif
+  if has('win32') | let g:previm_open_cmd = 'start' | endif
   let g:previm_enable_realtime = 1
 
 endif "}}}
