@@ -1058,8 +1058,8 @@ command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
-  let l:separator = stridx(a:alternateName, '!') == -1 ? "\<Space>" : '!'
-  if !exists(':' . split(a:alternateName, l:separator)[0]) | return | endif
+  " let l:separator = stridx(a:alternateName, '!') == -1 ? "\<Space>" : '!'
+  " if !exists(':' . split(a:alternateName, l:separator)[0]) | return | endif
   let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
   execute substitute(g:abbrev, '|', '<bar>', 'g')
   call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
@@ -1106,8 +1106,8 @@ call s:AddMyCMap('gdl', 'Gita diff-ls master')
 call s:AddMyCMap('glf', 'Gita ls-files')
 call s:AddMyCMap('gp2', 'Gita patch -2')
 call s:AddMyCMap('gp3', 'Gita patch -3')
-call s:AddMyCMap('gpl', 'Gita pull')
-call s:AddMyCMap('gps', 'Gita push')
+call s:AddMyCMap('gpl', '!git pull')
+call s:AddMyCMap('gps', '!git push')
 call s:AddMyCMap('gre', 'Gita reset')
 call s:AddMyCMap('gst', 'Gita status')
 
