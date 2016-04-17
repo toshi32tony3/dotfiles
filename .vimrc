@@ -167,22 +167,16 @@ NeoBundleLazy 'deris/vim-shot-f',   {'on_map' : '<Plug>'}
 NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
 
 NeoBundle 'kshenoy/vim-signature'
-
-NeoBundle 'tmhedberg/matchit'
+NeoBundle 'k-takata/matchit.vim'
 
 "}}}
 "-------------------------------------------------------------------
 " text-objects {{{
 
 NeoBundleLazy 'kana/vim-textobj-user'
-
 NeoBundleLazy 'kana/vim-textobj-function', {
       \   'depends' : 'kana/vim-textobj-user',
       \   'on_map'  : [['xo', 'if', 'af', 'iF', 'aF']],
-      \ }
-NeoBundleLazy 'kana/vim-textobj-indent', {
-      \   'depends' : 'kana/vim-textobj-user',
-      \   'on_map'  : [['xo', 'ii', 'ai', 'iI', 'aI']],
       \ }
 NeoBundleLazy 'sgur/vim-textobj-parameter', {
       \   'depends' : 'kana/vim-textobj-user',
@@ -194,31 +188,17 @@ NeoBundleLazy 'sgur/vim-textobj-parameter', {
 " operator {{{
 
 NeoBundleLazy 'kana/vim-operator-user'
-
 NeoBundleLazy 'kana/vim-operator-replace', {
       \   'depends' : 'kana/vim-operator-user',
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'osyo-manga/vim-operator-search', {
-      \   'depends' : [
-      \     'kana/vim-operator-user',
-      \     'kana/vim-textobj-function',
-      \     'kana/vim-textobj-indent',
-      \   ],
+      \   'depends' : ['kana/vim-operator-user', 'kana/vim-textobj-function'],
       \   'on_map'  : [['nx', '<Plug>']],
       \ }
-NeoBundleLazy 'sgur/vim-operator-openbrowser', {
-      \   'depends' : ['kana/vim-operator-user', 'tyru/open-browser.vim'],
-      \   'on_map'  : [['nx', '<Plug>']],
-      \ }
-NeoBundleLazy 'machakann/vim-operator-insert', {
-      \   'depends' : 'kana/vim-operator-user',
-      \   'on_map'  : [['nx', '<Plug>']],
-      \ }
-NeoBundleLazy 'toshi32tony3/caw.vim', {
-      \   'rev'     : 'fix_supporting_vim-repeat',
+NeoBundleLazy 'tyru/caw.vim', {
       \   'depends' : ['kana/vim-operator-user'],
-      \   'on_map'  : [['nx', '<Plug>', '<Plug>(operator']],
+      \   'on_map'  : [['nx', '<Plug>']],
       \ }
 
 NeoBundleLazy 't9md/vim-quickhl', {
@@ -284,11 +264,11 @@ NeoBundleLazy 'tyru/open-browser.vim', {
       \   'on_cmd' : ['OpenBrowserSearch'],
       \ }
 
-NeoBundleLazy 'basyura/twibill.vim'
-NeoBundleLazy 'basyura/TweetVim', {
-      \   'depends' : ['basyura/twibill.vim',  'tyru/open-browser.vim'],
-      \   'on_cmd'  : ['TweetVimHomeTimeline', 'TweetVimSearch'],
-      \ }
+" NeoBundleLazy 'basyura/twibill.vim'
+" NeoBundleLazy 'basyura/TweetVim', {
+"       \   'depends' : ['basyura/twibill.vim',  'tyru/open-browser.vim'],
+"       \   'on_cmd'  : ['TweetVimHomeTimeline', 'TweetVimSearch'],
+"       \ }
 NeoBundleLazy 'basyura/J6uil.vim', {'on_cmd' : 'J6uil'}
 
 " 本家 : 'kannokanno/previm'
@@ -311,8 +291,8 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 "-------------------------------------------------------------------
 " debug {{{
 
-NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
-NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
+" NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
+" NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
 
 "}}}
 "-------------------------------------------------------------------
@@ -342,7 +322,7 @@ endif
 " タブ幅, シフト幅, タブ使用有無の設定
 setglobal tabstop=2 shiftwidth=2 softtabstop=0 expandtab
 autocmd MyAutoCmd FileType c,cpp,make setlocal tabstop=4 shiftwidth=4
-autocmd MyAutoCmd FileType make       setlocal noexpandtab
+autocmd MyAutoCmd FileType       make setlocal noexpandtab
 
 setglobal nrformats=hex              " <C-a>や<C-x>の対象を10進数,16進数に絞る
 setglobal virtualedit=all            " テキストが存在しない場所でも動きたい
@@ -375,7 +355,7 @@ setglobal completeopt=menuone noinfercase pumheight=10
 " コマンドライン補完設定
 setglobal wildmenu wildmode=full
 
-" <C-p>や<C-n>でもコマンド履歴のフィルタリングを有効にする
+" <C-p>や<C-n>でもコマンド履歴のフィルタリングを使えるようにする
 cnoremap <C-p> <Up>
 cnoremap <C-n> <Down>
 
@@ -419,12 +399,7 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 "-----------------------------------------------------------------------------
 " View {{{
 
-if neobundle#is_installed('badwolf')
-  colorscheme badwolf
-endif
-
 if has('gui_running')
-  " Windowsは「Ricty for Powerline」&「MacTypePortable」で良い
   let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
 
   setglobal linespace=0          " 行間隔[pixel]の設定(default 1 for Win32 GUI)
@@ -505,11 +480,10 @@ setglobal ignorecase " 検索時に大文字小文字を区別しない。区別
 setglobal smartcase  " 大文字小文字の両方が含まれている場合は, 区別する
 setglobal wrapscan   " 検索時に最後まで行ったら最初に戻る
 setglobal incsearch  " インクリメンタルサーチ
-setglobal hlsearch   " マッチしたテキストをハイライト
+setglobal hlsearch   " 検索結果をハイライト
 
-" 逆方向migemo検索g?を有効化して再マッピング
 if has('kaoriya') && has('migemo')
-  setglobal migemo
+  setglobal migemo " backward-migemo検索g?を有効化
   noremap m/ g/
   noremap m? g?
 endif
@@ -518,8 +492,7 @@ endif
 "-----------------------------------------------------------------------------
 " Simplify operation {{{
 
-" キー入力タイムアウトはあると邪魔だし, 待つ意味も無い気がする
-setglobal notimeout
+setglobal notimeout " キー入力タイムアウトは無くて良い気がする
 
 " :make実行後, 自動でQuickfixウィンドウを開く
 autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
@@ -803,7 +776,7 @@ command! ClearJumpList for s:n in range(250) | mark '     | endfor
 
 " 指定時間毎に発火するCursorMoved / LineChangedを追加
 " http://d.hatena.ne.jp/gnarl/20080130/1201624546
-let s:throttleTimeSpan = 200
+let s:throttleTimeSpan = 250
 function! s:OnCursorMove() "{{{
   " normalかvisualの時のみ判定
   let     l:mode  = mode(1)
@@ -866,59 +839,42 @@ endfunction "}}}
 " NOTE: 1行, 1Foldまでとする
 " NOTE: 対応ファイルタイプ : vim/markdown
 function! s:GetFoldLevel() "{{{
-  " ------------------------------------------------------------
-  " 小細工
-  " ------------------------------------------------------------
   " foldlevelに大きめの値をセットして[z, ]zを使えるようにする
-  if &foldenable == 'nofoldenable'
-    setlocal foldlevel=10
-  endif
+  if &foldenable == 'nofoldenable' | setlocal foldlevel=10 | endif
 
-  " ------------------------------------------------------------
-  " 前処理
-  " ------------------------------------------------------------
+  let l:savedView = winsaveview() " Viewを保存
+  let l:belloffTmp = &l:belloff   " motionの失敗を前提にするのでbelloffを使う
+  let &l:belloff   = 'error'
+
   let l:foldLevel         = 0
   let l:currentLineNumber = line('.')
   let l:lastLineNumber    = l:currentLineNumber
 
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  " モーションの失敗を前提にしているのでbelloffを使う
-  let l:belloffTmp = &l:belloff
-  let &l:belloff   = 'error'
-
-  " ------------------------------------------------------------
-  " foldLevelをカウント
-  " ------------------------------------------------------------
   if &filetype == 'markdown'
     let l:pattern = '^#'
-
-    " markdownの場合, (現在の行 - 1)にfoldmarkerが含まれていれば, foldLevel+=1
-    let l:foldLevel += (match(getline((line('.') - 1)), l:pattern) >= 0) ? 1 : 0
   else
     let l:pattern = '{{{$' " for match }}}
   endif
 
+  " markdownの場合, (現在の行 - 1)にfoldmarkerが含まれていれば, foldLevel+=1
+  if &filetype == 'markdown' && getline((line('.') - 1)) =~# l:pattern
+    let l:foldLevel += 1
+  endif
+
   " 現在の行にfoldmarkerが含まれていれば, foldLevel+=1
-  let l:foldLevel += (match(getline('.'), l:pattern) >= 0) ? 1 : 0
+  let l:foldLevel += getline('.') =~# l:pattern ? 1 : 0
 
   " [zを使ってカーソルが移動していればfoldLevelをインクリメント
   while 1
     keepjumps normal! [z
     let l:currentLineNumber = line('.')
-    if l:lastLineNumber == l:currentLineNumber | break | endif
+    if  l:currentLineNumber == l:lastLineNumber | break | endif
     let l:foldLevel += 1
     let l:lastLineNumber = l:currentLineNumber
   endwhile
 
-  " ------------------------------------------------------------
-  " 後処理
-  " ------------------------------------------------------------
-  " 退避していたbelloffを戻す
+  " 退避していたbelloff / Viewを戻す
   let &l:belloff = l:belloffTmp
-
-  " Viewを復元
   call winrestview(l:savedView)
 
   return l:foldLevel
@@ -931,72 +887,44 @@ let s:currentFold = ''
 function! s:GetCurrentFold() "{{{
   if &filetype != 'vim' && &filetype != 'markdown' | return '' | endif
 
-  " ------------------------------------------------------------
-  " 前処理
-  " ------------------------------------------------------------
-  " foldlevel('.')はあてにならないことがあるので自作関数で求める
+  " foldlevel('.')はnofoldenable時にあてにならないので自作関数で求める
   let l:foldLevel = s:GetFoldLevel()
   if  l:foldLevel <= 0 | return '' | endif
 
-  " View/カーソル位置を保存
-  let l:savedView      = winsaveview()
-  let l:cursorPosition = getcurpos()
-
-  " モーションの失敗を前提にしているのでbelloffを使う
-  let l:belloffTmp = &l:belloff
+  let l:firstCurPos = getcurpos() " カーソル位置を保存
+  let l:savedView = winsaveview() " Viewを保存
+  let l:belloffTmp = &l:belloff   " motionの失敗を前提にするのでbelloffを使う
   let &l:belloff   = 'error'
 
-  " 走査回数の設定
-  let l:searchCounter = l:foldLevel
-
-  " 変数初期化
+  " カーソル位置のfoldListを取得
   let l:foldList = []
   let l:lastLineNumber = line('.')
-
-  " ------------------------------------------------------------
-  " カーソル位置のfoldListを取得
-  " ------------------------------------------------------------
-  while 1
-    if l:searchCounter <= 0 | break | endif
-
-    " 1段階親のところへ移動
+  let l:searchCounter = l:foldLevel
+  while 1 | if l:searchCounter <= 0 | break | endif
     keepjumps normal! [z
     let l:currentLineNumber = line('.')
-
-    " 移動していなければ, 移動前のカーソル行が子Fold開始位置だったということ
-    if l:lastLineNumber == l:currentLineNumber
+    if  l:currentLineNumber == l:lastLineNumber
       " カーソルを戻して子FoldをfoldListに追加
-      call setpos('.', l:cursorPosition)
-      let l:currentLine = (&filetype == 'markdown') &&
-            \             (match(getline('.'), '^#') == -1)
-            \           ? getline((line('.') - 1))
-            \           : getline('.')
+      call setpos('.', l:firstCurPos)
+      let l:currentLine = ((&filetype == 'markdown') && (getline('.') =~# '^#'))
+            \ ? getline((line('.') - 1))
+            \ : getline('.')
       let l:foldName = s:GetFoldName(l:currentLine)
-      if  l:foldName != ''
-        call add(l:foldList, l:foldName)
-      endif
+      if  l:foldName != '' | call add(l:foldList, l:foldName) | endif
     else
       let l:currentLine = (&filetype == 'markdown')
-            \           ? getline((line('.') - 1))
-            \           : getline('.')
+            \ ? getline((line('.') - 1))
+            \ : getline('.')
       " 親FoldをfoldListに追加
       let l:foldName = s:GetFoldName(l:currentLine)
-      if  l:foldName != ''
-        call insert(l:foldList, l:foldName, 0)
-      endif
+      if  l:foldName != '' | call insert(l:foldList, l:foldName, 0) | endif
     endif
-
     let l:lastLineNumber = l:currentLineNumber
     let l:searchCounter -= 1
   endwhile
 
-  " ------------------------------------------------------------
-  " 後処理
-  " ------------------------------------------------------------
-  " 退避していたbelloffを戻す
+  " 退避していたbelloff / Viewを戻す
   let &l:belloff = l:belloffTmp
-
-  " Viewを復元
   call winrestview(l:savedView)
 
   " ウィンドウ幅が十分ある場合, foldListを繋いで返す
@@ -1014,29 +942,22 @@ let s:currentFunc = ''
 function! s:GetCurrentFuncC() "{{{
   if &filetype != 'c' | return '' | endif
 
-  " Viewを保存
-  let l:savedView = winsaveview()
-
-  " カーソルがある行の1列目の文字が { ならば [[ は不要
-  if getline('.')[0] != '{' " for match } }
-
-    " { よりも先に前方にセクション末尾 } がある場合, 関数定義の間なので検索不要
+  let l:savedView = winsaveview() " Viewを保存
+  if getline('.')[0] != '{' " [[が必要か判定
     keepjumps normal! []
-    let l:endBracketLine = line('.')
+    let l:endLine = line('.')
     call winrestview(l:savedView)
     keepjumps normal! [[
-    if line('.') < l:endBracketLine | call winrestview(l:savedView) | return '' | endif
-
-    " 検索対象が居なければViewを戻して処理終了
-    if line('.') == 1 | call winrestview(l:savedView) | return '' | endif
+    " 以下のいずれかなら[[は不要
+    " ・関数定義の間(セクション開始 '{' よりも前方にセクション末尾 '}' がある)
+    " ・検索対象が居ない
+    if line('.') < l:endLine | call winrestview(l:savedView) | return '' | endif
+    if line('.') == 1        | call winrestview(l:savedView) | return '' | endif
   endif
-
   call search('(', 'b')
   keepjumps normal! b
-  let l:funcName = expand('<cword>')
-
-  " Viewを復元
-  call winrestview(l:savedView)
+  let l:funcName = expand('<cword>') " 関数名を取得
+  call winrestview(l:savedView)      " Viewを戻す
 
   return l:funcName
 endfunction " }}}
@@ -1045,26 +966,16 @@ autocmd MyAutoCmd User MyLineChanged
 autocmd MyAutoCmd BufEnter *  let s:currentFunc = s:GetCurrentFuncC()
 
 function! s:ClipCurrentFunc(funcName) "{{{
-  if strlen(a:funcName) == 0
-    echo 'There is no function nearby cursor.'
-    return
-  endif
+  if strlen(a:funcName) == 0 | echo 'function is not found.' | return | endif
   let @* = a:funcName | echo 'clipped: ' . a:funcName
 endfunction "}}}
-command! ClipCurrentFunc
-      \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:ClipCurrentFunc(s:currentFunc)
+command! ClipCurrentFunc call s:ClipCurrentFunc(s:currentFunc)
 
 function! s:PutCurrentFunc(funcName) "{{{
-  if strlen(a:funcName) == 0
-    echo 'There is no function nearby cursor.'
-    return
-  endif
+  if strlen(a:funcName) == 0 | echo 'function is not found.' | return | endif
   execute 'normal! i' . a:funcName
 endfunction "}}}
-command! PutCurrentFunc
-      \ let s:currentFunc = s:GetCurrentFuncC() |
-      \ call s:PutCurrentFunc(s:currentFunc)
+command! PutCurrentFunc call s:PutCurrentFunc(s:currentFunc)
 
 " :cdのディレクトリ名の補完に'cdpath'を使うようにする
 " http://whileimautomaton.net/2007/09/24141900
@@ -1085,8 +996,8 @@ command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
-  let l:separator = stridx(a:alternateName, '!') == -1 ? "\<Space>" : '!'
-  if !exists(':' . split(a:alternateName, l:separator)[0]) | return | endif
+  " let l:separator = stridx(a:alternateName, '!') == -1 ? "\<Space>" : '!'
+  " if !exists(':' . split(a:alternateName, l:separator)[0]) | return | endif
   let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
   execute substitute(g:abbrev, '|', '<bar>', 'g')
   call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
@@ -1133,8 +1044,8 @@ call s:AddMyCMap('gdl', 'Gita diff-ls master')
 call s:AddMyCMap('glf', 'Gita ls-files')
 call s:AddMyCMap('gp2', 'Gita patch -2')
 call s:AddMyCMap('gp3', 'Gita patch -3')
-call s:AddMyCMap('gpl', 'Gita pull')
-call s:AddMyCMap('gps', 'Gita push')
+call s:AddMyCMap('gpl', '!git pull')
+call s:AddMyCMap('gps', '!git push')
 call s:AddMyCMap('gre', 'Gita reset')
 call s:AddMyCMap('gst', 'Gita status')
 
@@ -1290,6 +1201,13 @@ if neobundle#tap('vim-ambicmd')
 
 endif "}}}
 
+" My favorite colorscheme(badwolf) {{{
+if neobundle#tap('badwolf')
+
+  colorscheme badwolf
+
+endif "}}}
+
 " カッコいいステータスラインを使う(lightline.vim) {{{
 if neobundle#tap('lightline.vim')
 
@@ -1389,7 +1307,6 @@ endif "}}}
 
 " フルスクリーンモード(scrnmode.vim) {{{
 if has('kaoriya')
-
   if !exists('s:fullscreenOn') | let s:fullscreenOn = 0 | endif
   function! s:ToggleScreenMode()
     let s:fullscreenOn = (s:fullscreenOn + 1) % 2
@@ -1397,7 +1314,6 @@ if has('kaoriya')
     else               | execute 'ScreenMode 0' | endif
   endfunction
   nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
-
 endif "}}}
 
 " incsearchをパワーアップ(incsearch.vim) {{{
@@ -1489,8 +1405,8 @@ if neobundle#tap('vim-signature')
 
 endif "}}}
 
-" 対応するキーワードを増やす(matchit) {{{
-if neobundle#tap('matchit')
+" 対応するキーワードを増やす(matchit.vim) {{{
+if neobundle#tap('matchit.vim')
 
 endif "}}}
 
@@ -1501,11 +1417,6 @@ endif "}}}
 
 " パラメータを選択するテキストオブジェクト(vim-textobj-parameter) {{{
 if neobundle#tap('vim-textobj-parameter')
-
-endif "}}}
-
-" 同インデント範囲を選択するテキストオブジェクト(vim-textobj-indent) {{{
-if neobundle#tap('vim-textobj-indent')
 
 endif "}}}
 
@@ -1523,26 +1434,11 @@ if neobundle#tap('vim-operator-search')
 
 endif "}}}
 
-" Web検索オペレータ(vim-operator-openbrowser) {{{
-if neobundle#tap('vim-operator-openbrowser')
-
-  map <A-l> <Plug>(operator-openbrowser)
-
-endif "}}}
-
-" 挿入オペレータ(vim-operator-insert) {{{
-if neobundle#tap('vim-operator-insert')
-
-  map <A-a> <Plug>(operator-insert-a)
-  map <A-i> <Plug>(operator-insert-i)
-
-endif "}}}
-
 " コメントアウト/コメントアウト解除(caw.vim) {{{
 if neobundle#tap('caw.vim')
 
   map gc    <Plug>(caw:prefix)
-  map <A-c> <Plug>(operator-caw-wrap-toggle)
+  map <A-c> <Plug>(caw:wrap:toggle:operator)
 
 endif "}}}
 
@@ -1550,8 +1446,6 @@ endif "}}}
 if neobundle#tap('vim-quickhl')
 
   map <A-h> <Plug>(operator-quickhl-manual-this-motion)
-
-  " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
   nmap <A-h><A-h> <Plug>(quickhl-manual-this)
 
 endif "}}}
@@ -1597,6 +1491,12 @@ if neobundle#tap('vim-repeat')
   " 変更リストを辿る
   nnoremap <silent> g; :<C-u>Repeatable silent! execute 'normal! g;zvzz'<CR>
   nnoremap <silent> g, :<C-u>Repeatable silent! execute 'normal! g,zvzz'<CR>
+
+  " ]c, [cをdotrepeat可能にする
+  if neobundle#is_installed('vim-signify')
+    nnoremap <silent> [c :<C-u>Repeatable silent! execute "normal \<Plug>(signify-prev-hunk)"<CR>
+    nnoremap <silent> ]c :<C-u>Repeatable silent! execute "normal \<Plug>(signify-next-hunk)"<CR>
+  endif
 
   " scrollbind無しで全ウィンドウ同時スクロール
   nnoremap <silent> <A-e> :Repeatable
@@ -1669,7 +1569,6 @@ if neobundle#tap('unite.vim')
   let g:unite_force_overwrite_statusline = 1
   let g:unite_split_rule = 'botright'
 
-  " use pt
   " https://github.com/monochromegane/the_platinum_searcher
   if executable('pt')
     setglobal grepprg=pt\ --hidden\ --nogroup\ --nocolor\ --smart-case
@@ -1774,7 +1673,6 @@ if neobundle#tap('unite.vim')
     " ディレクトリが選択されたらvimfilerで開く
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
     call unite#custom_default_action('directory_mru',             'vimfiler')
-
   endfunction
 
 endif "}}}
@@ -1923,7 +1821,6 @@ endif "}}}
 " Vimからブラウザを開く(open-browser.vim) {{{
 if neobundle#tap('open-browser.vim')
 
-  " オペレータは2回繰り返すと行に対して処理するが, <cword>に対して処理したい
   nmap <A-l><A-l> <Plug>(openbrowser-smart-search)
 
 endif "}}}
@@ -1955,9 +1852,7 @@ endif "}}}
 " ファイルをブラウザで開く(previm) {{{
 if neobundle#tap('previm')
 
-  if has('win32')
-    let g:previm_open_cmd = 'start'
-  endif
+  if has('win32') | let g:previm_open_cmd = 'start' | endif
   let g:previm_enable_realtime = 1
 
 endif "}}}
