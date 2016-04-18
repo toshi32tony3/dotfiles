@@ -85,17 +85,11 @@ filetype plugin indent off
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if has('vim_starting')
   if &compatible | setglobal nocompatible | endif
-  " neobundle.vimでプラグインを管理する(NeoBundleCleanを使うために小細工)
-  if   isdirectory(expand('~/.vim/bundle/neobundle.vim_673be4e'))
-    setglobal runtimepath+=~/.vim/bundle/neobundle.vim_673be4e
-  else
-    setglobal runtimepath+=~/.vim/bundle/neobundle.vim
-  endif
+  setglobal runtimepath+=~/.vim/bundle/neobundle.vim
 endif
 call neobundle#begin(expand('~/.vim/bundle'))
 
-" NeoBundleCleanを使うために小細工
-NeoBundleFetch 'Shougo/neobundle.vim', {'rev' : '673be4e'}
+NeoBundleFetch 'Shougo/neobundle.vim'
 
 " 日本語ヘルプを卒業したいが, なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
@@ -227,9 +221,13 @@ NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
-NeoBundleLazy 'hewes/unite-gtags',    {'on_source' : 'unite.vim'}
-NeoBundleLazy 'tacroe/unite-mark',    {'on_source' : 'unite.vim'}
-NeoBundleLazy 'Shougo/unite-outline', {'on_source' : 'unite.vim'}
+" 本家 : 'amitab/vim-unite-cscope'
+NeoBundleLazy 'toshi32tony3/vim-unite-cscope', {'on_source' : 'unite.vim'}
+NeoBundle 'hari-rangarajan/CCTree'
+
+NeoBundleLazy 'hewes/unite-gtags',       {'on_source' : 'unite.vim'}
+NeoBundleLazy 'tacroe/unite-mark',       {'on_source' : 'unite.vim'}
+NeoBundleLazy 'Shougo/unite-outline',    {'on_source' : 'unite.vim'}
 
 NeoBundleLazy 'Shougo/vimshell.vim', {
       \   'depends' : 'Shougo/unite.vim',
@@ -495,7 +493,7 @@ endif
 setglobal notimeout " キー入力タイムアウトは無くて良い気がする
 
 " :make実行後, 自動でQuickfixウィンドウを開く
-autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
+autocmd MyAutoCmd QuickfixCmdPost cscope,make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
 autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit | endif
@@ -536,10 +534,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
   tab split
-  " ctagsファイルを複数生成してpath登録順で優先順位を付けているなら'tag'にする
-  execute 'tag ' . a:funcName
-  " " 1つの大きいctagsファイルを生成している場合はリストから選べる'tjump'にする
-  " execute 'tjump ' . a:funcName
+  execute 'tjump ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
 nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
@@ -551,8 +546,22 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetSrcDir() "{{{
     let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
     let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
+    let g:local_rc_cscope_dir      = g:local_rc_current_src_dir . '\cscope.out'
     let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.ctags'
   endfunction "}}}
+
+  function! s:SetCscope() abort
+    " Cscopeの設定
+    if filereadable(g:local_rc_cscope_dir)
+      set cscopetag
+      set cscoperelative
+      set cscopequickfix=s-,c-,d-,i-,t-,e-
+      set nocscopeverbose
+      execute 'cscope add ' .  g:local_rc_cscope_dir
+      set cscopeverbose
+    endif
+    let g:unite_source_cscope_dir = g:local_rc_current_src_dir
+  endfunction
 
   function! s:SetTags() "{{{
     " tagsをセット
@@ -608,6 +617,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let g:local_rc_src_index = 0
     endif
     call s:SetSrcDir()
+    call s:SetCscope()
     call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
@@ -632,13 +642,30 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   " 初回のtags, path設定/ディレクトリ移動
   autocmd MyAutoCmd VimEnter *
         \   call s:SetSrcDir()
+        \ | call s:SetCscope()
         \ | call s:SetTags()
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
         \ | call SetEnvironmentVariables()
         \ | call s:ChangeToCurrentSourceDirectory()
 
-  " ctagsをアップデート
+  " cscopeのデータベースファイルをアップデート
+  function! s:UpdateCscope() "{{{
+    if !executable('cscope') | echomsg 'cscopeが見つかりません' | return | endif
+    let l:currentDir = getcwd()
+    execute 'cd ' . g:local_rc_current_src_dir
+    let l:updateCommand = 'cscope -b -q -R'
+    if has('win32')
+      " 処理中かどうかわかるように/minを使う
+      execute '!start /min ' . l:updateCommand
+    else
+      call system(l:updateCommand)
+    endif
+    execute 'cd ' . l:currentDir
+  endfunction "}}}
+  command! UpdateCscope call s:UpdateCscope()
+
+  " ctagsで生成するタグファイルをアップデート
   function! s:UpdateCtags() "{{{
     if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
     " ディレクトリを削除してから再生成
@@ -1023,7 +1050,8 @@ call s:AddMyCMap( 'cd', 'CD')
 call s:AddMyCMap( 'CD', 'cd')
 call s:AddMyCMap( 'cm', 'ClearMessage')
 call s:AddMyCMap( 'pd', 'PutDateTime')
-call s:AddMyCMap( 'uc', 'UpdateCtags')
+call s:AddMyCMap( 'uc', 'UpdateCscope')
+" call s:AddMyCMap( 'uc', 'UpdateCtags')
 call s:AddMyCMap('cfd', 'ClipFileDir')
 
 " リストへの変換候補登録(Plugin's command)
@@ -1033,6 +1061,7 @@ call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
 call s:AddMyCMap( 'ga', 'Gita add % -f')
 call s:AddMyCMap( 'gc', 'Gita commit')
+call s:AddMyCMap( 'gg', 'Gita grep')
 call s:AddMyCMap('gac', 'GitaBar add % -f | Gita commit')
 call s:AddMyCMap('gbl', 'Gita blame')
 call s:AddMyCMap('gbr', 'Gita branch')
@@ -1173,6 +1202,9 @@ if neobundle#tap('eskk.vim')
 
   imap <C-j>  <Plug>(eskk:toggle)
   nmap <C-j> i<Plug>(eskk:enable)
+  nmap <A-i> I<Plug>(eskk:enable)
+  nmap <A-a> A<Plug>(eskk:enable)
+  nmap <A-o> O<Plug>(eskk:enable)
   cmap <C-j>  <Plug>(eskk:toggle)
 
   function! s:EskkInitialPreSettings()
@@ -1693,6 +1725,11 @@ endif "}}}
 
 " for unite-gtags {{{
 if neobundle#tap('unite-gtags')
+
+endif "}}}
+
+" for vim-unite-cscope {{{
+if neobundle#tap('vim-unite-cscope')
 
 endif "}}}
 
