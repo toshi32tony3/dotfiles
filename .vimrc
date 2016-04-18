@@ -1202,6 +1202,9 @@ if neobundle#tap('eskk.vim')
 
   imap <C-j>  <Plug>(eskk:toggle)
   nmap <C-j> i<Plug>(eskk:enable)
+  nmap <A-i> I<Plug>(eskk:enable)
+  nmap <A-a> A<Plug>(eskk:enable)
+  nmap <A-o> O<Plug>(eskk:enable)
   cmap <C-j>  <Plug>(eskk:toggle)
 
   function! s:EskkInitialPreSettings()
