@@ -158,7 +158,8 @@ NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
 NeoBundleLazy 'deris/vim-shot-f',   {'on_map' : '<Plug>'}
-NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
+" NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
+NeoBundleLazy 'easymotion/vim-easymotion', {'on_map' : '<Plug>'}
 
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'k-takata/matchit.vim'
@@ -199,7 +200,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
       \ }
 
-NeoBundle 'tpope/vim-surround'
+" NeoBundle 'tpope/vim-surround'
 NeoBundle 'toshi32tony3/vim-repeat'
 
 "}}}
@@ -1417,6 +1418,18 @@ if neobundle#tap('vim-sneak')
   map S <Plug>Sneak_S
 
 endif "}}}
+
+" Vim motion on speed!(vim-easymotion) {{{
+if neobundle#tap('vim-easymotion')
+
+  let g:EasyMotion_do_shade = 0
+  let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+
+  map s  <Plug>(easymotion-prefix)
+  " map sw <Plug>(easymotion-bd-w)
+  " map se <Plug>(easymotion-bd-e)
+
+endif " }}}
 
 " Vimのマーク機能を使いやすくする(vim-signature) {{{
 if neobundle#tap('vim-signature')
