@@ -398,7 +398,9 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 " View {{{
 
 if has('gui_running')
-  let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
+  if has('vim_starting')
+    let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
+  endif
 
   setglobal linespace=0          " 行間隔[pixel]の設定(default 1 for Win32 GUI)
   setglobal guioptions=Mc        " M : メニュー削除 / c : ポップアップを使わない
