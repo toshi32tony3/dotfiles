@@ -557,6 +557,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       set cscoperelative
       set cscopequickfix=s-,c-,d-,i-,t-,e-
       set nocscopeverbose
+      execute 'cscope kill -1'
       execute 'cscope add ' .  g:local_rc_cscope_dir
       set cscopeverbose
     endif
