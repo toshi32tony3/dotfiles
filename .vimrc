@@ -496,7 +496,7 @@ endif
 setglobal notimeout " キー入力タイムアウトは無くて良い気がする
 
 " :make実行後, 自動でQuickfixウィンドウを開く
-autocmd MyAutoCmd QuickfixCmdPost cscope,make if len(getqflist()) != 0 | copen | endif
+autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
 autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit | endif
