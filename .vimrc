@@ -1447,10 +1447,11 @@ if neobundle#tap('vim-signature')
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
-    if exists(':SignatureToggleSigns') | delcommand SignatureToggleSigns | endif
-    if exists(':SignatureRefresh')     | delcommand SignatureRefresh     | endif
-    if exists(':SignatureListMarks')   | delcommand SignatureListMarks   | endif
-    if exists(':SignatureListMarkers') | delcommand SignatureListMarkers | endif
+    if exists(':SignatureToggleSigns')     | delcommand SignatureToggleSigns     | endif
+    if exists(':SignatureRefresh')         | delcommand SignatureRefresh         | endif
+    if exists(':SignatureListBufferMarks') | delcommand SignatureListBufferMarks | endif
+    if exists(':SignatureListGlobalMarks') | delcommand SignatureListGlobalMarks | endif
+    if exists(':SignatureListMarkers')     | delcommand SignatureListMarkers     | endif
   endfunction
 
 endif "}}}
