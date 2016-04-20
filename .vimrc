@@ -556,13 +556,13 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetCscope() abort
     " Cscopeの設定
     if filereadable(g:local_rc_cscope_dir)
-      set cscopetag
-      set cscoperelative
-      set cscopequickfix=s-,c-,d-,i-,t-,e-
-      set nocscopeverbose
+      setglobal cscopetag
+      setglobal cscoperelative
+      setglobal cscopequickfix=s-,c-,d-,i-,t-,e-
+      setglobal nocscopeverbose
       execute 'cscope kill -1'
       execute 'cscope add ' .  g:local_rc_cscope_dir
-      set cscopeverbose
+      setglobal cscopeverbose
     endif
     let g:unite_source_cscope_dir = g:local_rc_current_src_dir
   endfunction
@@ -656,16 +656,16 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   " cscopeのデータベースファイルをアップデート
   function! s:UpdateCscope() "{{{
     if !executable('cscope') | echomsg 'cscopeが見つかりません' | return | endif
+    echo 'cscope.outを更新中...'
     let l:currentDir = getcwd()
     execute 'cd ' . g:local_rc_current_src_dir
-    let l:updateCommand = 'cscope -b -q -R'
-    if has('win32')
-      " 処理中かどうかわかるように/minを使う
-      execute '!start /min ' . l:updateCommand
-    else
-      call system(l:updateCommand)
-    endif
+    setglobal nocscopeverbose
+    execute 'cscope kill -1'
+    !cscope -b -q -R
+    execute 'cscope add ' .  g:local_rc_cscope_dir
+    setglobal cscopeverbose
     execute 'cd ' . l:currentDir
+    echo 'cscope.outの更新完了'
   endfunction "}}}
   command! UpdateCscope call s:UpdateCscope()
 
