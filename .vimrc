@@ -1091,11 +1091,14 @@ autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 
 " バッファをHTML形式に変換(2html.vim) {{{
 
+let g:tohtml_font_family = "'MS Gothic'"
+let g:tohtml_font_size = "10pt"
+
 " 選択範囲をHTML変換してヤンクする
 command! -range=% -bar ClipHTML
       \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
-      \ | let @* = substitute(@*, 'font-family: \zs\w*\ze;', "'MS Gothic'", 'g')
-      \ | let @* = substitute(@*, 'font-size: \zs\w*\ze;', "10pt", 'g')
+      \ | let @* = substitute(@*, 'font-family: \zs\w*\ze;', g:tohtml_font_family, 'g')
+      \ | let @* = substitute(@*, 'font-size: \zs\w*\ze;', g:tohtml_font_size, 'g')
 cnoreabbrev ch ClipHTML
 
 "}}}
