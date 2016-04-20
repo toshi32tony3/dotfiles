@@ -537,7 +537,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
   tab split
-  execute 'tjump ' . a:funcName
+  execute 'cstag ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
 nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
