@@ -1094,6 +1094,8 @@ autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 " 選択範囲をHTML変換してヤンクする
 command! -range=% -bar ClipHTML
       \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
+      \ | let @* = substitute(@*, 'font-family: \zs\w*\ze;', "'MS Gothic'", 'g')
+      \ | let @* = substitute(@*, 'font-size: \zs\w*\ze;', "10pt", 'g')
 cnoreabbrev ch ClipHTML
 
 "}}}
