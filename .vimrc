@@ -158,7 +158,8 @@ NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
 NeoBundleLazy 'deris/vim-shot-f',   {'on_map' : '<Plug>'}
-NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
+" NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
+NeoBundleLazy 'easymotion/vim-easymotion', {'on_map' : '<Plug>'}
 
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'k-takata/matchit.vim'
@@ -199,7 +200,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
       \ }
 
-NeoBundle 'tpope/vim-surround'
+" NeoBundle 'tpope/vim-surround'
 NeoBundle 'toshi32tony3/vim-repeat'
 
 "}}}
@@ -398,7 +399,9 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 " View {{{
 
 if has('gui_running')
-  let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
+  if has('vim_starting')
+    let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
+  endif
 
   setglobal linespace=0          " 行間隔[pixel]の設定(default 1 for Win32 GUI)
   setglobal guioptions=Mc        " M : メニュー削除 / c : ポップアップを使わない
@@ -493,7 +496,7 @@ endif
 setglobal notimeout " キー入力タイムアウトは無くて良い気がする
 
 " :make実行後, 自動でQuickfixウィンドウを開く
-autocmd MyAutoCmd QuickfixCmdPost cscope,make if len(getqflist()) != 0 | copen | endif
+autocmd MyAutoCmd QuickfixCmdPost make if len(getqflist()) != 0 | copen | endif
 
 " 最後のウィンドウのbuftypeがquickfixであれば, 自動で閉じる
 autocmd MyAutoCmd WinEnter * if winnr('$') == 1 && &buftype == 'quickfix' | quit | endif
@@ -534,7 +537,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
   tab split
-  execute 'tjump ' . a:funcName
+  execute 'cstag ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
 nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
@@ -553,12 +556,13 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetCscope() abort
     " Cscopeの設定
     if filereadable(g:local_rc_cscope_dir)
-      set cscopetag
-      set cscoperelative
-      set cscopequickfix=s-,c-,d-,i-,t-,e-
-      set nocscopeverbose
+      setglobal cscopetag
+      setglobal cscoperelative
+      setglobal cscopequickfix=s-,c-,d-,i-,t-,e-
+      setglobal nocscopeverbose
+      execute 'cscope kill -1'
       execute 'cscope add ' .  g:local_rc_cscope_dir
-      set cscopeverbose
+      setglobal cscopeverbose
     endif
     let g:unite_source_cscope_dir = g:local_rc_current_src_dir
   endfunction
@@ -652,16 +656,16 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   " cscopeのデータベースファイルをアップデート
   function! s:UpdateCscope() "{{{
     if !executable('cscope') | echomsg 'cscopeが見つかりません' | return | endif
+    echo 'cscope.outを更新中...'
     let l:currentDir = getcwd()
     execute 'cd ' . g:local_rc_current_src_dir
-    let l:updateCommand = 'cscope -b -q -R'
-    if has('win32')
-      " 処理中かどうかわかるように/minを使う
-      execute '!start /min ' . l:updateCommand
-    else
-      call system(l:updateCommand)
-    endif
+    setglobal nocscopeverbose
+    execute 'cscope kill -1'
+    !cscope -b -q -R
+    execute 'cscope add ' .  g:local_rc_cscope_dir
+    setglobal cscopeverbose
     execute 'cd ' . l:currentDir
+    echo 'cscope.outの更新完了'
   endfunction "}}}
   command! UpdateCscope call s:UpdateCscope()
 
@@ -1087,9 +1091,14 @@ autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 
 " バッファをHTML形式に変換(2html.vim) {{{
 
+let g:tohtml_font_family = "'MS Gothic'"
+let g:tohtml_font_size = "10pt"
+
 " 選択範囲をHTML変換してヤンクする
 command! -range=% -bar ClipHTML
       \ :<line1>,<line2>TOhtml | execute "normal! ggyG" | silent execute "bd!"
+      \ | let @* = substitute(@*, 'font-family: \zs\w*\ze;', g:tohtml_font_family, 'g')
+      \ | let @* = substitute(@*, 'font-size: \zs\w*\ze;', g:tohtml_font_size, 'g')
 cnoreabbrev ch ClipHTML
 
 "}}}
@@ -1415,6 +1424,18 @@ if neobundle#tap('vim-sneak')
 
 endif "}}}
 
+" Vim motion on speed!(vim-easymotion) {{{
+if neobundle#tap('vim-easymotion')
+
+  let g:EasyMotion_do_shade = 0
+  let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+
+  map s  <Plug>(easymotion-prefix)
+  " map sw <Plug>(easymotion-bd-w)
+  " map se <Plug>(easymotion-bd-e)
+
+endif " }}}
+
 " Vimのマーク機能を使いやすくする(vim-signature) {{{
 if neobundle#tap('vim-signature')
 
@@ -1429,10 +1450,11 @@ if neobundle#tap('vim-signature')
 
   function! neobundle#hooks.on_post_source(bundle)
     " 使わないコマンドを削除する
-    if exists(':SignatureToggleSigns') | delcommand SignatureToggleSigns | endif
-    if exists(':SignatureRefresh')     | delcommand SignatureRefresh     | endif
-    if exists(':SignatureListMarks')   | delcommand SignatureListMarks   | endif
-    if exists(':SignatureListMarkers') | delcommand SignatureListMarkers | endif
+    if exists(':SignatureToggleSigns')     | delcommand SignatureToggleSigns     | endif
+    if exists(':SignatureRefresh')         | delcommand SignatureRefresh         | endif
+    if exists(':SignatureListBufferMarks') | delcommand SignatureListBufferMarks | endif
+    if exists(':SignatureListGlobalMarks') | delcommand SignatureListGlobalMarks | endif
+    if exists(':SignatureListMarkers')     | delcommand SignatureListMarkers     | endif
   endfunction
 
 endif "}}}
