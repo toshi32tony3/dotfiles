@@ -548,7 +548,6 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   endfunction "}}}
 
   function! s:SetGtags() abort
-    " GTAGSROOTの登録(GNU GLOBALのタグはプロジェクトルートで生成する)
     let $GTAGSROOT = g:local_rc_current_src_dir
     if filereadable($GTAGSROOT . '\GTAGS')
       setglobal cscopeprg=gtags-cscope
