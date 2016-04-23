@@ -222,10 +222,6 @@ NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
-" 本家 : 'amitab/vim-unite-cscope'
-NeoBundleLazy 'toshi32tony3/vim-unite-cscope', {'on_source' : 'unite.vim'}
-NeoBundle 'hari-rangarajan/CCTree'
-
 NeoBundleLazy 'hewes/unite-gtags',       {'on_source' : 'unite.vim'}
 NeoBundleLazy 'tacroe/unite-mark',       {'on_source' : 'unite.vim'}
 NeoBundleLazy 'Shougo/unite-outline',    {'on_source' : 'unite.vim'}
@@ -549,36 +545,22 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetSrcDir() "{{{
     let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
     let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
-    let g:local_rc_cscope_dir      = g:local_rc_current_src_dir . '\cscope.out'
-    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.ctags'
   endfunction "}}}
 
-  function! s:SetCscope() abort
-    " Cscopeの設定
-    if filereadable(g:local_rc_cscope_dir)
+  function! s:SetGtags() abort
+    " GTAGSROOTの登録(GNU GLOBALのタグはプロジェクトルートで生成する)
+    let $GTAGSROOT = g:local_rc_current_src_dir
+    if filereadable($GTAGSROOT . '\GTAGS')
+      setglobal cscopeprg=gtags-cscope
       setglobal cscopetag
       setglobal cscoperelative
       setglobal cscopequickfix=s-,c-,d-,i-,t-,e-
       setglobal nocscopeverbose
       execute 'cscope kill -1'
-      execute 'cscope add ' .  g:local_rc_cscope_dir
+      execute 'cscope add ' . $GTAGSROOT . '\GTAGS'
       setglobal cscopeverbose
     endif
-    let g:unite_source_cscope_dir = g:local_rc_current_src_dir
   endfunction
-
-  function! s:SetTags() "{{{
-    " tagsをセット
-    set tags=
-    for l:item in g:local_rc_ctags_list
-      if l:item == '' | break | endif
-      let &tags = &tags . ',' . g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item]
-    endfor
-    " 1文字目の','を削除
-    if &tags != '' | let &tags = &tags[1 :] | endif
-    " GTAGSROOTの登録(GNU GLOBALのタグはプロジェクトルートで生成する)
-    let $GTAGSROOT = g:local_rc_current_src_dir
-  endfunction "}}}
 
   function! s:SetPathList() "{{{
     set path=
@@ -621,8 +603,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let g:local_rc_src_index = 0
     endif
     call s:SetSrcDir()
-    call s:SetCscope()
-    call s:SetTags()
+    call s:SetGtags()
     call s:SetPathList()
     call s:SetCDPathList()
     call g:SetEnvironmentVariables()
@@ -646,54 +627,11 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   " 初回のtags, path設定/ディレクトリ移動
   autocmd MyAutoCmd VimEnter *
         \   call s:SetSrcDir()
-        \ | call s:SetCscope()
-        \ | call s:SetTags()
+        \ | call s:SetGtags()
         \ | call s:SetPathList()
         \ | call s:SetCDPathList()
         \ | call SetEnvironmentVariables()
         \ | call s:ChangeToCurrentSourceDirectory()
-
-  " cscopeのデータベースファイルをアップデート
-  function! s:UpdateCscope() "{{{
-    if !executable('cscope') | echomsg 'cscopeが見つかりません' | return | endif
-    echo 'cscope.outを更新中...'
-    let l:currentDir = getcwd()
-    execute 'cd ' . g:local_rc_current_src_dir
-    setglobal nocscopeverbose
-    execute 'cscope kill -1'
-    !cscope -b -q -R
-    execute 'cscope add ' .  g:local_rc_cscope_dir
-    setglobal cscopeverbose
-    execute 'cd ' . l:currentDir
-    echo 'cscope.outの更新完了'
-  endfunction "}}}
-  command! UpdateCscope call s:UpdateCscope()
-
-  " ctagsで生成するタグファイルをアップデート
-  function! s:UpdateCtags() "{{{
-    if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
-    " ディレクトリを削除してから再生成
-    call delete(g:local_rc_ctags_dir, 'rf')
-    if !isdirectory(g:local_rc_ctags_dir)
-      call    mkdir(g:local_rc_ctags_dir)
-    endif
-    for l:item in g:local_rc_ctags_list
-      if l:item == '' | break | endif
-      if !has_key(g:local_rc_ctags_name_list, l:item) | continue | endif
-      let l:updateCommand =
-            \ 'ctags -f ' .
-            \ g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item] .
-            \ ' -R ' .
-            \ g:local_rc_current_src_dir . '\' . l:item
-      if has('win32')
-        " 処理中かどうかわかるように/minを使う
-        silent execute '!start /min ' . l:updateCommand
-      else
-        call system(l:updateCommand)
-      endif
-    endfor
-  endfunction "}}}
-  command! UpdateCtags call s:UpdateCtags()
 
   " GNU GLOBALのタグをアップデート
   function! s:UpdateGtags() "{{{
@@ -709,6 +647,22 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     endif
     execute 'cd ' . l:currentDir
   endfunction "}}}
+
+  " お行儀良くcscope killする版
+  " function! s:UpdateGtags() "{{{
+  "   if !executable('gtags') | echomsg 'gtagsが見つかりません' | return | endif
+  "   echo 'GTAGSを更新中...'
+  "   let l:currentDir = getcwd()
+  "   execute 'cd ' . $GTAGSROOT
+  "   setglobal nocscopeverbose
+  "   execute 'cscope kill -1'
+  "   !gtags -iv
+  "   execute 'cscope add ' . $GTAGSROOT . '\GTAGS'
+  "   setglobal cscopeverbose
+  "   execute 'cd ' . l:currentDir
+  "   echo 'GTAGSの更新完了'
+  " endfunction "}}}
+
   command! UpdateGtags call s:UpdateGtags()
 
 endif
@@ -1054,9 +1008,9 @@ call s:AddMyCMap( 'cd', 'CD')
 call s:AddMyCMap( 'CD', 'cd')
 call s:AddMyCMap( 'cm', 'ClearMessage')
 call s:AddMyCMap( 'pd', 'PutDateTime')
-call s:AddMyCMap( 'uc', 'UpdateCscope')
-" call s:AddMyCMap( 'uc', 'UpdateCtags')
+call s:AddMyCMap( 'ug', 'UpdateGtags')
 call s:AddMyCMap('cfd', 'ClipFileDir')
+call s:AddMyCMap('csd', 'ChangeToCurrentSourceDirectory')
 
 " リストへの変換候補登録(Plugin's command)
 call s:AddMyCMap( 'sc', 'Scratch')
@@ -1763,11 +1717,6 @@ endif "}}}
 
 " for unite-gtags {{{
 if neobundle#tap('unite-gtags')
-
-endif "}}}
-
-" for vim-unite-cscope {{{
-if neobundle#tap('vim-unite-cscope')
 
 endif "}}}
 
