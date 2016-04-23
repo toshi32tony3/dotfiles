@@ -1400,8 +1400,9 @@ if neobundle#tap('vim-easymotion')
   let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
   map s  <Plug>(easymotion-prefix)
-  " map sw <Plug>(easymotion-bd-w)
-  " map se <Plug>(easymotion-bd-e)
+  map ss <Nop>
+  map sw <Plug>(easymotion-bd-w)
+  map se <Plug>(easymotion-bd-e)
 
 endif " }}}
 
