@@ -547,7 +547,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
   endfunction "}}}
 
-  function! s:SetGtags() abort
+  function! s:SetGtags() "{{{
     let $GTAGSROOT = g:local_rc_current_src_dir
     if filereadable($GTAGSROOT . '\GTAGS')
       setglobal cscopeprg=gtags-cscope
@@ -559,7 +559,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       execute 'cscope add ' . $GTAGSROOT . '\GTAGS'
       setglobal cscopeverbose
     endif
-  endfunction
+  endfunction "}}}
 
   function! s:SetPathList() "{{{
     set path=
@@ -647,7 +647,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     execute 'cd ' . l:currentDir
   endfunction "}}}
 
-  " お行儀良くcscope killする版
+  " GNU GLOBALのタグをアップデート(お行儀良くcscope killする版)
   " function! s:UpdateGtags() "{{{
   "   if !executable('gtags') | echomsg 'gtagsが見つかりません' | return | endif
   "   echo 'GTAGSを更新中...'
