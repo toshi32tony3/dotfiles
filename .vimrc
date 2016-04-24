@@ -1635,7 +1635,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'grep:*'           . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'grep:.*'          . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:/'       . '<CR>'
-  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'
+  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'grep:**'
   nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
@@ -1651,6 +1651,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>v% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
   nnoremap <expr> <Leader>v* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
   nnoremap <expr> <Leader>v. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
+  nnoremap <expr> <Leader>vg ':<C-u>' . g:u_opt_gr . 'vimgrep:**'
 
   function! s:UniteSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
