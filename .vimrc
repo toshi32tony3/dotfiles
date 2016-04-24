@@ -143,6 +143,9 @@ NeoBundle 'toshi32tony3/badwolf'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 NeoBundle 'itchyny/lightline.vim'
 
+let g:loaded_matchparen = 1
+NeoBundle 'itchyny/vim-parenmatch'
+
 NeoBundleLazy 'thinca/vim-fontzoom', {
       \   'on_map' : '<Plug>',
       \   'on_cmd' : 'Fontzoom',
@@ -1300,6 +1303,11 @@ if neobundle#tap('lightline.vim')
   endfunction
 
 endif "}}}
+
+" 対応する括弧をハイライト(vim-parenmatch)
+if neobundle#tap('vim-parenmatch')
+
+endif
 
 " フォントサイズ変更を簡易化(vim-fontzoom) {{{
 if neobundle#tap('vim-fontzoom')
