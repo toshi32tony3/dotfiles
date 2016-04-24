@@ -1288,10 +1288,10 @@ if neobundle#tap('lightline.vim')
 
 endif "}}}
 
-" 対応する括弧をハイライト(vim-parenmatch)
+" 対応する括弧をハイライト(vim-parenmatch) "{{{
 if neobundle#tap('vim-parenmatch')
 
-endif
+endif "}}}
 
 " フォントサイズ変更を簡易化(vim-fontzoom) {{{
 if neobundle#tap('vim-fontzoom')
