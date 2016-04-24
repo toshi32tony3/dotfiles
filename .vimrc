@@ -370,15 +370,13 @@ cnoremap <C-n> <Down>
 " t : textwidthを使ってテキストを自動折返
 " B : 行連結時に, マルチバイト文字の前後に空白を挿入しない
 " M : 行連結時に, マルチバイト文字同士の間に空白を挿入しない
-autocmd MyAutoCmd BufEnter * setlocal formatoptions=cjlmqBM
-autocmd MyAutoCmd BufEnter * setlocal textwidth=78
-autocmd MyAutoCmd BufEnter * setlocal noautoindent
+setglobal formatoptions=cjlmqBM
+setglobal textwidth=78
+setglobal noautoindent
 
 " インデントを入れるキーのリストを調整(コロン, 行頭の#でインデントしない)
-autocmd MyAutoCmd BufEnter * setlocal indk-=:
-autocmd MyAutoCmd BufEnter * setlocal indk-=0#
-autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
-autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
+setglobal indentkeys-=:,0#
+setglobal cinkeys-=:,0#
 
 " Dはd$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
