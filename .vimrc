@@ -160,9 +160,7 @@ NeoBundleLazy 'haya14busa/incsearch.vim'
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
-NeoBundleLazy 'deris/vim-shot-f',         {'on_map' : '<Plug>'}
-" NeoBundleLazy 'machakann/vim-columnmove', {'on_map' : '<Plug>'}
-" NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
+NeoBundleLazy 'deris/vim-shot-f',          {'on_map' : '<Plug>'}
 NeoBundleLazy 'easymotion/vim-easymotion', {'on_map' : '<Plug>'}
 
 NeoBundle 'kshenoy/vim-signature'
@@ -1378,31 +1376,6 @@ if neobundle#tap('vim-shot-f')
 
 endif "}}}
 
-" 縦方向のf検索(vim-columnmove) {{{
-if neobundle#tap('vim-columnmove')
-
-  let g:columnmove_no_default_key_mappings = 1
-  map <A-f> <Plug>(columnmove-f)
-  map <A-F> <Plug>(columnmove-t)
-  map <A-t> <Plug>(columnmove-F)
-  map <A-T> <Plug>(columnmove-T)
-
-endif "}}}
-
-" f検索の2文字版(vim-sneak) {{{
-if neobundle#tap('vim-sneak')
-
-  " clever-s
-  let g:sneak#s_next = 1
-
-  " smartcase
-  let g:sneak#use_ic_scs = 1
-
-  map s <Plug>Sneak_s
-  map S <Plug>Sneak_S
-
-endif "}}}
-
 " Vim motion on speed!(vim-easymotion) {{{
 if neobundle#tap('vim-easymotion')
 
@@ -1793,12 +1766,6 @@ if neobundle#tap('vimfiler.vim')
 
     " uniteを使うのでgrepは潰しておく
     nnoremap <buffer> gr <Nop>
-
-    " ソート用マッピングを変えたい
-    if neobundle#is_installed('vim-sneak')
-      map <buffer>         S <Plug>Sneak_S
-      map <buffer> <Leader>S <Plug>(vimfiler_select_sort_type)
-    endif
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
