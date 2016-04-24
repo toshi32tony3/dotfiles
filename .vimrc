@@ -160,7 +160,8 @@ NeoBundleLazy 'haya14busa/incsearch.vim'
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
-NeoBundleLazy 'deris/vim-shot-f',   {'on_map' : '<Plug>'}
+NeoBundleLazy 'deris/vim-shot-f',         {'on_map' : '<Plug>'}
+" NeoBundleLazy 'machakann/vim-columnmove', {'on_map' : '<Plug>'}
 " NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
 NeoBundleLazy 'easymotion/vim-easymotion', {'on_map' : '<Plug>'}
 
@@ -203,7 +204,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
       \ }
 
-" NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-surround'
 NeoBundle 'toshi32tony3/vim-repeat'
 
 "}}}
@@ -1387,6 +1388,17 @@ if neobundle#tap('vim-shot-f')
 
 endif "}}}
 
+" 縦方向のf検索(vim-columnmove) {{{
+if neobundle#tap('vim-columnmove')
+
+  let g:columnmove_no_default_key_mappings = 1
+  map <A-f> <Plug>(columnmove-f)
+  map <A-F> <Plug>(columnmove-t)
+  map <A-t> <Plug>(columnmove-F)
+  map <A-T> <Plug>(columnmove-T)
+
+endif "}}}
+
 " f検索の2文字版(vim-sneak) {{{
 if neobundle#tap('vim-sneak')
 
@@ -1407,10 +1419,8 @@ if neobundle#tap('vim-easymotion')
   let g:EasyMotion_do_shade = 0
   let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
-  map s  <Plug>(easymotion-prefix)
-  map ss <Nop>
-  map sw <Plug>(easymotion-bd-w)
-  map se <Plug>(easymotion-bd-e)
+  map <A-w> <Plug>(easymotion-bd-w)
+  map <A-e> <Plug>(easymotion-bd-e)
 
 endif " }}}
 
@@ -1531,11 +1541,11 @@ if neobundle#tap('vim-repeat')
   endif
 
   " scrollbind無しで全ウィンドウ同時スクロール
-  nnoremap <silent> <A-e> :Repeatable
+  nnoremap <silent> <Leader><A-e> :Repeatable
         \ for i in range(winnr('$')) <bar>
         \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
         \ endfor<CR>
-  nnoremap <silent> <A-y> :Repeatable
+  nnoremap <silent> <Leader><A-y> :Repeatable
         \ for i in range(winnr('$')) <bar>
         \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
         \ endfor<CR>
