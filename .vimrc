@@ -598,8 +598,8 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     if &cdpath != '' | let &cdpath = &cdpath[1 :] | endif
   endfunction "}}}
 
-  " ソースコードをスイッチ
-  function! s:SwitchSource() "{{{
+  " プロジェクトをスイッチ
+  function! s:SwitchProject() "{{{
     let g:local_rc_src_index += 1
     if  g:local_rc_src_index >= len(g:local_rc_src_list)
       let g:local_rc_src_index = 0
@@ -608,32 +608,14 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     call s:SetGtags()
     call s:SetPathList()
     call s:SetCDPathList()
-    call g:SetEnvironmentVariables()
-    " ソースコード切り替え後, ソースディレクトリ名を出力
-    echo 'switch source to: ' . g:local_rc_src_dir
+    call SetEnvironmentVariables()
+    execute 'cd ' . g:local_rc_current_src_dir
+    if exists('s:IsFirstLoad') | echo 'switch to: ' . g:local_rc_src_dir | endif
   endfunction "}}}
-  nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
-
-  " カレントのソースディレクトリにcd
-  function! s:ChangeToCurrentSourceDirectory() "{{{
-    if isdirectory(g:local_rc_current_src_dir)
-      execute 'cd ' . g:local_rc_current_src_dir
-      if exists('g:IsLoadedChangeToCurrentSourceDirectory')
-        echo 'change directory to current source: ' . g:local_rc_current_src_dir
-      endif
-    endif
-    let g:IsLoadedChangeToCurrentSourceDirectory = 1
-  endfunction "}}}
-  command! ChangeToCurrentSourceDirectory call s:ChangeToCurrentSourceDirectory()
+  nnoremap <silent> ,s :<C-u>call <SID>SwitchProject()<CR>
 
   " 初回のtags, path設定/ディレクトリ移動
-  autocmd MyAutoCmd VimEnter *
-        \   call s:SetSrcDir()
-        \ | call s:SetGtags()
-        \ | call s:SetPathList()
-        \ | call s:SetCDPathList()
-        \ | call SetEnvironmentVariables()
-        \ | call s:ChangeToCurrentSourceDirectory()
+  autocmd MyAutoCmd VimEnter * call s:SwitchProject() | let s:IsFirstLoad = 1
 
   " GNU GLOBALのタグをアップデート
   function! s:UpdateGtags() "{{{
