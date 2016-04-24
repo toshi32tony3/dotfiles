@@ -232,7 +232,6 @@ NeoBundleLazy 'Shougo/vimshell.vim', {
       \   'depends' : 'Shougo/unite.vim',
       \   'on_path' : '.*',
       \ }
-
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : 'Shougo/unite.vim',
       \   'on_path' : '.*',
@@ -333,8 +332,7 @@ setglobal nostartofline              " カーソルが勝手に行の先頭へ�
 setglobal hidden                     " quit時はバッファを削除せず, 隠す
 setglobal confirm                    " 変更されたバッファを閉じる時に確認する
 setglobal switchbuf=useopen,usetab   " 既に開かれていたら, そっちを使う
-setglobal showmatch                  " 対応する括弧などの入力時にハイライト表示
-setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
+setglobal showmatch matchtime=3      " 対応する括弧などの入力時にハイライト表示
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
 
 " " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
@@ -455,9 +453,7 @@ nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 " filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 autocmd MyAutoCmd FileType c,markdown
-      \   setlocal foldmethod=syntax
-      \ | setlocal foldnestmax=1
-      \ | setlocal nofoldenable
+      \ setlocal foldmethod=syntax foldnestmax=1 nofoldenable
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
