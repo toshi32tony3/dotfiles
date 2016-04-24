@@ -1644,6 +1644,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_bo = 'Unite '       . g:u_hopt
   let g:u_opt_de = 'Unite '       . g:u_hopt            . g:u_imme
   let g:u_opt_dm = 'Unite '       . g:u_hopt
+  let g:u_opt_dr = 'Unite '       . g:u_hopt
   let g:u_opt_fb = 'UniteResume ' . g:u_hopt                       . g:u_fbuf
   let g:u_opt_fg = 'Unite '       . g:u_hopt
   let g:u_opt_fi = 'Unite '       . g:u_hopt
@@ -1667,6 +1668,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>bo ':<C-u>' . g:u_opt_bo . 'bookmark'         . '<CR>'
   nnoremap <expr> <Leader>de ':<C-u>' . g:u_opt_de . 'gtags/def:'
   nnoremap <expr> <Leader>dm ':<C-u>' . g:u_opt_dm . 'directory_mru'    . '<CR>'
+  nnoremap <expr> <Leader>dr ':<C-u>' . g:u_opt_dr . 'directory_rec'
   nnoremap <expr> <Leader>fb ':<C-u>' . g:u_opt_fb                      . '<CR>'
   nnoremap <expr> <Leader>fg ':<C-u>' . g:u_opt_fg . 'file_rec/git'     . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
@@ -1713,10 +1715,12 @@ if neobundle#tap('unite.vim')
           \   'sync'             : 1,
           \ })
 
-    " Unite line/grep/vimgrepの結果候補数を制限しない
-    call unite#custom#source('line',    'max_candidates', 0)
-    call unite#custom#source('grep',    'max_candidates', 0)
-    call unite#custom#source('vimgrep', 'max_candidates', 0)
+    " Unite line/directory_rec/file_rec/grep/vimgrepの結果候補数を制限しない
+    call unite#custom#source('line',          'max_candidates', 0)
+    call unite#custom#source('directory_rec', 'max_candidates', 0)
+    call unite#custom#source('file_rec',      'max_candidates', 0)
+    call unite#custom#source('grep',          'max_candidates', 0)
+    call unite#custom#source('vimgrep',       'max_candidates', 0)
 
     " ディレクトリが選択されたらvimfilerで開く
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
