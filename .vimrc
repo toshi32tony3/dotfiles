@@ -656,22 +656,6 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     endif
     execute 'cd ' . l:currentDir
   endfunction "}}}
-
-  " GNU GLOBALのタグをアップデート(お行儀良くcscope killする版)
-  " function! s:UpdateGtags() "{{{
-  "   if !executable('gtags') | echomsg 'gtagsが見つかりません' | return | endif
-  "   echo 'GTAGSを更新中...'
-  "   let l:currentDir = getcwd()
-  "   execute 'cd ' . $GTAGSROOT
-  "   setglobal nocscopeverbose
-  "   execute 'cscope kill -1'
-  "   !gtags -iv
-  "   execute 'cscope add ' . $GTAGSROOT . '\GTAGS'
-  "   setglobal cscopeverbose
-  "   execute 'cd ' . l:currentDir
-  "   echo 'GTAGSの更新完了'
-  " endfunction "}}}
-
   command! UpdateGtags call s:UpdateGtags()
 
 endif
