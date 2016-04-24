@@ -298,6 +298,12 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 
 call neobundle#end()
 
+" Call on_source hook when reloading .vimrc.
+" https://github.com/machakann/vimrc/blob/master/.vimrc
+if !has('vim_starting')
+  call neobundle#call_hook('on_source')
+endif
+
 " filetype関連のファイルを読み込む
 filetype plugin indent on
 
