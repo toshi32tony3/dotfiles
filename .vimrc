@@ -334,7 +334,7 @@ setglobal virtualedit=all            " テキストが存在しない場所で�
 setglobal nostartofline              " カーソルが勝手に行の先頭へ行くのは嫌
 setglobal hidden                     " quit時はバッファを削除せず, 隠す
 setglobal confirm                    " 変更されたバッファを閉じる時に確認する
-setglobal switchbuf=useopen          " 既に開かれていたら, そっちを使う
+setglobal switchbuf=useopen,usetab   " 既に開かれていたら, そっちを使う
 setglobal showmatch                  " 対応する括弧などの入力時にハイライト表示
 setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
