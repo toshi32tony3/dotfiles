@@ -334,6 +334,7 @@ setglobal confirm                    " 変更されたバッファを閉じる�
 setglobal switchbuf=useopen,usetab   " 既に開かれていたら, そっちを使う
 setglobal showmatch matchtime=3      " 対応する括弧などの入力時にハイライト表示
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
+setglobal iminsert=0 imsearch=0
 
 " " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
 " setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
