@@ -951,8 +951,8 @@ let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
   " let l:separator = stridx(a:alternateName, '!') == -1 ? "\<Space>" : '!'
   " if !exists(':' . split(a:alternateName, l:separator)[0]) | return | endif
-  let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
-  execute substitute(g:abbrev, '|', '<bar>', 'g')
+  " let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
+  " execute substitute(g:abbrev, '|', '<bar>', 'g')
   call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
 endfunction "}}}
 
@@ -978,12 +978,10 @@ call s:AddMyCMap( 'cm', 'ClearMessage')
 call s:AddMyCMap( 'pd', 'PutDateTime')
 call s:AddMyCMap( 'ug', 'UpdateGtags')
 call s:AddMyCMap('cfd', 'ClipFileDir')
-call s:AddMyCMap('csd', 'ChangeToCurrentSourceDirectory')
 
 " リストへの変換候補登録(Plugin's command)
 call s:AddMyCMap( 'sc', 'Scratch')
 call s:AddMyCMap('scp', 'ScratchPreview')
-call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
 call s:AddMyCMap( 'ga', 'Gita add % -f')
 call s:AddMyCMap( 'gc', 'Gita commit')
