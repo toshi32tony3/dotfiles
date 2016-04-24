@@ -143,6 +143,9 @@ NeoBundle 'toshi32tony3/badwolf'
 NeoBundle 'cocopon/lightline-hybrid.vim'
 NeoBundle 'itchyny/lightline.vim'
 
+let g:loaded_matchparen = 1
+NeoBundle 'itchyny/vim-parenmatch'
+
 NeoBundleLazy 'thinca/vim-fontzoom', {
       \   'on_map' : '<Plug>',
       \   'on_cmd' : 'Fontzoom',
@@ -157,8 +160,7 @@ NeoBundleLazy 'haya14busa/incsearch.vim'
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
-NeoBundleLazy 'deris/vim-shot-f',   {'on_map' : '<Plug>'}
-" NeoBundleLazy 'justinmk/vim-sneak', {'on_map' : '<Plug>Sneak'}
+NeoBundleLazy 'deris/vim-shot-f',          {'on_map' : '<Plug>'}
 NeoBundleLazy 'easymotion/vim-easymotion', {'on_map' : '<Plug>'}
 
 NeoBundle 'kshenoy/vim-signature'
@@ -200,7 +202,7 @@ NeoBundleLazy 't9md/vim-quickhl', {
       \   'on_map'  : [['nx', '<Plug>(', '<Plug>(operator-quickhl-']],
       \ }
 
-" NeoBundle 'tpope/vim-surround'
+NeoBundle 'tpope/vim-surround'
 NeoBundle 'toshi32tony3/vim-repeat'
 
 "}}}
@@ -222,10 +224,6 @@ NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
-" 本家 : 'amitab/vim-unite-cscope'
-NeoBundleLazy 'toshi32tony3/vim-unite-cscope', {'on_source' : 'unite.vim'}
-NeoBundle 'hari-rangarajan/CCTree'
-
 NeoBundleLazy 'hewes/unite-gtags',       {'on_source' : 'unite.vim'}
 NeoBundleLazy 'tacroe/unite-mark',       {'on_source' : 'unite.vim'}
 NeoBundleLazy 'Shougo/unite-outline',    {'on_source' : 'unite.vim'}
@@ -234,7 +232,6 @@ NeoBundleLazy 'Shougo/vimshell.vim', {
       \   'depends' : 'Shougo/unite.vim',
       \   'on_path' : '.*',
       \ }
-
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : 'Shougo/unite.vim',
       \   'on_path' : '.*',
@@ -298,6 +295,12 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 
 call neobundle#end()
 
+" Call on_source hook when reloading .vimrc.
+" https://github.com/machakann/vimrc/blob/master/.vimrc
+if !has('vim_starting')
+  call neobundle#call_hook('on_source')
+endif
+
 " filetype関連のファイルを読み込む
 filetype plugin indent on
 
@@ -328,10 +331,10 @@ setglobal virtualedit=all            " テキストが存在しない場所で�
 setglobal nostartofline              " カーソルが勝手に行の先頭へ行くのは嫌
 setglobal hidden                     " quit時はバッファを削除せず, 隠す
 setglobal confirm                    " 変更されたバッファを閉じる時に確認する
-setglobal switchbuf=useopen          " 既に開かれていたら, そっちを使う
-setglobal showmatch                  " 対応する括弧などの入力時にハイライト表示
-setglobal matchtime=3                " 対応括弧入力時カーソルが飛ぶ時間を0.3秒に
+setglobal switchbuf=useopen,usetab   " 既に開かれていたら, そっちを使う
+setglobal showmatch matchtime=3      " 対応する括弧などの入力時にハイライト表示
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
+setglobal iminsert=0 imsearch=0
 
 " " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
 " setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
@@ -368,15 +371,13 @@ cnoremap <C-n> <Down>
 " t : textwidthを使ってテキストを自動折返
 " B : 行連結時に, マルチバイト文字の前後に空白を挿入しない
 " M : 行連結時に, マルチバイト文字同士の間に空白を挿入しない
-autocmd MyAutoCmd BufEnter * setlocal formatoptions=cjlmqBM
-autocmd MyAutoCmd BufEnter * setlocal textwidth=78
-autocmd MyAutoCmd BufEnter * setlocal noautoindent
+setglobal formatoptions=cjlmqBM
+setglobal textwidth=78
+setglobal noautoindent
 
 " インデントを入れるキーのリストを調整(コロン, 行頭の#でインデントしない)
-autocmd MyAutoCmd BufEnter * setlocal indk-=:
-autocmd MyAutoCmd BufEnter * setlocal indk-=0#
-autocmd MyAutoCmd BufEnter * setlocal cinkeys-=:
-autocmd MyAutoCmd BufEnter * setlocal cinkeys-=0#
+setglobal indentkeys-=:,0#
+setglobal cinkeys-=:,0#
 
 " Dはd$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
@@ -451,9 +452,7 @@ nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 " filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 autocmd MyAutoCmd FileType c,markdown
-      \   setlocal foldmethod=syntax
-      \ | setlocal foldnestmax=1
-      \ | setlocal nofoldenable
+      \ setlocal foldmethod=syntax foldnestmax=1 nofoldenable
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
 " http://vim-jp.org/vim-users-jp/2010/01/28/Hack-120.html
@@ -521,12 +520,12 @@ function! s:TabDiff(...) "{{{
   if a:0 == 1
     tabnew %:p
     execute 'rightbelow vertical diffsplit ' . a:1
-  else
-    execute 'tabedit ' a:1
-    for l:file in a:000[1 :]
-      execute 'rightbelow vertical diffsplit ' . l:file
-    endfor
+    return
   endif
+  execute 'tabedit ' a:1
+  for l:file in a:000[1 :]
+    execute 'rightbelow vertical diffsplit ' . l:file
+  endfor
 endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
@@ -536,8 +535,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
 " 新規タブでタグジャンプ
 function! s:JumpTagTab(funcName) "{{{
-  tab split
-  execute 'cstag ' . a:funcName
+  tab split | execute 'cstag ' . a:funcName
 endfunction "}}}
 command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
 nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
@@ -549,35 +547,20 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetSrcDir() "{{{
     let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
     let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
-    let g:local_rc_cscope_dir      = g:local_rc_current_src_dir . '\cscope.out'
-    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.ctags'
   endfunction "}}}
 
-  function! s:SetCscope() abort
-    " Cscopeの設定
-    if filereadable(g:local_rc_cscope_dir)
+  function! s:SetGtags() "{{{
+    let $GTAGSROOT = g:local_rc_current_src_dir
+    if filereadable($GTAGSROOT . '\GTAGS')
+      setglobal cscopeprg=gtags-cscope
       setglobal cscopetag
       setglobal cscoperelative
       setglobal cscopequickfix=s-,c-,d-,i-,t-,e-
       setglobal nocscopeverbose
       execute 'cscope kill -1'
-      execute 'cscope add ' .  g:local_rc_cscope_dir
+      execute 'cscope add ' . $GTAGSROOT . '\GTAGS'
       setglobal cscopeverbose
     endif
-    let g:unite_source_cscope_dir = g:local_rc_current_src_dir
-  endfunction
-
-  function! s:SetTags() "{{{
-    " tagsをセット
-    set tags=
-    for l:item in g:local_rc_ctags_list
-      if l:item == '' | break | endif
-      let &tags = &tags . ',' . g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item]
-    endfor
-    " 1文字目の','を削除
-    if &tags != '' | let &tags = &tags[1 :] | endif
-    " GTAGSROOTの登録(GNU GLOBALのタグはプロジェクトルートで生成する)
-    let $GTAGSROOT = g:local_rc_current_src_dir
   endfunction "}}}
 
   function! s:SetPathList() "{{{
@@ -614,86 +597,24 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     if &cdpath != '' | let &cdpath = &cdpath[1 :] | endif
   endfunction "}}}
 
-  " ソースコードをスイッチ
-  function! s:SwitchSource() "{{{
+  " プロジェクトをスイッチ
+  function! s:SwitchProject() "{{{
     let g:local_rc_src_index += 1
     if  g:local_rc_src_index >= len(g:local_rc_src_list)
       let g:local_rc_src_index = 0
     endif
     call s:SetSrcDir()
-    call s:SetCscope()
-    call s:SetTags()
+    call s:SetGtags()
     call s:SetPathList()
     call s:SetCDPathList()
-    call g:SetEnvironmentVariables()
-    " ソースコード切り替え後, ソースディレクトリ名を出力
-    echo 'switch source to: ' . g:local_rc_src_dir
+    call SetEnvironmentVariables()
+    execute 'cd ' . g:local_rc_current_src_dir
+    if exists('s:IsFirstLoad') | echo 'switch to: ' . g:local_rc_src_dir | endif
   endfunction "}}}
-  nnoremap <silent> ,s :<C-u>call <SID>SwitchSource()<CR>
-
-  " カレントのソースディレクトリにcd
-  function! s:ChangeToCurrentSourceDirectory() "{{{
-    if isdirectory(g:local_rc_current_src_dir)
-      execute 'cd ' . g:local_rc_current_src_dir
-      if exists('g:IsLoadedChangeToCurrentSourceDirectory')
-        echo 'change directory to current source: ' . g:local_rc_current_src_dir
-      endif
-    endif
-    let g:IsLoadedChangeToCurrentSourceDirectory = 1
-  endfunction "}}}
-  command! ChangeToCurrentSourceDirectory call s:ChangeToCurrentSourceDirectory()
+  nnoremap <silent> ,s :<C-u>call <SID>SwitchProject()<CR>
 
   " 初回のtags, path設定/ディレクトリ移動
-  autocmd MyAutoCmd VimEnter *
-        \   call s:SetSrcDir()
-        \ | call s:SetCscope()
-        \ | call s:SetTags()
-        \ | call s:SetPathList()
-        \ | call s:SetCDPathList()
-        \ | call SetEnvironmentVariables()
-        \ | call s:ChangeToCurrentSourceDirectory()
-
-  " cscopeのデータベースファイルをアップデート
-  function! s:UpdateCscope() "{{{
-    if !executable('cscope') | echomsg 'cscopeが見つかりません' | return | endif
-    echo 'cscope.outを更新中...'
-    let l:currentDir = getcwd()
-    execute 'cd ' . g:local_rc_current_src_dir
-    setglobal nocscopeverbose
-    execute 'cscope kill -1'
-    !cscope -b -q -R
-    execute 'cscope add ' .  g:local_rc_cscope_dir
-    setglobal cscopeverbose
-    execute 'cd ' . l:currentDir
-    echo 'cscope.outの更新完了'
-  endfunction "}}}
-  command! UpdateCscope call s:UpdateCscope()
-
-  " ctagsで生成するタグファイルをアップデート
-  function! s:UpdateCtags() "{{{
-    if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
-    " ディレクトリを削除してから再生成
-    call delete(g:local_rc_ctags_dir, 'rf')
-    if !isdirectory(g:local_rc_ctags_dir)
-      call    mkdir(g:local_rc_ctags_dir)
-    endif
-    for l:item in g:local_rc_ctags_list
-      if l:item == '' | break | endif
-      if !has_key(g:local_rc_ctags_name_list, l:item) | continue | endif
-      let l:updateCommand =
-            \ 'ctags -f ' .
-            \ g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item] .
-            \ ' -R ' .
-            \ g:local_rc_current_src_dir . '\' . l:item
-      if has('win32')
-        " 処理中かどうかわかるように/minを使う
-        silent execute '!start /min ' . l:updateCommand
-      else
-        call system(l:updateCommand)
-      endif
-    endfor
-  endfunction "}}}
-  command! UpdateCtags call s:UpdateCtags()
+  autocmd MyAutoCmd VimEnter * call s:SwitchProject() | let s:IsFirstLoad = 1
 
   " GNU GLOBALのタグをアップデート
   function! s:UpdateGtags() "{{{
@@ -1029,8 +950,8 @@ let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
   " let l:separator = stridx(a:alternateName, '!') == -1 ? "\<Space>" : '!'
   " if !exists(':' . split(a:alternateName, l:separator)[0]) | return | endif
-  let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
-  execute substitute(g:abbrev, '|', '<bar>', 'g')
+  " let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
+  " execute substitute(g:abbrev, '|', '<bar>', 'g')
   call add(s:MyCMapEntries, ['^' . a:originalPattern . '$', a:alternateName])
 endfunction "}}}
 
@@ -1054,14 +975,12 @@ call s:AddMyCMap( 'cd', 'CD')
 call s:AddMyCMap( 'CD', 'cd')
 call s:AddMyCMap( 'cm', 'ClearMessage')
 call s:AddMyCMap( 'pd', 'PutDateTime')
-call s:AddMyCMap( 'uc', 'UpdateCscope')
-" call s:AddMyCMap( 'uc', 'UpdateCtags')
+call s:AddMyCMap( 'ug', 'UpdateGtags')
 call s:AddMyCMap('cfd', 'ClipFileDir')
 
 " リストへの変換候補登録(Plugin's command)
 call s:AddMyCMap( 'sc', 'Scratch')
 call s:AddMyCMap('scp', 'ScratchPreview')
-call s:AddMyCMap('tvs', 'TweetVimSearch')
 call s:AddMyCMap( 'gi', 'Gita')
 call s:AddMyCMap( 'ga', 'Gita add % -f')
 call s:AddMyCMap( 'gc', 'Gita commit')
@@ -1348,6 +1267,11 @@ if neobundle#tap('lightline.vim')
 
 endif "}}}
 
+" 対応する括弧をハイライト(vim-parenmatch) "{{{
+if neobundle#tap('vim-parenmatch')
+
+endif "}}}
+
 " フォントサイズ変更を簡易化(vim-fontzoom) {{{
 if neobundle#tap('vim-fontzoom')
 
@@ -1426,29 +1350,14 @@ if neobundle#tap('vim-shot-f')
 
 endif "}}}
 
-" f検索の2文字版(vim-sneak) {{{
-if neobundle#tap('vim-sneak')
-
-  " clever-s
-  let g:sneak#s_next = 1
-
-  " smartcase
-  let g:sneak#use_ic_scs = 1
-
-  map s <Plug>Sneak_s
-  map S <Plug>Sneak_S
-
-endif "}}}
-
 " Vim motion on speed!(vim-easymotion) {{{
 if neobundle#tap('vim-easymotion')
 
   let g:EasyMotion_do_shade = 0
   let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
 
-  map s  <Plug>(easymotion-prefix)
-  " map sw <Plug>(easymotion-bd-w)
-  " map se <Plug>(easymotion-bd-e)
+  map <A-w> <Plug>(easymotion-bd-w)
+  map <A-e> <Plug>(easymotion-bd-e)
 
 endif " }}}
 
@@ -1569,11 +1478,11 @@ if neobundle#tap('vim-repeat')
   endif
 
   " scrollbind無しで全ウィンドウ同時スクロール
-  nnoremap <silent> <A-e> :Repeatable
+  nnoremap <silent> <Leader><A-e> :Repeatable
         \ for i in range(winnr('$')) <bar>
         \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
         \ endfor<CR>
-  nnoremap <silent> <A-y> :Repeatable
+  nnoremap <silent> <Leader><A-y> :Repeatable
         \ for i in range(winnr('$')) <bar>
         \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
         \ endfor<CR>
@@ -1666,6 +1575,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_bo = 'Unite '       . g:u_hopt
   let g:u_opt_de = 'Unite '       . g:u_hopt            . g:u_imme
   let g:u_opt_dm = 'Unite '       . g:u_hopt
+  let g:u_opt_dr = 'Unite '       . g:u_hopt
   let g:u_opt_fb = 'UniteResume ' . g:u_hopt                       . g:u_fbuf
   let g:u_opt_fg = 'Unite '       . g:u_hopt
   let g:u_opt_fi = 'Unite '       . g:u_hopt
@@ -1689,16 +1599,17 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>bo ':<C-u>' . g:u_opt_bo . 'bookmark'         . '<CR>'
   nnoremap <expr> <Leader>de ':<C-u>' . g:u_opt_de . 'gtags/def:'
   nnoremap <expr> <Leader>dm ':<C-u>' . g:u_opt_dm . 'directory_mru'    . '<CR>'
+  nnoremap <expr> <Leader>dr ':<C-u>' . g:u_opt_dr . 'directory_rec'
   nnoremap <expr> <Leader>fb ':<C-u>' . g:u_opt_fb                      . '<CR>'
   nnoremap <expr> <Leader>fg ':<C-u>' . g:u_opt_fg . 'file_rec/git'     . '<CR>'
   nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
   nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
   nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'
-  nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
-  nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
-  nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
+  nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'grep:%'           . '<CR>'
+  nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'grep:*'           . '<CR>'
+  nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'grep:.*'          . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:/'       . '<CR>'
-  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'vimgrep:**'
+  nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'grep:**'
   nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
@@ -1711,6 +1622,10 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>ol ':<C-u>' . g:u_opt_ol . 'outline:!'        . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>' . g:u_opt_op . 'output'           . '<CR>'
   nnoremap <expr> <Leader>sb ':<C-u>' . g:u_opt_sb                      . '<CR>'
+  nnoremap <expr> <Leader>v% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
+  nnoremap <expr> <Leader>v* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
+  nnoremap <expr> <Leader>v. ':<C-u>' . g:u_opt_gr . 'vimgrep:.*'       . '<CR>'
+  nnoremap <expr> <Leader>vg ':<C-u>' . g:u_opt_gr . 'vimgrep:**'
 
   function! s:UniteSettings()
     " <Leader>がデフォルトマッピングで使用されていた場合の対策
@@ -1735,10 +1650,12 @@ if neobundle#tap('unite.vim')
           \   'sync'             : 1,
           \ })
 
-    " Unite line/grep/vimgrepの結果候補数を制限しない
-    call unite#custom#source('line',    'max_candidates', 0)
-    call unite#custom#source('grep',    'max_candidates', 0)
-    call unite#custom#source('vimgrep', 'max_candidates', 0)
+    " Unite line/directory_rec/file_rec/grep/vimgrepの結果候補数を制限しない
+    call unite#custom#source('line',          'max_candidates', 0)
+    call unite#custom#source('directory_rec', 'max_candidates', 0)
+    call unite#custom#source('file_rec',      'max_candidates', 0)
+    call unite#custom#source('grep',          'max_candidates', 0)
+    call unite#custom#source('vimgrep',       'max_candidates', 0)
 
     " ディレクトリが選択されたらvimfilerで開く
     call unite#custom_default_action('source/bookmark/directory', 'vimfiler')
@@ -1763,11 +1680,6 @@ endif "}}}
 
 " for unite-gtags {{{
 if neobundle#tap('unite-gtags')
-
-endif "}}}
-
-" for vim-unite-cscope {{{
-if neobundle#tap('vim-unite-cscope')
 
 endif "}}}
 
@@ -1829,12 +1741,6 @@ if neobundle#tap('vimfiler.vim')
 
     " uniteを使うのでgrepは潰しておく
     nnoremap <buffer> gr <Nop>
-
-    " ソート用マッピングを変えたい
-    if neobundle#is_installed('vim-sneak')
-      map <buffer>         S <Plug>Sneak_S
-      map <buffer> <Leader>S <Plug>(vimfiler_select_sort_type)
-    endif
   endfunction
   autocmd MyAutoCmd FileType vimfiler call s:VimfilerSettings()
 
