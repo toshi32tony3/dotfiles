@@ -521,12 +521,12 @@ function! s:TabDiff(...) "{{{
   if a:0 == 1
     tabnew %:p
     execute 'rightbelow vertical diffsplit ' . a:1
-  else
-    execute 'tabedit ' a:1
-    for l:file in a:000[1 :]
-      execute 'rightbelow vertical diffsplit ' . l:file
-    endfor
+    return
   endif
+  execute 'tabedit ' a:1
+  for l:file in a:000[1 :]
+    execute 'rightbelow vertical diffsplit ' . l:file
+  endfor
 endfunction "}}}
 command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 
