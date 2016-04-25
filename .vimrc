@@ -547,9 +547,18 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetSrcDir() "{{{
     let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
     let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
+    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.ctags'
   endfunction "}}}
 
-  function! s:SetGtags() "{{{
+  function! s:SetTags() "{{{
+    " tagsをセット
+    set tags=
+    for l:item in g:local_rc_ctags_list
+      if l:item == '' | break | endif
+      let &tags = &tags . ',' . g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item]
+    endfor
+    " 1文字目の','を削除
+    if &tags != '' | let &tags = &tags[1 :] | endif
     let $GTAGSROOT = g:local_rc_current_src_dir
     if filereadable($GTAGSROOT . '\GTAGS')
       setglobal cscopeprg=gtags-cscope
@@ -604,7 +613,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       let g:local_rc_src_index = 0
     endif
     call s:SetSrcDir()
-    call s:SetGtags()
+    call s:SetTags()
     call s:SetPathList()
     call s:SetCDPathList()
     call SetEnvironmentVariables()
