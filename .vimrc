@@ -625,6 +625,32 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   " 初回のtags, path設定/ディレクトリ移動
   autocmd MyAutoCmd VimEnter * call s:SwitchProject() | let s:IsFirstLoad = 1
 
+  " ctagsで生成するタグファイルをアップデート
+  function! s:UpdateCtags() "{{{
+    if !executable('ctags') | echomsg 'ctagsが見つかりません' | return | endif
+    " ディレクトリを削除してから再生成
+    call delete(g:local_rc_ctags_dir, 'rf')
+    if !isdirectory(g:local_rc_ctags_dir)
+      call    mkdir(g:local_rc_ctags_dir)
+    endif
+    for l:item in g:local_rc_ctags_list
+      if l:item == '' | break | endif
+      if !has_key(g:local_rc_ctags_name_list, l:item) | continue | endif
+      let l:updateCommand =
+            \ 'ctags -f ' .
+            \ g:local_rc_ctags_dir . '\' . g:local_rc_ctags_name_list[l:item] .
+            \ ' -R ' .
+            \ g:local_rc_current_src_dir . '\' . l:item
+      if has('win32')
+        " 処理中かどうかわかるように/minを使う
+        silent execute '!start /min ' . l:updateCommand
+      else
+        call system(l:updateCommand)
+      endif
+    endfor
+  endfunction "}}}
+  command! UpdateCtags call s:UpdateCtags()
+
   " GNU GLOBALのタグをアップデート
   function! s:UpdateGtags() "{{{
     if !executable('gtags') | echomsg 'gtagsが見つかりません' | return | endif
