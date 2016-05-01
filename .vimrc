@@ -1617,6 +1617,7 @@ if neobundle#tap('unite.vim')
   let g:u_opt_fm = 'Unite '       . g:u_hopt
   let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt                       . g:u_sbuf
+  let g:u_opt_gp = 'Unite '       . g:u_hopt
   let g:u_opt_hy = 'Unite '       . g:u_hopt
   let g:u_opt_li = 'Unite '       . g:u_nspl                       . g:u_sbuf
   let g:u_opt_mf = 'Unite '       . g:u_hopt
@@ -1644,6 +1645,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'grep:*'           . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'grep:.*'          . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:/'       . '<CR>'
+  nnoremap <expr> <Leader>gp ':<C-u>' . g:u_opt_gr . 'gtags/path'       . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'grep:**'
   nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
