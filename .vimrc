@@ -547,7 +547,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetSrcDir() "{{{
     let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
     let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
-    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.ctags'
+    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\TAGS'
   endfunction "}}}
 
   function! s:SetTags() "{{{
