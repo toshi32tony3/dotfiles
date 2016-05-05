@@ -739,27 +739,6 @@ endif
 "-----------------------------------------------------------------------------
 " Scripts {{{
 
-let g:MyTimers = {}
-command! EchoTimers echo g:MyTimers
-function! AddMyTimer(funcName, interval, count) "{{{
-  let l:timerId = timer_start(a:interval, a:funcName, {'repeat' : a:count})
-  if a:count != -1 | return | endif
-  let g:MyTimers[l:timerId] = a:funcName
-endfunction "}}}
-
-function! SetCurrentFold(...) "{{{
-  let s:currentFold = s:GetCurrentFold()
-endfunction "}}}
-" call AddMyTimer('SetCurrentFold', 500, -1)
-
-function! DelMyTimer(timerId) "{{{
-  if !has_key(g:MyTimers, a:timerId)
-    echo 'There is no entry : ' . a:timerId | return
-  endif
-  call timer_stop(a:timerId)
-  call remove(g:MyTimers, a:timerId)
-endfunction "}}}
-
 " タイムスタンプの挿入
 function! s:PutDateTime() "{{{
   execute "normal! i\<C-r>=strftime('%Y/%m/%d(%a) %H:%M')\<CR>"
