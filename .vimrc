@@ -224,9 +224,9 @@ NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
-NeoBundleLazy 'hewes/unite-gtags',       {'on_source' : 'unite.vim'}
-NeoBundleLazy 'tacroe/unite-mark',       {'on_source' : 'unite.vim'}
-NeoBundleLazy 'Shougo/unite-outline',    {'on_source' : 'unite.vim'}
+NeoBundleLazy 'hewes/unite-gtags',    {'on_source' : 'unite.vim'}
+NeoBundleLazy 'tacroe/unite-mark',    {'on_source' : 'unite.vim'}
+NeoBundleLazy 'Shougo/unite-outline', {'on_source' : 'unite.vim'}
 
 NeoBundleLazy 'Shougo/vimshell.vim', {
       \   'depends' : 'Shougo/unite.vim',
@@ -310,7 +310,7 @@ syntax enable
 " vimrcに書いてあるプラグインがインストールされているかチェックする
 NeoBundleCheck
 
-" Load local settings
+" ローカル設定を読み込む
 if filereadable(expand('~/localfiles/local.rc.vim'))
   source ~/localfiles/local.rc.vim
 elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
@@ -334,10 +334,7 @@ setglobal confirm                    " 変更されたバッファを閉じる�
 setglobal switchbuf=useopen,usetab   " 既に開かれていたら, そっちを使う
 setglobal showmatch matchtime=3      " 対応する括弧などの入力時にハイライト表示
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
-setglobal iminsert=0 imsearch=0
-
-" " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
-" setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
+setglobal iminsert=0 imsearch=0      " 勝手にIME ONさせない
 
 " 汎用補完設定(complete)
 " Default: complete=.,w,b,u,t,i
@@ -365,19 +362,17 @@ cnoremap <C-n> <Down>
 " Default: formatoptions=tcq
 " c : textwidthを使ってコメントを自動折返 + コメント行を継続
 " j : 行連結時にコメントリーダーを削除
-" l : insertモードの自動改行を無効化
 " m : 整形時, 255よりも大きいマルチバイト文字間でも改行する
 " q : gqでコメント行を整形
 " t : textwidthを使ってテキストを自動折返
 " B : 行連結時に, マルチバイト文字の前後に空白を挿入しない
 " M : 行連結時に, マルチバイト文字同士の間に空白を挿入しない
-setglobal formatoptions=cjlmqBM
+setglobal formatoptions=cjmqBM
 setglobal textwidth=78
 setglobal noautoindent
 
 " インデントを入れるキーのリストを調整(コロン, 行頭の#でインデントしない)
-setglobal indentkeys-=:,0#
-setglobal cinkeys-=:,0#
+setglobal indentkeys-=:,0# cinkeys-=:,0#
 
 " Dはd$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
@@ -451,6 +446,8 @@ nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 
 " filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
+
+" filetypeがc/markdownの時は折り畳み機能を自動生成する。ただし, デフォルトは無効
 autocmd MyAutoCmd FileType c,markdown
       \ setlocal foldmethod=syntax foldnestmax=1 nofoldenable
 
