@@ -74,6 +74,11 @@ nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
 " vimdiff用オプション(filler : 埋め合わせ行を表示する / vertical : 縦分割する)
 setglobal diffopt=filler,vertical
 
+" ターミナルを指定
+if !has('gui_running')
+  setglobal ttytype=builtin_xterm
+endif
+
 "}}}
 "-----------------------------------------------------------------------------
 " Plugin List {{{
