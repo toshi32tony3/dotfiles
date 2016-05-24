@@ -536,11 +536,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 " tags, path {{{
 
 " 新規タブでタグジャンプ
-function! s:JumpTagTab(funcName) "{{{
-  tab split | execute 'cstag ' . a:funcName
-endfunction "}}}
-command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
-nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
+nnoremap <silent> <expr> <Leader>] ':<C-u>tab cstag ' . expand('<cword>') . "\<CR>"
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/template/local.rc.vim
