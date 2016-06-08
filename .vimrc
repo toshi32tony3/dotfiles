@@ -512,7 +512,7 @@ nnoremap <A-b> :<C-u>ls<CR>:buffer<Space>
 nnoremap ,t :<C-u>tab split<CR>
 
 " 新規タブでgf
-nnoremap <Leader>gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
+nnoremap ,gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
 
 " 新規タブでvimdiff
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
