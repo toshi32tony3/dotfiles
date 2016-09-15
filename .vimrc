@@ -1461,7 +1461,12 @@ endif "}}}
 if neobundle#tap('vim-quickhl')
 
   map <A-h> <Plug>(operator-quickhl-manual-this-motion)
-  nmap <A-h><A-h> <Plug>(quickhl-manual-this)
+
+  if neobundle#is_installed('vim-repeat')
+    nnoremap <silent> <A-h><A-h> :<C-u>Repeatable silent! execute "normal \<Plug>(quickhl-manual-this)"<CR>
+  else
+    nmap <A-h><A-h> <Plug>(quickhl-manual-this)
+  endif
 
 endif "}}}
 
