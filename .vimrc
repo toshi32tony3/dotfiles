@@ -1944,33 +1944,35 @@ if neobundle#tap('vim-quickrun')
         \     'cmdopt'   : '//Nologo',
         \     'tempfile' : '{tempname()}.vbs',
         \   },
-        \   'c' : {
-        \     'type'     : 'c/clang4_7_1',
-        \   },
-        \   'c/gcc4_8_1' : {
-        \     'command'  : 'gcc',
-        \     'cmdopt'   : '-g -Wall',
-        \   },
-        \   'c/clang4_7_1' : {
-        \     'command'  : 'clang',
-        \     'cmdopt'   : '-g -Wall',
-        \   },
-        \   'cpp' : {
-        \     'type' : 'cpp/clang4_7_1',
-        \   },
-        \   'cpp/gcc4_8_1' : {
-        \     'command'  : 'g++',
-        \     'cmdopt'   : '-g -Wall',
-        \   },
-        \   'cpp/clang4_7_1' : {
-        \     'command'  : 'clang++',
-        \     'cmdopt'   : '-g -Wall',
-        \   },
         \   'make' : {
         \     'command'  : 'make',
         \     'cmdopt'   : 'run',
         \   },
         \ }
+
+"         \   'c' : {
+"         \     'type'     : 'c/gcc4_8_1',
+"         \   },
+"         \   'c/gcc4_8_1' : {
+"         \     'command'  : 'gcc',
+"         \     'cmdopt'   : '-g -Wall',
+"         \   },
+"         \   'c/clang4_7_1' : {
+"         \     'command'  : 'clang',
+"         \     'cmdopt'   : '-g -Wall',
+"         \   },
+"         \   'cpp' : {
+"         \     'type' : 'cpp/clang4_7_1',
+"         \   },
+"         \   'cpp/gcc4_8_1' : {
+"         \     'command'  : 'g++',
+"         \     'cmdopt'   : '-g -Wall',
+"         \   },
+"         \   'cpp/clang4_7_1' : {
+"         \     'command'  : 'clang++',
+"         \     'cmdopt'   : '-g -Wall',
+"         \   },
+
 
   " デフォルトの<Leader>rだと入力待ちになるので, 別のキーをマッピング
   let g:quickrun_no_default_key_mappings = 1
