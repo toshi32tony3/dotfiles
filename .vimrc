@@ -1537,7 +1537,7 @@ if neobundle#tap('vim-repeat')
   nnoremap <silent> [F :<C-u>Repeatable call search(g:cFuncDefPattern, 'bs')<CR>
 
   " ブラケットの前の単語にジャンプ
-  let g:bracketPattern = '\v\zs<\w+>\ze\('
+  let g:bracketPattern = '\v\zs<\w+>\ze(\s)?\('
   nnoremap <silent> ]b :<C-u>Repeatable call search(g:bracketPattern,  's')<CR>
   nnoremap <silent> [b :<C-u>Repeatable call search(g:bracketPattern, 'bs')<CR>
 
