@@ -291,7 +291,7 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 "-------------------------------------------------------------------
 " debug {{{
 
-" NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
+NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
 " NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
 
 "}}}
