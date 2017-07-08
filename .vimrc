@@ -115,6 +115,7 @@ NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 NeoBundleLazy 'lambdalisue/vim-gita', {
+      \   'rev'       : '0.1.5',
       \   'on_source' : 'agit.vim',
       \   'on_cmd'    : 'Gita',
       \ }
