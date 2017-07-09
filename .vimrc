@@ -153,6 +153,9 @@ NeoBundleLazy 'thinca/vim-ambicmd'
 " 本家 : 'sjl/badwolf'
 NeoBundle 'toshi32tony3/badwolf'
 
+" 本家 : 'vim-scripts/EditPlus'
+NeoBundle 'toshi32tony3/EditPlus'
+
 NeoBundle 'cocopon/lightline-hybrid.vim'
 NeoBundle 'itchyny/lightline.vim'
 
