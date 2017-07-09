@@ -114,6 +114,9 @@ NeoBundle 'Shougo/vimproc.vim', {
       \   },
       \ }
 
+" ヴィむwiki
+NeoBundle 'vimwiki/vimwiki'
+
 "-------------------------------------------------------------------
 " VCS {{{
 
@@ -1056,6 +1059,13 @@ autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 "}}}
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
+
+" VimでWiki(vimwiki) {{{
+if neobundle#tap('agit.vim')
+
+  let g:vimwiki_menu = ''
+
+endif "}}}
 
 " バッファをHTML形式に変換(2html.vim) {{{
 
