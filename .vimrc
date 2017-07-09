@@ -90,11 +90,17 @@ filetype plugin indent off
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if has('vim_starting')
   if &compatible | setglobal nocompatible | endif
-  setglobal runtimepath+=~/.vim/bundle/neobundle.vim
+  " neobundle.vimでプラグインを管理する(NeoBundleCleanを使うために小細工)
+  if   isdirectory(expand('~/.vim/bundle/neobundle.vim_673be4e'))
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim_673be4e
+  else
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim
+  endif
 endif
 call neobundle#begin(expand('~/.vim/bundle'))
 
-NeoBundleFetch 'Shougo/neobundle.vim'
+" NeoBundleCleanを使うために小細工
+NeoBundleFetch 'Shougo/neobundle.vim', {'rev' : '673be4e'}
 
 " 日本語ヘルプを卒業したいが, なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
