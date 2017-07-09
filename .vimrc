@@ -121,6 +121,7 @@ NeoBundleLazy 'lambdalisue/vim-gita', {
       \ }
 command! -nargs=* -range -bang -bar -complete=customlist,gita#command#complete
       \ GitaBar call gita#command#command(<q-bang>, [<line1>, <line2>], <q-args>)
+NeoBundle 'tpope/vim-fugitive'
 
 "}}}
 "-------------------------------------------------------------------
