@@ -240,9 +240,10 @@ NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
-NeoBundleLazy 'hewes/unite-gtags',    {'on_source' : 'unite.vim'}
-NeoBundleLazy 'tacroe/unite-mark',    {'on_source' : 'unite.vim'}
-NeoBundleLazy 'Shougo/unite-outline', {'on_source' : 'unite.vim'}
+NeoBundleLazy 'hewes/unite-gtags',         {'on_source' : 'unite.vim'}
+NeoBundleLazy 'tacroe/unite-mark',         {'on_source' : 'unite.vim'}
+NeoBundleLazy 'Shougo/unite-outline',      {'on_source' : 'unite.vim'}
+NeoBundleLazy 'ujihisa/unite-colorscheme', {'on_source' : 'unite.vim'}
 
 NeoBundleLazy 'Shougo/vimshell.vim', {
       \   'depends' : 'Shougo/unite.vim',
