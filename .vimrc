@@ -1063,7 +1063,14 @@ autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 " VimでWiki(vimwiki) {{{
 if neobundle#tap('agit.vim')
 
+  let g:vimwiki_list = [
+        \   {
+        \     'path'        : '~/vimwiki',
+        \     'auto_export' : 1,
+        \   }
+        \ ]
   let g:vimwiki_menu = ''
+  let g:vimwiki_auto_chdir = 1
 
 endif "}}}
 
