@@ -1060,7 +1060,7 @@ autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 " Plugin Settings {{{
 
 " VimでWiki(vimwiki) {{{
-if neobundle#tap('agit.vim')
+if neobundle#tap('vimwiki')
 
   let g:vimwiki_list = [
         \   {
