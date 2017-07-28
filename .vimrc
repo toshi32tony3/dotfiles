@@ -956,8 +956,9 @@ function! s:GetCurrentFuncC() "{{{
     if line('.') < l:endLine | call winrestview(l:savedView) | return '' | endif
     if line('.') == 1        | call winrestview(l:savedView) | return '' | endif
   endif
-  call search('(', 'b')
-  keepjumps normal! b
+  " call search('(', 'b')
+  " keepjumps normal! b
+  call search(g:cFuncDefPattern, 'b')
   let l:funcName = expand('<cword>') " 関数名を取得
   call winrestview(l:savedView)      " Viewを戻す
 
