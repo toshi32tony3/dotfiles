@@ -240,7 +240,8 @@ NeoBundle 'mhinz/vim-startify'
 NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 
 " 遅延読み込みすると候補収集されないので, Vim起動直後に読み込む
-NeoBundle 'Shougo/neomru.vim'
+" ネットワーク上ファイルを記憶するとVimの起動が遅くなることがある
+" NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
 NeoBundleLazy 'hewes/unite-gtags',         {'on_source' : 'unite.vim'}
