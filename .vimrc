@@ -228,7 +228,7 @@ NeoBundle 'toshi32tony3/vim-repeat'
 "-------------------------------------------------------------------
 " vimdiff {{{
 
-NeoBundleLazy 'lambdalisue/vim-unified-diff'
+NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 
 "}}}
@@ -1134,6 +1134,7 @@ endif "}}}
 " VimからGitを使う(編集, コマンド実行, vim-gita) {{{
 if neobundle#tap('vim-gita')
 
+  let g:gita#suppress_warning = 1
   autocmd MyAutoCmd BufWinEnter gita:* setlocal nofoldenable
 
 endif "}}}
@@ -1578,8 +1579,6 @@ endif "}}}
 
 " vimdiffに別のDiffアルゴリズムを適用する(vim-unified-diff) {{{
 if neobundle#tap('vim-unified-diff')
-
-  setglobal diffexpr=unified_diff#diffexpr()
 
 endif "}}}
 
