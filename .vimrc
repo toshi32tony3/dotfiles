@@ -1590,7 +1590,7 @@ endif "}}}
 " Vimにスタート画面を用意(vim-startify) {{{
 if neobundle#tap('vim-startify')
 
-  let g:startify_files_number = 2
+  let g:startify_files_number = 3
   let g:startify_change_to_dir = 1
   let g:startify_session_dir = '~/vimfiles/session'
   let g:startify_session_delete_buffers = 1
