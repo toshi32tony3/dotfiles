@@ -1434,9 +1434,8 @@ endif " }}}
 " Vimのマーク機能を使いやすくする(vim-signature) {{{
 if neobundle#tap('vim-signature')
 
-  " viminfoからグローバルマークを削除する設定
-  " → Windowsではviminfoが書き込み禁止になり削除失敗するので無効化する
-  let g:SignatureForceRemoveGlobal = 0
+  " viminfoからグローバルマークを削除
+  let g:SignatureForceRemoveGlobal = 1
 
   " これだけあれば十分
   " mm       : ToggleMarkAtLine
