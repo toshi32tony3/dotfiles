@@ -1525,9 +1525,22 @@ if neobundle#tap('vim-repeat')
     else
       normal! q
       " remove trailing mapping key and <C-o>
-      let @m = @m[0 : (-1 * (a:op + 1))]
-      let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
-      call repeat#set('@m', 1)
+      let l:reg = '@' . a:id
+
+      " やってることは以下
+      " let @m = @m[0 : (-1 * (a:op + 1))]
+      execute 'let ' . l:reg
+        \    . ' = ' . l:reg . '[0 : (-1 * (' . a:op . ' + 1))]'
+
+      " やってることは以下
+      " let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
+      execute 'let '     . l:reg
+        \ . ' = stridx(' . l:reg . ', "\<C-o>") == (len(' . l:reg . ') - 1) ? '
+        \                . l:reg . '[0 : -2] : ' . l:reg
+
+      call repeat#set('@' . a:id, 1)
+      echo '@' . a:id . ':'
+      execute 'echo @' . a:id
     endif
   endfunction
   nnoremap <silent> <A-m> :call <SID>SimpleMacro('m', 2)<CR>
