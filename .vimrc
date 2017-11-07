@@ -1381,7 +1381,6 @@ if neobundle#tap('vim-asterisk')
   let g:asterisk#keeppos = 1
 
   " star-search対象を選択レジスタに入れる
-  " →yankオペレータを使うべき。矯正のため使用禁止
   function! s:ClipCword(data) "{{{
     let     l:mode  = mode(1)
     if      l:mode == 'n' || l:mode == 'no'
@@ -1392,12 +1391,16 @@ if neobundle#tap('vim-asterisk')
     endif
     return ''
   endfunction "}}}
-  " noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
+  noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
-  map *  <Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-  map #  <Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
-  map g* <Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-  map g# <Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+  map *                      <Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+  map #                      <Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
+  map g*                     <Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+  map g#                     <Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+  nmap y*  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+  nmap y#  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
+  nmap yg* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+  nmap yg# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
 
 endif "}}}
 
