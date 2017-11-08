@@ -1380,7 +1380,7 @@ if neobundle#tap('vim-asterisk')
   " 検索開始時のカーソル位置を保持する
   let g:asterisk#keeppos = 1
 
-  " star-search対象を選択レジスタに入れる
+  " <cword>を選択レジスタに入れる
   function! s:ClipCword(data) "{{{
     let     l:mode  = mode(1)
     if      l:mode == 'n' || l:mode == 'no'
@@ -1481,7 +1481,25 @@ endif "}}}
 " 検索オペレータ(vim-operator-search) {{{
 if neobundle#tap('vim-operator-search')
 
+  " <cword>を検索レジスタに入れる
+  function! s:SearchCword(data) "{{{
+    let     l:mode  = mode(1)
+    if      l:mode == 'n' || l:mode == 'no'
+      let @/ = '\<' . a:data . '\>'
+      return ''
+    elseif  l:mode ==# 'v' || l:mode ==# 'V' || l:mode == "\<C-v>"
+      echo 'function SearchCword() not supported in visual mode.'
+      return ''
+    endif
+    return ''
+  endfunction "}}}
+  noremap <silent> <expr> <Plug>(_SearchCword) <SID>SearchCword(expand('<cword>'))
+
   map <A-s> <Plug>(operator-search)
+
+  if neobundle#is_installed('vim-textobj-function')
+    nmap <A-s>* <Plug>(_SearchCword)<Plug>(operator-search)<Plug>(textobj-function-i)<C-r>/<CR>
+  endif
 
 endif "}}}
 
