@@ -1097,20 +1097,22 @@ if neobundle#tap('vim-signify')
   let g:signify_skip_filetype = {'vimfiler' : 1}
 
   " switch signify_vcs_cmds
+  let g:diff_target = 'master'
   if !exists('s:signifyDiffSwitch') | let s:signifyDiffSwitch = 0 | endif
   function! s:SwitchSignifyDiff() "{{{
     let s:signifyDiffSwitch = (s:signifyDiffSwitch + 1) % 2
     if  s:signifyDiffSwitch
-      let g:signify_vcs_cmds =
-            \ {'git': 'git diff master --no-color --no-ext-diff -U0 -- %f'}
-      echo 'Show diff between HEAD and master'
+      let g:signify_vcs_cmds.git = printf(
+            \ 'git diff %s --no-color --no-ext-diff -U0 -- %%f', g:diff_target)
+      echo 'Show diff between HEAD and ' . g:diff_target
     else
-      let g:signify_vcs_cmds =
-            \ {'git': 'git diff --no-color --no-ext-diff -U0 -- %f'}
+      let g:signify_vcs_cmds.git =
+            \ 'git diff --no-color --no-ext-diff -U0 -- %f'
       echo 'Show diff between HEAD and WORKTREE'
     endif
   endfunction "}}}
   nnoremap <silent> ,d :<C-u>call <SID>SwitchSignifyDiff()<CR>
+  nnoremap ,m :let g:diff_target =<Space>''<Left>
 
   " Hunk text object
   omap ic <Plug>(signify-motion-inner-pending)
