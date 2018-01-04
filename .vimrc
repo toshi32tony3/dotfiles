@@ -617,7 +617,9 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
     call s:SetPathList()
     call s:SetCDPathList()
     call SetEnvironmentVariables()
-    execute 'cd ' . g:local_rc_current_src_dir
+    if isdirectory(g:local_rc_current_src_dir)
+      execute 'cd ' . g:local_rc_current_src_dir
+    endif
     if exists('s:IsFirstLoad') | echo 'switch to: ' . g:local_rc_src_dir | endif
   endfunction "}}}
   nnoremap <silent> ,s :<C-u>call <SID>SwitchProject()<CR>
