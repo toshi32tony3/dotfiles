@@ -74,6 +74,11 @@ nnoremap <silent> <F2> :<C-u>call <SID>ToggleScrollOffSet()<CR>
 " vimdiff用オプション(filler : 埋め合わせ行を表示する / vertical : 縦分割する)
 setglobal diffopt=filler,vertical
 
+" ターミナルを指定
+if !has('gui_running')
+  setglobal ttytype=builtin_xterm
+endif
+
 "}}}
 "-----------------------------------------------------------------------------
 " Plugin List {{{
@@ -85,11 +90,17 @@ filetype plugin indent off
 " http://rbtnn.hateblo.jp/entry/2014/11/30/174749
 if has('vim_starting')
   if &compatible | setglobal nocompatible | endif
-  setglobal runtimepath+=~/.vim/bundle/neobundle.vim
+  " neobundle.vimでプラグインを管理する(NeoBundleCleanを使うために小細工)
+  if   isdirectory(expand('~/.vim/bundle/neobundle.vim_673be4e'))
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim_673be4e
+  else
+    setglobal runtimepath+=~/.vim/bundle/neobundle.vim
+  endif
 endif
 call neobundle#begin(expand('~/.vim/bundle'))
 
-NeoBundleFetch 'Shougo/neobundle.vim'
+" NeoBundleCleanを使うために小細工
+NeoBundleFetch 'Shougo/neobundle.vim', {'rev' : '673be4e'}
 
 " 日本語ヘルプを卒業したいが, なかなかできない
 NeoBundleLazy 'vim-jp/vimdoc-ja'
@@ -103,19 +114,24 @@ NeoBundle 'Shougo/vimproc.vim', {
       \   },
       \ }
 
+" ヴィむwiki
+NeoBundle 'vimwiki/vimwiki'
+
 "-------------------------------------------------------------------
 " VCS {{{
 
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
-set shellslash
 NeoBundleLazy 'lambdalisue/vim-gita', {
+      \   'rev'       : '0.1.5',
       \   'on_source' : 'agit.vim',
       \   'on_cmd'    : 'Gita',
       \ }
 command! -nargs=* -range -bang -bar -complete=customlist,gita#command#complete
       \ GitaBar call gita#command#command(<q-bang>, [<line1>, <line2>], <q-args>)
+" NeoBundleLazy 'lambdalisue/gina.vim', { 'on_cmd' : 'Gina' }
+NeoBundle 'tpope/vim-fugitive'
 
 "}}}
 "-------------------------------------------------------------------
@@ -139,6 +155,9 @@ NeoBundleLazy 'thinca/vim-ambicmd'
 
 " 本家 : 'sjl/badwolf'
 NeoBundle 'toshi32tony3/badwolf'
+
+" 本家 : 'vim-scripts/EditPlus'
+NeoBundle 'toshi32tony3/EditPlus'
 
 NeoBundle 'cocopon/lightline-hybrid.vim'
 NeoBundle 'itchyny/lightline.vim'
@@ -209,7 +228,7 @@ NeoBundle 'toshi32tony3/vim-repeat'
 "-------------------------------------------------------------------
 " vimdiff {{{
 
-NeoBundleLazy 'lambdalisue/vim-unified-diff'
+NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 
 "}}}
@@ -221,12 +240,14 @@ NeoBundle 'mhinz/vim-startify'
 NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 
 " 遅延読み込みすると候補収集されないので, Vim起動直後に読み込む
-NeoBundle 'Shougo/neomru.vim'
+" ネットワーク上ファイルを記憶するとVimの起動が遅くなることがある
+" NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
-NeoBundleLazy 'hewes/unite-gtags',       {'on_source' : 'unite.vim'}
-NeoBundleLazy 'tacroe/unite-mark',       {'on_source' : 'unite.vim'}
-NeoBundleLazy 'Shougo/unite-outline',    {'on_source' : 'unite.vim'}
+NeoBundleLazy 'hewes/unite-gtags',         {'on_source' : 'unite.vim'}
+NeoBundleLazy 'tacroe/unite-mark',         {'on_source' : 'unite.vim'}
+NeoBundleLazy 'Shougo/unite-outline',      {'on_source' : 'unite.vim'}
+NeoBundleLazy 'ujihisa/unite-colorscheme', {'on_source' : 'unite.vim'}
 
 NeoBundleLazy 'Shougo/vimshell.vim', {
       \   'depends' : 'Shougo/unite.vim',
@@ -287,7 +308,7 @@ NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
 "-------------------------------------------------------------------
 " debug {{{
 
-" NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
+NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
 " NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
 
 "}}}
@@ -310,7 +331,7 @@ syntax enable
 " vimrcに書いてあるプラグインがインストールされているかチェックする
 NeoBundleCheck
 
-" Load local settings
+" ローカル設定を読み込む
 if filereadable(expand('~/localfiles/local.rc.vim'))
   source ~/localfiles/local.rc.vim
 elseif filereadable(expand('~/localfiles/template/local.rc.vim'))
@@ -334,10 +355,7 @@ setglobal confirm                    " 変更されたバッファを閉じる�
 setglobal switchbuf=useopen,usetab   " 既に開かれていたら, そっちを使う
 setglobal showmatch matchtime=3      " 対応する括弧などの入力時にハイライト表示
 setglobal backspace=indent,eol,start " <BS>でなんでも消せるようにする
-setglobal iminsert=0 imsearch=0
-
-" " 矢印(->)を打つと対応が取れない括弧と認識され, bellが鳴るのでコメントアウト
-" setglobal matchpairs+=<:>            " 対応括弧に'<'と'>'のペアを追加
+setglobal iminsert=0 imsearch=0      " 勝手にIME ONさせない
 
 " 汎用補完設定(complete)
 " Default: complete=.,w,b,u,t,i
@@ -365,19 +383,17 @@ cnoremap <C-n> <Down>
 " Default: formatoptions=tcq
 " c : textwidthを使ってコメントを自動折返 + コメント行を継続
 " j : 行連結時にコメントリーダーを削除
-" l : insertモードの自動改行を無効化
 " m : 整形時, 255よりも大きいマルチバイト文字間でも改行する
 " q : gqでコメント行を整形
 " t : textwidthを使ってテキストを自動折返
 " B : 行連結時に, マルチバイト文字の前後に空白を挿入しない
 " M : 行連結時に, マルチバイト文字同士の間に空白を挿入しない
-setglobal formatoptions=cjlmqBM
+setglobal formatoptions=cjmqBM
 setglobal textwidth=78
 setglobal noautoindent
 
 " インデントを入れるキーのリストを調整(コロン, 行頭の#でインデントしない)
-setglobal indentkeys-=:,0#
-setglobal cinkeys-=:,0#
+setglobal indentkeys-=:,0# cinkeys-=:,0#
 
 " Dはd$なのにYはyyと同じというのは納得がいかない
 nnoremap Y y$
@@ -451,6 +467,8 @@ nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 
 " filetypeがvimの時はvimのコメント行markerを前置してfoldmarkerを付ける
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
+
+" filetypeがc/markdownの時は折り畳み機能を自動生成する。ただし, デフォルトは無効
 autocmd MyAutoCmd FileType c,markdown
       \ setlocal foldmethod=syntax foldnestmax=1 nofoldenable
 
@@ -510,7 +528,7 @@ nnoremap <A-b> :<C-u>ls<CR>:buffer<Space>
 nnoremap ,t :<C-u>tab split<CR>
 
 " 新規タブでgf
-nnoremap <Leader>gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
+nnoremap ,gf :<C-u>execute 'tabfind ' . expand('<cfile>')<CR>
 
 " 新規タブでvimdiff
 " 引数が1つ     : カレントバッファと引数指定ファイルの比較
@@ -534,11 +552,7 @@ command! -nargs=+ -complete=file Diff call s:TabDiff(<f-args>)
 " tags, path {{{
 
 " 新規タブでタグジャンプ
-function! s:JumpTagTab(funcName) "{{{
-  tab split | execute 'cstag ' . a:funcName
-endfunction "}}}
-command! -nargs=1 -complete=tag JumpTagTab call s:JumpTagTab(<f-args>)
-nnoremap <silent> <Leader>] :<C-u>call <SID>JumpTagTab(expand('<cword>'))<CR>
+nnoremap <silent> <expr> <Leader>] ':<C-u>tab cstag ' . expand('<cword>') . "\<CR>"
 
 " ソースディレクトリの設定はローカル設定ファイルに記述する
 " see: ~/localfiles/template/local.rc.vim
@@ -547,7 +561,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
   function! s:SetSrcDir() "{{{
     let g:local_rc_src_dir         = g:local_rc_src_list[g:local_rc_src_index]
     let g:local_rc_current_src_dir = g:local_rc_base_dir . '\' . g:local_rc_src_dir
-    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\.ctags'
+    let g:local_rc_ctags_dir       = g:local_rc_current_src_dir . '\TAGS'
   endfunction "}}}
 
   function! s:SetTags() "{{{
@@ -943,8 +957,9 @@ function! s:GetCurrentFuncC() "{{{
     if line('.') < l:endLine | call winrestview(l:savedView) | return '' | endif
     if line('.') == 1        | call winrestview(l:savedView) | return '' | endif
   endif
-  call search('(', 'b')
-  keepjumps normal! b
+  " call search('(', 'b')
+  " keepjumps normal! b
+  call search(g:cFuncDefPattern, 'b')
   let l:funcName = expand('<cword>') " 関数名を取得
   call winrestview(l:savedView)      " Viewを戻す
 
@@ -1029,8 +1044,9 @@ call s:AddMyCMap('gca', 'Gita commit --amend')
 call s:AddMyCMap('gch', 'Gita chaperone')
 call s:AddMyCMap('gco', 'Gita checkout')
 call s:AddMyCMap('gdi', 'Gita diff')
-call s:AddMyCMap('gdl', 'Gita diff-ls master')
+call s:AddMyCMap('gdl', 'Gita diff-ls')
 call s:AddMyCMap('glf', 'Gita ls-files')
+call s:AddMyCMap('gme', 'Gita merge')
 call s:AddMyCMap('gp2', 'Gita patch -2')
 call s:AddMyCMap('gp3', 'Gita patch -3')
 call s:AddMyCMap('gpl', '!git pull')
@@ -1044,6 +1060,20 @@ autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 "}}}
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
+
+" VimでWiki(vimwiki) {{{
+if neobundle#tap('vimwiki')
+
+  let g:vimwiki_list = [
+        \   {
+        \     'path'        : '~/vimwiki',
+        \     'auto_export' : 1,
+        \   }
+        \ ]
+  let g:vimwiki_menu = ''
+  let g:vimwiki_auto_chdir = 1
+
+endif "}}}
 
 " バッファをHTML形式に変換(2html.vim) {{{
 
@@ -1067,20 +1097,22 @@ if neobundle#tap('vim-signify')
   let g:signify_skip_filetype = {'vimfiler' : 1}
 
   " switch signify_vcs_cmds
+  let g:diff_target = 'master'
   if !exists('s:signifyDiffSwitch') | let s:signifyDiffSwitch = 0 | endif
   function! s:SwitchSignifyDiff() "{{{
     let s:signifyDiffSwitch = (s:signifyDiffSwitch + 1) % 2
     if  s:signifyDiffSwitch
-      let g:signify_vcs_cmds =
-            \ {'git': 'git diff master --no-color --no-ext-diff -U0 -- %f'}
-      echo 'Show diff between HEAD and master'
+      let g:signify_vcs_cmds.git = printf(
+            \ 'git diff %s --no-color --no-ext-diff -U0 -- %%f', g:diff_target)
+      echo 'Show diff between HEAD and ' . g:diff_target
     else
-      let g:signify_vcs_cmds =
-            \ {'git': 'git diff --no-color --no-ext-diff -U0 -- %f'}
+      let g:signify_vcs_cmds.git =
+            \ 'git diff --no-color --no-ext-diff -U0 -- %f'
       echo 'Show diff between HEAD and WORKTREE'
     endif
   endfunction "}}}
   nnoremap <silent> ,d :<C-u>call <SID>SwitchSignifyDiff()<CR>
+  nnoremap ,m :let g:diff_target =<Space>''<Left>
 
   " Hunk text object
   omap ic <Plug>(signify-motion-inner-pending)
@@ -1104,6 +1136,7 @@ endif "}}}
 " VimからGitを使う(編集, コマンド実行, vim-gita) {{{
 if neobundle#tap('vim-gita')
 
+  let g:gita#suppress_warning = 1
   autocmd MyAutoCmd BufWinEnter gita:* setlocal nofoldenable
 
 endif "}}}
@@ -1112,6 +1145,7 @@ endif "}}}
 if neobundle#tap('agit.vim')
 
   let g:agit_enable_auto_show_commit = 0
+  let g:agit_max_log_lines = 10000
 
   function! s:AgitSettings()
     nmap <buffer> ch <Plug>(agit-git-cherry-pick)
@@ -1348,7 +1382,7 @@ if neobundle#tap('vim-asterisk')
   " 検索開始時のカーソル位置を保持する
   let g:asterisk#keeppos = 1
 
-  " star-search対象を選択レジスタに入れる
+  " <cword>を選択レジスタに入れる
   function! s:ClipCword(data) "{{{
     let     l:mode  = mode(1)
     if      l:mode == 'n' || l:mode == 'no'
@@ -1361,10 +1395,14 @@ if neobundle#tap('vim-asterisk')
   endfunction "}}}
   noremap <silent> <expr> <Plug>(_ClipCword) <SID>ClipCword(expand('<cword>'))
 
-  map *  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
-  map #  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
-  map g* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
-  map g# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+  map *                      <Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+  map #                      <Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
+  map g*                     <Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+  map g#                     <Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
+  nmap y*  <Plug>(_ClipCword)<Plug>(asterisk-z*)<Plug>(anzu-update-search-status-with-echo)
+  nmap y#  <Plug>(_ClipCword)<Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
+  nmap yg* <Plug>(_ClipCword)<Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
+  nmap yg# <Plug>(_ClipCword)<Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
 
 endif "}}}
 
@@ -1401,9 +1439,8 @@ endif " }}}
 " Vimのマーク機能を使いやすくする(vim-signature) {{{
 if neobundle#tap('vim-signature')
 
-  " viminfoからグローバルマークを削除する設定
-  " → Windowsではviminfoが書き込み禁止になり削除失敗するので無効化する
-  let g:SignatureForceRemoveGlobal = 0
+  " viminfoからグローバルマークを削除
+  let g:SignatureForceRemoveGlobal = 1
 
   " これだけあれば十分
   " mm       : ToggleMarkAtLine
@@ -1446,7 +1483,25 @@ endif "}}}
 " 検索オペレータ(vim-operator-search) {{{
 if neobundle#tap('vim-operator-search')
 
+  " <cword>を検索レジスタに入れる
+  function! s:SearchCword(data) "{{{
+    let     l:mode  = mode(1)
+    if      l:mode == 'n' || l:mode == 'no'
+      let @/ = '\<' . a:data . '\>'
+      return ''
+    elseif  l:mode ==# 'v' || l:mode ==# 'V' || l:mode == "\<C-v>"
+      echo 'function SearchCword() not supported in visual mode.'
+      return ''
+    endif
+    return ''
+  endfunction "}}}
+  noremap <silent> <expr> <Plug>(_SearchCword) <SID>SearchCword(expand('<cword>'))
+
   map <A-s> <Plug>(operator-search)
+
+  if neobundle#is_installed('vim-textobj-function')
+    nmap <A-s>* <Plug>(_SearchCword)<Plug>(operator-search)<Plug>(textobj-function-i)<C-r>/<CR>
+  endif
 
 endif "}}}
 
@@ -1462,7 +1517,12 @@ endif "}}}
 if neobundle#tap('vim-quickhl')
 
   map <A-h> <Plug>(operator-quickhl-manual-this-motion)
-  nmap <A-h><A-h> <Plug>(quickhl-manual-this)
+
+  if neobundle#is_installed('vim-repeat')
+    nnoremap <silent> <A-h><A-h> :<C-u>Repeatable silent! execute "normal \<Plug>(quickhl-manual-this)"<CR>
+  else
+    nmap <A-h><A-h> <Plug>(quickhl-manual-this)
+  endif
 
 endif "}}}
 
@@ -1487,9 +1547,22 @@ if neobundle#tap('vim-repeat')
     else
       normal! q
       " remove trailing mapping key and <C-o>
-      let @m = @m[0 : (-1 * (a:op + 1))]
-      let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
-      call repeat#set('@m', 1)
+      let l:reg = '@' . a:id
+
+      " やってることは以下
+      " let @m = @m[0 : (-1 * (a:op + 1))]
+      execute 'let ' . l:reg
+        \    . ' = ' . l:reg . '[0 : (-1 * (' . a:op . ' + 1))]'
+
+      " やってることは以下
+      " let @m = stridx(@m, "\<C-o>") == (len(@m) - 1) ? @m[0 : -2] : @m
+      execute 'let '     . l:reg
+        \ . ' = stridx(' . l:reg . ', "\<C-o>") == (len(' . l:reg . ') - 1) ? '
+        \                . l:reg . '[0 : -2] : ' . l:reg
+
+      call repeat#set('@' . a:id, 1)
+      echo '@' . a:id . ':'
+      execute 'echo @' . a:id
     endif
   endfunction
   nnoremap <silent> <A-m> :call <SID>SimpleMacro('m', 2)<CR>
@@ -1533,7 +1606,7 @@ if neobundle#tap('vim-repeat')
   nnoremap <silent> [F :<C-u>Repeatable call search(g:cFuncDefPattern, 'bs')<CR>
 
   " ブラケットの前の単語にジャンプ
-  let g:bracketPattern = '\v\zs<\w+>\ze\('
+  let g:bracketPattern = '\v\zs<\w+>\ze(\s)?\('
   nnoremap <silent> ]b :<C-u>Repeatable call search(g:bracketPattern,  's')<CR>
   nnoremap <silent> [b :<C-u>Repeatable call search(g:bracketPattern, 'bs')<CR>
 
@@ -1541,8 +1614,6 @@ endif "}}}
 
 " vimdiffに別のDiffアルゴリズムを適用する(vim-unified-diff) {{{
 if neobundle#tap('vim-unified-diff')
-
-  setglobal diffexpr=unified_diff#diffexpr()
 
 endif "}}}
 
@@ -1554,7 +1625,7 @@ endif "}}}
 " Vimにスタート画面を用意(vim-startify) {{{
 if neobundle#tap('vim-startify')
 
-  let g:startify_files_number = 2
+  let g:startify_files_number = 3
   let g:startify_change_to_dir = 1
   let g:startify_session_dir = '~/vimfiles/session'
   let g:startify_session_delete_buffers = 1
@@ -1618,7 +1689,9 @@ if neobundle#tap('unite.vim')
   let g:u_opt_fi = 'Unite '       . g:u_hopt
   let g:u_opt_fm = 'Unite '       . g:u_hopt
   let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
+  let g:u_opt_gf = 'Unite '       . g:u_hopt
   let g:u_opt_gr = 'Unite '       . g:u_hopt                       . g:u_sbuf
+  let g:u_opt_gp = 'Unite '       . g:u_hopt
   let g:u_opt_hy = 'Unite '       . g:u_hopt
   let g:u_opt_li = 'Unite '       . g:u_nspl                       . g:u_sbuf
   let g:u_opt_mf = 'Unite '       . g:u_hopt
@@ -1645,7 +1718,9 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'grep:%'           . '<CR>'
   nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'grep:*'           . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'grep:.*'          . '<CR>'
+  nnoremap <expr> <Leader>gf ':<C-u>' . g:u_opt_gf . 'gtags/file'       . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:/'       . '<CR>'
+  nnoremap <expr> <Leader>gp ':<C-u>' . g:u_opt_gp . 'gtags/path'       . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'grep:**'
   nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
@@ -1935,33 +2010,35 @@ if neobundle#tap('vim-quickrun')
         \     'cmdopt'   : '//Nologo',
         \     'tempfile' : '{tempname()}.vbs',
         \   },
-        \   'c' : {
-        \     'type'     : 'c/clang4_7_1',
-        \   },
-        \   'c/gcc4_8_1' : {
-        \     'command'  : 'gcc',
-        \     'cmdopt'   : '-g -Wall',
-        \   },
-        \   'c/clang4_7_1' : {
-        \     'command'  : 'clang',
-        \     'cmdopt'   : '-g -Wall',
-        \   },
-        \   'cpp' : {
-        \     'type' : 'cpp/clang4_7_1',
-        \   },
-        \   'cpp/gcc4_8_1' : {
-        \     'command'  : 'g++',
-        \     'cmdopt'   : '-g -Wall',
-        \   },
-        \   'cpp/clang4_7_1' : {
-        \     'command'  : 'clang++',
-        \     'cmdopt'   : '-g -Wall',
-        \   },
         \   'make' : {
         \     'command'  : 'make',
         \     'cmdopt'   : 'run',
         \   },
         \ }
+
+"         \   'c' : {
+"         \     'type'     : 'c/gcc4_8_1',
+"         \   },
+"         \   'c/gcc4_8_1' : {
+"         \     'command'  : 'gcc',
+"         \     'cmdopt'   : '-g -Wall',
+"         \   },
+"         \   'c/clang4_7_1' : {
+"         \     'command'  : 'clang',
+"         \     'cmdopt'   : '-g -Wall',
+"         \   },
+"         \   'cpp' : {
+"         \     'type' : 'cpp/clang4_7_1',
+"         \   },
+"         \   'cpp/gcc4_8_1' : {
+"         \     'command'  : 'g++',
+"         \     'cmdopt'   : '-g -Wall',
+"         \   },
+"         \   'cpp/clang4_7_1' : {
+"         \     'command'  : 'clang++',
+"         \     'cmdopt'   : '-g -Wall',
+"         \   },
+
 
   " デフォルトの<Leader>rだと入力待ちになるので, 別のキーをマッピング
   let g:quickrun_no_default_key_mappings = 1
