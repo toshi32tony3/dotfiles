@@ -112,6 +112,7 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'windows' : 'tools\\update-dll-mingw',
       \     'linux'   : 'make',
       \   },
+      \   'rev' : 'ver.9.2',
       \ }
 
 " ヴィむwiki
