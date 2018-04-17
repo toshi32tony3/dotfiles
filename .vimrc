@@ -1520,7 +1520,12 @@ endif "}}}
 if neobundle#tap('caw.vim')
 
   map gc    <Plug>(caw:prefix)
-  map <A-c> <Plug>(caw:wrap:toggle:operator)
+
+  " 旧来のC用(/* comment */)
+  " map <A-c> <Plug>(caw:wrap:toggle:operator)
+
+  " C++用(// comment)
+  map <A-c> <Plug>(caw:hatpos:toggle:operator)
 
 endif "}}}
 
