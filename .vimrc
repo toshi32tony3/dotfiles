@@ -112,6 +112,7 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'windows' : 'tools\\update-dll-mingw',
       \     'linux'   : 'make',
       \   },
+      \   'rev' : 'ver.9.2',
       \ }
 
 " ヴィむwiki
@@ -130,7 +131,7 @@ NeoBundleLazy 'lambdalisue/vim-gita', {
       \ }
 command! -nargs=* -range -bang -bar -complete=customlist,gita#command#complete
       \ GitaBar call gita#command#command(<q-bang>, [<line1>, <line2>], <q-args>)
-" NeoBundleLazy 'lambdalisue/gina.vim', { 'on_cmd' : 'Gina' }
+NeoBundleLazy 'lambdalisue/gina.vim', { 'on_cmd' : 'Gina' }
 NeoBundle 'tpope/vim-fugitive'
 
 "}}}
@@ -235,7 +236,7 @@ NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 "-------------------------------------------------------------------
 " interface {{{
 
-NeoBundle 'mhinz/vim-startify'
+NeoBundle 'mhinz/vim-startify', {'rev' : 'v1.1'}
 
 NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 
@@ -987,21 +988,31 @@ function! s:PutCurrentFunc(funcName) "{{{
 endfunction "}}}
 command! PutCurrentFunc call s:PutCurrentFunc(s:currentFunc)
 
-" :cdのディレクトリ名の補完に'cdpath'を使うようにする
-" http://whileimautomaton.net/2007/09/24141900
-function! s:CommandCompleteCDPath(argLead, cmdLine, cursorPos) "{{{
-  let l:pattern = substitute($HOME, '\\', '\\\\','g')
-  return split(substitute(globpath(&cdpath, a:argLead . '*/'), l:pattern, '~', 'g'), "\n")
-endfunction "}}}
+" " :cdのディレクトリ名の補完に'cdpath'を使うようにする
+" " http://whileimautomaton.net/2007/09/24141900
+" function! s:CommandCompleteCDPath(argLead, cmdLine, cursorPos) "{{{
+"   let l:pattern = substitute($HOME, '\\', '\\\\','g')
+"   return split(substitute(globpath(&cdpath, a:argLead . '*/'), l:pattern, '~', 'g'), "\n")
+" endfunction "}}}
+
+" " 引数なし : 現在開いているファイルのディレクトリに移動
+" " 引数あり : 指定したディレクトリに移動
+" function! s:CD(...) "{{{
+"   if a:0 == 0 | execute 'cd ' . expand('%:p:h')
+"   else        | execute 'cd ' . a:1             | endif
+"   echo substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
+" endfunction "}}}
+" command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
 
 " 引数なし : 現在開いているファイルのディレクトリに移動
 " 引数あり : 指定したディレクトリに移動
+" :cdのディレクトリ名の補完に'cdpath'を使わない
 function! s:CD(...) "{{{
   if a:0 == 0 | execute 'cd ' . expand('%:p:h')
-  else        | execute 'cd ' . a:1             | endif
-  echo substitute(getcwd(), substitute($HOME, '\\', '\\\\', 'g'), '~', 'g')
+  else        | execute 'cd ' . substitute(a:1, '\\\\', '\\', 'g') | endif
+  echo getcwd()
 endfunction "}}}
-command! -complete=customlist,<SID>CommandCompleteCDPath -nargs=? CD call s:CD(<f-args>)
+command! -complete=file -nargs=? CD call s:CD(<f-args>)
 
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
@@ -1515,7 +1526,12 @@ endif "}}}
 if neobundle#tap('caw.vim')
 
   map gc    <Plug>(caw:prefix)
-  map <A-c> <Plug>(caw:wrap:toggle:operator)
+
+  " 旧来のC用(/* comment */)
+  " map <A-c> <Plug>(caw:wrap:toggle:operator)
+
+  " C++用(// comment)
+  map <A-c> <Plug>(caw:hatpos:toggle:operator)
 
 endif "}}}
 
