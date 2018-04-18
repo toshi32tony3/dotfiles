@@ -313,6 +313,12 @@ NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
 
 "}}}
 "-------------------------------------------------------------------
+" syumi {{{
+
+NeoBundle 'thinca/vim-scouter'
+
+"}}}
+"-------------------------------------------------------------------
 
 call neobundle#end()
 
