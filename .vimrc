@@ -468,7 +468,7 @@ nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " filetypeがc/markdownの時は折り畳み機能を自動生成する。ただし, デフォルトは無効
-autocmd MyAutoCmd FileType c,markdown
+autocmd MyAutoCmd FileType c,cpp,markdown
       \ setlocal foldmethod=syntax foldnestmax=1 nofoldenable
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
