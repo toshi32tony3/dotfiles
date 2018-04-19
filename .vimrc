@@ -281,14 +281,6 @@ NeoBundleLazy 'tyru/open-browser.vim', {
       \   'on_map' : '<Plug>(open',
       \   'on_cmd' : ['OpenBrowserSearch'],
       \ }
-
-" NeoBundleLazy 'basyura/twibill.vim'
-" NeoBundleLazy 'basyura/TweetVim', {
-"       \   'depends' : ['basyura/twibill.vim',  'tyru/open-browser.vim'],
-"       \   'on_cmd'  : ['TweetVimHomeTimeline', 'TweetVimSearch'],
-"       \ }
-NeoBundleLazy 'basyura/J6uil.vim', {'on_cmd' : 'J6uil'}
-
 " 本家 : 'kannokanno/previm'
 NeoBundleLazy 'beckorz/previm', {'on_ft' : 'markdown'}
 
@@ -1938,30 +1930,6 @@ endif "}}}
 if neobundle#tap('open-browser.vim')
 
   nmap <A-l><A-l> <Plug>(openbrowser-smart-search)
-
-endif "}}}
-
-" VimからTwitterを見る(TweetVim) {{{
-if neobundle#tap('TweetVim')
-
-  let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
-  function! s:TweetVimSettings()
-    nnoremap <buffer> s :<C-u>TweetVimSay<CR>
-  endfunction
-  autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
-endif "}}}
-
-" VimからLingrを見る(J6uil.vim) {{{
-if neobundle#tap('J6uil.vim')
-
-  let g:J6uil_config_dir = expand('~/.cache/J6uil')
-
-  function! s:J6uilSaySetting()
-    " bd!の誤爆防止(入力が記憶されてたら嬉しいのだけれど)
-    nnoremap <buffer> <C-j> <Nop>
-    nnoremap <buffer> <Esc> <Nop>
-  endfunction
-  autocmd MyAutoCmd FileType J6uil_say call s:J6uilSaySetting()
 
 endif "}}}
 
