@@ -242,7 +242,7 @@ NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
 
 " 遅延読み込みすると候補収集されないので, Vim起動直後に読み込む
 " ネットワーク上ファイルを記憶するとVimの起動が遅くなることがある
-" NeoBundle 'Shougo/neomru.vim'
+NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'Shougo/neoyank.vim'
 
 NeoBundleLazy 'hewes/unite-gtags',         {'on_source' : 'unite.vim'}
@@ -281,14 +281,6 @@ NeoBundleLazy 'tyru/open-browser.vim', {
       \   'on_map' : '<Plug>(open',
       \   'on_cmd' : ['OpenBrowserSearch'],
       \ }
-
-" NeoBundleLazy 'basyura/twibill.vim'
-" NeoBundleLazy 'basyura/TweetVim', {
-"       \   'depends' : ['basyura/twibill.vim',  'tyru/open-browser.vim'],
-"       \   'on_cmd'  : ['TweetVimHomeTimeline', 'TweetVimSearch'],
-"       \ }
-NeoBundleLazy 'basyura/J6uil.vim', {'on_cmd' : 'J6uil'}
-
 " 本家 : 'kannokanno/previm'
 NeoBundleLazy 'beckorz/previm', {'on_ft' : 'markdown'}
 
@@ -476,7 +468,7 @@ nnoremap <silent> <F9> :<C-u>setlocal foldenable! foldenable?<CR>
 autocmd MyAutoCmd FileType vim setlocal commentstring=\ \"%s
 
 " filetypeがc/markdownの時は折り畳み機能を自動生成する。ただし, デフォルトは無効
-autocmd MyAutoCmd FileType c,markdown
+autocmd MyAutoCmd FileType c,cpp,markdown
       \ setlocal foldmethod=syntax foldnestmax=1 nofoldenable
 
 " Hack #120: GVim でウィンドウの位置とサイズを記憶する
@@ -1703,16 +1695,12 @@ if neobundle#tap('unite.vim')
 
   " unite_sourcesに応じたオプション変数を定義して使ってみたけど微妙感が漂う
   let g:u_opt_bu = 'Unite '       . g:u_hopt . g:u_nins
-  let g:u_opt_bo = 'Unite '       . g:u_hopt
   let g:u_opt_de = 'Unite '       . g:u_hopt            . g:u_imme
-  let g:u_opt_dm = 'Unite '       . g:u_hopt
   let g:u_opt_dr = 'Unite '       . g:u_hopt
   let g:u_opt_fb = 'UniteResume ' . g:u_hopt                       . g:u_fbuf
   let g:u_opt_fg = 'Unite '       . g:u_hopt
-  let g:u_opt_fi = 'Unite '       . g:u_hopt
   let g:u_opt_fm = 'Unite '       . g:u_hopt
   let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
-  let g:u_opt_gf = 'Unite '       . g:u_hopt
   let g:u_opt_gr = 'Unite '       . g:u_hopt                       . g:u_sbuf
   let g:u_opt_gp = 'Unite '       . g:u_hopt
   let g:u_opt_hy = 'Unite '       . g:u_hopt
@@ -1729,24 +1717,18 @@ if neobundle#tap('unite.vim')
   let g:u_opt_sb = 'UniteResume ' . g:u_hopt                       . g:u_sbuf
 
   nnoremap <expr> <Leader>bu ':<C-u>' . g:u_opt_bu . 'buffer'           . '<CR>'
-  nnoremap <expr> <Leader>bo ':<C-u>' . g:u_opt_bo . 'bookmark'         . '<CR>'
   nnoremap <expr> <Leader>de ':<C-u>' . g:u_opt_de . 'gtags/def:'
-  nnoremap <expr> <Leader>dm ':<C-u>' . g:u_opt_dm . 'directory_mru'    . '<CR>'
   nnoremap <expr> <Leader>dr ':<C-u>' . g:u_opt_dr . 'directory_rec'
   nnoremap <expr> <Leader>fb ':<C-u>' . g:u_opt_fb                      . '<CR>'
   nnoremap <expr> <Leader>fg ':<C-u>' . g:u_opt_fg . 'file_rec/git'     . '<CR>'
-  nnoremap <expr> <Leader>fi ':<C-u>' . g:u_opt_fi . 'file:'
-  nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
   nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'
+  nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
   nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'grep:%'           . '<CR>'
-  nnoremap <expr> <Leader>g* ':<C-u>' . g:u_opt_gr . 'grep:*'           . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'grep:.*'          . '<CR>'
-  nnoremap <expr> <Leader>gf ':<C-u>' . g:u_opt_gf . 'gtags/file'       . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:/'       . '<CR>'
   nnoremap <expr> <Leader>gp ':<C-u>' . g:u_opt_gp . 'gtags/path'       . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'grep:**'
   nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
-  nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
   nnoremap <expr> <Leader>mf ':<C-u>' . g:u_opt_mf . 'file:~/memo'      . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>' . g:u_opt_mg . 'vimgrep:~/memo/*' . '<CR>'
@@ -1756,6 +1738,7 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>nu ':<C-u>' . g:u_opt_nu . 'neobundle/update'
   nnoremap <expr> <Leader>ol ':<C-u>' . g:u_opt_ol . 'outline:!'        . '<CR>'
   nnoremap <expr> <Leader>op ':<C-u>' . g:u_opt_op . 'output'           . '<CR>'
+  nnoremap <expr> <Leader>re ':<C-u>' . g:u_opt_re . 'gtags/ref:'
   nnoremap <expr> <Leader>sb ':<C-u>' . g:u_opt_sb                      . '<CR>'
   nnoremap <expr> <Leader>v% ':<C-u>' . g:u_opt_gr . 'vimgrep:%'        . '<CR>'
   nnoremap <expr> <Leader>v* ':<C-u>' . g:u_opt_gr . 'vimgrep:*'        . '<CR>'
@@ -1938,30 +1921,6 @@ endif "}}}
 if neobundle#tap('open-browser.vim')
 
   nmap <A-l><A-l> <Plug>(openbrowser-smart-search)
-
-endif "}}}
-
-" VimからTwitterを見る(TweetVim) {{{
-if neobundle#tap('TweetVim')
-
-  let g:tweetvim_config_dir = expand('~/.cache/TweetVim')
-  function! s:TweetVimSettings()
-    nnoremap <buffer> s :<C-u>TweetVimSay<CR>
-  endfunction
-  autocmd MyAutoCmd FileType tweetvim call s:TweetVimSettings()
-endif "}}}
-
-" VimからLingrを見る(J6uil.vim) {{{
-if neobundle#tap('J6uil.vim')
-
-  let g:J6uil_config_dir = expand('~/.cache/J6uil')
-
-  function! s:J6uilSaySetting()
-    " bd!の誤爆防止(入力が記憶されてたら嬉しいのだけれど)
-    nnoremap <buffer> <C-j> <Nop>
-    nnoremap <buffer> <Esc> <Nop>
-  endfunction
-  autocmd MyAutoCmd FileType J6uil_say call s:J6uilSaySetting()
 
 endif "}}}
 
