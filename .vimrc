@@ -416,7 +416,7 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 
 if has('gui_running')
   if has('vim_starting')
-    let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
+    let &g:guifont = 'Ricty for Powerline:h15:cSHIFTJIS'
   endif
 
   setglobal linespace=0          " 行間隔[pixel]の設定(default 1 for Win32 GUI)
