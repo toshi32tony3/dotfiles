@@ -29,3 +29,5 @@
   interactive = never
 [gui]
   encoding = utf-8
+# [init]
+#   templatedir = ~/dotfiles/git_template
