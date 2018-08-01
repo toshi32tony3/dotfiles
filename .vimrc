@@ -416,7 +416,7 @@ command! -nargs=1 -complete=command ClipCommandOutput call s:ClipCommandOutput(<
 
 if has('gui_running')
   if has('vim_starting')
-    let &g:guifont = 'Ricty for Powerline:h15:cSHIFTJIS'
+    let &g:guifont = 'Ricty for Powerline:h12:cSHIFTJIS'
   endif
 
   setglobal linespace=0          " 行間隔[pixel]の設定(default 1 for Win32 GUI)
@@ -579,6 +579,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       setglobal cscoperelative
       setglobal cscopequickfix=s-,c-,d-,i-,t-,e-
       setglobal nocscopeverbose
+      setglobal cscopetagorder=1
       execute 'cscope kill -1'
       execute 'cscope add ' . $GTAGSROOT . '\GTAGS'
       setglobal cscopeverbose
@@ -1356,8 +1357,8 @@ endif "}}}
 if neobundle#tap('vim-fontzoom')
 
   nnoremap ,f :<C-u>Fontzoom!<CR>
-  nmap + <Plug>(fontzoom-larger)
-  nmap - <Plug>(fontzoom-smaller)
+  nmap <A-+> <Plug>(fontzoom-larger)
+  nmap <A--> <Plug>(fontzoom-smaller)
 
   " 残念だが, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
   " → https://github.com/vim-jp/issues/issues/73
