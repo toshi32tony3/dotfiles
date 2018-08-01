@@ -1357,8 +1357,8 @@ endif "}}}
 if neobundle#tap('vim-fontzoom')
 
   nnoremap ,f :<C-u>Fontzoom!<CR>
-  nmap + <Plug>(fontzoom-larger)
-  nmap - <Plug>(fontzoom-smaller)
+  nmap <A-+> <Plug>(fontzoom-larger)
+  nmap <A--> <Plug>(fontzoom-smaller)
 
   " 残念だが, Vimの既知のバグでWindows環境ではC-Scrollを使えないらしい
   " → https://github.com/vim-jp/issues/issues/73
