@@ -121,13 +121,6 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
-NeoBundleLazy 'lambdalisue/vim-gita', {
-      \   'rev'       : '0.1.5',
-      \   'on_source' : 'agit.vim',
-      \   'on_cmd'    : 'Gita',
-      \ }
-command! -nargs=* -range -bang -bar -complete=customlist,gita#command#complete
-      \ GitaBar call gita#command#command(<q-bang>, [<line1>, <line2>], <q-args>)
 NeoBundleLazy 'lambdalisue/gina.vim', { 'on_cmd' : 'Gina' }
 NeoBundle 'tpope/vim-fugitive'
 
@@ -173,7 +166,6 @@ NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 NeoBundleLazy 'deris/vim-shot-f',          {'on_map' : '<Plug>'}
 
 NeoBundle 'kshenoy/vim-signature'
-NeoBundle 'k-takata/matchit.vim'
 
 "}}}
 "-------------------------------------------------------------------
@@ -998,26 +990,20 @@ call s:AddMyCMap('cfd', 'ClipFileDir')
 " リストへの変換候補登録(Plugin's command)
 call s:AddMyCMap( 'sc', 'Scratch')
 call s:AddMyCMap('scp', 'ScratchPreview')
-call s:AddMyCMap( 'gi', 'Gita')
-call s:AddMyCMap( 'ga', 'Gita add % -f')
-call s:AddMyCMap( 'gc', 'Gita commit')
-call s:AddMyCMap( 'gg', 'Gita grep')
-call s:AddMyCMap('gac', 'GitaBar add % -f | Gita commit')
-call s:AddMyCMap('gbl', 'Gita blame')
-call s:AddMyCMap('gbr', 'Gita branch')
-call s:AddMyCMap('gca', 'Gita commit --amend')
-call s:AddMyCMap('gch', 'Gita chaperone')
-call s:AddMyCMap('gco', 'Gita checkout')
-call s:AddMyCMap('gdi', 'Gita diff')
-call s:AddMyCMap('gdl', 'Gita diff-ls')
-call s:AddMyCMap('glf', 'Gita ls-files')
-call s:AddMyCMap('gme', 'Gita merge')
-call s:AddMyCMap('gp2', 'Gita patch -2')
-call s:AddMyCMap('gp3', 'Gita patch -3')
+call s:AddMyCMap( 'gi', 'Gina')
+call s:AddMyCMap( 'ga', 'Gina add % -f')
+call s:AddMyCMap( 'gc', 'Gina commit')
+call s:AddMyCMap( 'gg', 'Gina grep')
+call s:AddMyCMap('gac', 'Gina add % -f | Gina commit')
+call s:AddMyCMap('gbl', 'Gina blame')
+call s:AddMyCMap('gbr', 'Gina branch')
+call s:AddMyCMap('gca', 'Gina commit --amend')
+call s:AddMyCMap('gco', 'Gina compare')
+call s:AddMyCMap('gdi', 'Gina diff')
+call s:AddMyCMap('gls', 'Gina ls')
 call s:AddMyCMap('gpl', '!git pull')
 call s:AddMyCMap('gps', '!git push')
-call s:AddMyCMap('gre', 'Gita reset')
-call s:AddMyCMap('gst', 'Gita status')
+call s:AddMyCMap('gst', 'Gina status')
 
 " 最後のカーソル位置にジャンプ
 autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
@@ -1084,11 +1070,20 @@ if neobundle#tap('vim-signify')
 
 endif "}}}
 
-" VimからGitを使う(編集, コマンド実行, vim-gita) {{{
-if neobundle#tap('vim-gita')
+" VimからGitを使う(編集, コマンド実行, gina.vim) {{{
+if neobundle#tap('gina.vim')
 
-  let g:gita#suppress_warning = 1
-  autocmd MyAutoCmd BufWinEnter gita:* setlocal nofoldenable
+  function! neobundle#hooks.on_post_source(bundle)
+    call gina#custom#execute(
+          \ '/\%(status\|commit\|branch\|ls\|grep\|changes\|tag\)',
+          \ 'resize 15',
+          \ )
+    call gina#custom#command#option(
+          \ '/\%(status\|commit\|branch\|ls\|grep\|changes\|tag\)',
+          \ '--opener', 'botright split'
+          \ )
+  endfunction
+  autocmd MyAutoCmd BufWinEnter gina:* setlocal nofoldenable
 
 endif "}}}
 
@@ -1225,8 +1220,8 @@ if neobundle#tap('lightline.vim')
   endfunction
 
   function! MyGit()
-    if !neobundle#is_sourced('vim-gita') | return '' | endif
-    let l:_ = gita#statusline#format('%lb')
+    if !neobundle#is_sourced('gina.vim') | return '' | endif
+    let l:_ = gina#component#repo#branch()
     return winwidth(0) < 30 ? '' : strlen(l:_) ? "\u2B60 " . l:_ : ''
   endfunction
 
@@ -1365,11 +1360,6 @@ if neobundle#tap('vim-signature')
     if exists(':SignatureListGlobalMarks') | delcommand SignatureListGlobalMarks | endif
     if exists(':SignatureListMarkers')     | delcommand SignatureListMarkers     | endif
   endfunction
-
-endif "}}}
-
-" 対応するキーワードを増やす(matchit.vim) {{{
-if neobundle#tap('matchit.vim')
 
 endif "}}}
 
