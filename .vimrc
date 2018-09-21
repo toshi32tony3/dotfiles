@@ -115,9 +115,6 @@ NeoBundle 'Shougo/vimproc.vim', {
       \   'rev' : 'ver.9.2',
       \ }
 
-" ヴィむwiki
-NeoBundle 'vimwiki/vimwiki'
-
 "-------------------------------------------------------------------
 " VCS {{{
 
@@ -137,13 +134,6 @@ NeoBundle 'tpope/vim-fugitive'
 "}}}
 "-------------------------------------------------------------------
 " input {{{
-
-NeoBundleLazy 'Shougo/neosnippet.vim', {
-      \   'depends' : 'toshi32tony3/neosnippet-snippets',
-      \   'on_i'    : 1,
-      \   'on_ft'   : 'neosnippet',
-      \ }
-NeoBundleLazy 'toshi32tony3/neosnippet-snippets'
 
 NeoBundleLazy 'tyru/eskk.vim',    {'on_map' : [['nic', '<Plug>']]}
 NeoBundleLazy 'tyru/skkdict.vim', {'on_ft' : 'skkdict'}
@@ -181,7 +171,6 @@ NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
 NeoBundleLazy 'deris/vim-shot-f',          {'on_map' : '<Plug>'}
-NeoBundleLazy 'easymotion/vim-easymotion', {'on_map' : '<Plug>'}
 
 NeoBundle 'kshenoy/vim-signature'
 NeoBundle 'k-takata/matchit.vim'
@@ -229,7 +218,6 @@ NeoBundle 'toshi32tony3/vim-repeat'
 "-------------------------------------------------------------------
 " vimdiff {{{
 
-NeoBundle 'lambdalisue/vim-unified-diff'
 NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 
 "}}}
@@ -239,21 +227,9 @@ NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 NeoBundle 'mhinz/vim-startify', {'rev' : 'v1.1'}
 
 NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
-
-" 遅延読み込みすると候補収集されないので, Vim起動直後に読み込む
-" ネットワーク上ファイルを記憶するとVimの起動が遅くなることがある
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'Shougo/neoyank.vim'
-
 NeoBundleLazy 'hewes/unite-gtags',         {'on_source' : 'unite.vim'}
-NeoBundleLazy 'tacroe/unite-mark',         {'on_source' : 'unite.vim'}
 NeoBundleLazy 'Shougo/unite-outline',      {'on_source' : 'unite.vim'}
-NeoBundleLazy 'ujihisa/unite-colorscheme', {'on_source' : 'unite.vim'}
 
-NeoBundleLazy 'Shougo/vimshell.vim', {
-      \   'depends' : 'Shougo/unite.vim',
-      \   'on_path' : '.*',
-      \ }
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : 'Shougo/unite.vim',
       \   'on_path' : '.*',
@@ -275,19 +251,12 @@ NeoBundleLazy 'toshi32tony3/dicwin-vim', {'on_map' : [['ni', '<Plug>']]}
 
 "}}}
 "-------------------------------------------------------------------
-" web / markdown {{{
+" web {{{
 
 NeoBundleLazy 'tyru/open-browser.vim', {
       \   'on_map' : '<Plug>(open',
       \   'on_cmd' : ['OpenBrowserSearch'],
       \ }
-" 本家 : 'kannokanno/previm'
-NeoBundleLazy 'beckorz/previm', {'on_ft' : 'markdown'}
-
-" 本家 : 'plasticboy/vim-markdown'
-NeoBundleLazy 'rcmdnk/vim-markdown',    {'on_ft'  : 'markdown'}
-NeoBundleLazy 'glidenote/memolist.vim', {'on_cmd' : 'MemoNew' }
-
 "}}}
 "-------------------------------------------------------------------
 " formatter {{{
@@ -295,21 +264,7 @@ NeoBundleLazy 'glidenote/memolist.vim', {'on_cmd' : 'MemoNew' }
 " 本家 : 'bronson/vim-trailing-whitespace'
 NeoBundle 'toshi32tony3/vim-trailing-whitespace'
 
-NeoBundleLazy 'junegunn/vim-easy-align', {'on_cmd' : 'EasyAlign'}
-
 "}}}
-"-------------------------------------------------------------------
-" debug {{{
-
-NeoBundleLazy 'thinca/vim-quickrun',     {'on_cmd' : 'QuickRun'}
-" NeoBundleLazy 'haya14busa/vim-debugger', {'on_cmd' : 'DebuggerOn'}
-
-"}}}
-"-------------------------------------------------------------------
-" syumi {{{
-
-NeoBundle 'thinca/vim-scouter'
-
 "}}}
 "-------------------------------------------------------------------
 
@@ -1071,20 +1026,6 @@ autocmd MyAutoCmd BufRead * silent! execute 'normal! `"zv'
 "-----------------------------------------------------------------------------
 " Plugin Settings {{{
 
-" VimでWiki(vimwiki) {{{
-if neobundle#tap('vimwiki')
-
-  let g:vimwiki_list = [
-        \   {
-        \     'path'        : '~/vimwiki',
-        \     'auto_export' : 1,
-        \   }
-        \ ]
-  let g:vimwiki_menu = ''
-  let g:vimwiki_auto_chdir = 1
-
-endif "}}}
-
 " バッファをHTML形式に変換(2html.vim) {{{
 
 let g:tohtml_font_family = "'MS Gothic'"
@@ -1163,36 +1104,6 @@ if neobundle#tap('agit.vim')
   endfunction
   autocmd MyAutoCmd FileType agit          call s:AgitSettings()
   autocmd MyAutoCmd FileType agit_diff setlocal nofoldenable
-
-endif "}}}
-
-" コードスニペットによる入力補助(neosnippet.vim) {{{
-if neobundle#tap('neosnippet.vim')
-
-  let g:neosnippet#snippets_directory =
-        \ '~/.vim/bundle/neosnippet-snippets/neosnippets'
-
-  imap     <expr>   <TAB> pumvisible() ? "\<C-n>" :
-        \        neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-        \        "\<TAB>"
-  inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-TAB>"
-  imap <C-k> <Plug>(neosnippet_expand_or_jump)
-
-  if neobundle#is_installed('unite.vim')
-    imap <C-s> <Plug>(neosnippet_start_unite_snippet)
-  endif
-
-  " smap対策
-  " http://d.hatena.ne.jp/thinca/20090526/1243267812
-  function! s:neosnippetSettings()
-    smapclear
-    smapclear <buffer>
-    smap <expr> <TAB>
-          \ neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" :
-          \ "\<TAB>"
-    smap <C-k> <Plug>(neosnippet_expand_or_jump)
-  endfunction
-  autocmd MyAutoCmd BufEnter * call s:neosnippetSettings()
 
 endif "}}}
 
@@ -1435,17 +1346,6 @@ if neobundle#tap('vim-shot-f')
 
 endif "}}}
 
-" Vim motion on speed!(vim-easymotion) {{{
-if neobundle#tap('vim-easymotion')
-
-  let g:EasyMotion_do_shade = 0
-  let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
-
-  map <A-w> <Plug>(easymotion-bd-w)
-  map <A-e> <Plug>(easymotion-bd-e)
-
-endif " }}}
-
 " Vimのマーク機能を使いやすくする(vim-signature) {{{
 if neobundle#tap('vim-signature')
 
@@ -1627,11 +1527,6 @@ if neobundle#tap('vim-repeat')
 
 endif "}}}
 
-" vimdiffに別のDiffアルゴリズムを適用する(vim-unified-diff) {{{
-if neobundle#tap('vim-unified-diff')
-
-endif "}}}
-
 " 指定した行をVimDiff(linediff.vim) {{{
 if neobundle#tap('linediff.vim')
 
@@ -1700,15 +1595,12 @@ if neobundle#tap('unite.vim')
   let g:u_opt_dr = 'Unite '       . g:u_hopt
   let g:u_opt_fb = 'UniteResume ' . g:u_hopt                       . g:u_fbuf
   let g:u_opt_fg = 'Unite '       . g:u_hopt
-  let g:u_opt_fm = 'Unite '       . g:u_hopt
   let g:u_opt_fr = 'Unite '       . g:u_hopt                       . g:u_fbuf
   let g:u_opt_gr = 'Unite '       . g:u_hopt                       . g:u_sbuf
   let g:u_opt_gp = 'Unite '       . g:u_hopt
-  let g:u_opt_hy = 'Unite '       . g:u_hopt
   let g:u_opt_li = 'Unite '       . g:u_nspl                       . g:u_sbuf
   let g:u_opt_mf = 'Unite '       . g:u_hopt
   let g:u_opt_mg = 'Unite '       . g:u_hopt                       . g:u_sbuf
-  let g:u_opt_mk = 'Unite '       . g:u_hopt            . g:u_prev
   let g:u_opt_mp = 'Unite '       . g:u_nspl
   let g:u_opt_nl = 'Unite '       . g:u_nspl
   let g:u_opt_nu = 'Unite '       . g:u_nspl . g:u_nins . g:u_nsyn
@@ -1723,17 +1615,14 @@ if neobundle#tap('unite.vim')
   nnoremap <expr> <Leader>fb ':<C-u>' . g:u_opt_fb                      . '<CR>'
   nnoremap <expr> <Leader>fg ':<C-u>' . g:u_opt_fg . 'file_rec/git'     . '<CR>'
   nnoremap <expr> <Leader>fr ':<C-u>' . g:u_opt_fr . 'file_rec'
-  nnoremap <expr> <Leader>fm ':<C-u>' . g:u_opt_fm . 'file_mru'         . '<CR>'
   nnoremap <expr> <Leader>g% ':<C-u>' . g:u_opt_gr . 'grep:%'           . '<CR>'
   nnoremap <expr> <Leader>g. ':<C-u>' . g:u_opt_gr . 'grep:.*'          . '<CR>'
   nnoremap <expr> <Leader>gg ':<C-u>' . g:u_opt_gr . 'grep/git:/'       . '<CR>'
   nnoremap <expr> <Leader>gp ':<C-u>' . g:u_opt_gp . 'gtags/path'       . '<CR>'
   nnoremap <expr> <Leader>gr ':<C-u>' . g:u_opt_gr . 'grep:**'
-  nnoremap <expr> <Leader>hy ':<C-u>' . g:u_opt_hy . 'history/yank'     . '<CR>'
   nnoremap <expr> <Leader>li ':<C-u>' . g:u_opt_li . 'line:'
   nnoremap <expr> <Leader>mf ':<C-u>' . g:u_opt_mf . 'file:~/memo'      . '<CR>'
   nnoremap <expr> <Leader>mg ':<C-u>' . g:u_opt_mg . 'vimgrep:~/memo/*' . '<CR>'
-  nnoremap <expr> <Leader>mk ':<C-u>' . g:u_opt_mk . 'mark'             . '<CR>'
   nnoremap <expr> <Leader>mp ':<C-u>' . g:u_opt_mp . 'mapping'          . '<CR>'
   nnoremap <expr> <Leader>nl ':<C-u>' . g:u_opt_nl . 'neobundle/lazy'   . '<CR>'
   nnoremap <expr> <Leader>nu ':<C-u>' . g:u_opt_nu . 'neobundle/update'
@@ -1783,59 +1672,13 @@ if neobundle#tap('unite.vim')
 
 endif "}}}
 
-" for unite-file_mru {{{
-if neobundle#tap('neomru.vim')
-
-  let g:neomru#do_validate = 0
-
-endif "}}}
-
-" for unite-history/yank {{{
-if neobundle#tap('neoyank.vim')
-
-  let g:neoyank#limit = 15
-
-endif "}}}
-
 " for unite-gtags {{{
 if neobundle#tap('unite-gtags')
 
 endif "}}}
 
-" for unite-mark {{{
-if neobundle#tap('unite-mark')
-
-  " グローバルマークに対しても有効にする
-  let g:unite_source_mark_marks =
-        \ 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
-endif "}}}
-
 " for unite-outline {{{
 if neobundle#tap('unite-outline')
-
-endif "}}}
-
-" Vim上で動くシェル(vimshell.vim) {{{
-if neobundle#tap('vimshell.vim')
-
-  " 動的プロンプトの設定
-  let g:vimshell_prompt_expr = 'fnamemodify(getcwd(), ":~") . "> "'
-  let g:vimshell_prompt_pattern = '^\%(\f\|\\.\)\+> '
-
-  " 横分割大きめで開く
-  let g:vimshell_popup_height = 70
-
-  " vimshellのマッピングを一部変更
-  function! s:VimShellSettings()
-    " <C-l>を普通のシェルのclearと同じ挙動にする
-    nnoremap <buffer> <C-l> zt
-
-    " neocompleteに依存しない通常の汎用補完を使う
-    inoremap <buffer> <C-n> <C-n>
-    inoremap <buffer> <C-p> <C-p>
-  endfunction
-  autocmd MyAutoCmd FileType vimshell call s:VimShellSettings()
 
 endif "}}}
 
@@ -1922,112 +1765,12 @@ endif "}}}
 if neobundle#tap('open-browser.vim')
 
   nmap <A-l><A-l> <Plug>(openbrowser-smart-search)
-
-endif "}}}
-
-" ファイルをブラウザで開く(previm) {{{
-if neobundle#tap('previm')
-
-  if has('win32') | let g:previm_open_cmd = 'start' | endif
-  let g:previm_enable_realtime = 1
-
-endif "}}}
-
-" markdownを使いやすくする(vim-markdown) {{{
-if neobundle#tap('vim-markdown')
-
-  " 折り畳みを1段階閉じて開く(foldlevelstartではダメぽいのでfoldlevelをいじる)
-  autocmd MyAutoCmd FileType markdown setlocal foldlevel=1
-
-endif "}}}
-
-" メモ管理用プラグイン(memolist.vim) {{{
-if neobundle#tap('memolist.vim')
-
-  let g:memolist_path = '~/memo'
-  let g:memolist_memo_suffix = 'md'
-  let g:memolist_prompt_tags = 1
-  let g:memolist_prompt_categories = 0
-
-  " markdownテンプレートを指定
-  if filereadable(expand('~/configs/template/md.txt'))
-    let g:memolist_template_dir_path = '~/configs/template'
-  endif
-
-  nnoremap <Leader>ml :<C-u>edit ~/memo<CR>
-  nnoremap <Leader>mn :<C-u>MemoNew<CR>
+  vmap <A-l><A-l> <Plug>(openbrowser-smart-search)
 
 endif "}}}
 
 " 文末の空白削除を簡易化(vim-trailing-whitespace) {{{
 if neobundle#tap('vim-trailing-whitespace')
-
-endif "}}}
-
-" テキスト整形を簡易化(vim-easy-align) {{{
-if neobundle#tap('vim-easy-align')
-
-  let g:easy_align_delimiters = {
-        \   '/' : {
-        \     'pattern'         : '//\+\|/\*\|\*/',
-        \     'delimiter_align' : 'l',
-        \     'ignore_groups'   : ['!Comment'],
-        \   },
-        \ }
-
-  xnoremap <CR> :EasyAlign<CR>
-
-endif "}}}
-
-" Vim上で書いているスクリプトをすぐ実行(vim-quickrun) {{{
-if neobundle#tap('vim-quickrun')
-
-  let g:quickrun_config = {
-        \   '_' : {
-        \     'outputter'                 : 'loclist',
-        \     'runner'                    : 'vimproc',
-        \     'runner/vimproc/updatetime' : 50,
-        \   },
-        \   'vb' : {
-        \     'command'  : 'cscript',
-        \     'cmdopt'   : '//Nologo',
-        \     'tempfile' : '{tempname()}.vbs',
-        \   },
-        \   'make' : {
-        \     'command'  : 'make',
-        \     'cmdopt'   : 'run',
-        \   },
-        \ }
-
-"         \   'c' : {
-"         \     'type'     : 'c/gcc4_8_1',
-"         \   },
-"         \   'c/gcc4_8_1' : {
-"         \     'command'  : 'gcc',
-"         \     'cmdopt'   : '-g -Wall',
-"         \   },
-"         \   'c/clang4_7_1' : {
-"         \     'command'  : 'clang',
-"         \     'cmdopt'   : '-g -Wall',
-"         \   },
-"         \   'cpp' : {
-"         \     'type' : 'cpp/clang4_7_1',
-"         \   },
-"         \   'cpp/gcc4_8_1' : {
-"         \     'command'  : 'g++',
-"         \     'cmdopt'   : '-g -Wall',
-"         \   },
-"         \   'cpp/clang4_7_1' : {
-"         \     'command'  : 'clang++',
-"         \     'cmdopt'   : '-g -Wall',
-"         \   },
-
-
-  " デフォルトの<Leader>rだと入力待ちになるので, 別のキーをマッピング
-  let g:quickrun_no_default_key_mappings = 1
-  noremap <Leader>qq :<C-u>QuickRun -hook/time/enable 1
-  noremap <Leader>qt :<C-u>QuickRun -hook/time/enable 1 -type<Space>
-  noremap <Leader>qa :<C-u>QuickRun -hook/time/enable 1 -args<Space>""<Left>
 
 endif "}}}
 
