@@ -978,6 +978,7 @@ call s:AddMyCMap( 'CD', 'cd')
 call s:AddMyCMap( 'cm', 'ClearMessage')
 call s:AddMyCMap( 'pd', 'PutDateTime')
 call s:AddMyCMap( 'uc', 'UpdateCtags')
+call s:AddMyCMap( 'ug', 'UpdateGtags')
 call s:AddMyCMap('cfd', 'ClipFileDir')
 
 " リストへの変換候補登録(Plugin's command)
