@@ -1079,13 +1079,15 @@ if neobundle#tap('gina.vim')
   endfunction
   autocmd MyAutoCmd BufWinEnter gina:* setlocal nofoldenable
 
-  function! s:GinaSettings()
-    nnoremap    <buffer> <Esc> :<C-u>q<CR>
-    cnoreabbrev <buffer> Gina commit :<C-u>q<CR>
-  " let g:abbrev = 'cnoreabbrev ' . a:originalPattern . ' ' . a:alternateName
-  " execute substitute(g:abbrev, '|', '<bar>', 'g')
+  function! s:GinaStatusSettings()
+    nnoremap <silent><buffer> <C-^> :<C-u>q<CR>:Gina commit<CR>
   endfunction
-  autocmd MyAutoCmd FileType gina-status call s:GinaSettings()
+  autocmd MyAutoCmd FileType gina-status call s:GinaStatusSettings()
+
+  function! s:GinaCommitSettings()
+    nnoremap <silent><buffer> <C-^> :<C-u>q<CR>:Gina status --short<CR>
+  endfunction
+  autocmd MyAutoCmd FileType gina-commit call s:GinaCommitSettings()
 
 endif "}}}
 
