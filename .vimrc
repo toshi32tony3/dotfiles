@@ -250,7 +250,6 @@ NeoBundleLazy 'tyru/open-browser.vim', {
 NeoBundle 'toshi32tony3/vim-trailing-whitespace'
 
 "}}}
-"}}}
 "-------------------------------------------------------------------
 
 call neobundle#end()
