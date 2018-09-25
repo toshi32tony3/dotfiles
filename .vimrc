@@ -116,7 +116,6 @@ NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
 NeoBundleLazy 'lambdalisue/gina.vim', { 'on_cmd' : 'Gina' }
-NeoBundle 'tpope/vim-fugitive'
 
 "}}}
 "-------------------------------------------------------------------
