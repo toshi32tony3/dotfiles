@@ -1293,8 +1293,8 @@ endif "}}}
 " incsearchをパワーアップ(incsearch.vim) {{{
 if neobundle#tap('incsearch.vim')
 
-  noremap <silent> <expr> g/ incsearch#go({'command' : '/', 'is_stay' : 1})
-  noremap <silent> <expr> g? incsearch#go({'command' : '?', 'is_stay' : 1})
+  noremap <silent> <expr> <Leader>/ incsearch#go({'command' : '/', 'is_stay' : 1})
+  noremap <silent> <expr> <Leader>? incsearch#go({'command' : '?', 'is_stay' : 1})
 
 endif "}}}
 
