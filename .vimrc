@@ -1497,11 +1497,11 @@ if neobundle#tap('vim-repeat')
   endif
 
   " scrollbind無しで全ウィンドウ同時スクロール
-  nnoremap <silent> <Leader><A-e> :Repeatable
+  nnoremap <silent> <A-e> :Repeatable
         \ for i in range(winnr('$')) <bar>
         \ execute "normal! \<C-e\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
         \ endfor<CR>
-  nnoremap <silent> <Leader><A-y> :Repeatable
+  nnoremap <silent> <A-y> :Repeatable
         \ for i in range(winnr('$')) <bar>
         \ execute "normal! \<C-y\><Left><C-h><C-e>" <bar> silent! wincmd w <bar>
         \ endfor<CR>
