@@ -106,7 +106,7 @@ NeoBundle 'Shougo/vimproc.vim', {
       \     'windows' : 'tools\\update-dll-mingw',
       \     'linux'   : 'make',
       \   },
-      \   'rev' : 'ver.9.2',
+      \   'rev' : 'ver.9.3',
       \ }
 
 "-------------------------------------------------------------------
@@ -976,7 +976,6 @@ call s:AddMyCMap( 'cd', 'CD')
 call s:AddMyCMap( 'CD', 'cd')
 call s:AddMyCMap( 'cm', 'ClearMessage')
 call s:AddMyCMap( 'pd', 'PutDateTime')
-call s:AddMyCMap( 'td', 'TabDiff')
 call s:AddMyCMap( 'uc', 'UpdateCtags')
 call s:AddMyCMap( 'ug', 'UpdateGtags')
 call s:AddMyCMap('cfd', 'ClipFileDir')
