@@ -1080,12 +1080,12 @@ if neobundle#tap('gina.vim')
   autocmd MyAutoCmd BufWinEnter gina:* setlocal nofoldenable
 
   function! s:GinaStatusSettings()
-    nnoremap <silent><buffer> <C-^> :<C-u>q<CR>:Gina commit<CR>
+    nnoremap <silent><buffer> <C-^> :<C-u>q <bar> Gina commit<CR>
   endfunction
   autocmd MyAutoCmd FileType gina-status call s:GinaStatusSettings()
 
   function! s:GinaCommitSettings()
-    nnoremap <silent><buffer> <C-^> :<C-u>q<CR>:Gina status --short<CR>
+    nnoremap <silent><buffer> <C-^> :<C-u>q <bar> Gina status --short<CR>
   endfunction
   autocmd MyAutoCmd FileType gina-commit call s:GinaCommitSettings()
 
