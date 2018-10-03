@@ -771,7 +771,7 @@ function! s:GetFoldName(line) "{{{
     let l:sufIndex   = strlen(a:line) - ((l:endIndex == -1) ? 6 : 5)
     return a:line[l:preIndex : l:sufIndex]
   elseif &filetype == 'markdown'
-    let l:foldName = split(a:line, "\<Space>")
+    let l:foldName = split(a:line)
     return empty(l:foldName) ? '' : join(l:foldName[1 :], "\<Space>")
   endif
   return ''
