@@ -218,6 +218,7 @@ NeoBundleLazy 'Shougo/unite-outline',      {'on_source' : 'unite.vim'}
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : 'Shougo/unite.vim',
       \   'on_path' : '.*',
+      \   'rev'     : 'b5a8b54',
       \ }
 
 "}}}
