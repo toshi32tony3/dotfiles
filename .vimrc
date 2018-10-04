@@ -115,7 +115,10 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
-NeoBundleLazy 'lambdalisue/gina.vim', { 'on_cmd' : 'Gina' }
+NeoBundleLazy 'lambdalisue/gina.vim', {
+      \   'on_cmd' : 'Gina',
+      \   'rev'    : 'e97fe8e',
+      \ }
 
 "}}}
 "-------------------------------------------------------------------
