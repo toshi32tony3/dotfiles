@@ -159,7 +159,7 @@ NeoBundleLazy 'haya14busa/incsearch.vim'
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
-NeoBundleLazy 'deris/vim-shot-f',          {'on_map' : '<Plug>'}
+NeoBundleLazy 'deris/vim-shot-f',        {'on_map' : '<Plug>'}
 
 NeoBundle 'kshenoy/vim-signature'
 
@@ -214,9 +214,9 @@ NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 
 NeoBundle 'mhinz/vim-startify', {'rev' : 'v1.1'}
 
-NeoBundleLazy 'Shougo/unite.vim', {'on_cmd' : 'Unite'}
-NeoBundleLazy 'hewes/unite-gtags',         {'on_source' : 'unite.vim'}
-NeoBundleLazy 'Shougo/unite-outline',      {'on_source' : 'unite.vim'}
+NeoBundleLazy 'Shougo/unite.vim',     {'on_cmd' : 'Unite'}
+NeoBundleLazy 'hewes/unite-gtags',    {'on_source' : 'unite.vim'}
+NeoBundleLazy 'Shougo/unite-outline', {'on_source' : 'unite.vim'}
 
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   'depends' : 'Shougo/unite.vim',
