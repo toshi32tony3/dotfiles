@@ -522,7 +522,7 @@ if filereadable(expand('~/localfiles/template/local.rc.vim'))
       setglobal cscoperelative
       setglobal cscopequickfix=s-,c-,d-,i-,t-,e-
       setglobal nocscopeverbose
-      setglobal cscopetagorder=1
+      setglobal cscopetagorder=0
       execute 'cscope kill -1'
       execute 'cscope add ' . $GTAGSROOT . '\GTAGS'
       setglobal cscopeverbose
