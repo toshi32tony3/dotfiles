@@ -219,7 +219,7 @@ NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 "-------------------------------------------------------------------
 " interface {{{
 
-" NeoBundle 'mhinz/vim-startify', {'rev' : 'v1.1'}
+NeoBundle 'mhinz/vim-startify', {'rev' : 'v1.1'}
 
 NeoBundleLazy 'Shougo/unite.vim',     {'on_cmd'    : 'Unite'}
 NeoBundleLazy 'hewes/unite-gtags',    {'on_source' : 'unite.vim'}
