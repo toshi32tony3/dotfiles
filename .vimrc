@@ -114,7 +114,10 @@ NeoBundle 'Shougo/vimproc.vim', {
 
 NeoBundle 'mhinz/vim-signify'
 
-NeoBundleLazy 'cohama/agit.vim', {'on_cmd' : ['Agit', 'AgitFile']}
+NeoBundleLazy 'cohama/agit.vim', {
+      \   'rev'       : 'e1c6481',
+      \   'on_cmd'    : ['Agit', 'AgitFile']
+      \ }
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'       : '0.1.5',
       \   'on_source' : 'agit.vim',
@@ -216,17 +219,12 @@ NeoBundleLazy 'AndrewRadev/linediff.vim', {'on_cmd' : 'Linediff'}
 "-------------------------------------------------------------------
 " interface {{{
 
-NeoBundle 'mhinz/vim-startify', {'rev' : 'v1.1'}
+" NeoBundle 'mhinz/vim-startify', {'rev' : 'v1.1'}
 
-NeoBundleLazy 'Shougo/unite.vim',     {'on_cmd' : 'Unite'}
+NeoBundleLazy 'Shougo/unite.vim',     {'on_cmd'    : 'Unite'}
 NeoBundleLazy 'hewes/unite-gtags',    {'on_source' : 'unite.vim'}
 NeoBundleLazy 'Shougo/unite-outline', {'on_source' : 'unite.vim'}
-
-NeoBundleLazy 'Shougo/vimfiler.vim', {
-      \   'depends' : 'Shougo/unite.vim',
-      \   'on_path' : '.*',
-      \   'rev'     : 'b5a8b54',
-      \ }
+NeoBundle 'Shougo/vimfiler.vim',      {'rev'       : 'b5a8b54' }
 
 "}}}
 "-------------------------------------------------------------------
@@ -1683,6 +1681,8 @@ if neobundle#tap('vimfiler.vim')
           \   'safe'    : 0,
           \ })
   endfunction
+
+  nnoremap ,, :<C-u>VimFilerTab<CR>
 
   " vimfilerのマッピングを一部変更
   function! s:VimfilerSettings()
