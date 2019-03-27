@@ -960,8 +960,6 @@ call s:AddMyCMap(  'pd', 'PutDateTime')
 call s:AddMyCMap(  'uc', 'UpdateCtags')
 call s:AddMyCMap(  'ug', 'UpdateGtags')
 call s:AddMyCMap( 'cfd', 'ClipFileDir')
-call s:AddMyCMap( 'cd.', 'cd ' . expand('%:p:h'))
-call s:AddMyCMap('cd .', 'cd ' . expand('%:p:h'))
 
 " リストへの変換候補登録(Plugin's command)
 call s:AddMyCMap( 'sc', 'Scratch')
