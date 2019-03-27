@@ -926,6 +926,9 @@ function! s:PutCurrentFunc(funcName) "{{{
 endfunction "}}}
 command! PutCurrentFunc call s:PutCurrentFunc(s:currentFunc)
 
+" cd.で現在開いているファイルのディレクトリに移動
+cnoreabbrev <expr> cd. 'cd ' . expand('%:p:h')
+
 " vim-ambicmdでは補完できないパターンを補うため, リストを使った補完を併用する
 let s:MyCMapEntries = []
 function! s:AddMyCMap(originalPattern, alternateName) "{{{
