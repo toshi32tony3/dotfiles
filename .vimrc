@@ -1045,7 +1045,6 @@ if neobundle#tap('vim-signify')
     if exists(':SignifyDebugDiff')    | delcommand SignifyDebugDiff    | endif
     if exists(':SignifyDebugUnknown') | delcommand SignifyDebugUnknown | endif
     if exists(':SignifyFold')         | delcommand SignifyFold         | endif
-    if exists(':SignifyRefresh')      | delcommand SignifyRefresh      | endif
   endfunction
 
 endif "}}}
