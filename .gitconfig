@@ -1,6 +1,6 @@
 [user]
-  name = toshi32tony3
-  email = toshi32tony3@gmail.com
+  name = Toshimitsu Chiba
+  email = toshimitsu.chiba@tel.com
 [core]
   autocrlf = false
   editor = gvim
@@ -25,7 +25,7 @@
 [alias]
   co = checkout
 [credential]
-  helper = manager
+	helper = cache
   interactive = never
 [gui]
   encoding = utf-8
