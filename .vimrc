@@ -170,7 +170,7 @@ NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
 NeoBundleLazy 'deris/vim-shot-f',        {'on_map' : '<Plug>'}
 
-NeoBundle 'kshenoy/vim-signature'
+" NeoBundle 'kshenoy/vim-signature'
 
 "}}}
 "-------------------------------------------------------------------
