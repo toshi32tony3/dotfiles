@@ -163,8 +163,6 @@ NeoBundleLazy 'thinca/vim-fontzoom', {
 "-------------------------------------------------------------------
 " move {{{
 
-NeoBundleLazy 'haya14busa/incsearch.vim'
-
 NeoBundleLazy 'osyo-manga/vim-anzu',     {'on_map' : '<Plug>'}
 NeoBundleLazy 'haya14busa/vim-asterisk', {'on_map' : '<Plug>'}
 
@@ -1255,14 +1253,6 @@ if has('kaoriya')
     else               | execute 'ScreenMode 0' | endif
   endfunction
   nnoremap <silent> <F11> :<C-u>call <SID>ToggleScreenMode()<CR>
-endif "}}}
-
-" incsearchをパワーアップ(incsearch.vim) {{{
-if neobundle#tap('incsearch.vim')
-
-  noremap <silent> <expr> <Leader>/ incsearch#go({'command' : '/', 'is_stay' : 1})
-  noremap <silent> <expr> <Leader>? incsearch#go({'command' : '?', 'is_stay' : 1})
-
 endif "}}}
 
 " asterisk検索をパワーアップ(vim-asterisk) {{{
