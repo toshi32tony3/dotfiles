@@ -1730,6 +1730,21 @@ cnoreabbrev ch ClipHTML
 
 "}}}
 
+" Vim上でGDBを動かす(termdebug) {{{
+
+packadd termdebug
+
+autocmd MyAutoCmd WinEnter *
+      \ if &buftype == 'prompt' | call s:TermDebugSettings() | endif
+
+function! s:TermDebugSettings()
+  imap <buffer> <A-s> <Esc>:Step<CR>
+  imap <buffer> <A-n> <Esc>:Over<CR>
+  imap <buffer> <A-f> <Esc>:Finish<CR>
+  imap <buffer> <A-c> <Esc>:Continue<CR>
+endfunction
+
+"}}}
 
 "}}}
 "-----------------------------------------------------------------------------
