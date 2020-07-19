@@ -367,7 +367,8 @@ if has('gui_running')
   endif
 
   setglobal linespace=0          " 行間隔[pixel]の設定(default 1 for Win32 GUI)
-  setglobal guioptions=Mc        " M : メニュー削除 / c : ポップアップを使わない
+  setglobal guioptions=Mc!       " M : メニュー削除 / c : ポップアップを使わない
+                                 " ! : :shで:terminalする
   setglobal guicursor=a:blinkon0 " カーソルを点滅させない
   setglobal nomousefocus         " マウス移動でフォーカスを自動的に切り替えない
   setglobal mousehide            " 入力時にマウスポインタを隠す
