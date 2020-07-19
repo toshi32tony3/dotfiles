@@ -100,6 +100,8 @@ NeoBundleFetch 'Shougo/neobundle.vim', {'rev' : '673be4e'}
 NeoBundleLazy 'vim-jp/vimdoc-ja'
 setglobal helplang=ja
 
+NeoBundle 'thinca/vim-scouter'
+
 " ヴィむぷろしー
 NeoBundle 'Shougo/vimproc.vim', {
       \   'build' : {
