@@ -117,9 +117,9 @@ NeoBundle 'Shougo/vimproc.vim', {
 NeoBundle 'mhinz/vim-signify'
 
 NeoBundleLazy 'cohama/agit.vim', {
-      \   'rev'       : 'e1c6481',
-      \   'on_cmd'    : ['Agit', 'AgitFile']
-      \ }
+     \   'on_cmd'    : ['Agit', 'AgitFile']
+     \ }
+
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \   'rev'       : '0.1.5',
       \   'on_source' : 'agit.vim',
