@@ -346,9 +346,16 @@ nnoremap Y y$
 setglobal clipboard=unnamed
 
 " クリップボード関連のコマンドを定義
-command! ClipFilePath let @* = expand('%:p')   | echo 'clipped: ' . @*
-command! ClipFileName let @* = expand('%:t')   | echo 'clipped: ' . @*
-command! ClipFileDir  let @* = expand('%:p:h') | echo 'clipped: ' . @*
+command! ClipFilePath    let @* = expand('%:p')   | echo 'clipped: ' . @*
+command! ClipFileName    let @* = expand('%:t')   | echo 'clipped: ' . @*
+function! s:ClipFileDir()
+  let l:dirPathList = split(expand('%:p:h'), '\\')
+  call reverse(l:dirPathList)
+  let @* = l:dirPathList[0]
+  echo 'clipped: ' . @*
+endfunction
+command! ClipFileDir call s:ClipFileDir()
+command! ClipFileDirPath let @* = expand('%:p:h') | echo 'clipped: ' . @*
 function! s:ClipCommandOutput(cmd)
   redir @*> | silent execute a:cmd | redir END
   if len(@*) != 0 | let @* = @*[1 :] | endif " 先頭の改行文字を取り除く
